@@ -1,0 +1,94 @@
+
+Version::
+Current version: 0.3.5
+
+Version History.
+
+0.0.1: 	Setup and code to draw gui, window and button complete
+0.0.2: 	Added label, seperator and image items
+0.0.3: 	Made button highlights work, converted all co-ords to use rect's
+0.0.4: 	Implemented the start of the mouse messaging service
+0.0.5: 	Made answer=gui.messagebox((OK|CANCEL),"Quit SPQR?") work
+0.0.6: 	Split code up into smaller files
+0.0.65:	Hosted on sourceforge
+0.0.7: 	Made the file menu gfx work
+0.0.8: 	Made the file menu callbacks work
+0.0.9:	Split code into modules
+0.0.91:	Added ability to pan map with middle mouse button
+0.0.92:	Back on the case, changed the way the modules were layed out
+0.1		If you click on a hex, it now shows you the hex and any units on it
+0.1.1   Added a parser for game scenarios
+0.1.2	Displays city names on main map
+0.1.3	Displays info buttons for hex, and responds to them
+0.1.4	Added game year visual, and next button for unit turn
+0.1.5	Finished city details window. Parser now grabs players as well
+0.1.6	Loops around and displays all your units via the next button
+0.1.7	Added keyboard handling routines
+0.1.8	Hex detection vastly improved: key clicks started to be integrated
+           with menu code and messagebox code (the latter complete)
+0.1.9	Menus look like the real deal now (and have keyboard shortcuts)
+0.2.0	Menus fully complete: button highlights now work
+0.2.1	Units flash when they are highlighted (and clipped on screen sides)
+0.2.2	Unit shows movement possibilities, and they render fine.
+           Also the interface for selecting troops now works
+0.2.3	The above statement is not technically true, but now all that fancy
+           unit flashing/updating stuff is working fine
+0.2.4	Hex detection is now pixel perfect. Unit move possibilities all fine
+0.2.5	Program reads some command line options now. Also splash screen has
+           added, and movement keys have been put in (and work, but no anim yet)
+0.2.6	Added unit strength,quality and morale to parser
+0.2.7	Unit movement works fine, animation and everything
+0.2.8	The basic turn has been implemented! Granted, you can only move around
+        	the units but it *is* starting to feel like a game now
+0.2.9	Slowly adding a battle screen
+        	It's a lot of work, although you can now start a battle and retreat(!)
+        	You can now (16/03/06) wait a round and see what happens
+0.2.91	Again back on the case after a break. Re-writing code to allow for
+        	a maximum of 4 units on every hex. Completion of this is v0.3
+0.2.92	4 units on every hex is coming along fast, move and battle code seems
+        	ok, but selection is still an issue (and some minor gfx glitches)
+0.2.93	Game handles 4 units per hex just fine. Minor gfx effects all work
+            Some very minor bugs to shave off and 0.3 will be here!
+0.3 	I think (!) all issues with 4 units per hex are solved
+        	Working on adding some new gui features - checkbox (working)
+        	and slider (starting to work)
+0.3.1	Slider and checkbox fully working
+0.3.2   Added music, and preferences screen for it :-)
+0.3.3   ScrollArea widget now fully working
+0.3.31	Started to add unit list box
+0.3.32	Added individuals to scenario file, parser and dataset
+0.3.33	Unit list box and city list box complete except for callbacks
+0.3.34	Actually adding a pretty complex ItemList to handle all list displays
+			Code for this version *does not run*!!
+0.3.35  Unit list box is broken but runs
+0.3.36	Made console work, with some simple commands
+0.3.37	Begads! The fancy complex ItemList builds all the gfx's fine.It just
+			needs the callbacks to be implemented
+0.3.38	Because the ItemList was pretty complex, it has made me clean up a
+			whole bunch of window code, so that's what I'm ploughing through now
+			The end result is a smaller code base as the cruft gets taken out
+0.3.39	Arrow graphics added to ItemList (it's getting there!)
+0.3.391	SLOWLY the ItemList is coming together. The arrows work fine.
+0.3.4	Everything for the itemlist works ok!! Quite a fancy widget,
+			*definitly* the most complex one so far
+0.3.41	Now I'm going slowly through all the annoying TODO bits, before
+			starting the battle screens again.
+0.3.42	Rewrote gui dirty rects code (was buggy): added double-click callback.
+			Fixed horrible bug that erased welcome screen at start
+0.3.43	Added MenuOption widget ready for battle screen
+0.3.431	Excuse to flag new start after a month off: also fixed dirty rect bug
+0.3.432	Removed 500 lines of code whilst tidying unit animation code :-)
+0.3.433	Removed another 500 lines and started re-coding the battle stuff
+0.3.5	Began the change to update the code and move to region - based code
+
+Notable milestones:
+
+0.0.65:	Looks like a gui, speeded up gfx a lot
+0.0.8:	Menus work, though they could look a bit better
+0.0.9:	Splitting code into modules: I learnt a lot about python
+0.2.0:	First technology demo (i.e. everything works, in it's own limited way)
+			It actually feels like a game now, even if there is nothing to play
+0.2.8:	The movement phase has been implemented, you can almost feel the game now
+0.3.3:	GUI much improved, looks and feels very GNOME-like
+
+

@@ -1,0 +1,328 @@
+# main game scenario for spqr
+# comments are like this, obviously
+
+# firstly we define the sides:
+# THE ROMAN PLAYER MUST ALWAYS BE FIRST!
+
+player Romans
+	(Roma)
+	(human)
+	(Roman)
+
+player Carthaginians
+	(Carthage)
+	(computer)
+	(Carthaginian)
+	
+player Greeks
+	(Corinth)
+	(computer)
+	(Greek)
+	
+player Macedonians
+	(Pella)
+	(computer)
+	(Macedonian)
+	
+player Ptolemies
+	(Alexandria)
+	(computer)
+	(Ptolemic)
+	
+player Selucids
+	(Antioch)
+	(computer)
+	(Selucid)
+
+player Pergamums
+	(Pergamum)
+	(computer)
+	(Pergamum)
+	
+player Rhodians
+	(Rhodes)
+	(computer)
+	(Rhodian)
+
+player Bithynians
+	(Nicomedia)
+	(computer)
+	(Bithynian)
+
+# firstly the roman cities:
+
+city Roma
+	(23,18)
+	(IMG_ROME)
+	(Romans)
+city Capua
+	(24,20)
+	(IMG_RMEDIUM)
+	(Romans)
+city Pisae
+	(21,16)
+	(IMG_RSMALL)
+	(Romans)
+city Terentum
+	(27,20)
+	(IMG_RSMALL)
+	(Romans)
+city Syracuse
+	(25,23)
+	(IMG_RSMALL)
+	(Romans)
+city Panormus
+	(23,22)
+	(IMG_RSMALL)
+	(Romans)
+city Alalia
+	(20,18)
+	(IMG_RSMALL)
+	(Romans)
+city Caralis
+	(19,21)
+	(IMG_RSMALL)
+	(Romans)
+city Gades
+	(5,21)
+	(IMG_RSMALL)
+	(Romans)
+city Carthago_Nova
+	(10,21)
+	(IMG_RSMALL)
+	(Romans)
+city Saguntum
+	(12,19)
+	(IMG_RSMALL)
+	(Romans)
+city Emporiae
+	(14,18)
+	(IMG_RSMALL)
+	(Romans)
+
+# then the enemy ones:
+
+city Carthage
+	(20,24)
+	(IMG_EMEDIUM)
+	(Carthaginians)
+	
+city Pella
+	(32,20)
+	(IMG_EMEDIUM)
+	(Macedonians)
+
+city Rhodes
+	(37,23)
+	(IMG_EMEDIUM)
+	(Rhodians)
+	
+city Corinth
+	(32,23)
+	(IMG_EMEDIUM)
+	(Greeks)              
+city Sparta
+	(32,24)
+	(IMG_ESMALL)
+	(Greeks)
+city Athens
+	(32,22)
+	(IMG_EMEDIUM)
+	(Greeks)
+city Ambracia
+	(31,21)
+	(IMG_ESMALL)
+	(Greeks)
+
+city Alexandria
+	(41,28)
+	(IMG_ELARGE)
+	(Ptolemies)
+city Cyrene
+	(33,28)
+	(IMG_ESMALL)
+	(Ptolemies)
+city Memphis
+	(42,30)
+	(IMG_EMEDIUM)
+	(Ptolemies)
+city Pelusium
+	(43,28)
+	(IMG_ESMALL)
+	(Ptolemies)
+city Ephesus
+	(37,22)
+	(IMG_ESMALL)
+	(Ptolemies)
+	
+city Tarsus
+	(44,32)
+	(IMG_ESMALL)
+	(Selucids)
+city Antioch
+	(45,22)
+	(IMG_ELARGE)
+	(Selucids)
+city Hierosolyma
+	(46,26)
+	(IMG_ESMALL)
+	(Selucids)
+city Damascus
+	(47,25)
+	(IMG_ESMALL)
+	(Selucids)
+city Edessa
+	(48,22)
+	(IMG_ESMALL)
+	(Selucids)
+city Dura
+	(51,22)
+	(IMG_ESMALL)
+	(Selucids)
+city Selucia
+	(56,23)
+	(IMG_ELARGE)
+	(Selucids)
+
+city Nicomedia
+	(38,19)
+	(IMG_EMEDIUM)
+	(Bithynians)
+city Sinope
+	(43,16)
+	(IMG_ESMALL)
+	(Bithynians)
+	
+city Pergamum
+	(36,21)
+	(IMG_ESMALL)
+	(Pergamums)
+
+# next come the roman soldiers:
+# the 4th line is as follows: (X,Y,Z), where x is the % unit strength,
+# Y is the troop quality (1-5) and Z is the morale (1-5), where low is best
+
+unit Preatorians
+	(23,18)
+	(IMG_PRAETOR)
+	(Romans)
+	(100,3,1)
+unit Legio_I
+	(21,15)
+	(IMG_LEGION)
+	(Romans)
+	(95,2,2)
+unit Legio_II
+	(24,19)
+	(IMG_LEGION)
+	(Romans)
+	(95,2,2)
+unit Legio_III
+	(8,18)
+	(IMG_LEGION)
+	(Romans)
+	(95,2,2)
+unit Legio_IV
+	(25,23)
+	(IMG_LEGION)
+	(Romans)
+	(95,2,2)
+unit Legio_V
+	(12,19)
+	(IMG_LEGION)
+	(Romans)
+	(95,2,2)
+
+# and finally, the enemy ones
+
+unit Carthaginian_I
+	(19,24)
+	(IMG_BARBS)
+	(Carthaginians)
+	(80,3,3)
+unit Greek_I
+	(9,16)
+	(IMG_BHORSE)
+	(Greeks)
+	(60,4,4)
+unit Greek_II
+	(10,17)
+	(IMG_BHORSE)
+	(Greeks)
+	(50,4,5)
+unit Greek_III
+	(13,16)
+	(IMG_BHORSE)
+	(Greeks)
+	(70,2,2)
+unit Greek_Elite
+	(9,17)
+	(IMG_BARBS)
+	(Greeks)
+	(100,1,1)
+
+# now we get the individuals.
+# they are defined as follows:
+# person NAME_NAME
+#		(nationality)
+#		(age,sex)
+#		(populous,liberality,republican)
+#		(birthplace,birthdate)
+#		(units:units_controlled_1,..X)
+#		(cities_controlled_1,..X)
+
+person Lucius_Veturius_Philo
+	(Roman)
+	(30,Male)
+	(50,50,100)
+	(Roma,200)
+	(units:Preatorians)
+	(cities:)
+	
+person Lucius_Scipio
+	(Roman)
+	(22,Male)
+	(80,70,100)
+	(Roma,100)
+	(units:Legio_I)
+	(cities:)
+
+person Quintus_Caecilius
+	(Roman)
+	(45,Male)
+	(20,20,100)
+	(Pisae,150)
+	(units:)
+	(cities:Roma)
+
+person Tiberius_Claudius_Asellus
+	(Roman)
+	(50,Male)
+	(35,50,100)
+	(Roma,220)
+	(units:Legio_V)
+	(cities:)
+
+person Gaius_Hostilius_Tubulus
+	(Roman)
+	(60,Male)
+	(12,67,100)
+	(Syracuse,190)
+	(units:Legio_II,Legio_III,Legio_IV)
+	(cities:)
+
+person Lucius_Quintus_Valens
+	(Roman)
+	(43,Male)
+	(40,50,100)
+	(Capua,123)
+	(units:)
+	(cities:)
+
+person Livia_Augustus
+	(Roman)
+	(37,Female)
+	(20,20,100)
+	(Terentum,200)
+	(units:)
+	(cities:)

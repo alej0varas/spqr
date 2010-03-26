@@ -1,0 +1,13 @@
+player {
+	display: block;
+	width: 600px;
+	padding: 4px;
+	margin-bottom: 4px;
+	border: 2px double black;
+	background-color: silver;
+	color: black;
+	font-family: Times,serif;
+	font-size: 14pt;
+	text-align: left;
+}
+

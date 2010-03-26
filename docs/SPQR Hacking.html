@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>SPQR Hacking</title>
+</head>
+<body>
+SPQR Hacking Guide<br>
+<br>
+SPQR Startup.<br>
+<br>
+<ul>
+  <li>Init the GUI</li>
+</ul>
+<ul>
+  <ul>
+    <li>Init Screen</li>
+    <li>Load and convert all graphics</li>
+    <li>Load all fonts</li>
+    <li>Set various resolution independant variables</li>
+  </ul>
+  <li>Setup the units</li>
+  <ul>
+    <li>Allocate space and structure</li>
+  </ul>
+  <li>Call main init() function</li>
+  <ul>
+    <li>Define the menu and build it</li>
+    <li>Draws the box below the map (defined as a window)</li>
+    <li>Add the test buttons</li>
+    <li>Add some simple units</li>
+    <li>Draw everything</li>
+  </ul>
+  <li>Call the main loop (lgui.main_loop())</li>
+</ul>
+Inside the main loop:<br>
+<ul>
+  <li>Loop until event reached:</li>
+  <ul>
+    <li>Check map scroll first</li>
+    <li>Check against all possible events</li>
+  </ul>
+</ul>
+test_mouse() is the function that gets called after determining what
+event we got. It checks the following:<br>
+<br>
+Goes through each defined window in reverse order of definition.<br>
+If a modal window, only checks that<br>
+Is the mouse inside the window?<br>
+<div style="margin-left: 40px;">Yes: check against that window<br>
+Finally, call the widget itself.<br>
+</div>
+<br>
+We need to add a double-click. If you double-click the map, then draw
+the hex details in the bottom window.<br>
+<br>
+First:<br>
+<br>
+Sort out the module mess.<br>
+*DONE*<br>
+<br>
+Each module must be self contained and ONLY define things. If it needs
+a callback to data then it should from a central point.<br>
+*DONE*<br>
+<br>
+The gui functions need to be called from most things, so:<br>
+Say in SPQR_WIDGET it needs lgui. Each widget must have a local pointer
+to lgui, and so on.<br>
+*DONE*<br>
+<br>
+LGUI DRAWS EVERYTHING AND HOLDS ALL THE GFX, BUT NO GAME DATA<br>
+*DONE*<br>
+<br>
+Things to do/improve on:<br>
+<br>
+Click on hex also checks unit and displays it<br>
+Map co-ords actually work (lots of fussy debugging)<br>
+Make the menus look better (more space, icons, shortcuts)<br>
+Add keyboard detection in events, and add some keyboard shortcuts for
+the menus<br>
+Allow clock dragging on mini-map<br>
+Implement a game turn by:<br>
+<ul>
+  <li>showing date/game turn</li>
+  <li>flash unit to move</li>
+  <li>allow one-hex movement</li>
+  <li>go through each unit after the move</li>
+  <li>show 'end turn' button at end of turn</li>
+</ul>
+SPQR should be built around the city.<br>
+<br>
+Each city has a number of hexes around it that it 'controls'. If you
+capture a city and hold it for a length of time, then those hexes
+become yours.<br>
+Hexes can be changed between cities if one grows or weakens.<br>
+In areas where there are no major cities then you need a miltary
+presence, followed by a perhaps founding such a city.<br>
+In fact, instead of the map, one should think of a nodal network when
+one thinks of the map of SPQR.<br>
+<br>
+SPQR is modelled in the following way:<br>
+<br>
+It starts fairly easy, and gets harder. Reasons:<br>
+<br>
+Military starts as Citizen-soldiers, becomes a recruited force (we
+start at 200BC, remember).<br>
+Italy starts as a producer of money, but soon becomes a consumer.<br>
+The more control you exert in areas, the harder it becomes, because you
+are not nessacerily the best one to choose.<br>
+Religion starts to change the people.<br>
+Barbarians become more like you, and better at being like you.<br>
+<br>
+SPQR Game Data File Parsing:<br>
+<br>
+A city is defined as the following:<br>
+<br>
+city &lt;NAME&gt;:<br>
+(NUMBER,NUMBER)<br>
+(GFX)<br>
+<br>
+and a unit:<br>
+<br>
+unit &lt;NAME&gt;:<br>
+(NUMBER,NUMBER)<br>
+(GFX)<br>
+<br>
+&lt;NAME&gt;= [0-9A-Za-z_] all _ converted to spaces in the code<br>
+NUMBER=[0-9]<br>
+GFX=[0-9A-Za-z_]<br>
+<br>
+</body>
+</html>

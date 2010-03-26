@@ -1,0 +1,17 @@
+﻿Interested in SPQR?
+
+This document is a description of how SPQR the game works. Perhaps the hardest part to get your head around will be the 'pick a player' that happens at the start of each year, so let's begin with that facet:
+
+At the start of each turn, you have to select a Roman to be that year. You can pick any individual you like, but you only have control over their actions.
+
+1: You may not do things that are completely against that players ideology, but you may change that ideology over a few years of play. For example, a roman general with a very high loyalty rating will not generally revolt.
+
+2: If the player dies in that turn, then you have no control until the next turn, where you may select any player again.
+
+3: The more turns you control a player, the more you can shape his character.
+
+4: The base skills of a player (charisma, command etc...) are fixed and do not change.
+
+So – why do we use this game mechanic?
+
+At the beginning of the game, Rome is ruled by a republican senate. You may choose to be the leading man of the senate, or a general: but power will be limited. Changing the constitution and moving to an Imperial govt will be a desire of the player (because then you can have real power as the emperor). However, the game does not force this upon you: it arises due to the players wishes – in the same way that the leading men of the late republic found themselves.

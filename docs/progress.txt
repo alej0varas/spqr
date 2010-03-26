@@ -1,0 +1,247 @@
+This is a list of the immediate issues that I have with SPQR (as of v0.2.9),
+and the ones I shall be fixing first:
+
+1: After selecting new, you are told that k brings up a key list. It doesn't.
+   *DONE*
+
+2: Clicking on a menu item activates the code, but the menu is not cleared
+   from the screen until AFTER the routine has finished (and also goes
+   funny on preferences menu)
+   *DONE*
+
+2b:Add a link from the pygame image on intro screen
+   *DONE*
+   
+Currently:
+Firstly make the map and unit info link up better
+	*DONE*
+Each individual/city/unit to have a unique id to identify it
+	*DONE*
+Never pass an index: pass the id number
+	*Mainly done* - not always done to ensure speed.
+	In future - all data that needs to be stored will use the id number
+Allow 4 units on each hex
+	*DONE*
+Code now shows these units below
+	*DONE*
+Allow user to select a unit from the info box
+	*DONE*
+Add a 'm' key - moves to next unit on same hex
+	*DONE*
+Allow units to move
+	*DONE*
+Tidy up visually (2c and 2d)
+	*DONE*
+Put an option of 'new game' in file menu
+	*DONE*
+
+13 Sep 06 - Seems that the structure for 4 units/hex seems to work 
+
+Known Bugs:
+Still possible to move to below the max hex (bottom y co-ord)
+The mini-map click is not accurate
+When you move *away* from a hex, you'll need to redraw the hex you left
+if it now only has 1 unit in it
+	*DONE*
+Flashing unit overwrites star overlay on surrounding hexes - fix
+	*DONE*
+
+2c: Add movement left to unit overlay graphics
+	*DONE*
+
+2d: Add 'extra units' overlay on map
+	*DONE*
+
+Add music
+	*DONE*
+Make preference screen work for volume + music options
+	*DONE*
+Enable click dragging for mini-map
+	*DONE*
+
+Add a 'c' key - centre map on current unit (if highlighted)
+	*DONE*
+Add individuals to dataset, parser and scenario file
+	*DONE*
+
+Tidy up some of the window code to ensure we don't reproduce code
+	I.e. the loop at the end of EVERY window creation code that
+	offsets all of the widgets etc...
+	*DONE*
+Make it so that the area asked for, when you ask for a window, is
+	actually that area, so that the window itself is slightly larger
+	*DONE*
+4: Need to resolve more than 1 unit on screen at once. Possible: reduce size
+   of info bars, get rid of i button, allow max of n units on 1 hex
+   (possibly 4 - that would be an army of 96,000 men)
+	*DONE*
+
+5: Allow left click drag on mini map
+	*DONE*
+
+==============================================
+==28th October 2006===========================
+==============================================
+	
+Allow double-clicks (*ouch*).
+	*DONE*
+Add a 'display units' window, which lists the units like the
+  cities in civ
+  *DONE*
+Do the same for the cities
+	*DONE*
+And for the individuals
+	*DONE*
+Show turns left on unit list dialog
+	*DONE*
+Fix 'window top left not showing' bug
+	*DONE*
+Make the keypress code pass the handle parameter on an event
+	*DONE* - or at least the skeleton for it (not useful yet?)
+Standardise the placement of buttons and seperators at the bottom
+  of all dialogs and windows
+  *DONE*
+Add owner to unit info boxes
+	*DONE*
+Draw mini graph on stacked units images
+	*DONE*
+Make the console screen 1:work, 2:do something useful
+	*DONE*
+Remove silly i icon and show info on icon double-click
+	*DONE*
+Tidy up the bottom info display a *lot*. Get rid of the i graphic
+	*DONE*
+Diffrentiate between the different stacked units
+	*DONE*
+
+==============================================
+===2nd November 2006==========================
+==============================================
+
+Add a listbox widget (ouch). Used for battle code
+	*DONE*
+Make the unit list dialog more interactive
+Show a loading screen during start-up
+	*DONE*
+Highlight the current unit in the section left of the mini-map
+	*DONE*
+Fix left click position on mini-map (not accurate)
+	*DONE*
+FIX THE FUCKING MAP LAYOUT - YOU CAN CRASH THE GAME IN NORTH AFRICA!!!
+Move to a CVS database, or something like it
+
+Add individuals to the code. Make them *very* simple for now
+	(i.e. they actually do something, and play the game)
+
+Split the battle code *away* from the AI code.
+
+Make the AI code do something (retreat at sign of attack, retire
+  to a sensible hex)
+
+3: Battle code badly needs to be finished. We need:
+	a: An agression meter of some kind
+	b: The ability to select what you want to go for/defend
+	c: Enemy units to retreat
+	d: The numbers to look better
+	e: It should work with cities
+
+----------------------------------------------
+Back to work on Dec 6th 2006:
+
+Remove all battle code.
+	*DONE*
+Seperate all animation code away from movement area
+	*DONE*
+Build a general 'animate unit' routine
+	*DONE*
+Make a *very* simple battle routine: just a simple messagebox with results
+Make the loser retreat away
+Make battles for cities a bit more complex (but not a lot)
+
+NOT EASY: update maps with color overlay to show territory controlled
+	(*OUCH!!* - but it'll get done)
+
+----------------------------------------------
+Back to work on Tuesday 6th March
+Previous 'back to work' was pretty short
+
+Aims:
+
+Finish off the battle code so a simple battle system is coherent and works
+Make it work with cities as well
+Add color overlay to the graphics
+
+==============================================
+===Serious - almost a release!================
+==============================================
+
+Give individuals named jobs, add a fair few of them
+
+Enhance individiual itemlist window, so you can cut down
+  those highlighted (important jobs only, maybe)
+
+At start of game turn, allow to select individual to play
+
+Play as that individual
+
+Add a whole bunch of sound effects
+
+Add a navy, and ports, and a seperate 'SR' move at the very
+  start of the turn (make this pretty simple)
+  
+==============================================
+===This is most definitly a release!==========
+==============================================
+  
+Add a 'goto' interface, that uses an A* routine and can handle
+  moves over multiple turns (small ouch)
+
+6: Add VERY basic economic system, and add to end of turn
+
+7: Allow loading and saving of game. Make this very simple to start with
+   (choose between various slots)
+
+10: Add some simple A.I. for the enemy, and give them a turn
+
+At this point you have a semi-playable game. Ok, it'll suck, but you can
+possibly get some other people in at this point.
+
+Add weights to each map index, so it costs more to move in some
+  areas than others, and indicate this graphically (*OUCH*)
+
+Economic System:
+
+There are several things traded in SPQR.
+
+Foreign trade is in:
+Amber - Free Germany
+Ivory - Tropical Africa
+Incense - Arabia
+Pepper - India
+Silk - China
+
+Other trade is in the following items:
+Bronze
+Iron -> Weapons
+Silver
+Gold
+Grain
+Oil
+Flax -> Cloth
+Hemp -> Cloth
+Slaves
+
+We use the city as the basic economic unit
+Each hex attached to a city (EXCEPT that of the city itself) has a production
+value for all of the above. This is the EXCESS produce, or if negative, the NEED
+that a city has. If a city has a shortfall in food, expect problems (normally, cities
+are *not* short on food).
+
+It is not profitable in any way to export food over land to anything more than 2 hexes
+away, the only option is by sea. In fact almost all major movement of goods must be done
+by sea. The cost of transportation is taken as largly static (a function of distance).
+
+The following taxes can be implemented:
+
+A tax on goods, as a percentage (i.e. a sales tax). This is on named goods.
+A border collection tax, when goods move in or out the Roman border.

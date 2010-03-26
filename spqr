@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# standard starter script for spqr
+
+./spqr.py -n

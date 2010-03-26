@@ -1,0 +1,1601 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <title>SPQR Design Document</title>
+</head>
+
+
+<body>
+
+
+
+
+
+<big><span style="font-weight: bold;">
+
+
+SPQR Design Spec</span></big><br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+This document is the formal design specification for SPQR, a turn-based
+strategy game written in Python and using the Pygame library.<br>
+
+
+
+
+
+
+
+
+The bulk of this document is split into 3 sections. The first sets out
+what may be termed the axioms of SPQR; that is, what SPQR aims to be
+and how it aims to get there. The second section describes a road map
+to how the current code is moving along. The third section describes
+how the game mechanics work.<br>
+
+
+
+
+
+
+
+
+<br style="font-weight: bold;">
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Basic Axioms of SPQR</span><br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+1: SPQR uses Python + Pygame, nothing else<br>
+
+
+
+
+
+
+
+
+2: Aim to be historically accurate at all times<br>
+
+
+
+
+
+
+
+
+3: Don't force micro-management<br>
+
+
+
+
+
+
+
+
+4: Should be enjoyable and informative<br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+<span style="font-weight: bold;">Code Road Map</span><br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+The current TODO list boils down to this:<br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+Clear up the clutter in the spqr_data.py module.<br>
+
+
+
+
+
+
+
+
+Enable movement on a laptop.<br>
+
+
+
+
+
+
+
+
+Enable movement with just a mouse.<br>
+
+
+
+
+
+
+
+
+Clear some minor menu issues (port bug solutions from HandyGUI).<br>
+
+
+
+
+
+
+
+
+Make the battles work.<br>
+
+
+
+
+
+
+
+
+Enable battles with cities.<br>
+
+
+
+
+
+
+
+
+Color the regions of empires.<br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+
+<span style="font-weight: bold; font-style: italic;">SPQR Design</span><br>
+
+
+
+
+
+
+
+
+<br>
+
+Before I go into detail about the various features of SPQR, I wil first
+outline how the game will work. Note that this is not to make every
+game the same, but it will show some features of how the game should
+play.<br>
+
+<br>
+
+Firstly, SPQR tends to move in phases. In the first phase, Rome will
+generally have the best military. In the second phase, although your
+military will normally be better than the enemy, you will meet much
+tougher opponents; and if you have grown your empire in the first
+phase, you will often be fighting campaigns far away from home. In the
+final phase, you can expect your enemies to be as tough as yourself.<br>
+
+<br>
+The amount of control and information about the empire is directly
+proportional to the cost of the beuracracy. If you choose to have more
+control, it will cost you more as a % of total income.<br>
+<br>
+
+And now onto the details.<br>
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold;">
+
+
+1: SPQR is based around people, not countries.</span><br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+On every turn of SPQR, the player plays the part of 1 person in Rome.
+Who that actually will be is decided by the player. He may choose a
+separate person every turn, but normally the same person is kept until
+their death. Therefore the powers available to a player will depend on
+who is picked. So maybe you can think of SPQR as a turn based role
+playing game.<br>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+Reasoning: We need a way to simulate both the fall of the republic, and
+to simulate civil wars. It is typical that a player will always
+demand more power, and the only end result of this will give you an
+emperor. But this is not forced on the player.<br>
+
+
+
+
+
+
+
+Similarly, in the civil war period, we need a mechanism where a player
+can rapidly admit defeat to another Roman power yet continue to play. A
+player in a losing position in a civil war will normally switch at some
+point to the winning side, rather than run the empire into the ground
+to hold on to power.<br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold;">
+
+2: The basic map unit is the City</span><br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+Compare cities with countryside:<br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+Cities:<br>
+
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; Have dense populations<br>
+
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; May have harbors<br>
+
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; Easier to control<br>
+
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; Easier to tax<br>
+
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; Promote trade<br>
+
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; Generally, consume food<br>
+
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; Allow greater goods production<br>
+
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; Easier to defend<br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+Countryside:<br>
+
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; Have lower population densities<br>
+
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; Cost more to control<br>
+
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; Produce lower tax<br>
+
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; Generally, produce a food surplus<br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+A city controls a number of hexes around it (this number can vary).
+When a city is captured by an enemy unit, then usually the hexes under
+it's control will count as being captured as well. It is unusual for
+this not to happen, the reasons begin:<br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+The capture being done by a weak enemy&nbsp;at the very end of a campaign season.<br>
+
+
+
+
+
+
+
+The enemy is weak and hated (barbarian units on plunder missions, for example)<br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+Even if this happens though, the hexes will offer no opposition&nbsp;to
+enemy units passing through them, and, after a year, convert to their
+new owner.<br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+In a civilized area, generally all countryside hexes will be under the
+influence of a city. In a barbarian area this is not the case, and all
+hexes will be 'free'. Obviously conquering civilized areas will be
+potentially a lot faster since all you need to do is capture the
+cities; whereas in barbarian areas you will need to capture each hex
+individually.<br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+Cities in general consume food, and their size is mainly limited to the
+number of hexes they influence, since these hexes in effect feed the
+city. In the time period we are simulating, large scale transportation
+of food, other than by boat, was not in general effective, so any
+excess food produced by the countryside will be used by the local city
+and not move outside the area. The exception with boats is important,
+because some cities may grow so large that they need to be supplied
+every year with food from far away - Rome being the most obvious city.<br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+Battles in the countryside are very much the standard type of battle.
+Un-walled cities are treated as if there was no city for all military
+encounters. Walled cities create a seige situation, and cannot be
+assaulted unless the enemy has a seige train. During a seige, a city
+does not receive food from it's countryside hexes. It is also possible,
+given a navy, to seige from the sea as well, and prevent the import of
+food by boat.<br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+In general, troops produced from the countryside are better than those from the city.<br>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold;">
+
+3: The basic military unit is the unit (duh!)</span><br>
+
+
+
+
+
+
+<br>
+
+
+A unit is a number of troops from 1 to 20,000. It is unusual for units
+to have less than 1,000 troops. Each hex can hold up to 4 units. Each
+unit may have up to 8 different unit types. Each type has 2 aspects:
+it's troop type, and it's skill. There are many troop types:<br>
+
+
+<br>
+
+
+Elephants<br>
+
+
+Heavy Cavalry<br>
+
+
+Cavalry<br>
+
+
+Light Cavalry<br>
+
+
+Camelry<br>
+
+
+Expendables<br>
+
+
+Spears<br>
+
+
+
+Pikes<br>
+
+
+Blades<br>
+
+
+Warband<br>
+
+
+Auxilia<br>
+
+
+Bowmen<br>
+
+
+Psiloi<br>
+
+
+Artillery<br>
+
+
+Hordes<br>
+
+
+<br>
+
+
+The various skills are:<br>
+
+
+<br>
+
+
+Superior<br>
+
+
+Ordinary<br>
+
+
+Inferior<br>
+
+
+Fast<br>
+
+
+Exception<br>
+
+
+<br>
+
+
+Any particular sub-unit may have one and only one skill, and not all skill type are always available.<br>
+
+
+<br>
+
+
+A sub-unit also has a 'Commander' tag as well, which if true means it
+is run by an SPQR person. The advantages and disadvantages of SPQR
+people commanding units are:<br>
+
+
+
+<br>
+
+
+
+Positive:<br>
+
+
+
+&nbsp;&nbsp;&nbsp; Campaign season can be extended<br>
+
+
+
+&nbsp;&nbsp;&nbsp; Greater loyalty<br>
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;A minor advantage of Republican systems is that the command troops
+come at no extra cost, since they are borne by the SPQR person.<br>
+
+
+
+<br>
+
+
+
+Negative:<br>
+
+
+
+&nbsp;&nbsp;&nbsp; Tend to be slightly more costly<br>
+
+
+
+&nbsp;&nbsp;&nbsp; Since they are controlled by SPQR people, they may be more independent<br>
+
+
+&nbsp;&nbsp;&nbsp; Individuals in charge of a unit are those most likely to declare themselves emperor.<br>
+
+
+
+<br>
+
+
+
+<br>
+
+
+Each hex can hold
+up to 4 units.<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+When a unit attacks another unit, the following sequence of events happens:<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+Firstly, units on the same hex as the attacker that have movement points left may join in the attack.<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+Then the attack is done. The attacker may choose from some options,
+i.e. the losses they are prepared to accept, and perhaps what sort of
+attack they may try. The defender also chooses from some options. Then
+the battle is calculated. The results will be one of: (ranging from
+best to worst, from the point of the attacker)<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; 1: The defending units surrender before battle starts.<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; 2: The defending units retreat away from battle<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; 3: The defending units are annihilated &nbsp;(and the attackers take some loss)<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; 4: The attacker wins, but takes losses (remaining defenders retreat)<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; 5: The defender retreats but gives the attacker a bloody nose (a phyrric victory)<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; 6: Battle is not engaged, and the attackers retreat without loss*<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; 7: Attackers refuse to move<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; 8: Defenders win, and force the attackers to retreat with losses<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; 9: Defenders win, and inflict heavy losses on the retreating attackers<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; 10: Defenders annihilate the attacking force<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; 11: Attackers rebel and and switch sides<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+* e.g. troops morale is lowered when they discover the enemy well entrenched<br>
+
+
+
+
+<br>
+
+
+
+
+
+
+
+Most of these results will give casualties to both sides. If the
+defenders win, then all the units remain in their starting places. If
+the attackers win, then they all move to the new hex. In this latter
+case, the defenders must retreat 1 hex to another bordering hex that is
+either friendly or free of enemy units. If no such hex exists, then
+another battle occurs between the two sides (usually with a
+large&nbsp;disadvantage to the defenders).<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+<br>
+
+
+<span style="font-weight: bold;">
+
+
+
+4: SPQR is based around people</span><br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+Real people populate SPQR. They have children and careers. Unfortunately, most of these people will be anonymous, because:<br>
+
+
+
+
+
+
+<br>
+
+
+&nbsp;&nbsp;&nbsp; There are too many, and they die regularly. Most names will mean nothing to you.<br>
+
+
+&nbsp;&nbsp;&nbsp; To help the memory, we use families and awards.<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; In general, the middle&nbsp;name denotes the type of person. So, for example,
+the name Lucius may denote good &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; military commanders; Grachus
+that of republicans. This is a pure game device.<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold;">
+The yearly turn</span><br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+A turn is SPQR is one year long. The turn phase runs a strict order, vis:<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; I: Player chooses who to play this year<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; II: Spending: excess cash may be spent on special projects at this time<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; III: Pre-campaign movement: players may SR troops<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; IV: Campaign season: troops are moved and normal combat occurs.<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; V: Post-campaign movement: all troops not SR'd in pre-campaign movement, and all troops who<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; did not move in the movement phase can be SR'd.<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; VI: Harvest time: Taxes are collected and food levels are set.<br>
+
+
+
+
+
+
+&nbsp;&nbsp;&nbsp; VII: Start of next year: consuls are elected for the new year.<br>
+
+
+
+
+
+
+<br>
+
+
+
+
+
+Let's sub-divide these and give some more detail:<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold;">I: Player choice</span><br>
+
+
+
+
+
+<br>
+
+
+
+
+
+This part is fairly simple. Most moves the player will want to stay
+with the same person. Even when they change, most likely they will want
+to play a powerful character, and SPQR will happily provide lists of
+the most powerful every turn.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold;">II: Spending</span><br>
+
+
+
+
+
+<br>
+
+
+
+
+
+Excess cash may be spent here. But it's not as simple as just spending
+easy money. First let's define cash. This is the gold and silver
+reserves of the empire. And 'excess'? Thats any that happens to be any
+cash you have! So let's look more closely at how we manage the economy.<br>
+
+
+<br>
+
+
+Firstly, there is the income of the economy. Income is derived from
+several sources, but by far the most important of these are taxes. It
+is important to note that in the Roman period taxes were historically
+low, so you may have a 2% tax on slaves, or 5% on money lending. The
+next most important source of revenue is the spoils of war, which of course
+is highly variable for each year. The next source is that of the gold
+and silver mines of the empire. Finally, a minor source of money is by
+simply taking it from people. This last would normally be by
+confiscating the estates of rich people - which happened on a regular
+basis with some emperors! Finally, there is non-direct income, where
+the empire will take a resource (say food) and not pay for it.<br>
+
+
+<br>
+
+
+Next are the outgoings. By far the biggest outgoing is on the military.
+In various order, the other major outgoings are 'bread and circuses',
+i.e. entertainment for the people (mainly for the inhabitants of the
+city of Rome, it must be said), upkeep of the water and road systems,
+and appeasement payments to enemies. Like income, you can have
+non-direct spending. The classic example is disaster relief; it was
+very common, in the event of an earthquake or other natural disaster,
+to drop the tax rate to 0% in the area affected. <br>
+
+
+<br>
+
+
+There is one more outgoing that is perhaps the most important outgoing,
+and one which is perhaps the most interesting: buerocracy.<br>
+
+
+<br>
+
+
+Now, income in the manner described above comes in the form of coins,
+i.e. shaped nuggets of either copper, silver or gold. The empire
+derives an extra bonus in that a coin made of gold is worth slightly
+more than that of an equal weight of gold, <span style="font-style: italic;">if the empire is perceived to be honest</span>.
+At any time the empire can make quick money by producing coins that
+have less silver or gold in them. For example, a sesterci may have 100%
+silver; you can make that 80% silver, thus saving you money (since the
+sesterci is nominally equal in value to the 100% silver one). However,
+your reputation will suffer, and slowly the value of the coin will be
+debased (with the main consequence being inflation).<br>
+
+
+<br>
+
+
+There is sometimes a good reason why you may choose to debase your
+coinage. The empire will depend on a certain amount of coin being
+circulated, otherwise transactions will start to be conducted by
+bartering, and thus your tax collections may give you goods rather than
+the gold and silver which is much easier turned into goods and services
+that you require. So a player needs to keep the coinage levels up in
+order to make the economy a coin-based one rather than a barter system.
+Of course in times of difficulty, the easiest way to produce high coin
+levels is to debase the coins.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold;">III: Per-Campaign Movement</span><br>
+
+
+
+
+
+<br>
+
+
+Units can now move. These moves represent troop movements from the
+start of the year to the start of the campaign period, so usually they
+are limited to sea
+transfers or troop movements in the southern half of the map.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold;">IV: Campaign Season</span><br>
+
+
+
+
+
+<br>
+
+
+This is one of the most critical sections of the game turn. During this
+part, troops move normally and combat is conducted. The first
+difficulty is that the campaign season varies according to the
+commander and the troops. Highly skilled commanders can start the
+season early; and with well trained troops they can carry the season
+into late in the year. Such a flexibility can be critical in war.
+Campaigns can also cost money, especially if they are not a success.
+Although troops may have a seemingly high movement rate at first, in
+general they must finish the campaign season in place where they can
+rest and be fed. To make life easier, the should somehow display how
+many moves are needed to safely retire (or automatically update a
+'real-moves-left' move amount).<br>
+
+
+
+
+
+In general, the further north you are, the shorter the campaign season is.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold;">V: Post-Campaign Season</span><br>
+
+
+
+
+
+<br>
+
+
+
+
+
+Once again, troops can move. This represents post campaign movement.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold;">VI: Harvest Time</span><br>
+
+
+
+
+
+<br>
+
+
+
+
+
+This is probably the most important phase of all. Essentially, in this
+part you collect your taxes and set some general spending policy for
+the next year.<br>
+
+
+<br>
+
+
+To stop that being so vague, let me specify. In this section, the game
+first calculates the income this turn. The game also calculates income
+at the start of the 'spending' season, but it is normally much less
+than this period, because you are collecting taxes from harvest (a lot)
+and campaign windfalls with be added here (which can be a lot). Of the
+other income streams, gold and silver mines are calculated each time,
+whilst confisticating estates is different for each turn. The end
+result is almost always: more income this time, and pressure to steal
+estates when money is needed on the other financial turn.<br>
+
+
+<br>
+
+
+Next you can set the tax rates for the coming year. The Roman <br>
+
+&nbsp;is not effeicent enough to allow you to change the tax rate
+(although this could be an option if the empire leans heavily in one
+direction: this may change). The usual expense is 10% of total spending
+spread over both financial periods (so an unfair proportion is spent in
+the first). the twist is: <span style="font-style: italic;">the greater control you desire over your domain, the higher this cost</span>. Of course the opposite is also true: <span style="font-style: italic;">the more control you relax, the cheaper it is to run it!</span> This aspect is covered in a later section.<br>
+
+
+
+
+
+<br>
+
+
+
+
+
+<span style="font-weight: bold;">VII: Consul Elections</span><br>
+
+
+
+
+
+<br>
+
+
+
+
+
+Consuls and other officials are set in place.<br>
+
+
+
+
+
+<br>
+
+
+<br>
+
+<span style="font-weight: bold;">
+SPQR People</span><br>
+
+
+<br>
+
+
+The people populating the game have various attributes:<br>
+
+
+<br>
+
+
+<span style="font-style: italic;">Name</span><br>
+
+
+Obviously a simple text string<br>
+
+
+<br>
+
+
+<span style="font-style: italic;">Desire</span><br>
+
+What they wish to be: a soldier, an emperor, a diplomat, or a
+politician. The desire to be an emperor is at first not used. When
+individuals are given dictator status in a republic then that desire
+may be awakened. After a succesfull emperor, all individuals may have
+this desire.<br>
+
+
+<br>
+
+
+<span style="font-style: italic;">Skill</span><br>
+
+
+What they are best at: soldiering, leading, diplomacy or politics.<br>
+
+
+<br>
+
+
+<span style="font-style: italic;">Wisdom</span><br>
+
+Wisdom denotes a persons rationale skill in calculating the best
+situation for themselves. It increases slightly every 5 years, and at a
+certain level a persons desire is set equal to their skill (i.e., they
+work out what they are best at). This minor effect makes elder people a
+lot more reliable (since they obviously have skills in what they are
+interested in doing).<br>
+
+
+<br style="font-style: italic;">
+
+
+<span style="font-style: italic;">Intelligence</span><br>
+
+
+Intelligence denotes a persons skill in calculating how best to so
+something. As compared to wisdom, a person with high wisdom is good at
+questions like 'how do I conquer empire XXX' wheras one with high
+intelligence is good at 'How do win this battle?'. In game terms,
+wisdom is used at the start of every turn (what goals shall I aim for&nbsp;now?)
+whereas intelligence is used all other times (battles, voting and so
+on - how do I acheive my goal).<br>
+
+
+<br>
+
+
+<span style="font-style: italic;">Charisma</span><br>
+
+Charisma represents a persons likeability and leadership qualities.<br>
+
+<br>
+
+
+<span style="font-style: italic;">Constitution</span><br>
+
+Governs the health and vitality of the person. This only has a small
+bearing on the length of the life; it is mainly used to see how well
+somebody can hold up against long travelling or long campaign seasons.<br>
+
+<br>
+
+<br>
+
+<span style="font-weight: bold;">Beauracracy</span><br style="font-weight: bold;">
+
+<br>
+
+SPQR will essentially hide a lot of details of the economics and
+military from you. You can get more data and more options by increasing
+the beauracracy. This insidious charge is not a fixed sum but instead
+expressed as a percentage charge of total income. Normally it is around
+10%, but it can increase to astounding amounts if you choose to enforce
+real micro-managment of everybodys lives (and presumably annoy them a
+lot as well).<br>
+
+<br>
+One small point to know is that beauracracy costs are not applied to
+windfall incomes from conquest, since these require no actual
+beauracracy to acquire (just an army!).<br>
+
+<br>
+
+<span style="font-weight: bold;">Inventions &amp; Engineering</span><br>
+
+<br>
+
+kj<br>
+
+
+
+
+
+
+
+
+</body>
+</html>
