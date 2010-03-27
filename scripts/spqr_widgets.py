@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-#	This program is free software; you can redistribute it and/or modify
+# This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
@@ -14,72 +14,68 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-# get modules
 import sys,pygame
 from pygame.locals import *
-from spqr_defines import *
+
+import spqr_defines as SPQR
 import spqr_events as SEVENT
 
-# what follows is the base class used for the callback functions of thw widgets. Every
+# what follows is the base class used for the callback functions of the widgets. Every
 # widget has one, and you can modify the widgets be pointing mouse_* to different functions
-class SPQR_Callbacks:
+class CCallbacks:
 	"""Simple class holding callbacks for widgets."""
 	def __init__(self,description):
-		self.mouse_over=mouse_over_std
-		self.mouse_ldown=mouse_ldown_std
-		self.mouse_rdown=mouse_rdown_std
-		self.mouse_dclick=mouse_dclick_std
-		self.mouse_lclk=mouse_lclk_std
-		self.mouse_rclk=mouse_rclk_std
+		self.mouse_over=SPQR.mouse_over_std
+		self.mouse_ldown=SPQR.mouse_ldown_std
+		self.mouse_rdown=SPQR.mouse_rdown_std
+		self.mouse_dclick=SPQR.mouse_dclick_std
+		self.mouse_lclk=SPQR.mouse_lclk_std
+		self.mouse_rclk=SPQR.mouse_rclk_std
 		self.describe=description
 
 # now a class for the items contained within the window
 # this is the base class that you will only use to generate custom widgets
-# in almost all cases you'll use the widgets defined by SPQR
-class SPQR_Widget:
+# in almost all cases you'll use the widgets defined by the library
+class CWidget:
 	"""Base class for widgets: All other widgets should build on this one"""
-	def __init__(self,gui,x,y,width,height):
+	def __init__(self,gui,x,y,rect,htype,image,describe,
+				 parent=False,active=False,visible=True):
 		self.lgui=gui
-		self.active=False
-		self.visible=True
-		self.rect=pygame.Rect(x,y,width,height)
-		self.wtype=WT_ROOT
+		self.active=active
+		self.visible=visible
+		self.rect=rect
+		self.wtype=htype
 		# add callbacks
-		self.callbacks=SPQR_Callbacks("SPQR_Widget_Callback")
+		self.callbacks=CCallbacks(describe+"_Callback")
 		# set an image up for later
-		self.image=False
+		self.image=image
 		# following used to store the parent window of the
 		# widget... False if there is no valid parent
 		self.parent=False
-		self.describe="SPQR_Widget"
+		self.describe=describe
 		
-# TODO: Build all of these items by subclassing the SPQR_Item one 
+# TODO: Build all of these items by subclassing CWidget
+
 # place the standard items here, starting with a label
-class SPQR_Label:
+class CLabel(CWidget):
 	"""Label class stes and stores details for a simple label"""
 	def __init__(self,gui,x,y,width,height,text):
-		self.lgui=gui
-		self.active=False
-		self.visible=True
-		self.rect=pygame.Rect(x,y,width,height)
-		self.wtype=WT_LABEL
-		self.background_colour=(238,238,230)
-		self.text_colour=COL_BLACK
-		self.font=FONT_VERA;
-		self.justification=LEFT_JUSTIFY
-		self.text=text;
-		self.callbacks=SPQR_Callbacks("SPQR_Label_Callback")
+		CWidget.__init__(self,gui,x,y,pygame.Rect(x,y,width,height),"WT_LABEL",
+					     None,"CLabel") 
+		self.background_colour=SPQR.BGUI_COL
+		self.text_colour=SPQR.COL_BLACK
+		self.font=SPQR.FONT_VERA
+		self.justification=SPQR.LEFT_JUSTIFY
+		self.text=text	
 		# render the image text
-		if self.build_label()==False:
+		if self.buildLabel()==False:
 			# well, something went wrong, lets create an empty gfx
-			self.image=pygame.Surface((self.rect.w,self.rect.h))
-			self.image.fill(self.background_colour)
-		self.parent=False
-		self.describe="SPQR_Label"
+			image=pygame.Surface((self.rect.w,self.rect.h))
+			image.fill(self.background_colour)
 	
 	# code for the following routine taken from the Pygame code repository.
 	# written by David Clark, amended by Chris Smith
-	def build_label(self):
+	def buildLabel(self):
 		"""Called to redraw the text on the label
 		   Returns false (and displays message on console) if
 		   the new text will not fit the image. (possible on low res)"""
@@ -87,20 +83,20 @@ class SPQR_Label:
 		requested_lines=self.text.splitlines()
 		# Create a series of lines that will fit on the provided rectangle
 		for requested_line in requested_lines:
-			if self.lgui.fonts[self.font].size(requested_line)[0]>self.rect.w:
+			if(self.lgui.fonts[self.font].size(requested_line)[0]>self.rect.w):
 				words=requested_line.split(' ')
 				# if any of our words are too long to fit, return.
 				for word in words:
-					if self.lgui.fonts[self.font].size(word)[0]>=self.rect.w:
-						print "[SPQR]: Error: Word (",word,") was too long in label"
-						print "               Width was more than ",self.rect.w
+					if(self.lgui.fonts[self.font].size(word)[0]>=self.rect.w):
+						print "Error: Word (",word,") was too long in label"
+						print "       Width was more than ",self.rect.w
 						return(False)
 				# Start a new line
 				accumulated_line=""
 				for word in words:
 					test_line=accumulated_line+word+" "
 					# Build the line while the words fit.
-					if self.lgui.fonts[self.font].size(test_line)[0]<self.rect.w:
+					if(self.lgui.fonts[self.font].size(test_line)[0]<self.rect.w):
 						accumulated_line=test_line
 					else:
 						final_lines.append(accumulated_line)
@@ -113,148 +109,114 @@ class SPQR_Label:
 		self.image.fill(self.background_colour)
 		accumulated_height=0
 		for line in final_lines:
-			if accumulated_height+self.lgui.fonts[self.font].size(line)[1]>=self.rect.h:
-				print "[SPQR]: Error: Text string too tall in label"
-				print "               ah=",accumulated_height," h=",self.rect.h
+			if(accumulated_height+self.lgui.fonts[self.font].size(line)[1]>=self.rect.h):
+				print "Error: Text string too tall in label"
+				print "       ah=",accumulated_height," h=",self.rect.h
 				return False
-			if line!="":
+			if(line!=""):
 				tempsurface=self.lgui.fonts[self.font].render(line,1,self.text_colour)
-				if self.justification==LEFT_JUSTIFY:
+				if self.justification==SPQR.LEFT_JUSTIFY:
 					self.image.blit(tempsurface,(0,accumulated_height))
-				elif self.justification==CENTRE_HORIZ:
+				elif(self.justification==SPQR.CENTRE_HORIZ):
 					self.image.blit(tempsurface,((self.rect.w-tempsurface.get_width())/2,accumulated_height))
-				elif self.justification==RIGHT_JUSTIFY:
+				elif(self.justification==SPQR.RIGHT_JUSTIFY):
 					self.image.blit(tempsurface,(self.rect.w-tempsurface.get_width(),accumulated_height))
 				else:
-					print "[SPQR]: Error: Invalid justification value in label"
-					return False
+					print "Error: Invalid justification value in label"
+					return(False)
 			accumulated_height+=self.lgui.fonts[self.font].size(line)[1]
 		return(True)
 
 # possibly something even SIMPLER than the label - an image
-class SPQR_Image:
+class CImage(CWidget):
 	"""Image class states and stores details for a simple image"""	
 	def __init__(self,gui,x,y,width,height,image):
-		self.lgui=gui
-		self.active=False
-		self.visible=True
-		self.rect=pygame.Rect(x,y,width,height)
-		self.wtype=WT_IMAGE
-		# add the usual callbacks
-		self.callbacks=SPQR_Callbacks("SPQR_Image_Callback")
-		# image will be cropped if it's bigger than the supplied co-ords
-		self.image=pygame.Surface((width,height))
-		self.image.blit(self.lgui.images[image],(0,0))
-		self.parent=False
-		self.describe="SPQR_Image"
+		tmp_image=pygame.Surface((width,height))
+		tmp_image.blit(gui.images[image],(0,0))
+		CWidget.__init__(self,gui,x,y,pygame.Rect(x,y,width,height),
+						 SPQR.WT_IMAGE,tmp_image,"CImage")
 
 # and the simplest of all - a seperator bar
 # regardless of width, they all have a height of 2
-class SPQR_Seperator:
+class CSeperator(CWidget):
 	"""Seperator class states and stores details for a seperator"""
 	def __init__(self,gui,x,y,width):
-		self.lgui=gui
-		self.active=False
-		self.visible=True
-		self.rect=pygame.Rect(x,y,width,2)
-		self.wtype=WT_SEP
-		self.image=pygame.Surface((width,2))
+		image=pygame.Surface((width,2))
 		# now blit the 2 colours to the image
-		pygame.draw.line(self.image,SEP_DARK,(0,0),(width,0),1)
-		pygame.draw.line(self.image,SEP_LIGHT,(0,1),(width,1),1)
-		# even sep bars have callbacks!
-		self.callbacks=SPQR_Callbacks("SPQR_Seperator_Callback")
-		self.parent=False
-		self.describe="SPQR_Seperator"
+		pygame.draw.line(image,SPQR.SEP_DARK,(0,0),(width,0),1)
+		pygame.draw.line(image,SPQR.SEP_LIGHT,(0,1),(width,1),1)
+		CWidget.__init__(self,gui,x,y,pygame.Rect(x,y,width,2),SPQR.WT_SEP,
+						 image,"CSeperator")
 
 # and now a button
-class SPQR_Button:
+class CButton(CWidget):
 	"""Init routine to create a button widget. Call with a gui pointer,
 		 x and y positons, and the text on the button. Returns a
 		 button widget item for you to use.
-		 Buttons are automagically highlighted when the mouse is
-	   over them"""
+		 Buttons are automagically highlighted when the mouse is over them"""
 	def __init__(self,gui,x,y,text):
-		self.lgui=gui
-		self.active=False
-		self.visible=True
+		width=gui.images[SPQR.BUTTON_STD].get_width()
+		height=gui.images[SPQR.BUTTON_STD].get_height()
+		CWidget.__init__(self,gui,x,y,pygame.Rect(x,y,width,height),
+						 SPQR.WT_BUTTON,None,"CButton")
+		# get the images
+		self.image,self.pressed=self.drawButton(text)
 		self.highlight=False
-		self.wtype=WT_BUTTON
-		width=self.lgui.images[BUTTON_STD].get_width()
-		height=self.lgui.images[BUTTON_STD].get_height()
-		self.rect=pygame.Rect(x,y,width,height)
-		self.callbacks=SPQR_Callbacks("SPQR_Button_Callback")
-		# get the image, please!
-		self.image,self.pressed=self.draw_button(text)
-		self.parent=False
-		self.describe="SPQR_Button"
 		
 	# function to draw a standard button
-	def draw_button(self,text):
+	def drawButton(self,text):
 		"""Just call with the text you want displayed, the
 			 routine will draw the button for you. Returns
 			 the image that has been drawn AND the highlight button"""
 		# make a copy of the button bitmap and the highlight one
-		foo=pygame.Surface((self.lgui.images[BUTTON_STD].get_width(),
-			self.lgui.images[BUTTON_STD].get_height()))
-		bar=pygame.Surface((self.lgui.images[BUTTON_STD].get_width(),
-			self.lgui.images[BUTTON_STD].get_height()))
+		foo=pygame.Surface((self.lgui.images[SPQR.BUTTON_STD].get_width(),
+			self.lgui.images[SPQR.BUTTON_STD].get_height()))
+		bar=pygame.Surface((self.lgui.images[SPQR.BUTTON_STD].get_width(),
+			self.lgui.images[SPQR.BUTTON_STD].get_height()))
 		area=pygame.Rect((0,0,foo.get_width(),foo.get_height()))
-		foo.blit(self.lgui.images[BUTTON_STD],area)
-		bar.blit(self.lgui.images[BUTTON_HIGH],area)
+		foo.blit(self.lgui.images[SPQR.BUTTON_STD],area)
+		bar.blit(self.lgui.images[SPQR.BUTTON_HIGH],area)
 		# render the text
-		txt=self.lgui.fonts[FONT_VERA].render(text,True,COL_BUTTON)
+		txt=self.lgui.fonts[SPQR.FONT_VERA].render(text,True,SPQR.COL_BUTTON)
 		# centre the text and overlay it
-		x=(self.lgui.images[BUTTON_STD].get_width()-txt.get_width())/2
-		y=(self.lgui.images[BUTTON_STD].get_height()-txt.get_height())/2
+		x=(self.lgui.images[SPQR.BUTTON_STD].get_width()-txt.get_width())/2
+		y=(self.lgui.images[SPQR.BUTTON_STD].get_height()-txt.get_height())/2
 		area=pygame.Rect((x,y,bar.get_width(),bar.get_height()))
 		foo.blit(txt,area)
 		bar.blit(txt,area)
 		return(foo,bar)
 
-# and now a checkbox
-class SPQR_CheckBox:
-	def __init__(self,lgui,x,y,initial):
+class CCheckBox(CWidget):
+	"""Checkbox widget"""
+	def __init__(self,gui,x,y,initial):
 		"""You need to pass the following parameters to the init() routine:
 		   lgui - the gui class instance
 		   x,y - the offset into the window
 		   initial - a boolean describing the start status of the widget"""
-		self.lgui=lgui
-		self.rect=(x,y,CHKBOX_SIZE,CHKBOX_SIZE)
-		self.active=False
-		self.visible=True
-		# width and height are taken from defines
-		self.rect=pygame.Rect(x,y,CHKBOX_SIZE,CHKBOX_SIZE)
-		self.wtype=WT_CHECK
+		if(initial==True):
+			image=gui.images[SPQR.CHECK_YES]
+		else:
+			image=gui.images[SPQR.CHECK_NO]
+		CWidget.__init__(self,gui,x,y,pygame.Rect(x,y,SPQR.CHKBOX_SIZE,SPQR.CHKBOX_SIZE),
+						 SPQR.WT_CHECK,image,"CCheckBox")
 		# status is the inital boolean value
 		self.status=initial
-		# add callbacks
-		self.callbacks=SPQR_Callbacks("SPQR_CheckBox_Callback")
 		# automatically add it's own click callback
 		self.callbacks.mouse_lclk=self.clicked
 		# sometimes you'll need to call another routine as well
 		# as updating the graphic. Let's set that here as blank
-		self.after_click=null_routine
+		self.after_click=SPQR.null_routine
 		self.after_click_status=False
-		# set an image up for later
-		if(self.status==True):
-			self.image=lgui.images[CHECK_YES]
-		else:
-			self.image=lgui.images[CHECK_NO]
-		# following used to store the parent window of the
-		# widget... False if there is no valid parent
-		self.parent=False
-		self.describe="SPQR_CheckBox"
 	
 	def clicked(self,lgui,handle,x,y):
 		"""Called by the gui routine when clicked. Just
 		   updates it's own gfx. In the parent window"""
 		if(self.status==True):
 			self.status=False
-			self.image=lgui.images[CHECK_NO]
+			self.image=lgui.images[SPQR.CHECK_NO]
 		else:
 			self.status=True
-			self.image=lgui.images[CHECK_YES]
+			self.image=lgui.images[SPQR.CHECK_YES]
 		# the image will have to be updated. Since we know that the widget
 		# must be active and on display (since we just got a click), we can
 		# just update the small bit of screen. Firstly, we get the window
@@ -271,34 +233,31 @@ class SPQR_CheckBox:
 			self.after_click(lgui,handle,xpos,ypos)
 		return(True)
 		
-	def add_after_click(self,routine):
+	def addAfterClick(self,routine):
 		"""Add routine to be called when left mouse clicked"""
 		self.after_click_status=True
 		self.after_click=routine
 		return(True)
 
-# a classic slider widget
-# call with following parameters:
-# lgui - normal gui pointer, x/y pos of widget in window
-# width - width of entire widget, start - value on lhs of widget
-# end - value on rhs of widget, initial - initial value
-
-class SPQR_Slider:
-	"""Slider class states and stores details for a slider"""
-	def __init__(self,lgui,x,y,width,start,end,initial):
-		self.lgui=lgui
-		self.active=False
-		self.visible=True
+class CSlider(CWidget):
+	"""Slider class states and stores details for a slider
+	   Call with following parameters:
+	   gui - normal gui pointer, x/y pos of widget in window
+	   width - width of entire widget, start - value on lhs of widget
+	   end - value on rhs of widget, initial - initial value"""
+	def __init__(self,gui,x,y,width,start,end,initial):
 		# width is at least what the gfx width is
-		if(width<lgui.images[GUI_SLIDER].get_width()):
-			width=lgui.images[GUI_SLIDER].get_width()
-		self.rect=pygame.Rect(x,y,width,
-			lgui.images[GUI_SLIDER].get_height())
+		if(width<gui.images[SPQR.GUI_SLIDER].get_width()):
+			width=gui.images[SPQR.GUI_SLIDER].get_width()
+		height=gui.images[SPQR.GUI_SLIDER].get_height()
+		CWidget.__init__(self,gui,x,y,pygame.Rect(x,y,width,height),
+						 SPQR.WT_SLIDER,pygame.Surface((width,height)),
+						 "CSlider")
 		# we have to check wether the slider knob is being pressed
 		# or if it's some other part of the widget 
 		self.knob_rect=pygame.Rect(0,0,
-			lgui.images[GUI_SLIDER].get_width(),lgui.images[GUI_SLIDER].get_height())
-		self.wtype=WT_SLIDER
+			gui.images[SPQR.GUI_SLIDER].get_width(),
+			gui.images[SPQR.GUI_SLIDER].get_height())
 		# some more specific slider variables
 		# just check the range is ok
 		if(start>end):
@@ -315,94 +274,86 @@ class SPQR_Slider:
 		# width of slider, since the slider 'overhangs' the bar at
 		# both ends of the bar (the left part on the left, and the same
 		# on the right, by half the slider width)
-		self.slide_bar_width=self.rect.w-lgui.images[GUI_SLIDER].get_width()
+		self.slide_bar_width=self.rect.w-gui.images[SPQR.GUI_SLIDER].get_width()
 		self.pixel_increment=(float)(end-start)/(float)(width)
-		# add callbacks
-		self.callbacks=SPQR_Callbacks("SPQR_Slider_Callback")
 		# mainly with a slider you'll let it do it's own thing
-		self.callbacks.mouse_ldown=self.slider_mouse_ldown
-		# set an image up for later
-		self.image=pygame.Surface((width,self.rect.h))
-		self.draw_slider()
-		# following used to store the parent window of the
-		# widget... False if there is no valid parent
-		self.parent=False
+		self.callbacks.mouse_ldown=self.sliderMouseLDown
+		# build the image
+		self.drawSlider()
 		# sometimes you'll want to call a function every time the
-		# slider value is set... here are the dat points
+		# slider value is set... here are the data points
 		self.update_function_valid=False
-		self.update_function=null_routine
-		self.describe="SPQR_Slider"
+		self.update_function=SPQR.null_routine
 
-	def draw_slider(self):
+	def drawSlider(self):
 		"""Helper routine, draws the slider knob. Called by both
 		   the initial routine and the slider callback function"""
 		# There are 3 parts here: the slider itself, and then the
 		# bars to the left (in blue) and to the right (in normal colors)
-		# start by flood filling the gui color
-		self.image.fill(BGUI_COL)
+		self.image.fill(SPQR.BGUI_COL)
 		# now draw the bars in
 		spoint=(float)(self.current_value)/(float)(self.right_value-self.left_value)
 		spoint=(int)(spoint*self.slide_bar_width)
 		# make sure bars are in middle of slider
-		yoff=(self.lgui.images[GUI_SLIDER].get_height()/2)-2
+		yoff=(self.lgui.images[SPQR.GUI_SLIDER].get_height()/2)-2
 		# also, allow for fact slide bar is not as long as the widget width
-		# becuase the slider know 'overhangs'. To make things easier, we just
+		# because the slider knob 'overhangs'. To make things easier, we just
 		# adjust the middle point by half the slider knob width
-		spoint+=self.lgui.images[GUI_SLIDER].get_width()/2
+		spoint+=self.lgui.images[SPQR.GUI_SLIDER].get_width()/2
 		# blue bar is from left hand side up to the spoint
-		pygame.draw.line(self.image,SLIDER_BDARK,(0,yoff),
+		pygame.draw.line(self.image,SPQR.SLIDER_BDARK,(0,yoff),
 			(spoint,yoff),1)
-		pygame.draw.line(self.image,SLIDER_BDARK,(0,yoff),
+		pygame.draw.line(self.image,SPQR.SLIDER_BDARK,(0,yoff),
 			(0,yoff+4),1)
-		pygame.draw.line(self.image,SLIDER_BDARK,(0,yoff+4),
+		pygame.draw.line(self.image,SPQR.SLIDER_BDARK,(0,yoff+4),
 			(spoint,yoff+4),1)
-		pygame.draw.line(self.image,SLIDER_LIGHT,(1,yoff+1),
+		pygame.draw.line(self.image,SPQR.SLIDER_LIGHT,(1,yoff+1),
 			(spoint,yoff+1),1)
-		pygame.draw.line(self.image,SLIDER_MEDIUM,(1,yoff+2),
+		pygame.draw.line(self.image,SPQR.SLIDER_MEDIUM,(1,yoff+2),
 			(spoint,yoff+2),1)
-		pygame.draw.line(self.image,SLIDER_DARK,(1,yoff+3),
+		pygame.draw.line(self.image,SPQR.SLIDER_DARK,(1,yoff+3),
 			(spoint,yoff+3),1)
 		# thats the left hand side taken care of, now the right...
-		pygame.draw.line(self.image,SLIDER_BLIGHT,(spoint,yoff),
+		pygame.draw.line(self.image,SPQR.SLIDER_BLIGHT,(spoint,yoff),
 			(self.rect.w-1,yoff),1)
-		pygame.draw.line(self.image,SLIDER_BLIGHT,(self.rect.w-1,yoff),
+		pygame.draw.line(self.image,SPQR.SLIDER_BLIGHT,(self.rect.w-1,yoff),
 			(self.rect.w-1,yoff+4),1)
-		pygame.draw.line(self.image,SLIDER_BLIGHT,(spoint,yoff+4),
+		pygame.draw.line(self.image,SPQR.SLIDER_BLIGHT,(spoint,yoff+4),
 			(self.rect.w-1,yoff+4),1)
-		pygame.draw.line(self.image,SLIDER_BMED1,(spoint,yoff+1),
+		pygame.draw.line(self.image,SPQR.SLIDER_BMED1,(spoint,yoff+1),
 			(self.rect.w-1,self.rect.y+1),1)
-		pygame.draw.line(self.image,SLIDER_BMED2,(spoint,yoff+2),
+		pygame.draw.line(self.image,SPQR.SLIDER_BMED2,(spoint,yoff+2),
 			(self.rect.w-1,self.rect.y+2),1)
-		pygame.draw.line(self.image,SLIDER_BMED2,(spoint,yoff+3),
+		pygame.draw.line(self.image,SPQR.SLIDER_BMED2,(spoint,yoff+3),
 			(self.rect.w-1,self.rect.y+3),1)
 		# that was a lot of line drawing... now we just have to blit the
 		# slider bar itself, in the right place
-		xpos=spoint-(self.lgui.images[GUI_SLIDER].get_width()/2)
-		self.image.blit(self.lgui.images[GUI_SLIDER],(xpos,0))
+		xpos=spoint-(self.lgui.images[SPQR.GUI_SLIDER].get_width()/2)
+		self.image.blit(self.lgui.images[SPQR.GUI_SLIDER],(xpos,0))
 		# set knob_rect so we can catch events as well
 		self.knob_rect.x=xpos
 		# and that's it! updating is all up to you...
 		return(True)
 		
-	def get_value(self):
+	def getSliderValue(self):
 		"""Returns current setting of slider. Although internally value
 		   is sometimes a float, this always returns an int"""
 		return((int)(self.current_value))
 
-	def set_update_function(self,code):
+	def setUpdateFunction(self,code):
 		"""Set callback function, called every time the value
 		   of the slider is called. Must be a usual callback function"""
 		self.update_function_valid=True
 		self.update_function=code
 		return(True)
 		
-	def kill_update_function(self,code):
+	def killUpdateFunction(self,code):
 		"""Call if you ever want to cancel the slider update function"""
 		self.update_function_valid=False
-		self.update_function=null_routine
+		self.update_function=SPQR.null_routine
 		return(True)
 
-	def slider_mouse_ldown(self,lgui,handle,xpos,ypos):
+	def sliderMouseLDown(self,lgui,handle,xpos,ypos):
 		"""Called when user clicks down with the mouse over a slider knob
 			 Captures all input until user releases mouse button"""
 		# first of all we check to see wether it was over the
@@ -451,7 +402,7 @@ class SPQR_Slider:
 							# need to update?
 							if(old!=self.current_value):
 								# update the image
-								self.draw_slider()
+								self.drawSlider()
 								x=self.parent.rect.x+self.rect.x
 								y=self.parent.rect.y+self.rect.y
 								lgui.blitSlider(x,y,self.rect.w,self.rect.h,self.image)
@@ -459,29 +410,24 @@ class SPQR_Slider:
 								if(self.update_function_valid==True):
 									# do the callback
 									self.update_function(lgui,handle,xpos,ypos)
-		# nothing happened, but be graceful about it anyway
+		# nothing might have happened, but be graceful about it anyway
 		return(True)
 
-# now we have a scroll_area widget
-# this contains a graphical area that has a scroll bar on it's RHS
-# the user can scroll up and down the area with the mouse
-# call with gui pointer, x/y positon, width and height and image
-# *NOTE*: in the x size, you must allow for the fact that this widget
-# will add a scrollbar on the rhs of a given size!
-# height of widget *MUST BE* >61 pixels or funny gfx effects will occur
-# also, border area, if true, adds 1 pixel on the lhs and 2 on the y axis
-
-class SPQR_ScrollArea:
-	"""ScrollArea class holds details for a ScrollArea"""
-	def __init__(self,lgui,x,y,width,height,image,border=True):
-		self.lgui=lgui
-		self.active=False
-		self.visible=True
+class CScrollArea(CWidget):
+	"""ScrollArea class holds details for a ScrollArea
+	   Contains a graphical area that has a scroll bar on it's RHS
+	   Call with gui pointer, x/y positon, width and height and image
+	   *NOTE*: in the x size, you must allow for the fact that this widget
+	   will add a scrollbar on the rhs of a given size!
+	   height of widget *MUST BE* >61 pixels or funny gfx effects will occur
+	   border area, if true, adds 1 pixel on the lhs and 2 on the y axis"""
+	def __init__(self,gui,x,y,width,height,image,border=True):
+		CWidget.__init__(self,gui,x,y,None,SPQR.WT_SCROLLAREA,None,"CScrollArea")
 		self.border=border
 		# get size of the area to display:
 		vsize=image.get_height()
 		# get offset size:
-		width+=lgui.images[SCHAN_MIDDLE].get_width()
+		width+=gui.images[SPQR.SCHAN_MIDDLE].get_width()
 		if(self.border==True):
 			height+=2
 			width+=1
@@ -490,8 +436,8 @@ class SPQR_ScrollArea:
 		# a value of 0 means 'start at the top'
 		self.display_ypos=0
 		# we need to know how big the 'handle' is:
-		w=lgui.images[SCHAN_MIDDLE].get_width()
-		y=lgui.images[SCROLL_TOP].get_height()
+		w=gui.images[SPQR.SCHAN_MIDDLE].get_width()
+		y=gui.images[SPQR.SCROLL_TOP].get_height()
 		# for the handle height, just make sure the math is ok:
 		if(vsize<height):
 			vsize=height
@@ -502,21 +448,18 @@ class SPQR_ScrollArea:
 		height-=(y*2)
 		h=(int)(float((height*height)/(float)(vsize)))
 		self.handle_rect=pygame.Rect(0,y,w,h)
-		self.wtype=WT_SCROLLAREA
-		# add callbacks
-		self.callbacks=SPQR_Callbacks("SPQR_ScrollArea_Callback")
 		# add automatic callbacks
-		self.callbacks.mouse_ldown=self.scrollarea_mouse_ldown
-		self.callbacks.mouse_lclk=self.scrollarea_mouse_lclk
+		self.callbacks.mouse_ldown=self.scrollareaMouseLDown
+		self.callbacks.mouse_lclk=self.scrollareaMouseLClk
 		# set an image up for later
 		# this is the image that we want to actually show *inside*
 		# the scrollarea box
 		self.display_image=image
 		# area_image is what finally goes to the screen, and
 		# handle image is the handle gfx
-		self.area_image,self.handle_image=self.build_image()
+		self.area_image,self.handle_image=self.buildScrollImage()
 		self.image=pygame.Surface((self.rect.w,self.rect.h))
-		self.update_scroll_area()
+		self.updateScrollArea()
 		# final set of per-calcs for later routines:
 		self.lower_bound=self.handle_rect.y
 		self.upper_bound=self.handle_rect.y+(height-self.handle_rect.h)
@@ -533,9 +476,9 @@ class SPQR_ScrollArea:
 		# following used to store the parent window of the
 		# widget... False if there is no valid parent
 		self.parent=False
-		self.describe="SPQR_ScrollArea"
+		self.describe="CScrollArea"
 		
-	def build_image(self):
+	def buildScrollImage(self):
 		"""Helper routine to build the base image that
 		   is displayed on screen. update_image() should be
 		   called to normally, this just sets everything up"""
@@ -543,52 +486,52 @@ class SPQR_ScrollArea:
 		piccy=pygame.Surface((self.rect.w,self.rect.h))
 		# really, this is quite simple but a lot of legwork
 		# start by filling in the base of the scrollbar:
-		piccy.fill(SCROLL_MIDDLE)
-		pygame.draw.line(piccy,SCROLL_BORDER,(0,0),(0,self.rect.h))
-		pygame.draw.line(piccy,SCROLL_BORDER,(self.rect.w,0),
+		piccy.fill(SPQR.SCROLL_MIDDLE)
+		pygame.draw.line(piccy,SPQR.SCROLL_BORDER,(0,0),(0,self.rect.h))
+		pygame.draw.line(piccy,SPQR.SCROLL_BORDER,(self.rect.w,0),
 			(self.rect.w,self.rect.h))
 		# now blit in the arrows at the top and bottom:
-		xpos=self.rect.w-self.lgui.images[SCROLL_TOP].get_width()
-		piccy.blit(self.lgui.images[SCROLL_TOP],(xpos,0))
-		piccy.blit(self.lgui.images[SCROLL_BOTTOM],
-			(xpos,(self.rect.h-self.lgui.images[SCROLL_BOTTOM].get_height())))
+		xpos=self.rect.w-self.lgui.images[SPQR.SCROLL_TOP].get_width()
+		piccy.blit(self.lgui.images[SPQR.SCROLL_TOP],(xpos,0))
+		piccy.blit(self.lgui.images[SPQR.SCROLL_BOTTOM],
+			(xpos,(self.rect.h-self.lgui.images[SPQR.SCROLL_BOTTOM].get_height())))
 		# now draw the handlebar for the widget
 		# start by making a new surface
 		handle_gfx=pygame.Surface((self.handle_rect.w,self.handle_rect.h))
 		# fill the area in first
 		pixels=self.handle_rect.h
 		ypos=0
-		fill=self.lgui.images[SCHAN_FILL].get_height()
+		fill=self.lgui.images[SPQR.SCHAN_FILL].get_height()
 		while(pixels>0):
-			if(pixels<self.lgui.images[SCHAN_FILL].get_height()):
-				handle_gfx.blit(self.lgui.images[SCHAN_FILL],(0,ypos))
+			if(pixels<self.lgui.images[SPQR.SCHAN_FILL].get_height()):
+				handle_gfx.blit(self.lgui.images[SPQR.SCHAN_FILL],(0,ypos))
 				pixels=0
 			else:
-				handle_gfx.blit(self.lgui.images[SCHAN_FILL],(0,ypos))
+				handle_gfx.blit(self.lgui.images[SPQR.SCHAN_FILL],(0,ypos))
 				ypos+=fill
 				pixels-=fill
 		# do the top and bottom:
-		handle_gfx.blit(self.lgui.images[SCHAN_TOP],(0,0))
-		handle_gfx.blit(self.lgui.images[SCHAN_BOTTOM],(0,(self.handle_rect.h)-2))
+		handle_gfx.blit(self.lgui.images[SPQR.SCHAN_TOP],(0,0))
+		handle_gfx.blit(self.lgui.images[SPQR.SCHAN_BOTTOM],(0,(self.handle_rect.h)-2))
 		# work out middle of area and blit that
-		middle=(self.handle_rect.h-self.lgui.images[SCHAN_MIDDLE].get_height())/2
-		handle_gfx.blit(self.lgui.images[SCHAN_MIDDLE],(0,middle))
+		middle=(self.handle_rect.h-self.lgui.images[SPQR.SCHAN_MIDDLE].get_height())/2
+		handle_gfx.blit(self.lgui.images[SPQR.SCHAN_MIDDLE],(0,middle))
 		# draw the border here if we have to
 		if(self.border==True):
-			pygame.draw.line(piccy,SCROLL_BORDER,
+			pygame.draw.line(piccy,SPQR.SCROLL_BORDER,
 				(0,0),(0,self.rect.h))
-			pygame.draw.line(piccy,SCROLL_BORDER,
+			pygame.draw.line(piccy,SPQR.SCROLL_BORDER,
 				(0,0),(self.rect.w-self.handle_rect.w,0))
-			pygame.draw.line(piccy,SCROLL_BORDER,
+			pygame.draw.line(piccy,SPQR.SCROLL_BORDER,
 				(0,self.rect.h-1),(self.rect.w-self.handle_rect.w,self.rect.h-1))
 			# set handle rect position:
 			self.handle_rect.x=self.display_image.get_width()+1
 		else:
 			self.handle_rect.x=self.display_image.get_width()
-		self.handle_rect.y=self.lgui.images[SCROLL_TOP].get_height()
+		self.handle_rect.y=self.lgui.images[SPQR.SCROLL_TOP].get_height()
 		return(piccy,handle_gfx)
 
-	def update_scroll_area(self):
+	def updateScrollArea(self):
 		"""Routine to build final image that is displayed on screen"""
 		# blit the base image:
 		self.image.blit(self.area_image,(0,0))
@@ -614,7 +557,7 @@ class SPQR_ScrollArea:
 		# may not have actually been defined at this point in time
 		return(True)
 
-	def scrollarea_mouse_ldown(self,lgui,handle,xpos,ypos):
+	def scrollareaMouseLDown(self,lgui,handle,xpos,ypos):
 		"""Called when user clicks down with the mouse over a scroll knob
 			 Captures all input until user releases mouse button"""
 		# first of all we check to see wether it was over the
@@ -630,11 +573,11 @@ class SPQR_ScrollArea:
 					return(True)
 				elif((event.type==MOUSEMOTION)):
 					# now we actually move the bar
-					self.move_handle(event.rel[1])
+					self.moveScrollHandle(event.rel[1])
 		# nothing happened, but be graceful about it anyway
 		return(True)
 
-	def scrollarea_mouse_lclk(self,lgui,handle,xpos,ypos):
+	def scrollareaMouseLClk(self,lgui,handle,xpos,ypos):
 		"""For when the user clicks on the thing itself. For the
 		   moment, just checks the arrows at the top and bottom"""
 		# firstly, check we are in the right area
@@ -644,10 +587,10 @@ class SPQR_ScrollArea:
 		# at top or bottom... or nowhere?
 		if(ypos<self.lower_bound):
 			# it was a click on the up arrow, so do it
-			self.move_handle(-self.arrow_click_move)
+			self.moveScrollHandle(-self.arrow_click_move)
 			return(True)
 		elif(ypos>(self.upper_bound+self.handle_rect.h)):
-			self.move_handle(self.arrow_click_move)
+			self.moveScrollHandle(self.arrow_click_move)
 			return(True)
 		# could be a click on the blank area
 		# don't forget, it's not possible for xpos/ypos to be out
@@ -655,12 +598,11 @@ class SPQR_ScrollArea:
 		if(self.handle_rect.collidepoint(xpos,ypos)==True):
 			# ignore it if we clicked the handle itself
 			return(True)
-		# ok, very simple, we try and move the middle of the handle
+		# # TODO very simple, we try and move the middle of the handle
 		# widget to where we clicked, or as close as possible
-		# TODO
 		return(True)
 			
-	def move_handle(self,ydiff):
+	def moveScrollHandle(self,ydiff):
 		"""Move and update the handle graphic. Parameter
 		   passed tells us by how many pixels we should
 		   update move the widget by"""
@@ -669,38 +611,30 @@ class SPQR_ScrollArea:
 		# luckily, we pre-calculated some stuff earlier
 		# firstly though, are we in bounds?
 		self.handle_rect.y+=ydiff
-		if((self.handle_rect.y>self.upper_bound)or
-			(self.handle_rect.y<self.lower_bound)):
+		if((self.handle_rect.y>self.upper_bound)or(self.handle_rect.y<self.lower_bound)):
 				# nothing to do, correct and return
 				self.handle_rect.y-=ydiff
 				return(True)
 		# otherwise, do some easy stuff:
 		self.display_ypos=(int)((self.handle_rect.y-self.lower_bound)*self.hanpix_ratio)
 		# make the new image and draw it to the screen
-		self.update_scroll_area()
+		self.updateScrollArea()
 		x=self.parent.rect.x+self.rect.x
 		y=self.parent.rect.y+self.rect.y
 		self.lgui.blitScrollarea(x,y,self.rect.w,self.rect.h,self.image)
 		return(True)	   
 
-	def update_scroll_image(self,image):
+	def updateScrollImage(self,image):
 		"""Call when you wish to change the scroll image display,
 		   but change nothing else. Updates the screen for you"""
 		self.display_image=image
-		self.update_scroll_area()
+		self.updateScrollArea()
 		x=self.parent.rect.x+self.rect.x
 		y=self.parent.rect.y+self.rect.y
 		self.lgui.blitScrollarea(x,y,self.rect.w,self.rect.h,self.image)
 		return(True)		
 
-# ItemList is the most complex object so far (Oct 06)
-# it's a list set out like the text list in Nautilus: there
-# is a bar at the top which describes each column, and then below
-# that is an SPQR_ScrollArea which contains all of the items
-# Because of this, the calling parameters are a bit strict,
-# and not to say a little complex
-
-class SPQR_ItemList:
+class CItemList(CWidget):
 	"""Call the init routine with the following parameters:
 	   lgui - a pointer to the gfx sub-system: x,y the position
 	   then a list of lists, defined in the following way:
@@ -715,20 +649,8 @@ class SPQR_ItemList:
 	   the element to take up (including the header height)"""
 	def __init__(self,gui,x,y,elements,sorts,id_values,total_height):
 		# let's do the easy stuff first - this will be a long routine
-		self.lgui=gui
-		self.active=False
-		self.visible=True
-		# define what we can for now
-		self.rect=pygame.Rect(x,y,0,0)
-		self.wtype=WT_ITEMLIST
-		# add callbacks
-		self.callbacks=SPQR_Callbacks("SPQR_ItemList_Callback")
-		# set an image up for later
-		self.image=False
-		# following used to store the parent window of the
-		# widget... False if there is no valid parent
-		self.parent=False
-		self.describe="SPQR_ItemList"
+		CWidget.__init__(self,gui,x,y,pygame.Rect(x,y,0,0),
+						 SPQR.WT_ITEMLIST,None,"CItemList")
 		self.data=[]
 
 		# ok, let's now do everything else
@@ -766,20 +688,20 @@ class SPQR_ItemList:
 			else:
 				# must be text
 				for item in column:
-					tsize=self.lgui.fonts[FONT_VERA].size(item)
+					tsize=self.lgui.fonts[SPQR.FONT_VERA].size(item)
 					if(tsize[0]>csize):
 						csize=tsize[0]
 			# now we know the size, just expand it:
-			csize+=(2*SPACER)
+			csize+=(2*SPQR.SPACER)
 			column_size.append(csize)
 			
 		# now we have the right widths for all of the items
 		# let's do a similar thing for the widths of the text headers
 		tsize=[]
 		for text in text_headers:
-			width=self.lgui.fonts[FONT_VERA_SM].size(text)[0]
+			width=self.lgui.fonts[SPQR.FONT_VERA_SM].size(text)[0]
 			# allow some spacing
-			width+=(HALFSPCR+(2*SPACER))
+			width+=(SPQR.HALFSPCR+(2*SPQR.SPACER))
 			tsize.append(width)
 		# now construct a final width list
 		column_width=[]
@@ -799,7 +721,7 @@ class SPQR_ItemList:
 		it=0
 		theight=0
 		# we have (2*SPACER) as vertical spacing
-		spacing=(2*SPACER)
+		spacing=(2*SPQR.SPACER)
 		for column in item_type:
 			if(column==False):
 				# image, easy:
@@ -808,7 +730,7 @@ class SPQR_ItemList:
 					theight=h
 			else:
 				# text, a bit more complex
-				h=self.lgui.fonts[FONT_VERA].size("Aq")[1]+spacing
+				h=self.lgui.fonts[SPQR.FONT_VERA].size("Aq")[1]+spacing
 				if(h>theight):
 					theight=h
 			it+=1
@@ -829,7 +751,7 @@ class SPQR_ItemList:
 		index=0
 		size=False
 		# oh for a fast gradiant fill :-o
-		for i in GRADBAR_SIZES:
+		for i in SPQR.GRADBAR_SIZES:
 			if(theight<i):
 				# found an image of the right size
 				size=True
@@ -842,27 +764,27 @@ class SPQR_ItemList:
 		# did we find one small enough?
 		if(size==False):
 			# we'll have to create a false image
-			row_image.fill(BGUI_COL)
+			row_image.fill(SPQR.BGUI_COL)
 		else:
 			# we at least found the right size
-			yoffset=(GRADBAR_SIZES[index]-theight)/2
+			yoffset=(SPQR.GRADBAR_SIZES[index]-theight)/2
 			# blit across until complete
 			xsize_blit=width
 			xpos=0
 			while(xsize_blit>0):
-				row_image.blit(self.lgui.images[GRADBAR+index],
-					(xpos,0),(0,yoffset,GRADBAR_WIDTH,GRADBAR_SIZES[index]))
-				xpos+=GRADBAR_WIDTH
-				xsize_blit-=GRADBAR_WIDTH
+				row_image.blit(self.lgui.images[SPQR.GRADBAR+index],
+					(xpos,0),(0,yoffset,SPQR.GRADBAR_WIDTH,SPQR.GRADBAR_SIZES[index]))
+				xpos+=SPQR.GRADBAR_WIDTH
+				xsize_blit-=SPQR.GRADBAR_WIDTH
 		# finally, draw in the bottom line
-		pygame.draw.line(row_image,SEP_DARK,(0,theight-1),(width,theight-1),1)
+		pygame.draw.line(row_image,SPQR.SEP_DARK,(0,theight-1),(width,theight-1),1)
 		
 		# Finally!! We can now build up the ScrollArea image
 		# we'll do this a column at a time, since that's the way the
 		# data is given to us in the lists
 		# firstly, get the basic image
 		sc_image=pygame.Surface((width,height),SRCALPHA)
-		sc_image.fill(BGUI_COL)
+		sc_image.fill(SPQR.BGUI_COL)
 		# fill in the base row images
 		count=0
 		ypos=0
@@ -875,7 +797,7 @@ class SPQR_ItemList:
 		it=0
 		# all items are offset by SPACER. Since the arithmatic is
 		# acummulative, we set that offset here
-		base_x=SPACER
+		base_x=SPQR.SPACER
 		# now go down each column
 		for column in elements:
 			# point to next column
@@ -895,7 +817,7 @@ class SPQR_ItemList:
 				# it's text, so make the image first
 				base_y=0
 				for i in column:
-					timg=self.lgui.fonts[FONT_VERA].render(i,True,COL_BLACK)
+					timg=self.lgui.fonts[SPQR.FONT_VERA].render(i,True,SPQR.COL_BLACK)
 					yoff=(theight-timg.get_height())/2
 					# blit the text
 					sc_image.blit(timg,(base_x,base_y+yoff))
@@ -923,44 +845,44 @@ class SPQR_ItemList:
 		# SPACER to it:
 		hheight=0
 		for i in text_headers:
-			t=self.lgui.fonts[FONT_VERA_SM].size(i)
+			t=self.lgui.fonts[SPQR.FONT_VERA_SM].size(i)
 			if(t[1]>hheight):
 				hheight=t[1]
-		hheight+=SPACER
+		hheight+=SPQR.SPACER
 		# create the base image
 		header_img=pygame.Surface((width,hheight),SRCALPHA)
-		header_img.fill(BGUI_COL)
+		header_img.fill(SPQR.BGUI_COL)
 		# draw in some of the funky lines
-		pygame.draw.line(header_img,SEP_DARK,(0,0),(width-1,0),1)
-		pygame.draw.line(header_img,SEP_DARK,(0,hheight-1),(width-1,hheight-1),1)
-		pygame.draw.line(header_img,SEP_LIGHT,(0,1),(width-1,1),1)
-		pygame.draw.line(header_img,SEP_LIGHT,(0,1),(0,hheight-1),1)
+		pygame.draw.line(header_img,SPQR.SEP_DARK,(0,0),(width-1,0),1)
+		pygame.draw.line(header_img,SPQR.SEP_DARK,(0,hheight-1),(width-1,hheight-1),1)
+		pygame.draw.line(header_img,SPQR.SEP_LIGHT,(0,1),(width-1,1),1)
+		pygame.draw.line(header_img,SPQR.SEP_LIGHT,(0,1),(0,hheight-1),1)
 		# now we can go along each text header item
 		# all the items are offset by HALFSPCR
-		base_x=HALFSPCR
+		base_x=SPQR.HALFSPCR
 		hxsize=0
 		
 		for txt in text_headers:
 			# point to next column
 			new_x=column_width.pop(0)
 			base_x+=new_x
-			timg=self.lgui.fonts[FONT_VERA_SM].render(txt,True,COL_BLACK)
+			timg=self.lgui.fonts[SPQR.FONT_VERA_SM].render(txt,True,SPQR.COL_BLACK)
 			base_y=(hheight-timg.get_height())/2
 			header_img.blit(timg,(base_x,base_y))
 			# we also need to draw those funky lines
 			hxsize+=new_x
 			if(hxsize!=0):
 				# i.e. not the first time we meet...
-				pygame.draw.line(header_img,SEP_LIGHT,
-					(hxsize-1,HALFSPCR),(hxsize-1,hheight-HALFSPCR),1)
-				pygame.draw.line(header_img,SEP_DARK,
-					(hxsize-2,HALFSPCR),(hxsize-2,hheight-HALFSPCR),1)
+				pygame.draw.line(header_img,SPQR.SEP_LIGHT,
+					(hxsize-1,SPQR.HALFSPCR),(hxsize-1,hheight-SPQR.HALFSPCR),1)
+				pygame.draw.line(header_img,SPQR.SEP_DARK,
+					(hxsize-2,SPQR.HALFSPCR),(hxsize-2,hheight-SPQR.HALFSPCR),1)
 		# there will be one more set of lines to draw
 		hxsize+=column_width.pop(0)
-		pygame.draw.line(header_img,SEP_LIGHT,
-			(hxsize-1,HALFSPCR),(hxsize-1,hheight-HALFSPCR),1)
-		pygame.draw.line(header_img,SEP_DARK,
-			(hxsize-2,HALFSPCR),(hxsize-2,hheight-HALFSPCR),1)
+		pygame.draw.line(header_img,SPQR.SEP_LIGHT,
+			(hxsize-1,SPQR.HALFSPCR),(hxsize-1,hheight-SPQR.HALFSPCR),1)
+		pygame.draw.line(header_img,SPQR.SEP_DARK,
+			(hxsize-2,SPQR.HALFSPCR),(hxsize-2,hheight-SPQR.HALFSPCR),1)
 		# the actual rectangle size for the ItemList is merely the
 		# size of the image we have just drawn
 		self.rect.w=width
@@ -969,18 +891,18 @@ class SPQR_ItemList:
 		# now we generate the ScrollArea
 		sc_h=total_height-hheight
 		# was there an error there?
-		if(sc_h<SCAREA_MINH):
-			print "[SPQR]: Error: Size for ItemList too small"
+		if(sc_h<SPQR.SCAREA_MINH):
+			print "Error: Size for ItemList too small"
 			# do it, but nasty things may happen
 			# probably the widget display will look nasty
 			sc_h=sc_image.get_height()/2
 		# we always have a border on these scroll areas
 		y+=hheight
-		self.listarea=SPQR_ScrollArea(self.lgui,x,y,width,sc_h,sc_image,True)
+		self.listarea=CScrollArea(self.lgui,x,y,width,sc_h,sc_image,True)
 		
 		# we need to put in the callbacks.
 		# Yes this is flippin' complex for a widget!
-		self.callbacks.mouse_lclk=self.header_click
+		self.callbacks.mouse_lclk=self.itemsHeaderClick
 		# define the status of the colum headers, i.e what direction
 		# the arrows start out at
 		# False is pointing UP, True is pointing DOWN
@@ -995,7 +917,7 @@ class SPQR_ItemList:
 		# blimey!!! That's it
 		# of course we can't return anything yet :-(
 
-	def header_click(self,lgui,handle,xpos,ypos):
+	def itemsHeaderClick(self,lgui,handle,xpos,ypos):
 		"""Routine called when ItemList top header amount is clicked"""
 		# which column of data?	
 		# column will actually be off by 1 (since it's *always* >0)
@@ -1011,19 +933,19 @@ class SPQR_ItemList:
 		# we also have to delete the other arrows
 		# what arrow graphic do we use?
 		if(self.data[1][column]==True):
-			arrow=lgui.images[ARROW_DOWN]
+			arrow=lgui.images[SPQR.ARROW_DOWN]
 			# invert for next time
 			self.data[1][column]=False
 		else:
 			# similar code
-			arrow=lgui.images[ARROW_UP]
+			arrow=lgui.images[SPQR.ARROW_UP]
 			self.data[1][column]=True
 		
 		# create another image to blit over the other arrows
 		erase=pygame.Surface((arrow.get_width(),arrow.get_height()))
-		erase.fill(BGUI_COL)
+		erase.fill(SPQR.BGUI_COL)
 		# erase every image
-		xoff=(self.parent.rect.x+self.rect.x)-(SPACER+HALFSPCR)	
+		xoff=(self.parent.rect.x+self.rect.x)-(SPQR.SPACER+SPQR.HALFSPCR)	
 		yoff=self.parent.rect.y+self.rect.y
 		# centre the arrow
 		yoff+=(self.rect.h-arrow.get_height())/2
@@ -1063,9 +985,9 @@ class SPQR_ItemList:
 					break
 		# update the screen (don't forget to reset xpos accuratly -
 		# thus all that spacer stuff)
-		pygame.display.update((xoff+SPACER+HALFSPCR,yoff,self.rect.w,self.rect.h))
+		pygame.display.update((xoff+SPQR.SPACER+SPQR.HALFSPCR,yoff,self.rect.w,self.rect.h))
 		# and the new scrollist image		
-		self.listarea.update_scroll_image(img)
+		self.listarea.updateScrollImage(img)
 		return(True)
 
 # an optionmenu is a widget that let's you choose an item from a drop-down
@@ -1073,57 +995,54 @@ class SPQR_ItemList:
 # width of the widget is dependant on the text length of the options
 # height is completly dependant on the graphic widget
 
-class SPQR_OptionMenu:
+class COptionMenu(CWidget):
 	"""OptionMenu widget lets user choose from a drop-down menu.
 	   Call with gui pointer, the x and y position, and then a
 	   list of the options, in text format"""
 	def __init__(self,gui,x,y,options):
+		CWidget.__init__(self,gui,x,y,None,SPQR.WT_OPTMENU,None,"COptionMenu")
 		# just a simple check - there has to be at least 1 option!
 		if(len(options)<1):
-			if(DEBUG_MODE==True):
-				print "[SPQR]: Error: Asked for OptionMenu with no options"
-			return
-		self.lgui=gui
-		self.active=False
-		self.visible=True
+			if(SPQR.DEBUG_MODE==True):
+				print "Error: Asked for OptionMenu with no options"
+				# enter the error options
+				options=["Error","No","Options","Given"]
 		# calculate width
 		width=0
 		for i in options:
-			tlen=self.lgui.fonts[FONT_VERA].size(i)[0]
+			tlen=self.lgui.fonts[SPQR.FONT_VERA].size(i)[0]
 			if(tlen>width):
 				width=tlen
 		# add a spacer either side
-		width+=(2*SPACER)
+		width+=(2*SPQR.SPACER)
 		# then allow for the graphics on either side
-		width+=self.lgui.images[OPTM_LHAND].get_width()
+		width+=self.lgui.images[SPQR.OPTM_LHAND].get_width()
 		# save info for later
 		xpos=width
-		width+=self.lgui.images[OPTM_RHAND].get_width()
+		width+=self.lgui.images[SPQR.OPTM_RHAND].get_width()
 		# we can now work out the rect size
-		height=self.lgui.images[OPTM_RHAND].get_height()
+		height=self.lgui.images[SPQR.OPTM_RHAND].get_height()
 		self.rect=pygame.Rect(x,y,width,height)
-		# add callbacks
-		self.callbacks=SPQR_Callbacks("SPQR_OptionMenu_Callback")
 		# we can now start to build the base image
 		self.image=pygame.Surface((width,height),SRCALPHA)
 		# build up the base image
-		self.image.fill(COL_WHITE)
-		self.image.blit(self.lgui.images[OPTM_LHAND],(0,0))
-		self.image.blit(self.lgui.images[OPTM_RHAND],(xpos,0))
+		self.image.fill(SPQR.COL_WHITE)
+		self.image.blit(self.lgui.images[SPQR.OPTM_LHAND],(0,0))
+		self.image.blit(self.lgui.images[SPQR.OPTM_RHAND],(xpos,0))
 		# now we draw the lines at the top and bottom
-		xstart=self.lgui.images[OPTM_LHAND].get_width()
-		pygame.draw.line(self.image,BGUI_HIGH,(xstart,0),(xpos,0),1)
-		pygame.draw.line(self.image,COLG_RED,(xstart,1),(xpos,1),1)
-		pygame.draw.line(self.image,COLG_RHIGH,(xstart,2),(xpos,2),1)
+		xstart=self.lgui.images[SPQR.OPTM_LHAND].get_width()
+		pygame.draw.line(self.image,SPQR.BGUI_HIGH,(xstart,0),(xpos,0),1)
+		pygame.draw.line(self.image,SPQR.COLG_RED,(xstart,1),(xpos,1),1)
+		pygame.draw.line(self.image,SPQR.COLG_RHIGH,(xstart,2),(xpos,2),1)
 		height-=1
-		pygame.draw.line(self.image,BGUI_HIGH,(xstart,height),(xpos,height),1)
+		pygame.draw.line(self.image,SPQR.BGUI_HIGH,(xstart,height),(xpos,height),1)
 		height-=1
-		pygame.draw.line(self.image,COLG_RED,(xstart,height),(xpos,height),1)
+		pygame.draw.line(self.image,SPQR.COLG_RED,(xstart,height),(xpos,height),1)
 		height-=1
-		pygame.draw.line(self.image,COLG_RHIGH,(xstart,height),(xpos,height),1)
+		pygame.draw.line(self.image,SPQR.COLG_RHIGH,(xstart,height),(xpos,height),1)
 		# finally, we need to blit the text
-		txtx=xstart+SPACER
-		txtg=self.lgui.fonts[FONT_VERA].render(options[0],True,COL_BLACK)
+		txtx=xstart+SPQR.SPACER
+		txtg=self.lgui.fonts[SPQR.FONT_VERA].render(options[0],True,SPQR.COL_BLACK)
 		txty=(self.image.get_height()-txtg.get_height())/2
 		self.image.blit(txtg,(txtx,txty))
 		
@@ -1131,29 +1050,29 @@ class SPQR_OptionMenu:
 		# set up for when we drop the menu down
 		# the image size should be widget_height-HALFSPCR for each row,
 		# and then length should be the same as the widget minus the arrow
-		row_height=self.image.get_height()-HALFSPCR
+		row_height=self.image.get_height()-SPQR.HALFSPCR
 		ysize=len(options)*row_height
-		ysize+=HALFSPCR+QTRSPCR
+		ysize+=SPQR.HALFSPCR+SPQR.QTRSPCR
 		xsize=self.image.get_width()
 		self.drop_image=pygame.Surface((xsize,ysize))
-		self.drop_image.fill(OPTM_BDARK)
+		self.drop_image.fill(SPQR.OPTM_BDARK)
 		# draw nice borders
-		pygame.draw.rect(self.drop_image,BGUI_COL,(1,1,xsize-2,ysize-2),0)
-		pygame.draw.rect(self.drop_image,OPTM_BDARK,(2,2,xsize-4,ysize-4),0)
-		pygame.draw.rect(self.drop_image,COL_WHITE,(3,3,xsize-6,ysize-6),0)
+		pygame.draw.rect(self.drop_image,SPQR.BGUI_COL,(1,1,xsize-2,ysize-2),0)
+		pygame.draw.rect(self.drop_image,SPQR.OPTM_BDARK,(2,2,xsize-4,ysize-4),0)
+		pygame.draw.rect(self.drop_image,SPQR.COL_WHITE,(3,3,xsize-6,ysize-6),0)
 		# now we need to render the text names:
-		ypos=HALFSPCR+QTRSPCR+1
-		xpos=SPACER+self.lgui.images[OPTM_LHAND].get_width()
+		ypos=SPQR.HALFSPCR+SPQR.QTRSPCR+1
+		xpos=SPQR.SPACER+self.lgui.images[SPQR.OPTM_LHAND].get_width()
 		# we'll build the rects for menu checks as well
 		self.menu_highlights=[]
 		for txt in options:
-			rend=self.lgui.fonts[FONT_VERA].render(txt,True,COL_BLACK)
+			rend=self.lgui.fonts[SPQR.FONT_VERA].render(txt,True,SPQR.COL_BLACK)
 			self.drop_image.blit(rend,(xpos,ypos))
 			ypos+=row_height
 			self.menu_highlights.append([(pygame.Rect(self.rect.x+3,
 				ypos+self.rect.h+4,xsize-6,row_height)),txt])
 		self.drop_rect=pygame.Rect(self.rect.x,
-			self.rect.y+self.image.get_height()+QTRSPCR,xsize,ysize)
+			self.rect.y+self.image.get_height()+SPQR.QTRSPCR,xsize,ysize)
 		# we'll need to update it on the first loop:
 		self.drop_rect_update=False
 		# we'll just set up a rect which we use to check the mouse against
@@ -1162,21 +1081,16 @@ class SPQR_OptionMenu:
 		# the 32 is to force a 32 bit surface for alpha blitting
 		self.himage=pygame.Surface((xsize-6,row_height),0,32)
 		# then set the alpha value
-		self.himage.set_alpha(MENU_ALPHA)
+		self.himage.set_alpha(SPQR.MENU_ALPHA)
 		# flood fill it
-		self.himage.fill(MENU_HLCOL)
+		self.himage.fill(SPQR.MENU_HLCOL)
 		
 		# and then the basic callback
-		self.callbacks.mouse_lclk=self.get_option
+		self.callbacks.mouse_lclk=self.optionsSelect
 		# before we finish off, we need somewhere to store the current option
 		self.option=options[0]
-		self.wtype=WT_OPTMENU
-		# following used to store the parent window of the
-		# widget... False if there is no valid parent
-		self.parent=False
-		self.describe="SPQR_OptionMenu"
 
-	def get_option(self,lgui,handle,xpos,ypos):
+	def optionsSelect(self,lgui,handle,xpos,ypos):
 		"""Called when the OptionMenu is clicked
 			 Returns False if option did not change"""
 		if(self.mouse_check.collidepoint(xpos,ypos)==False):
@@ -1189,16 +1103,16 @@ class SPQR_OptionMenu:
 			# annoying but true: it also won't have updated the x/y postions
 			# to account for the window borders....!
 			if(self.parent.border_offset==True):
-				self.drop_rect.x+=WINSZ_SIDE
-				self.drop_rect.y+=WINSZ_TOP
+				self.drop_rect.x+=SPQR.WINSZ_SIDE
+				self.drop_rect.y+=SPQR.WINSZ_TOP
 			# now the highlight rects:
 			for item in self.menu_highlights:
 				rect=item[0]
 				rect.x+=self.parent.rect.x
 				rect.y+=self.parent.rect.y
 				if(self.parent.border_offset==True):
-					rect.x+=WINSZ_SIDE
-					rect.y+=WINSZ_TOP
+					rect.x+=SPQR.WINSZ_SIDE
+					rect.y+=SPQR.WINSZ_TOP
 			self.drop_rect_update=True
 		
 		# got the click: firstly, update the screen with a new dirty
@@ -1248,15 +1162,15 @@ class SPQR_OptionMenu:
 						
 						# hey! *all* we have to do is update the original gfx now!
 						# firstly render some text
-						newtxt=lgui.fonts[FONT_VERA].render(self.option,True,COL_BLACK)
+						newtxt=lgui.fonts[SPQR.FONT_VERA].render(self.option,True,SPQR.COL_BLACK)
 						# now erase old text
 						oldtxt=pygame.Rect(0,3,0,self.image.get_height()-6)
-						oldtxt.x=lgui.images[OPTM_LHAND].get_width()+SPACER
-						oldtxt.w=self.rect.w-lgui.images[OPTM_LHAND].get_width()
-						oldtxt.w-=(lgui.images[OPTM_RHAND].get_width()+SPACER)
-						pygame.draw.rect(self.image,COL_WHITE,oldtxt)
+						oldtxt.x=lgui.images[SPQR.OPTM_LHAND].get_width()+SPQR.SPACER
+						oldtxt.w=self.rect.w-lgui.images[SPQR.OPTM_LHAND].get_width()
+						oldtxt.w-=(lgui.images[SPQR.OPTM_RHAND].get_width()+SPQR.SPACER)
+						pygame.draw.rect(self.image,SPQR.COL_WHITE,oldtxt)
 						# blit text into image
-						xpos=lgui.images[OPTM_LHAND].get_width()+SPACER
+						xpos=lgui.images[SPQR.OPTM_LHAND].get_width()+SPQR.SPACER
 						ypos=(self.rect.h-newtxt.get_height())/2
 						self.image.blit(newtxt,(xpos,ypos))
 						# erase menu drop
@@ -1279,40 +1193,40 @@ class SPQR_OptionMenu:
 		return(False)
 
 # helper routines to build stuff follow
-def BuildLabel(lgui,text):
+def buildLabel(gui,text):
 	"""Helper function to build a label given just the text.
 	   Uses standard font, which is FONT_VERA. Returns the new label"""
 	# get the size
-	w,h=lgui.fonts[FONT_VERA].size(text)
+	w,h=gui.fonts[SPQR.FONT_VERA].size(text)
 	# and then create
 	# note: annoyingly enough, despite asking what size the font is, if
 	# I render to an image of that size, it doesn't work. So we have to add 1
 	# any answers to this one, or have I missed something?
-	return(SPQR_Label(lgui,0,0,w,h+1,text))
+	return(CLabel(gui,0,0,w,h+1,text))
 
-def BuildImage(lgui,image):
+def buildImage(gui,image):
 	"""Helper function to build a image given just the image
 	   title. Pass index of image. Returns the new widget"""
-	w=lgui.images[image].get_width()
-	h=lgui.images[image].get_height()
+	w=gui.images[image].get_width()
+	h=gui.images[image].get_height()
 	# create and return
-	return(SPQR_Image(lgui,0,0,w,h,image))
+	return(CImage(gui,0,0,w,h,image))
 
-def BuildImageAlpha(lgui,image):
-	"""As BuildImage, but blits alpha image over gui color"""
-	w=lgui.images[image].get_width()
-	h=lgui.images[image].get_height()
+def buildImageAlpha(gui,image):
+	"""As buildImage, but blits alpha image over gui color"""
+	w=gui.images[image].get_width()
+	h=gui.images[image].get_height()
 	# create out initial image and make it the right color
 	piccy=pygame.Surface((w,h))
-	piccy.fill(BGUI_COL)
+	piccy.fill(SPQR.BGUI_COL)
 	# now blit over the real image
-	piccy.blit(lgui.images[image],(0,0))
+	piccy.blit(gui.images[image],(0,0))
 	# and thats almost it
-	return(BuildUniqueImage(lgui,piccy))
+	return(buildUniqueImage(gui,piccy))
 
-def BuildUniqueImage(lgui,picture):
-	"""As BuildImage, but this time you pass your own image"""
-	new=SPQR_Image(lgui,0,0,0,0,IMG_LEGION)
+def buildUniqueImage(gui,picture):
+	"""As buildImage, but this time you pass your own image"""
+	new=CImage(gui,0,0,0,0,SPQR.IMG_NONE)
 	# now amend that image
 	new.rect.w=picture.get_width()
 	new.rect.h=picture.get_height()
@@ -1320,7 +1234,7 @@ def BuildUniqueImage(lgui,picture):
 	return(new)
 
 # class to hold a key value
-class SPQR_KEYPRESS:
+class CKeypress:
 	"""Class defines a simple keypress, as stores in the keyboard
 	   handling code"""
 	def __init__(self,press,mod,routine,parent=None):
@@ -1329,28 +1243,20 @@ class SPQR_KEYPRESS:
 		self.function=routine
 		self.handle=parent
 
-# here's a completly different type of widget: the keyboard.
-# only 2 of these are needed: It holds a list of keyboard events to respond to
-# and the functions that they should call (defined in the normal SEVENT)
-# Note: You can set one key to have more than one function - SPQR doesn't care
-# in fact this is normal behaviour in a modal window
-# if the window is modal, then the last one in the list will get called,
-# if not then the first will get called
-
-# Note: generally the keys 7,8,9,1,2,3 are reserved for unit movement
-# You can use them in a modal window if you desire, but generally they will
-# *ALL* be deleted and updated every time a new unit is brought into focus
-# the mod status will be ignored
-
-class SPQR_KEYBOARD:
-	"""Keyboard class holds information for keyboard interaction"""
+class CKeyboard:
+	"""CKeyboard holds a list of keyboard events to respond to
+	   and the functions that they should call (defined in the normal SEVENT)
+	   Note: You can set one key to have more than one function
+	   in fact this is normal behaviour in a modal window
+	   if the window is modal, then the last one in the list will get called,
+	   if not then the first will get called."""
 	def __init__(self):
 		self.active_keys=[]		
 		self.modal=[]
 		self.move_keys=0
 	
-	def add_key(self,key,mod,code):
-		"""Call add_key with the keypress and the function
+	def addKey(self,key,mod,code):
+		"""Call addKey with the keypress and the function
 		   to call, and it gets added to the list."""
 		# firstly, check we haven't already got this key:
 		for i in self.active_keys:
@@ -1358,47 +1264,11 @@ class SPQR_KEYBOARD:
 					# don't allow this
 					return(False)
 		# we havn't seen it yet, so add it
-		self.active_keys.append(SPQR_KEYPRESS(key,mod,code))
+		self.active_keys.append(CKeypress(key,mod,code))
 		return(True)
 		
-	def add_key_moves(self,tp,tr,br,bt,bl,tl):
-		"""Call with status of possible moves. For each variable,
-		   a value of True means that this key becomes active.
-		   Resets the keys 7,8,9,1,2 and 3"""
-		# first of all, delete the number keys:
-		while(self.move_keys>0):
-			self.active_keys.pop(0)
-			self.move_keys-=1
-		# move_keys should now be 0
-		# now go through the list and insert, not append, these keys:
-		if(tp==True):
-			self.active_keys.insert(0,SPQR_KEYPRESS(K_KP8,KMOD_BASE,
-				SEVENT.moveUp))
-			self.move_keys+=1
-		if(tr==True):
-			self.active_keys.insert(0,SPQR_KEYPRESS(K_KP9,KMOD_BASE,
-				SEVENT.moveUpRight))
-			self.move_keys+=1
-		if(br==True):
-			self.active_keys.insert(0,SPQR_KEYPRESS(K_KP3,KMOD_BASE,
-				SEVENT.moveDownRight))
-			self.move_keys+=1
-		if(bt==True):
-			self.active_keys.insert(0,SPQR_KEYPRESS(K_KP2,KMOD_BASE,
-				SEVENT.moveDown))
-			self.move_keys+=1
-		if(bl==True):
-			self.active_keys.insert(0,SPQR_KEYPRESS(K_KP1,KMOD_BASE,
-				SEVENT.moveDownLeft))
-			self.move_keys+=1
-		if(tl==True):
-			self.active_keys.insert(0,SPQR_KEYPRESS(K_KP7,KMOD_BASE,
-				SEVENT.moveUpLeft))
-			self.move_keys+=1
-		return(True)			
-		
-	def remove_key(self,key,mod):
-		"""Use remove_key to remove from the events list the
+	def removeKey(self,key,mod):
+		"""Use removeKey to remove from the events list the
 		   keypress sent as a parameter. If False is received
 		   back, that key didn't exist anyway"""
 		index=0
@@ -1409,26 +1279,24 @@ class SPQR_KEYBOARD:
 			index+=1
 		return(False)
 	
-	def key_exists(self,key,mod):
+	def keyExists(self,key,mod):
 		"""Check if a keypress already exists"""
 		for i in self.keys:
 			if((i.key==key)and(i.mod==mod)):
 				return(True)
 		return(False)
 
-	# I should explain how modal strings work:
-	# self.modal is an array. When this routine searches through
-	# the keylist, it only looks at the self.modal[-1] ones (i.e. the
-	# the number at the top of the list) starting backwards
-	# if you really want to ignore keys, set the top value to -1
-	# Originally I had this set as a single array, but then realised
-	# you could have nested modal windows, each with their own modal keys :-s
-	def set_modal(self,value):
+	def setModalKeys(self,value):
 		"""Set a unique number of keys on the top of the stack that
-		   are to be the only keys to respond to. Used for modal dialogs"""
+		   are to be the only keys to respond to. Used for modal dialogs
+		   I should explain how modal strings work:
+		   self.modal is an array. When this routine searches through
+		   the keylist, it only looks at the self.modal[-1] ones (i.e. the
+	 	   the number at the top of the list) starting backwards
+	 	   if you really want to ignore keys, set the top value to -1"""
 		self.modal.append(value)
 		
-	def remove_modal(self):
+	def removeModalKeys(self):
 		"""Stops modal searching, removes the keys for you as well"""
 		# anything to remove?
 		if(len(self.modal)==0):
@@ -1442,7 +1310,7 @@ class SPQR_KEYBOARD:
 		# then remove this modal value from the stack
 		self.modal.pop()
 
-	def get_function(self,key,mod):
+	def getKeyFunction(self,key,mod):
 		"""Returns function and true/false if key is on the list"""
 		# modal keys in operation?
 		if(len(self.modal)==0):
@@ -1464,4 +1332,34 @@ class SPQR_KEYBOARD:
 				count-=1
 				index-=1
 		return False,False,None
+
+	def addKeyMoves(self,tp,tr,br,bt,bl,tl):
+		"""Call with status of possible moves. For each variable,
+		   a value of True means that this key becomes active.
+		   Resets the keys 7,8,9,1,2 and 3"""
+		# first of all, delete the number keys:
+		while(self.move_keys>0):
+			self.active_keys.pop(0)
+			self.move_keys-=1
+		# move_keys should now be 0
+		# now go through the list and insert, not append, these keys:
+		if(tp==True):
+			self.active_keys.insert(0,CKeypress(K_KP8,SPQR.KMOD_BASE,SEVENT.moveUp))
+			self.move_keys+=1
+		if(tr==True):
+			self.active_keys.insert(0,CKeypress(K_KP9,SPQR.KMOD_BASE,SEVENT.moveUpRight))
+			self.move_keys+=1
+		if(br==True):
+			self.active_keys.insert(0,CKeypress(K_KP3,SPQR.KMOD_BASE,SEVENT.moveDownRight))
+			self.move_keys+=1
+		if(bt==True):
+			self.active_keys.insert(0,CKeypress(K_KP2,SPQR.KMOD_BASE,SEVENT.moveDown))
+			self.move_keys+=1
+		if(bl==True):
+			self.active_keys.insert(0,CKeypress(K_KP1,SPQR.KMOD_BASE,SEVENT.moveDownLeft))
+			self.move_keys+=1
+		if(tl==True):
+			self.active_keys.insert(0,CKeypress(K_KP7,SPQR.KMOD_BASE,SEVENT.moveUpLeft))
+			self.move_keys+=1
+		return(True)
 

@@ -208,10 +208,10 @@ def init():
 	# a few more things here - the eagle design on the left to start
 	w=gui.images[SPQR.IMG_EAGLE].get_width()
 	h=gui.images[SPQR.IMG_EAGLE].get_height()
-	foo=gui.windows[index].add_item(SWIDGET.SPQR_Image(gui,4,10+SPQR.SPACER,
+	foo=gui.windows[index].add_item(SWIDGET.CImage(gui,4,10+SPQR.SPACER,
 		w,h,SPQR.IMG_EAGLE))
 	# the image that contains the current game turn
-	gui.turn_widget=gui.windows[index].add_item(SWIDGET.SPQR_Image
+	gui.turn_widget=gui.windows[index].add_item(SWIDGET.CImage
 		(gui,SPQR.HALFSPCR,10,w,SPQR.TXT_MIN_H,0))
 	# render current game turn
 	gui.renderGameTurn()
@@ -224,7 +224,7 @@ def init():
 	hh=gui.images[SPQR.BTN_NEXT].get_height()
 	xoff=SPQR.HALFSPCR+((w-wh)/2)
 	yoff=SPQR.BBOX_HEIGHT-hh
-	gui.next_button=gui.windows[index].add_item(SWIDGET.SPQR_Image
+	gui.next_button=gui.windows[index].add_item(SWIDGET.CImage
 		(gui,xoff,yoff,wh,hh,SPQR.BTN_NEXT))
 	# set callback
 	gui.windows[index].items[gui.next_button].callbacks.mouse_lclk=SEVENT.nextTurn
@@ -235,7 +235,7 @@ def init():
 	wh=gui.images[SPQR.HEX_BORDER].get_width()
 	hh=gui.images[SPQR.HEX_BORDER].get_height()
 	xoff=SPQR.HALFSPCR+w+SPQR.SPACER
-	gui.hex_widget=gui.windows[index].add_item(SWIDGET.SPQR_Image
+	gui.hex_widget=gui.windows[index].add_item(SWIDGET.CImage
 		(gui,xoff,SPQR.SPACER,wh,hh,SPQR.HEX_BORDER))
 	# don't draw or test for now
 	gui.windows[index].items[gui.hex_widget].visible=False
@@ -246,7 +246,7 @@ def init():
 	yoff=SPQR.SPACER
 	wh=gui.images[SPQR.IMG_LEGION].get_width()
 	hh=gui.images[SPQR.IMG_LEGION].get_height()
-	gui.unit_widget=gui.windows[index].add_item(SWIDGET.SPQR_Image
+	gui.unit_widget=gui.windows[index].add_item(SWIDGET.CImage
 		(gui,xoff,yoff,wh,hh,SPQR.IMG_LEGION))
 	# again, don't display this for now
 	gui.windows[index].items[gui.unit_widget].describe="unit graphic"
@@ -260,7 +260,7 @@ def init():
 	hh=SPQR.TXT_MIN_H
 	lwidth=SPQR.SCREEN_WIDTH-(xoff+
 		gui.images[SPQR.SMALL_MAP].get_width()+SPQR.SPACER+SPQR.SPACER)
-	gui.unit_txt_widget=gui.windows[index].add_item(SWIDGET.SPQR_Label
+	gui.unit_txt_widget=gui.windows[index].add_item(SWIDGET.CLabel
 		(gui,xoff,yoff,lwidth,hh,"This is a bug"))
 	# don't activate
 	gui.windows[index].items[gui.unit_txt_widget].describe="unit txt description"
@@ -269,7 +269,7 @@ def init():
 	# a graph showing the unit info
 	nx=xoff+SPQR.SPACER+gui.images[SPQR.IMG_LEGION].get_width()
 	ny=SPQR.SPACER+SPQR.QTRSPCR
-	ug_img=SWIDGET.BuildImage(gui,SPQR.GRAPH_UNIT)
+	ug_img=SWIDGET.buildImage(gui,SPQR.GRAPH_UNIT)
 	gui.unit_graph_widget=gui.windows[index].add_item(ug_img)
 	gui.windows[index].items[gui.unit_graph_widget].rect.x=nx
 	gui.windows[index].items[gui.unit_graph_widget].rect.y=ny
@@ -280,7 +280,7 @@ def init():
 	yoff+=SPQR.TXT_MIN_H+1+SPQR.HALFSPCR
 	wh=gui.images[SPQR.IMG_ROME].get_width()
 	hh=gui.images[SPQR.IMG_ROME].get_height()
-	gui.city_widget=gui.windows[index].add_item(SWIDGET.SPQR_Image
+	gui.city_widget=gui.windows[index].add_item(SWIDGET.CImage
 		(gui,xoff,yoff,wh,hh,SPQR.IMG_ROME))
 	# don't activate
 	gui.windows[index].items[gui.city_widget].describe="city graphic"	
@@ -290,7 +290,8 @@ def init():
 	
 	# and the city text label
 	yoff+=hh+2
-	gui.city_txt_widget=gui.windows[index].add_item(SWIDGET.SPQR_Label
+	# the text should never printed, thus the message :-)
+	gui.city_txt_widget=gui.windows[index].add_item(SWIDGET.CLabel
 		(gui,xoff,yoff,lwidth,hh,"This is a bug"))
 	# as per...
 	gui.windows[index].items[gui.city_txt_widget].describe="city txt description"
@@ -303,16 +304,16 @@ def init():
 	yoff=SPQR.SPACER
 	xoff-=SPQR.HALFSPCR+(SPQR.SPACER*3)+(w*4)
 	# let's have 4 images for the regional soldiers
-	gui.display_units.append(gui.windows[index].add_item(SWIDGET.SPQR_Image
+	gui.display_units.append(gui.windows[index].add_item(SWIDGET.CImage
 		(gui,xoff,yoff,w,h,SPQR.IMG_LEGION)))
 	xoff+=(w+SPQR.SPACER)
-	gui.display_units.append(gui.windows[index].add_item(SWIDGET.SPQR_Image
+	gui.display_units.append(gui.windows[index].add_item(SWIDGET.CImage
 		(gui,xoff,yoff,w,h,SPQR.IMG_LEGION)))
 	xoff+=(w+SPQR.SPACER)
-	gui.display_units.append(gui.windows[index].add_item(SWIDGET.SPQR_Image
+	gui.display_units.append(gui.windows[index].add_item(SWIDGET.CImage
 		(gui,xoff,yoff,w,h,SPQR.IMG_LEGION)))
 	xoff+=(w+SPQR.SPACER)
-	gui.display_units.append(gui.windows[index].add_item(SWIDGET.SPQR_Image
+	gui.display_units.append(gui.windows[index].add_item(SWIDGET.CImage
 		(gui,xoff,yoff,w,h,SPQR.IMG_LEGION)))
 	# again, don't display these right yet
 	gui.windows[index].items[gui.display_units[0]].visible=False
@@ -337,7 +338,7 @@ def init():
 	# TODO: This works, but something silly is going on
 	y=SPQR.SCREEN_HEIGHT-(gui.images[SPQR.SMALL_MAP].get_height()+17)
 	x=SPQR.SCREEN_WIDTH-(gui.images[SPQR.SMALL_MAP].get_width()+SPQR.HALFSPCR)
-	slot=gui.windows[index].add_item(SWIDGET.SPQR_Image(gui,x+9,-9,w,h,SPQR.SMALL_MAP))
+	slot=gui.windows[index].add_item(SWIDGET.CImage(gui,x+9,-9,w,h,SPQR.SMALL_MAP))
 	# allow left mouse button dragging as well
 	# this code also simulates a mini-map click
 	gui.windows[index].items[slot].callbacks.mouse_ldown=SEVENT.miniMapDrag
@@ -349,7 +350,7 @@ def init():
 	h=gui.images[SPQR.BTN_ROME].get_height()
 	x+=gui.images[SPQR.SMALL_MAP].get_width()-(SPQR.SPACER+w)
 	y=SPQR.BBOX_HEIGHT-h
-	slot=gui.windows[index].add_item(SWIDGET.SPQR_Image(gui,x,y,w,h,SPQR.BTN_ROME))
+	slot=gui.windows[index].add_item(SWIDGET.CImage(gui,x,y,w,h,SPQR.BTN_ROME))
 	gui.windows[index].items[slot].callbacks.mouse_lclk=SEVENT.centreMap
 	gui.windows[index].items[slot].active=True
 	gui.windows[index].items[slot].describe="centre button"
@@ -362,39 +363,39 @@ def init():
 	# f - finish this units turn, m - next unit on stack
 	# k - display the standard keys list (i.e. these keys)
 	# c - centre map on current unit
-	gui.keyboard.add_key(K_n,SPQR.KMOD_BASE,SEVENT.nextTurn)
-	gui.keyboard.add_key(K_m,SPQR.KMOD_BASE,SEVENT.nextUnitOnStack)
-	gui.keyboard.add_key(K_r,SPQR.KMOD_BASE,SEVENT.centreMap)
-	gui.keyboard.add_key(K_c,SPQR.KMOD_BASE,SEVENT.centreMapOnUnit)
-	gui.keyboard.add_key(K_f,SPQR.KMOD_BASE|KMOD_LALT,SEVENT.keyMenuFile)
-	gui.keyboard.add_key(K_e,SPQR.KMOD_BASE|KMOD_LALT,SEVENT.keyMenuEmpire)
-	gui.keyboard.add_key(K_h,SPQR.KMOD_BASE|KMOD_LALT,SEVENT.keyMenuHelp)
+	gui.keyboard.addKey(K_n,SPQR.KMOD_BASE,SEVENT.nextTurn)
+	gui.keyboard.addKey(K_m,SPQR.KMOD_BASE,SEVENT.nextUnitOnStack)
+	gui.keyboard.addKey(K_r,SPQR.KMOD_BASE,SEVENT.centreMap)
+	gui.keyboard.addKey(K_c,SPQR.KMOD_BASE,SEVENT.centreMapOnUnit)
+	gui.keyboard.addKey(K_f,SPQR.KMOD_BASE|KMOD_LALT,SEVENT.keyMenuFile)
+	gui.keyboard.addKey(K_e,SPQR.KMOD_BASE|KMOD_LALT,SEVENT.keyMenuEmpire)
+	gui.keyboard.addKey(K_h,SPQR.KMOD_BASE|KMOD_LALT,SEVENT.keyMenuHelp)
 	# debug menu added?
 	if(SPQR.DEBUG_MODE==True):
-		gui.keyboard.add_key(K_d,SPQR.KMOD_BASE|KMOD_LALT,SEVENT.keyMenuDebug)
-	gui.keyboard.add_key(K_ESCAPE,SPQR.KMOD_BASE,SEVENT.keyMenuEscape)
-	gui.keyboard.add_key(K_F6,SPQR.KMOD_BASE,SEVENT.keyShowUnit)
-	gui.keyboard.add_key(K_F7,SPQR.KMOD_BASE,SEVENT.keyShowCity)
+		gui.keyboard.addKey(K_d,SPQR.KMOD_BASE|KMOD_LALT,SEVENT.keyMenuDebug)
+	gui.keyboard.addKey(K_ESCAPE,SPQR.KMOD_BASE,SEVENT.keyMenuEscape)
+	gui.keyboard.addKey(K_F6,SPQR.KMOD_BASE,SEVENT.keyShowUnit)
+	gui.keyboard.addKey(K_F7,SPQR.KMOD_BASE,SEVENT.keyShowCity)
 	# allow map scrolling with curser keys
-	gui.keyboard.add_key(K_UP,SPQR.KMOD_BASE,SEVENT.keyScrollUp)
-	gui.keyboard.add_key(K_DOWN,SPQR.KMOD_BASE,SEVENT.keyScrollDown)
-	gui.keyboard.add_key(K_RIGHT,SPQR.KMOD_BASE,SEVENT.keyScrollRight)
-	gui.keyboard.add_key(K_LEFT,SPQR.KMOD_BASE,SEVENT.keyScrollLeft)
+	gui.keyboard.addKey(K_UP,SPQR.KMOD_BASE,SEVENT.keyScrollUp)
+	gui.keyboard.addKey(K_DOWN,SPQR.KMOD_BASE,SEVENT.keyScrollDown)
+	gui.keyboard.addKey(K_RIGHT,SPQR.KMOD_BASE,SEVENT.keyScrollRight)
+	gui.keyboard.addKey(K_LEFT,SPQR.KMOD_BASE,SEVENT.keyScrollLeft)
 	# add menu shortcut keys
-	gui.keyboard.add_key(K_n,SPQR.KMOD_BASE|KMOD_LCTRL,SEVENT.menuNew)
-	gui.keyboard.add_key(K_l,SPQR.KMOD_BASE|KMOD_LCTRL,SEVENT.menuLoad)
-	gui.keyboard.add_key(K_s,SPQR.KMOD_BASE|KMOD_LCTRL,SEVENT.menuSave)
-	gui.keyboard.add_key(K_p,SPQR.KMOD_BASE|KMOD_LCTRL,SEVENT.menuPreferences)
-	gui.keyboard.add_key(K_q,SPQR.KMOD_BASE|KMOD_LCTRL,SEVENT.quitSpqr)
-	gui.keyboard.add_key(K_F2,SPQR.KMOD_BASE,SEVENT.menuEmpireSenate)
-	gui.keyboard.add_key(K_F3,SPQR.KMOD_BASE,SEVENT.menuEmpireMilitary)
-	gui.keyboard.add_key(K_F4,SPQR.KMOD_BASE,SEVENT.menuEmpireCities)
-	gui.keyboard.add_key(K_F5,SPQR.KMOD_BASE,SEVENT.menuEmpireStatistics)
-	gui.keyboard.add_key(K_a,SPQR.KMOD_BASE|KMOD_LCTRL,SEVENT.menuHelpAbout)
-	gui.keyboard.add_key(K_F1,SPQR.KMOD_BASE,SEVENT.menuHelpHelp)
-	gui.keyboard.add_key(K_k,SPQR.KMOD_BASE,SEVENT.keyShowKeys)
+	gui.keyboard.addKey(K_n,SPQR.KMOD_BASE|KMOD_LCTRL,SEVENT.menuNew)
+	gui.keyboard.addKey(K_l,SPQR.KMOD_BASE|KMOD_LCTRL,SEVENT.menuLoad)
+	gui.keyboard.addKey(K_s,SPQR.KMOD_BASE|KMOD_LCTRL,SEVENT.menuSave)
+	gui.keyboard.addKey(K_p,SPQR.KMOD_BASE|KMOD_LCTRL,SEVENT.menuPreferences)
+	gui.keyboard.addKey(K_q,SPQR.KMOD_BASE|KMOD_LCTRL,SEVENT.quitSpqr)
+	gui.keyboard.addKey(K_F2,SPQR.KMOD_BASE,SEVENT.menuEmpireSenate)
+	gui.keyboard.addKey(K_F3,SPQR.KMOD_BASE,SEVENT.menuEmpireMilitary)
+	gui.keyboard.addKey(K_F4,SPQR.KMOD_BASE,SEVENT.menuEmpireCities)
+	gui.keyboard.addKey(K_F5,SPQR.KMOD_BASE,SEVENT.menuEmpireStatistics)
+	gui.keyboard.addKey(K_a,SPQR.KMOD_BASE|KMOD_LCTRL,SEVENT.menuHelpAbout)
+	gui.keyboard.addKey(K_F1,SPQR.KMOD_BASE,SEVENT.menuHelpHelp)
+	gui.keyboard.addKey(K_k,SPQR.KMOD_BASE,SEVENT.keyShowKeys)
 	# cheap way to render text for copying
-	#gui.windows[index].add_item(SWIDGET.SPQR_Button(gui,200,20,"End Turn"))
+	#gui.windows[index].add_item(SWIDGET.CButton(gui,200,20,"End Turn"))
 	
 	# blit offscreen map
 	gui.renderPixelMap()

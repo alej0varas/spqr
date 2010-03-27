@@ -18,7 +18,7 @@
 import sys,pygame
 from pygame.locals import *
 from spqr_defines import *
-import spqr_widgets as SWIDGET
+import spqr_widgets2 as SWIDGET
 
 # at the moment, you have to allow for the borders when you create a new window
 # sorry about, it's definitly on the TODO list
@@ -241,7 +241,7 @@ class SPQR_Window:
 			# you may question the maths here (how do we know the length is going to be
 			# big enough?), but all we after is a width >(2*SPACER), ok (if SPACER is
 			# fairly small) because we already tested for button width earlier
-			self.add_item(SWIDGET.SPQR_Seperator(self.lgui,
+			self.add_item(SWIDGET.CSeperator(self.lgui,
 				SPACER,self.rect.h-(extend_height+WINSZ_TOP),
 				(self.rect.w-(2*(WINSZ_SIDE+SPACER)))))
 				
@@ -257,7 +257,7 @@ class SPQR_Window:
 					# amend xpos - real easy
 					xpos=SPACER
 				# build the button
-				bwidget=SWIDGET.SPQR_Button(self.lgui,xpos,ypos,button.text)
+				bwidget=SWIDGET.CButton(self.lgui,xpos,ypos,button.text)
 				bwidget.active=True
 				# and then add it
 				self.add_item(bwidget)
@@ -265,7 +265,7 @@ class SPQR_Window:
 				bwidget.callbacks.mouse_lclk=button.event
 				# and the keystuff, if needed:
 				if(button.key!=None):
-					self.lgui.keyboard.add_key(button.key,KMOD_BASE,button.event)
+					self.lgui.keyboard.addKey(button.key,KMOD_BASE,button.event)
 				# reset x position
 				xpos-=(2*SPACER)+self.lgui.images[BUTTON_STD].get_width()
 		else:

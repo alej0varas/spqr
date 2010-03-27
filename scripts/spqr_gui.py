@@ -111,7 +111,7 @@ class CGFXEngine:
 		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf",SPQR.FONT_SMALL))
 		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf",SPQR.FONT_LARGE))
 		# enable keyboard reponses
-		self.keyboard=SWIDGET.SPQR_KEYBOARD()	
+		self.keyboard=SWIDGET.CKeyboard()	
 		# render the city texts
 		self.renderCityNames()
 		# set up sound
@@ -392,7 +392,7 @@ class CGFXEngine:
 		# lets start with the simple case: handling keypress values
 		if(event.type==KEYDOWN):
 			# did it match?
-			foo,bar,handle=self.keyboard.get_function(event.key,event.mod)
+			foo,bar,handle=self.keyboard.getKeyFunction(event.key,event.mod)
 			if(foo==True):
 				# set win_index to TOP of current window list -2 to enable
 				# killing of current window from keyboard function
@@ -675,7 +675,7 @@ class CGFXEngine:
 			self.windows[SPQR.WIN_INFO].items[self.display_units[2]].active=False
 			self.windows[SPQR.WIN_INFO].items[self.display_units[3]].active=False
 			# remove 'finish turn' key, if it was ever there
-			self.keyboard.remove_key(K_f,SPQR.KMOD_BASE)
+			self.keyboard.removeKey(K_f,SPQR.KMOD_BASE)
 			self.data.troops.current_highlight=-1
 			# turn off unit flashing and clear any move overlay
 			self.unitFlashAndClear()
@@ -807,7 +807,7 @@ class CGFXEngine:
 		name.visible=True
 		name.text=self.data.troops.units[index].name
 		# redraw the label
-		name.build_label()
+		name.buildLabel()
 		# build the graph
 		self.drawUnitGraph(index)
 		self.windows[SPQR.WIN_INFO].items[self.unit_graph_widget].visible=True
@@ -822,14 +822,14 @@ class CGFXEngine:
 			x=self.data.troops.units[index].xpos
 			y=self.data.troops.units[index].ypos
 			# add possibilty of key f - finish current turn
-			self.keyboard.add_key(K_f,SPQR.KMOD_BASE,SEVENT.finishUnitTurn)
+			self.keyboard.addKey(K_f,SPQR.KMOD_BASE,SEVENT.finishUnitTurn)
 		else:
 			# an enemy unit, don't flash or add move area
 			# blit over the old move overlay
 			self.unitFlashAndClear()
 			self.data.troops.current_highlight=self.data.troops.units[index].id_number
 			# remove 'finish turn' key
-			self.keyboard.remove_key(K_f,SPQR.KMOD_BASE)
+			self.keyboard.removeKey(K_f,SPQR.KMOD_BASE)
 		return(True)
 
 	def drawUnitGraph(self,index):
@@ -901,7 +901,7 @@ class CGFXEngine:
 		name.visible=True
 		name.text=self.data.cities[index].name
 		# redraw the label
-		name.build_label()
+		name.buildLabel()
 		# make this the current active city
 		self.data.city_highlight=index
 		return
@@ -1283,7 +1283,7 @@ class CGFXEngine:
 			# just to make things even more complex is the fact that we now use those
 			# index values to set new keypresses - the unit moves!
 			# however, to preserve some sanity I'll push this out to another function
-			self.keyboard.add_key_moves(index_tp,index_tr,index_br,index_bt,index_bl,index_tl)
+			self.keyboard.addKeyMoves(index_tp,index_tr,index_br,index_bt,index_bl,index_tl)
 
 			# now we can construct the draw image. Get a copy of the last image
 			self.flash_draw=pygame.Surface((SPQR.MOVESZ_X,SPQR.MOVESZ_Y),SRCALPHA)
@@ -1654,11 +1654,11 @@ class CGFXEngine:
 		index=self.addWindow(SWINDOW.SPQR_Window(self,-1,-1,width,wheight,win_title,True))
 		y=SPQR.SPACER
 		# print "Window details on messagebox():",y,width,height
-		self.windows[index].add_item(SWIDGET.SPQR_Label(self,6,y,txt_width,height,text))
+		self.windows[index].add_item(SWIDGET.CLabel(self,6,y,txt_width,height,text))
 		# now add the seperator bar
 		x=6
 		y+=height
-		self.windows[index].add_item(SWIDGET.SPQR_Seperator(self,x,y,width-24))
+		self.windows[index].add_item(SWIDGET.CSeperator(self,x,y,width-24))
 		y+=1+(self.images[SPQR.BUTTON_STD].get_height()/2)
 		# move x to the right, buttons are blitted from right to left
 		x=width-16-(self.images[SPQR.BUTTON_STD].get_width())
@@ -1667,47 +1667,47 @@ class CGFXEngine:
 		# logic is simple: found a button? yes, display it and 
 		# modify next print pos. quit if 4th button found
 		if((flags&SPQR.BUTTON_OK)!=0):
-			slot=self.windows[index].add_item(SWIDGET.SPQR_Button(self,x,y,"OK"))
+			slot=self.windows[index].add_item(SWIDGET.CButton(self,x,y,"OK"))
 			# same for every instance of this little loop: add the callbacks
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxOK
 			self.windows[index].items[slot].active=True
 			x=x-(self.images[SPQR.BUTTON_STD].get_width()+12)
 			# add a key for this
-			self.keyboard.add_key(K_o,SPQR.KMOD_BASE,msgboxOK)
+			self.keyboard.addKey(K_o,SPQR.KMOD_BASE,msgboxOK)
 			total_buttons+=1
 		if((flags&SPQR.BUTTON_CANCEL)!=0):
-			slot=self.windows[index].add_item(SWIDGET.SPQR_Button(self,x,y,"Cancel"))
+			slot=self.windows[index].add_item(SWIDGET.CButton(self,x,y,"Cancel"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxCancel
 			self.windows[index].items[slot].active=True
 			x=x-(self.images[SPQR.BUTTON_STD].get_width()+12)
-			self.keyboard.add_key(K_c,SPQR.KMOD_BASE,msgboxCancel)
+			self.keyboard.addKey(K_c,SPQR.KMOD_BASE,msgboxCancel)
 			total_buttons+=1
 		if((flags&SPQR.BUTTON_YES)!=0):
-			slot=self.windows[index].add_item(SWIDGET.SPQR_Button(self,x,y,"Yes"))
+			slot=self.windows[index].add_item(SWIDGET.CButton(self,x,y,"Yes"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxYes
 			self.windows[index].items[slot].active=True
 			x=x-(self.images[SPQR.BUTTON_STD].get_width()+12)
-			self.keyboard.add_key(K_y,SPQR.KMOD_BASE,msgboxYes)
+			self.keyboard.addKey(K_y,SPQR.KMOD_BASE,msgboxYes)
 			total_buttons+=1
 		if(((flags&SPQR.BUTTON_NO)!=0)&(total_buttons<3)):
-			slot=self.windows[index].add_item(SWIDGET.SPQR_Button(self,x,y,"No"))
+			slot=self.windows[index].add_item(SWIDGET.CButton(self,x,y,"No"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxNo
 			self.windows[index].items[slot].active=True
 			x=x-(self.images[SPQR.BUTTON_STD].get_width()+12)
-			self.keyboard.add_key(K_n,SPQR.KMOD_BASE,msgboxNo)
+			self.keyboard.addKey(K_n,SPQR.KMOD_BASE,msgboxNo)
 			total_buttons+=1
 		if(((flags&SPQR.BUTTON_QUIT)!=0)&(total_buttons<3)):
-			slot=self.windows[index].add_item(SWIDGET.SPQR_Button(self,x,y,"Quit"))
+			slot=self.windows[index].add_item(SWIDGET.CButton(self,x,y,"Quit"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxQuit
 			self.windows[index].items[slot].active=True
 			x=x-(self.images[SPQR.BUTTON_STD].get_width()+12)
-			self.keyboard.add_key(K_q,SPQR.KMOD_BASE,msgboxQuit)
+			self.keyboard.addKey(K_q,SPQR.KMOD_BASE,msgboxQuit)
 			total_buttons+=1
 		if(((flags&SPQR.BUTTON_IGNORE)!=0)&(total_buttons<3)):
-			slot=self.windows[index].add_item(SWIDGET.SPQR_Button(self,x,y,"Ignore"))
+			slot=self.windows[index].add_item(SWIDGET.CButton(self,x,y,"Ignore"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxIgnore
 			self.windows[index].items[slot].active=True
-			self.keyboard.add_key(K_i,SPQR.KMOD_BASE,msgboxIgnore)
+			self.keyboard.addKey(K_i,SPQR.KMOD_BASE,msgboxIgnore)
 			total_buttons+=1
 		# thats the graphics dealt with, make sure the whole window is modal
 		self.windows[index].modal=True
@@ -1715,11 +1715,11 @@ class CGFXEngine:
 		if(total_buttons==1):
 			# get the routine to call
 			rout=self.keyboard.active_keys[-1].function
-			self.keyboard.add_key(K_RETURN,SPQR.KMOD_BASE,rout)
+			self.keyboard.addKey(K_RETURN,SPQR.KMOD_BASE,rout)
 			# allow for extra key on key stack
 			total_buttons+=1
 		# set keyboard functions
-		self.keyboard.set_modal(total_buttons)
+		self.keyboard.setModalKeys(total_buttons)
 		# turn off unit animation during the messagebox
 		self.unitFlashAndOff()
 		# ok, lets get the image we need and the rectangle:
@@ -1734,7 +1734,7 @@ class CGFXEngine:
 		# and then redraw the screen
 		self.deleteTopDirty()
 		# reset the keyboard
-		self.keyboard.remove_modal()
+		self.keyboard.removeModalKeys()
 		# remove the window
 		self.windows.pop()
 		# put the animation back if the top window is NOT modal

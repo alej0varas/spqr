@@ -31,7 +31,7 @@ class CMenuChild:
 		self.key_text=key
 		# rectangle is defined when the parent menu is drawn
 		self.rect=pygame.Rect(0,0,0,0)
-		self.callbacks=SWIDGET.SPQR_Callbacks("HMenuChild_Callback")
+		self.callbacks=SWIDGET.CCallbacks("HMenuChild_Callback")
 		# less faffing as we add the menu code pointer right here in the constructor
 		self.callbacks.mouse_lclk=code
 		self.parent=False
@@ -69,7 +69,7 @@ class CMenuParent:
 		self.highlight=pygame.Surface((1,1))
 		# the area of this rect is set when the Hmenu is set up
 		self.rect=pygame.Rect(0,0,0,0)
-		self.callbacks=SWIDGET.SPQR_Callbacks("CMenuParent_Callback")
+		self.callbacks=SWIDGET.CCallbacks("CMenuParent_Callback")
 		self.callbacks.mouse_lclk=menuParentClick
 		self.parent=False
 		self.describe="CMenuParent"
@@ -136,7 +136,7 @@ class CMenu:
 			# draw the actual menu here as well
 			self.drawMenu(foo)
 		# finish the defines
-		self.callbacks=SWIDGET.SPQR_Callbacks("CMenu_Callback")
+		self.callbacks=SWIDGET.CCallbacks("CMenu_Callback")
 		# now set so that the menu traps all the clicks on it
 		self.callbacks.mouse_lclk=self.getMenuOption
 		self.parent=False
