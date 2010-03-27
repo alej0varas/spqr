@@ -12,7 +12,9 @@ class CSound:
 	"""Class stores and sets music parameters"""
 	def __init__(self):
 		# define the sounds:
-		self.music=["Menuetto.ogg",
+		self.music=["La_Clemenza.ogg",
+					"Menuetto.ogg",
+					"Molto_Allegro.ogg",
 					"LaCamp.ogg"]
 		self.volume=SPQR.INIT_VOLUME
 		# initially the music is OFF
