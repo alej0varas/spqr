@@ -118,65 +118,65 @@ def init():
 	   And yes, it is very long but it's not at all complicated"""
 	# build up a menu
 	menu=[]
-	menu.append(SMENU.SPQR_Menu_Parent("File"))
-	menu.append(SMENU.SPQR_Menu_Parent("Empire"))
-	menu.append(SMENU.SPQR_Menu_Parent("Help"))
+	menu.append(SMENU.CMenuParent("File"))
+	menu.append(SMENU.CMenuParent("Empire"))
+	menu.append(SMENU.CMenuParent("Help"))
 	if(SPQR.DEBUG_MODE==True):
-		menu.append(SMENU.SPQR_Menu_Parent("Debug"))
+		menu.append(SMENU.CMenuParent("Debug"))
 	# then add the sub menus below these
-	menu[0].add_child(SMENU.SPQR_Menu_Child("New Game",
+	menu[0].addChild(SMENU.CMenuChild("New Game",
 		SPQR.ICON_NEW,"Ctrl+N",SEVENT.menuNew))
-	menu[0].add_child(SMENU.SPQR_Menu_Child("sep",
+	menu[0].addChild(SMENU.CMenuChild("sep",
 		SPQR.ICON_NONE,"",SEVENT.notYetCoded))
-	menu[0].add_child(SMENU.SPQR_Menu_Child("Load Game",
+	menu[0].addChild(SMENU.CMenuChild("Load Game",
 		SPQR.ICON_LOAD,"Ctrl+L",SEVENT.menuLoad))
-	menu[0].add_child(SMENU.SPQR_Menu_Child("Save Game",
+	menu[0].addChild(SMENU.CMenuChild("Save Game",
 		SPQR.ICON_SAVE,"Ctrl+S",SEVENT.menuSave))
 	# this is a seperate, drawn bar to split the text
-	menu[0].add_child(SMENU.SPQR_Menu_Child("sep",
+	menu[0].addChild(SMENU.CMenuChild("sep",
 		SPQR.ICON_NONE,"",SEVENT.notYetCoded))
-	menu[0].add_child(SMENU.SPQR_Menu_Child("Preferences",
+	menu[0].addChild(SMENU.CMenuChild("Preferences",
 		SPQR.ICON_PREFS,"Ctrl+P",SEVENT.menuPreferences))
-	menu[0].add_child(SMENU.SPQR_Menu_Child("sep",
+	menu[0].addChild(SMENU.CMenuChild("sep",
 		SPQR.ICON_NONE,"",SEVENT.notYetCoded))
-	menu[0].add_child(SMENU.SPQR_Menu_Child("Exit SPQR",
+	menu[0].addChild(SMENU.CMenuChild("Exit SPQR",
 		SPQR.ICON_EXIT,"Ctrl+Q",SEVENT.quitSpqr))
-	menu[1].add_child(SMENU.SPQR_Menu_Child("Vist Senate",
+	menu[1].addChild(SMENU.CMenuChild("Vist Senate",
 		SPQR.ICON_SENATE,"F2",SEVENT.menuEmpireSenate))
-	menu[1].add_child(SMENU.SPQR_Menu_Child("Show Units",
+	menu[1].addChild(SMENU.CMenuChild("Show Units",
 		SPQR.ICON_MILITARY,"F3",SEVENT.menuEmpireMilitary))
-	menu[1].add_child(SMENU.SPQR_Menu_Child("Show Cities",
+	menu[1].addChild(SMENU.CMenuChild("Show Cities",
 		SPQR.ICON_CITY,"F4",SEVENT.menuEmpireCities))
-	menu[1].add_child(SMENU.SPQR_Menu_Child("Show People",
+	menu[1].addChild(SMENU.CMenuChild("Show People",
 		SPQR.ICON_NONE,"F5",SEVENT.menuEmpirePeople))
-	menu[1].add_child(SMENU.SPQR_Menu_Child("Statistics",
+	menu[1].addChild(SMENU.CMenuChild("Statistics",
 		SPQR.ICON_STATS,"",SEVENT.menuEmpireStatistics))
-	menu[2].add_child(SMENU.SPQR_Menu_Child("About",
+	menu[2].addChild(SMENU.CMenuChild("About",
 		SPQR.ICON_ABOUT,"Ctrl+A",SEVENT.menuHelpAbout))
-	menu[2].add_child(SMENU.SPQR_Menu_Child("sep",
+	menu[2].addChild(SMENU.CMenuChild("sep",
 		SPQR.ICON_NONE,"",SEVENT.notYetCoded))
-	menu[2].add_child(SMENU.SPQR_Menu_Child("Help",
+	menu[2].addChild(SMENU.CMenuChild("Help",
 		SPQR.ICON_HELP,"F1",SEVENT.menuHelpHelp))
 
 	# debug menu is always last - it's easy to remove then
 	if(SPQR.DEBUG_MODE==True):
-		menu[3].add_child(SMENU.SPQR_Menu_Child("Show unit names",
+		menu[3].addChild(SMENU.CMenuChild("Show unit names",
 			SPQR.ICON_DEBUG,"",SEVENT.consoleUnitNames))
-		menu[3].add_child(SMENU.SPQR_Menu_Child("Show unit IDs",
+		menu[3].addChild(SMENU.CMenuChild("Show unit IDs",
 			SPQR.ICON_DEBUG,"",SEVENT.consoleUnitNumbers))
-		menu[3].add_child(SMENU.SPQR_Menu_Child("Show unit owners",
+		menu[3].addChild(SMENU.CMenuChild("Show unit owners",
 			SPQR.ICON_DEBUG,"",SEVENT.consoleUnitOwners))
-		menu[3].add_child(SMENU.SPQR_Menu_Child("Show city names",
+		menu[3].addChild(SMENU.CMenuChild("Show city names",
 			SPQR.ICON_DEBUG,"",SEVENT.consoleCityNames))
-		menu[3].add_child(SMENU.SPQR_Menu_Child("sep",
+		menu[3].addChild(SMENU.CMenuChild("sep",
 			SPQR.ICON_NONE,"",SEVENT.notYetCoded))
-		menu[3].add_child(SMENU.SPQR_Menu_Child("Window test",
+		menu[3].addChild(SMENU.CMenuChild("Window test",
 			SPQR.ICON_DEBUG,"",SEVENT.windowTest))
-		menu[3].add_child(SMENU.SPQR_Menu_Child("Widget test",
+		menu[3].addChild(SMENU.CMenuChild("Widget test",
 			SPQR.ICON_DEBUG,"",SEVENT.widgetTest))
-		menu[3].add_child(SMENU.SPQR_Menu_Child("sep",
+		menu[3].addChild(SMENU.CMenuChild("sep",
 			SPQR.ICON_NONE,"",SEVENT.notYetCoded))
-		menu[3].add_child(SMENU.SPQR_Menu_Child("Open Console",
+		menu[3].addChild(SMENU.CMenuChild("Open Console",
 			SPQR.ICON_CONSOLE,"",SEVENT.displayConsole))
 
 	# Add the menubar at the top. It has no drawn window
@@ -184,7 +184,7 @@ def init():
 	index=gui.addWindow(SWINDOW.SPQR_Window(gui,0,0,0,0,"",False))
 	gui.windows[index].border_offset=False
 	# add the prepared menu onto this
-	gui.windows[index].add_item(SMENU.SPQR_Menu(gui,menu))
+	gui.windows[index].add_item(SMENU.CMenu(gui,menu))
 
 	# now we have the main box underneath what will be the map
 	# start with the window, of course
