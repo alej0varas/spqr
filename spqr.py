@@ -181,15 +181,15 @@ def init():
 
 	# Add the menubar at the top. It has no drawn window
 	# THIS MUST BE THE FIRST WINDOW
-	index=gui.addWindow(SWINDOW.SPQR_Window(gui,0,0,0,0,"",False))
+	index=gui.addWindow(SWINDOW.CWindow(gui,0,0,0,0,"",False))
 	gui.windows[index].border_offset=False
 	# add the prepared menu onto this
-	gui.windows[index].add_item(SMENU.CMenu(gui,menu))
+	gui.windows[index].addWidget(SMENU.CMenu(gui,menu))
 
 	# now we have the main box underneath what will be the map
 	# start with the window, of course
 	# THIS MUST BE THE SECOND WINDOW
-	index=gui.addWindow(SWINDOW.SPQR_Window(gui,0,SPQR.SCREEN_HEIGHT-SPQR.BBOX_HEIGHT,
+	index=gui.addWindow(SWINDOW.CWindow(gui,0,SPQR.SCREEN_HEIGHT-SPQR.BBOX_HEIGHT,
 		SPQR.SCREEN_WIDTH,SPQR.BBOX_HEIGHT,"",False))
 	# set it special
 	gui.windows[index].border_offset=False
@@ -208,10 +208,10 @@ def init():
 	# a few more things here - the eagle design on the left to start
 	w=gui.images[SPQR.IMG_EAGLE].get_width()
 	h=gui.images[SPQR.IMG_EAGLE].get_height()
-	foo=gui.windows[index].add_item(SWIDGET.CImage(gui,4,10+SPQR.SPACER,
+	foo=gui.windows[index].addWidget(SWIDGET.CImage(gui,4,10+SPQR.SPACER,
 		w,h,SPQR.IMG_EAGLE))
 	# the image that contains the current game turn
-	gui.turn_widget=gui.windows[index].add_item(SWIDGET.CImage
+	gui.turn_widget=gui.windows[index].addWidget(SWIDGET.CImage
 		(gui,SPQR.HALFSPCR,10,w,SPQR.TXT_MIN_H,0))
 	# render current game turn
 	gui.renderGameTurn()
@@ -224,7 +224,7 @@ def init():
 	hh=gui.images[SPQR.BTN_NEXT].get_height()
 	xoff=SPQR.HALFSPCR+((w-wh)/2)
 	yoff=SPQR.BBOX_HEIGHT-hh
-	gui.next_button=gui.windows[index].add_item(SWIDGET.CImage
+	gui.next_button=gui.windows[index].addWidget(SWIDGET.CImage
 		(gui,xoff,yoff,wh,hh,SPQR.BTN_NEXT))
 	# set callback
 	gui.windows[index].items[gui.next_button].callbacks.mouse_lclk=SEVENT.nextTurn
@@ -235,7 +235,7 @@ def init():
 	wh=gui.images[SPQR.HEX_BORDER].get_width()
 	hh=gui.images[SPQR.HEX_BORDER].get_height()
 	xoff=SPQR.HALFSPCR+w+SPQR.SPACER
-	gui.hex_widget=gui.windows[index].add_item(SWIDGET.CImage
+	gui.hex_widget=gui.windows[index].addWidget(SWIDGET.CImage
 		(gui,xoff,SPQR.SPACER,wh,hh,SPQR.HEX_BORDER))
 	# don't draw or test for now
 	gui.windows[index].items[gui.hex_widget].visible=False
@@ -246,7 +246,7 @@ def init():
 	yoff=SPQR.SPACER
 	wh=gui.images[SPQR.IMG_LEGION].get_width()
 	hh=gui.images[SPQR.IMG_LEGION].get_height()
-	gui.unit_widget=gui.windows[index].add_item(SWIDGET.CImage
+	gui.unit_widget=gui.windows[index].addWidget(SWIDGET.CImage
 		(gui,xoff,yoff,wh,hh,SPQR.IMG_LEGION))
 	# again, don't display this for now
 	gui.windows[index].items[gui.unit_widget].describe="unit graphic"
@@ -260,7 +260,7 @@ def init():
 	hh=SPQR.TXT_MIN_H
 	lwidth=SPQR.SCREEN_WIDTH-(xoff+
 		gui.images[SPQR.SMALL_MAP].get_width()+SPQR.SPACER+SPQR.SPACER)
-	gui.unit_txt_widget=gui.windows[index].add_item(SWIDGET.CLabel
+	gui.unit_txt_widget=gui.windows[index].addWidget(SWIDGET.CLabel
 		(gui,xoff,yoff,lwidth,hh,"This is a bug"))
 	# don't activate
 	gui.windows[index].items[gui.unit_txt_widget].describe="unit txt description"
@@ -270,7 +270,7 @@ def init():
 	nx=xoff+SPQR.SPACER+gui.images[SPQR.IMG_LEGION].get_width()
 	ny=SPQR.SPACER+SPQR.QTRSPCR
 	ug_img=SWIDGET.buildImage(gui,SPQR.GRAPH_UNIT)
-	gui.unit_graph_widget=gui.windows[index].add_item(ug_img)
+	gui.unit_graph_widget=gui.windows[index].addWidget(ug_img)
 	gui.windows[index].items[gui.unit_graph_widget].rect.x=nx
 	gui.windows[index].items[gui.unit_graph_widget].rect.y=ny
 	gui.windows[index].items[gui.unit_graph_widget].describe="unit graph image"
@@ -280,7 +280,7 @@ def init():
 	yoff+=SPQR.TXT_MIN_H+1+SPQR.HALFSPCR
 	wh=gui.images[SPQR.IMG_ROME].get_width()
 	hh=gui.images[SPQR.IMG_ROME].get_height()
-	gui.city_widget=gui.windows[index].add_item(SWIDGET.CImage
+	gui.city_widget=gui.windows[index].addWidget(SWIDGET.CImage
 		(gui,xoff,yoff,wh,hh,SPQR.IMG_ROME))
 	# don't activate
 	gui.windows[index].items[gui.city_widget].describe="city graphic"	
@@ -291,7 +291,7 @@ def init():
 	# and the city text label
 	yoff+=hh+2
 	# the text should never printed, thus the message :-)
-	gui.city_txt_widget=gui.windows[index].add_item(SWIDGET.CLabel
+	gui.city_txt_widget=gui.windows[index].addWidget(SWIDGET.CLabel
 		(gui,xoff,yoff,lwidth,hh,"This is a bug"))
 	# as per...
 	gui.windows[index].items[gui.city_txt_widget].describe="city txt description"
@@ -304,16 +304,16 @@ def init():
 	yoff=SPQR.SPACER
 	xoff-=SPQR.HALFSPCR+(SPQR.SPACER*3)+(w*4)
 	# let's have 4 images for the regional soldiers
-	gui.display_units.append(gui.windows[index].add_item(SWIDGET.CImage
+	gui.display_units.append(gui.windows[index].addWidget(SWIDGET.CImage
 		(gui,xoff,yoff,w,h,SPQR.IMG_LEGION)))
 	xoff+=(w+SPQR.SPACER)
-	gui.display_units.append(gui.windows[index].add_item(SWIDGET.CImage
+	gui.display_units.append(gui.windows[index].addWidget(SWIDGET.CImage
 		(gui,xoff,yoff,w,h,SPQR.IMG_LEGION)))
 	xoff+=(w+SPQR.SPACER)
-	gui.display_units.append(gui.windows[index].add_item(SWIDGET.CImage
+	gui.display_units.append(gui.windows[index].addWidget(SWIDGET.CImage
 		(gui,xoff,yoff,w,h,SPQR.IMG_LEGION)))
 	xoff+=(w+SPQR.SPACER)
-	gui.display_units.append(gui.windows[index].add_item(SWIDGET.CImage
+	gui.display_units.append(gui.windows[index].addWidget(SWIDGET.CImage
 		(gui,xoff,yoff,w,h,SPQR.IMG_LEGION)))
 	# again, don't display these right yet
 	gui.windows[index].items[gui.display_units[0]].visible=False
@@ -338,7 +338,7 @@ def init():
 	# TODO: This works, but something silly is going on
 	y=SPQR.SCREEN_HEIGHT-(gui.images[SPQR.SMALL_MAP].get_height()+17)
 	x=SPQR.SCREEN_WIDTH-(gui.images[SPQR.SMALL_MAP].get_width()+SPQR.HALFSPCR)
-	slot=gui.windows[index].add_item(SWIDGET.CImage(gui,x+9,-9,w,h,SPQR.SMALL_MAP))
+	slot=gui.windows[index].addWidget(SWIDGET.CImage(gui,x+9,-9,w,h,SPQR.SMALL_MAP))
 	# allow left mouse button dragging as well
 	# this code also simulates a mini-map click
 	gui.windows[index].items[slot].callbacks.mouse_ldown=SEVENT.miniMapDrag
@@ -350,7 +350,7 @@ def init():
 	h=gui.images[SPQR.BTN_ROME].get_height()
 	x+=gui.images[SPQR.SMALL_MAP].get_width()-(SPQR.SPACER+w)
 	y=SPQR.BBOX_HEIGHT-h
-	slot=gui.windows[index].add_item(SWIDGET.CImage(gui,x,y,w,h,SPQR.BTN_ROME))
+	slot=gui.windows[index].addWidget(SWIDGET.CImage(gui,x,y,w,h,SPQR.BTN_ROME))
 	gui.windows[index].items[slot].callbacks.mouse_lclk=SEVENT.centreMap
 	gui.windows[index].items[slot].active=True
 	gui.windows[index].items[slot].describe="centre button"
@@ -395,7 +395,7 @@ def init():
 	gui.keyboard.addKey(K_F1,SPQR.KMOD_BASE,SEVENT.menuHelpHelp)
 	gui.keyboard.addKey(K_k,SPQR.KMOD_BASE,SEVENT.keyShowKeys)
 	# cheap way to render text for copying
-	#gui.windows[index].add_item(SWIDGET.CButton(gui,200,20,"End Turn"))
+	#gui.windows[index].addWidget(SWIDGET.CButton(gui,200,20,"End Turn"))
 	
 	# blit offscreen map
 	gui.renderPixelMap()

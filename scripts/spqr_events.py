@@ -112,7 +112,7 @@ def menuPreferences(lgui,handle,xpos,ypos):
 	"""Display the user preferences window. You can only really
 	   play with the music and volume settings for now"""
 	# first off, let's make the window that we need
-	index=lgui.addWindow(SWINDOW.SPQR_Window(lgui,-1,-1,288,152,"SPQR Preferences",True))
+	index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,288,152,"SPQR Preferences",True))
 	# we'll need an image first
 	img=SWIDGET.buildImageAlpha(lgui,SPQR.IMG_MUSIC)
 	img.rect.x=20
@@ -141,13 +141,13 @@ def menuPreferences(lgui,handle,xpos,ypos):
 	btn_ok.callbacks.mouse_lclk=killModalWindow
 	btn_ok.active=True
 	# add them all to our window
-	lgui.windows[index].add_item(img)
-	lgui.windows[index].add_item(lbl_MusicOn)
-	lgui.windows[index].add_item(lbl_Volume)
-	lgui.windows[index].add_item(chk_Volume)
-	lgui.windows[index].add_item(sld_Volume)
-	lgui.windows[index].add_item(sep)
-	lgui.windows[index].add_item(btn_ok)
+	lgui.windows[index].addWidget(img)
+	lgui.windows[index].addWidget(lbl_MusicOn)
+	lgui.windows[index].addWidget(lbl_Volume)
+	lgui.windows[index].addWidget(chk_Volume)
+	lgui.windows[index].addWidget(sld_Volume)
+	lgui.windows[index].addWidget(sep)
+	lgui.windows[index].addWidget(btn_ok)
 	# make the window modal
 	lgui.windows[index].modal=True
 	# add the new key event: o=ok
@@ -156,7 +156,7 @@ def menuPreferences(lgui,handle,xpos,ypos):
 	# turn off unit animations
 	lgui.unitFlashAndOff()
 	# setup dirty rect stuff
-	lgui.addDirtyRect(lgui.windows[index].draw_window(),
+	lgui.addDirtyRect(lgui.windows[index].drawWindow(),
 		lgui.windows[index].rect)
 	# and thats us done
 	return(True)
@@ -194,10 +194,9 @@ def killCurrentWindow(lgui,handle,xpos,ypos):
 	return(True)
 	
 def killModalWindow(lgui,handle,xpos,ypos):
-	"""As kill_current_window, but this also removes
-	   any modal keypresses we might have left behind
-	   It also destroys the dirty rect that you must have left
-	   behind..."""
+	"""As killCurrentWindow, but this also removes any modal
+	   keypresses we might have left behind. It also destroys the
+	   dirty rect that you must have left behind"""
 	lgui.keyboard.removeModalKeys()
 	lgui.deleteTopDirty()
 	lgui.killTopWindow()
@@ -212,7 +211,7 @@ def killModalWindow(lgui,handle,xpos,ypos):
 
 def startGame(lgui,handle,xpos,ypos):
 	"""Called when user starts game"""
-	kill_modal_window(lgui,0,0,0)
+	killModalWindow(lgui,0,0,0)
 	# remove top dirty image as well
 	lgui.deleteTopDirty()
 	# update screen
@@ -324,21 +323,21 @@ def menuEmpireMilitary(lgui,handle,xpos,ypos):
 	height=wysize+(SPQR.SPACER*3)
 	width=wxsize+((SPQR.SPACER*2)+lgui.images[SPQR.SCROLL_TOP].get_width())	
 	# now start to build the window
-	uwin=(SWINDOW.SPQR_Window(lgui,-1,-1,width,height,"Unit List",True))	
-	uwin.add_item(unitlist)
-	uwin.add_item(sclist)
+	uwin=(SWINDOW.CWindow(lgui,-1,-1,width,height,"Unit List",True))	
+	uwin.addWidget(unitlist)
+	uwin.addWidget(sclist)
 	uwin.modal=True
 	
 	# add the extra buttons
-	b1=SWINDOW.button_details("Cancel",K_c,killModalWindow)
-	uwin.build_button_area([b1],False)
+	b1=SWINDOW.CButtonDetails("Cancel",K_c,killModalWindow)
+	uwin.buildButtonArea([b1],False)
 	lgui.keyboard.setModalKeys(1)
 	index=lgui.addWindow(uwin)
 
 	# turn off unit animations for the moment
 	lgui.unitFlashAndOff()
 	# add the dirty rect details
-	lgui.addDirtyRect(lgui.windows[index].draw_window(),
+	lgui.addDirtyRect(lgui.windows[index].drawWindow(),
 		lgui.windows[index].rect)
 	return(True)
 
@@ -412,22 +411,22 @@ def menuEmpireCities(lgui,handle,xpos,ypos):
 	# where we have SPACER - checkbox+label - SPACER:
 	height=wysize+(SPQR.SPACER*3)
 	width=wxsize+((SPQR.SPACER*2)+lgui.images[SPQR.SCROLL_TOP].get_width())
-	index=lgui.addWindow(SWINDOW.SPQR_Window(lgui,-1,-1,width,height,
+	index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,width,height,
 		"City List",True))
-	lgui.windows[index].add_item(unitlist)
-	lgui.windows[index].add_item(sclist)
+	lgui.windows[index].addWidget(unitlist)
+	lgui.windows[index].addWidget(sclist)
 	# set it modal
 	lgui.windows[index].modal=True
 
 	# add the extra buttons
-	b1=SWINDOW.button_details("Cancel",K_c,killModalWindow)
-	lgui.windows[index].build_button_area([b1],False)
+	b1=SWINDOWCButtonDetails("Cancel",K_c,killModalWindow)
+	lgui.windows[index].buildButtonArea([b1],False)
 	lgui.keyboard.setModalKeys(1)
 
 	# turn off unit animations for the moment
 	lgui.unitFlashAndOff()
 	# add the dirty rect details
-	lgui.addDirtyRect(lgui.windows[index].draw_window(),
+	lgui.addDirtyRect(lgui.windows[index].drawWindow(),
 		lgui.windows[index].rect)
 	return(True)
 
@@ -497,23 +496,23 @@ def menuEmpirePeople(lgui,handle,xpos,ypos):
 	# where we have SPACER - checkbox+label - SPACER:
 	height=wysize+(SPQR.SPACER*3)
 	width=wxsize+((SPQR.SPACER*2)+lgui.images[SPQR.SCROLL_TOP].get_width())
-	index=lgui.addWindow(SWINDOW.SPQR_Window(lgui,-1,-1,width,height,
+	index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,width,height,
 		"People List",True))
-	lgui.windows[index].add_item(unitlist)
-	lgui.windows[index].add_item(sclist)
+	lgui.windows[index].addWidget(unitlist)
+	lgui.windows[index].addWidget(sclist)
 	# set it modal
 	lgui.windows[index].modal=True
 
 	# add the extra buttons
-	b1=SWINDOW.button_details("OK",K_o,killModalWindow)
-	b2=SWINDOW.button_details("Goto",K_g,killModalWindow)
-	lgui.windows[index].build_button_area([b1,b2],False)
+	b1=SWINDOW.CButtonDetails("OK",K_o,killModalWindow)
+	b2=SWINDOW.CButtonDetails("Goto",K_g,killModalWindow)
+	lgui.windows[index].buildButtonArea([b1,b2],False)
 	lgui.keyboard.setModalKeys(2)
 
 	# turn off unit animations for the moment
 	lgui.unitFlashAndOff()
 	# add the dirty rect details
-	lgui.addDirtyRect(lgui.windows[index].draw_window(),
+	lgui.addDirtyRect(lgui.windows[index].drawWindow(),
 		lgui.windows[index].rect)
 	return(True)
 
@@ -597,12 +596,12 @@ def unitDetails(lgui,handle,xpos,ypos):
 	height=img_graph.rect.y+img_graph.rect.h+SPQR.SPACER
 	
 	# start by actually getting a window
-	win=SWINDOW.SPQR_Window(lgui,-1,-1,width,height,"Unit Details",True)
+	win=SWINDOW.CWindow(lgui,-1,-1,width,height,"Unit Details",True)
 	# then add all the widgets to it
-	win.add_item(lbl_name)
-	win.add_item(lbl_cmdr)
-	win.add_item(img_unit)
-	win.add_item(img_graph)
+	win.addWidget(lbl_name)
+	win.addWidget(lbl_cmdr)
+	win.addWidget(img_unit)
+	win.addWidget(img_graph)
 	
 	# TODO: Here is where we add widgets to enable you to do things to the unit
 	# (disband, decimate, rest, etc...) if and only if you are the controller
@@ -611,15 +610,15 @@ def unitDetails(lgui,handle,xpos,ypos):
 	# set it modal
 	win.modal=True
 	# add the sep and an ok buttons
-	b1=SWINDOW.button_details("OK",K_o,killModalWindow)
-	win.build_button_area([b1],False)
+	b1=SWINDOW.CButtonDetails("OK",K_o,killModalWindow)
+	win.buildButtonArea([b1],False)
 	lgui.keyboard.setModalKeys(1)
 	# finally, add it to the window list:
 	index=lgui.addWindow(win)
 	# turn off unit animations for the moment
 	lgui.unitFlashAndOff()
 	# do the usual, starting with adding the dirty rect details
-	lgui.addDirtyRect(lgui.windows[index].draw_window(),
+	lgui.addDirtyRect(lgui.windows[index].drawWindow(),
 		lgui.windows[index].rect)
 	return(True)
 	
@@ -693,12 +692,12 @@ def cityDetails(lgui,handle,xpos,ypos):
 	btn_ok.active=True
 	# now we can get a window and add all the items we want
 	string="City Details: "+lgui.data.cities[lgui.data.city_highlight].name
-	index=lgui.addWindow(SWINDOW.SPQR_Window(lgui,-1,-1,wwidth,wheight,string,True))
-	lgui.windows[index].add_item(img_hex)
-	lgui.windows[index].add_item(img_name)
-	lgui.windows[index].add_item(lbl_owner)
-	lgui.windows[index].add_item(sep)
-	lgui.windows[index].add_item(btn_ok)
+	index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,wwidth,wheight,string,True))
+	lgui.windows[index].addWidget(img_hex)
+	lgui.windows[index].addWidget(img_name)
+	lgui.windows[index].addWidget(lbl_owner)
+	lgui.windows[index].addWidget(sep)
+	lgui.windows[index].addWidget(btn_ok)
 	# set it modal
 	lgui.windows[index].modal=True
 	# there is only one key, but don't forget to add an enter one button windows
@@ -708,7 +707,7 @@ def cityDetails(lgui,handle,xpos,ypos):
 	# turn off unit animations for the moment
 	lgui.unitFlashAndOff()
 	# add the dirty rect details
-	lgui.addDirtyRect(lgui.windows[index].draw_window(),
+	lgui.addDirtyRect(lgui.windows[index].drawWindow(),
 		lgui.windows[index].rect)
 	return(True)
 	
@@ -1058,10 +1057,10 @@ def welcomeScreen(lgui,handle,xpos,ypos):
 	w=lgui.images[SPQR.START_SCREEN].get_width()
 	h=lgui.images[SPQR.START_SCREEN].get_height()
 	# build the window
-	index=lgui.addWindow(SWINDOW.SPQR_Window(lgui,-1,-1,w,h,"SPQR "+SPQR.VERSION,True))
+	index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,w,h,"SPQR "+SPQR.VERSION,True))
 	# add the image that pretty much takes up the whole area:
 	main_img=SWIDGET.buildImage(lgui,SPQR.START_SCREEN)
-	lgui.windows[index].add_item(main_img)
+	lgui.windows[index].addWidget(main_img)
 	# create the 4 main buttons
 	btn_new=SWIDGET.CButton(lgui,460,12,"New")
 	btn_load=SWIDGET.CButton(lgui,460,52,"Load")
@@ -1093,12 +1092,12 @@ def welcomeScreen(lgui,handle,xpos,ypos):
 	btn_pygame.callbacks.mouse_lclk=displayPygameInfo
 	
 	# add all that to the window
-	lgui.windows[index].add_item(btn_new)
-	lgui.windows[index].add_item(btn_load)
-	lgui.windows[index].add_item(btn_options)
-	lgui.windows[index].add_item(btn_about)
-	lgui.windows[index].add_item(btn_quit)
-	lgui.windows[index].add_item(btn_pygame)
+	lgui.windows[index].addWidget(btn_new)
+	lgui.windows[index].addWidget(btn_load)
+	lgui.windows[index].addWidget(btn_options)
+	lgui.windows[index].addWidget(btn_about)
+	lgui.windows[index].addWidget(btn_quit)
+	lgui.windows[index].addWidget(btn_pygame)
 	# make modal
 	lgui.windows[index].modal=True	
 	# add the modal key events: n=new, l=load, o=options, a=about, q=quit
@@ -1111,7 +1110,7 @@ def welcomeScreen(lgui,handle,xpos,ypos):
 	# turn off unit animations
 	lgui.unitFlashAndOff()
 	# add the window as a dirty image
-	lgui.addDirtyRect(lgui.windows[index].draw_window(),
+	lgui.addDirtyRect(lgui.windows[index].drawWindow(),
 		lgui.windows[index].rect)
 	return(True)
 
@@ -1157,12 +1156,12 @@ def windowTest(lgui,handle,xpos,ypos):
 	"""Routine to test whatever the latest version of the window
 	   code is. Does nothing clever really"""
 	# get a window
-	index=lgui.addWindow(SWINDOW.SPQR_Window(lgui,-1,-1,320,200,"Test",True))
+	index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,320,200,"Test",True))
 	# make a list of 2 buttons
 	buttons=[]
-	buttons.append(SWINDOW.button_details("OK",K_o,killModalWindow))
-	buttons.append(SWINDOW.button_details("?!?",None,killModalWindow))
-	lgui.windows[index].build_button_area(buttons,False)
+	buttons.append(SWINDOW.CButtonDetails("OK",K_o,killModalWindow))
+	buttons.append(SWINDOW.CButtonDetails("?!?",None,killModalWindow))
+	lgui.windows[index].buildButtonArea(buttons,False)
 	# we have to add modal keypresses ourselves
 	lgui.keyboard.setModalKeys(1)
 	# make modal
@@ -1170,7 +1169,7 @@ def windowTest(lgui,handle,xpos,ypos):
 	# turn off unit animations
 	lgui.unitFlashAndOff()
 	# add the window as a dirty image
-	win_img=lgui.windows[index].draw_window()
+	win_img=lgui.windows[index].drawWindow()
 	lgui.addDirtyRect(win_img,lgui.windows[index].rect)
 	return(True)
 
@@ -1202,15 +1201,15 @@ def widgetTest(lgui,handle,xpos,ypos):
 	# make sure we have a console output for the example slider
 	sld_widget.setUpdateFunction(displaySliderContents)
 	# let's have a window
-	index=lgui.addWindow(SWINDOW.SPQR_Window(lgui,-1,-1,260,300,"Widget Test",True))
+	index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,260,300,"Widget Test",True))
 	# add items to window
-	lgui.windows[index].add_item(lbl_widget)
-	lgui.windows[index].add_item(btn_widget)
-	lgui.windows[index].add_item(chk_widget)
-	lgui.windows[index].add_item(sld_widget)
-	lgui.windows[index].add_item(scl_widget)
-	lgui.windows[index].add_item(dc_widget)
-	lgui.windows[index].add_item(opt_widget)
+	lgui.windows[index].addWidget(lbl_widget)
+	lgui.windows[index].addWidget(btn_widget)
+	lgui.windows[index].addWidget(chk_widget)
+	lgui.windows[index].addWidget(sld_widget)
+	lgui.windows[index].addWidget(scl_widget)
+	lgui.windows[index].addWidget(dc_widget)
+	lgui.windows[index].addWidget(opt_widget)
 	# set it modal
 	lgui.windows[index].modal=True
 	# there is only one key, but don't forget to add an enter one button windows
@@ -1220,7 +1219,7 @@ def widgetTest(lgui,handle,xpos,ypos):
 	# turn off unit animations for the moment and thats it
 	lgui.unitFlashAndOff()
 	# add the dirty rect details
-	lgui.addDirtyRect(lgui.windows[index].draw_window(),
+	lgui.addDirtyRect(lgui.windows[index].drawWindow(),
 		lgui.windows[index].rect)
 	return(True)
 

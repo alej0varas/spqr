@@ -21,7 +21,6 @@
 # everywhere, I may as well use that to pass data as well (or make it
 # global).
 
-# get modules
 import sys,pygame,re
 from pygame.locals import *
 import spqr_defines as SPQR
@@ -1651,14 +1650,14 @@ class CGFXEngine:
 		wheight+=(self.images[SPQR.BUTTON_STD].get_height()*2)+2
 
 		# ok, the window gets rendered for us here
-		index=self.addWindow(SWINDOW.SPQR_Window(self,-1,-1,width,wheight,win_title,True))
+		index=self.addWindow(SWINDOW.CWindow(self,-1,-1,width,wheight,win_title,True))
 		y=SPQR.SPACER
 		# print "Window details on messagebox():",y,width,height
-		self.windows[index].add_item(SWIDGET.CLabel(self,6,y,txt_width,height,text))
+		self.windows[index].addWidget(SWIDGET.CLabel(self,6,y,txt_width,height,text))
 		# now add the seperator bar
 		x=6
 		y+=height
-		self.windows[index].add_item(SWIDGET.CSeperator(self,x,y,width-24))
+		self.windows[index].addWidget(SWIDGET.CSeperator(self,x,y,width-24))
 		y+=1+(self.images[SPQR.BUTTON_STD].get_height()/2)
 		# move x to the right, buttons are blitted from right to left
 		x=width-16-(self.images[SPQR.BUTTON_STD].get_width())
@@ -1667,7 +1666,7 @@ class CGFXEngine:
 		# logic is simple: found a button? yes, display it and 
 		# modify next print pos. quit if 4th button found
 		if((flags&SPQR.BUTTON_OK)!=0):
-			slot=self.windows[index].add_item(SWIDGET.CButton(self,x,y,"OK"))
+			slot=self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"OK"))
 			# same for every instance of this little loop: add the callbacks
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxOK
 			self.windows[index].items[slot].active=True
@@ -1676,35 +1675,35 @@ class CGFXEngine:
 			self.keyboard.addKey(K_o,SPQR.KMOD_BASE,msgboxOK)
 			total_buttons+=1
 		if((flags&SPQR.BUTTON_CANCEL)!=0):
-			slot=self.windows[index].add_item(SWIDGET.CButton(self,x,y,"Cancel"))
+			slot=self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"Cancel"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxCancel
 			self.windows[index].items[slot].active=True
 			x=x-(self.images[SPQR.BUTTON_STD].get_width()+12)
 			self.keyboard.addKey(K_c,SPQR.KMOD_BASE,msgboxCancel)
 			total_buttons+=1
 		if((flags&SPQR.BUTTON_YES)!=0):
-			slot=self.windows[index].add_item(SWIDGET.CButton(self,x,y,"Yes"))
+			slot=self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"Yes"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxYes
 			self.windows[index].items[slot].active=True
 			x=x-(self.images[SPQR.BUTTON_STD].get_width()+12)
 			self.keyboard.addKey(K_y,SPQR.KMOD_BASE,msgboxYes)
 			total_buttons+=1
 		if(((flags&SPQR.BUTTON_NO)!=0)&(total_buttons<3)):
-			slot=self.windows[index].add_item(SWIDGET.CButton(self,x,y,"No"))
+			slot=self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"No"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxNo
 			self.windows[index].items[slot].active=True
 			x=x-(self.images[SPQR.BUTTON_STD].get_width()+12)
 			self.keyboard.addKey(K_n,SPQR.KMOD_BASE,msgboxNo)
 			total_buttons+=1
 		if(((flags&SPQR.BUTTON_QUIT)!=0)&(total_buttons<3)):
-			slot=self.windows[index].add_item(SWIDGET.CButton(self,x,y,"Quit"))
+			slot=self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"Quit"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxQuit
 			self.windows[index].items[slot].active=True
 			x=x-(self.images[SPQR.BUTTON_STD].get_width()+12)
 			self.keyboard.addKey(K_q,SPQR.KMOD_BASE,msgboxQuit)
 			total_buttons+=1
 		if(((flags&SPQR.BUTTON_IGNORE)!=0)&(total_buttons<3)):
-			slot=self.windows[index].add_item(SWIDGET.CButton(self,x,y,"Ignore"))
+			slot=self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"Ignore"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxIgnore
 			self.windows[index].items[slot].active=True
 			self.keyboard.addKey(K_i,SPQR.KMOD_BASE,msgboxIgnore)
@@ -1723,7 +1722,7 @@ class CGFXEngine:
 		# turn off unit animation during the messagebox
 		self.unitFlashAndOff()
 		# ok, lets get the image we need and the rectangle:
-		self.addDirtyRect(self.windows[index].draw_window(),
+		self.addDirtyRect(self.windows[index].drawWindow(),
 			self.windows[index].rect)
 		# keep looping until we get a positive result
 		self.callback_temp=SPQR.BUTTON_FAIL
