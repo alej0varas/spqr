@@ -242,8 +242,8 @@ def menuSave(lgui,handle,xpos,ypos):
 
 def menuEmpireSenate(lgui,handle,xpos,ypos):
 	"""Temp routine, just displays a messagebox for now"""
-	string="It is not possible to vist the senate at this moment in time."
-	lgui.messagebox(SPQR.BUTTON_OK,string,"Vist Senate")
+	string="It is not possible to visit the senate at this moment in time."
+	lgui.messagebox(SPQR.BUTTON_OK,string,"Visit Senate")
 	return(True)
 	
 def menuEmpireMilitary(lgui,handle,xpos,ypos):
