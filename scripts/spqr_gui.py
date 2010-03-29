@@ -26,6 +26,7 @@ from pygame.locals import *
 import spqr_defines as SPQR
 import spqr_window as SWINDOW
 import spqr_widgets as SWIDGET
+import spqr_keys as SKEY
 import spqr_events as SEVENT
 import spqr_console as SCONSOLE
 import spqr_sound as SSOUND
@@ -110,7 +111,7 @@ class CGFXEngine:
 		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf",SPQR.FONT_SMALL))
 		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf",SPQR.FONT_LARGE))
 		# enable keyboard reponses
-		self.keyboard=SWIDGET.CKeyboard()	
+		self.keyboard=SKEY.CKeyboard()	
 		# render the city texts
 		self.renderCityNames()
 		# set up sound
@@ -503,13 +504,13 @@ class CGFXEngine:
 		   this routine with the x and y mouse co-ords. Returns True
 		   if the screen (and thus the map) were updated"""
 		update=False
-		if x==0:
-			if y==0:
+		if(x==0):
+			if(y==0):
 				# scroll down right
 				self.map_screen.x-=SPQR.SCROLL_DIAG
 				self.map_screen.y-=SPQR.SCROLL_DIAG
 				update=True
-			elif y==(SCREEN_HEIGHT-1):
+			elif(y==(SPQR.SCREEN_HEIGHT-1)):
 				# scroll up right
 				self.map_screen.x-=SPQR.SCROLL_DIAG
 				self.map_screen.y+=SPQR.SCROLL_DIAG
@@ -518,13 +519,13 @@ class CGFXEngine:
 				# scroll the map right
 				self.map_screen.x-=SPQR.SCROLL_SPEED
 				update=True
-		elif x==(SPQR.SCREEN_WIDTH-1):
-			if y==0:
+		elif(x==(SPQR.SCREEN_WIDTH-1)):
+			if(y==0):
 				# scroll down left
 				self.map_screen.x+=SPQR.SCROLL_DIAG
 				self.map_screen.y-=SPQR.SCROLL_DIAG
 				update=True
-			elif y==(SCREEN_HEIGHT-1):
+			elif(y==(SPQR.SCREEN_HEIGHT-1)):
 				# scroll up left
 				self.map_screen.x+=SPQR.SCROLL_DIAG
 				self.map_screen.y+=SPQR.SCROLL_DIAG
@@ -542,7 +543,7 @@ class CGFXEngine:
 			self.map_screen.y+=SPQR.SCROLL_SPEED
 			update=True
 		# so, if something, then we need to re-draw the screen display
-		if update==True:
+		if(update==True):
 			# clear any menu flags we have
 			self.mouse_active=False
 			# check the scroll areas...
@@ -550,9 +551,9 @@ class CGFXEngine:
 			# and then finally draw it!
 			self.updateMiniMap()
 			self.updateMap()				
-			return True
+			return(True)
 		# return false if no update done
-		return False
+		return(False)
 	
 	# use this function to test the mouse against all objects
 	def testMouse(self,x,y,action):
@@ -567,7 +568,7 @@ class CGFXEngine:
 			# define a new variable that we can use later to kill the current window off
 			foo=self.windows[self.win_index]
 			self.win_index=self.win_index-1
-			if quit==True:
+			if(quit==True):
 				return(False)
 			# if this is a modal window, then stop after processing:
 			quit=foo.modal
@@ -690,7 +691,7 @@ class CGFXEngine:
 			self.data.city_highlight=-1
 		# thats it, update the screen and we can go
 		self.updateGUI()
-		return
+		return(True)
 		
 	def drawSmallHex(self,x,y):
 		"""Updates the small hex drawn in the information box
@@ -711,7 +712,7 @@ class CGFXEngine:
 		# blit the new gfx onto it, make it visible and update
 		hx_draw.image.blit(draw,(0,0))	
 		hx_draw.visible=True
-		return
+		return(True)
 		
 	def drawHexUnitContents(self,x,y):
 		"""Draws and updates the 4 unit details to the left
@@ -903,7 +904,7 @@ class CGFXEngine:
 		name.buildLabel()
 		# make this the current active city
 		self.data.city_highlight=index
-		return
+		return(True)
 
 	# this is the main game loop. There are 2 varients of it, one which keeps
 	# looping forever, and a solo version which runs only once
@@ -962,10 +963,10 @@ class CGFXEngine:
 		x,y=pygame.mouse.get_pos()
 		if(self.windows[len(self.windows)-1].modal==False):
 			if self.checkScrollArea(x,y)==True:
-				return True
+				return(True)
 		# now check normal events
 		self.checkInputs()
-		return False
+		return(False)
 	
 	# tries to fit text onto a surface
 	# returns False if area is too small, otherwise returns
@@ -1234,56 +1235,6 @@ class CGFXEngine:
 				self.flash_erase.blit(self.images[self.data.troops.units[index_bl].image],
 					(0,34),area)
 			
-			# now we need to draw the arrows
-			# we also have to draw them to the back map
-			# if you can't move there, don't draw the arrow
-			# what map hex are we talking about?
-			index=self.data.board.getHexIndex(xu,yu)
-			# start at the top and go round:
-			if((self.data.board.hexes[index].tp==True)and(free_tp==True)):
-				#(self.data.troops.units[index_tp].owner!=ROME_SIDE)):
-				self.flash_erase.blit(self.images[SPQR.ARROW_TOP],(0,0))
-				arrow_img.blit(self.images[SPQR.ARROW_TOP],(0,0))
-				index_tp=True
-			else:
-				# don't add move by key, either
-				index_tp=False
-			if((self.data.board.hexes[index].tr==True)and(free_tr==True)):
-				self.flash_erase.blit(self.images[SPQR.ARROW_TRGT],(0,0))
-				arrow_img.blit(self.images[SPQR.ARROW_TRGT],(0,0))
-				index_tr=True
-			else:
-				index_tr=False
-			if((self.data.board.hexes[index].br==True)and(free_br==True)):
-				self.flash_erase.blit(self.images[SPQR.ARROW_BRGT],(0,0))
-				arrow_img.blit(self.images[SPQR.ARROW_BRGT],(0,0))
-				index_br=True
-			else:
-				index_br=False
-			if((self.data.board.hexes[index].bt==True)and(free_bt==True)):
-				self.flash_erase.blit(self.images[SPQR.ARROW_BOT],(0,0))
-				arrow_img.blit(self.images[SPQR.ARROW_BOT],(0,0))
-				index_bt=True
-			else:
-				index_bt=False
-			if((self.data.board.hexes[index].bl==True)and(free_bl==True)):
-				self.flash_erase.blit(self.images[SPQR.ARROW_BLFT],(0,0))
-				arrow_img.blit(self.images[SPQR.ARROW_BLFT],(0,0))
-				index_bl=True
-			else:
-				index_bl=False
-			if((self.data.board.hexes[index].tl==True)and(free_tl==True)):
-				self.flash_erase.blit(self.images[SPQR.ARROW_TLFT],(0,0))
-				arrow_img.blit(self.images[SPQR.ARROW_TLFT],(0,0))
-				index_tl=True
-			else:
-				index_tl=False
-
-			# just to make things even more complex is the fact that we now use those
-			# index values to set new keypresses - the unit moves!
-			# however, to preserve some sanity I'll push this out to another function
-			self.keyboard.addKeyMoves(index_tp,index_tr,index_br,index_bt,index_bl,index_tl)
-
 			# now we can construct the draw image. Get a copy of the last image
 			self.flash_draw=pygame.Surface((SPQR.MOVESZ_X,SPQR.MOVESZ_Y),SRCALPHA)
 			self.flash_draw.blit(self.flash_erase,(0,0))

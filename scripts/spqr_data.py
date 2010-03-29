@@ -29,16 +29,6 @@ class CHex:
 	def __init__(self,surface,resource):
 		self.surface=surface
 		self.resource=resource
-		# following: tp=top, bl=bottom left etc of each hex
-		# True if you can move this way (sea handled a different way)
-		self.tp=False
-		self.tr=False
-		self.br=False
-		self.bt=False
-		self.bl=False
-		self.tl=False
-		# we store the index numbers of each unit on this hex
-		# as a list. Of course it starts out empty
 		self.units=[]
 
 class CMap:
@@ -46,83 +36,6 @@ class CMap:
 		self.hexes=[]
 		for x in range(width*height):
 			self.hexes.append(CHex(SPQR.MAP_LAND,0))
-		# now load the mapfile
-		try:
-			mapdata=open(SPQR.MAP_FILE)
-		except IOError:
-			print "[SPQR]: Error: Can't find map file",SPQR.MAP_FILE
-			sys.exit(False)
-		xpos=0
-		ypos=0
-		for line in mapdata:
-			# yes, it's hacky code ...:-s
-			# remove the eol from the line
-			line.rstrip("\r\n")
-			# does this line indicate a new line?
-			if(re.match('^# line [\d]*',line))!=None:
-			# yep, start the next line
-				ypos+=1
-				xpos=0
-			# first check line is neither a comment or non-trivial:
-			if(len(line)>1):
-				if line[0]!='#':
-					# now decode it
-					# At the start (^), match 3 ({3}) decimal numbers(\d) a comma(,)
-					# and another decimal(\d)
-					if(re.match('^\d{3},\d',line))==None:
-						print "[SPQR]: Invalid data in map file\n"
-						sys.exit(False)
-					# twas' ok, store the results
-					if line[0]=='1':
-						self.hexes[self.getHexIndex(xpos,ypos)].bl=True
-					if line[1]=='1':
-						self.hexes[self.getHexIndex(xpos,ypos)].bt=True
-					if line[2]=='1':
-						self.hexes[self.getHexIndex(xpos,ypos)].br=True
-					# now follows the hex status
-					if line[4]=='0':
-						self.hexes[self.getHexIndex(xpos,ypos)].surface=SPQR.MAP_WATER
-					# next hex
-					xpos+=1
-		# fill out the table
-		self.fillMap()
-
-	def fillMap(self):
-		"""Routine fills in the positions for movement on the top left,
-		   top and top right of each hex. This is redundant data (since
-		   we can calculate it at any time), it just makes the code
-		   a little easier for movement and drawing quicker"""
-		# Handle the sides first
-		# top is all False, which is pre-declared, so start with the sides
-		for y in range(1,SPQR.HEXES_TALL-2):
-			index=self.getHexIndex(0,y)
-			self.hexes[index].tp=self.hexes[self.getHexIndex(0,y-1)].bt
-			self.hexes[index].tr=self.hexes[self.getHexIndex(1,y-1)].bl
-			index=self.getHexIndex(SPQR.HEXES_WIDE,y)
-			self.hexes[index].tp=self.hexes[self.getHexIndex(0,y-1)].bt
-			self.hexes[index].tl=self.hexes[self.getHexIndex(SPQR.HEXES_WIDE-2,y)].br
-		# do the bottom row
-		for x in range(0,SPQR.HEXES_WIDE):
-			index=self.getHexIndex(x,SPQR.HEXES_TALL-1)
-			if((x&1)==0):
-				# even column
-				self.hexes[index].tp=self.hexes[self.getHexIndex(x,SPQR.HEXES_TALL-2)].bt
-				self.hexes[index].tr=self.hexes[self.getHexIndex(x+1,SPQR.HEXES_TALL-2)].bt					
-		# (odd columns are all False, as in bottom right-hand corner)
-		# now do the main body in the centre:
-		for y in range(1,SPQR.HEXES_TALL-2):
-			for x in range(1,SPQR.HEXES_WIDE-2):
-				index=self.getHexIndex(x,y)
-				self.hexes[index].tp=self.hexes[self.getHexIndex(x,y-1)].bt
-				# top left/right depend on what column we are in
-				if((x&1)==0):
-					# even column...
-					self.hexes[index].tl=self.hexes[self.getHexIndex(x-1,y-1)].br
-					self.hexes[index].tr=self.hexes[self.getHexIndex(x+1,y-1)].bl
-				else:
-					# odd column...
-					self.hexes[index].tl=self.hexes[self.getHexIndex(x-1,y)].br
-					self.hexes[index].tr=self.hexes[self.getHexIndex(x+1,y)].bl
 
 	# returns x+y hex co-ords on board from map gfx co-ords
 	def getXYFromMap(self,xpos,ypos):
@@ -184,11 +97,7 @@ class CMap:
 	def hexLand(self,xpos,ypos):
 		"""Returns True if the given hex is a land hex,
 		   False otherwise"""
-		i=self.getHexIndex(xpos,ypos)
-		if(self.hexes[i].surface==SPQR.MAP_LAND):
-			return(True)
-		# otherwise it must be sea
-		return(False)
+		return(True)
 
 	def getMapPixel(self,xpos,ypos):
 		"""As getGFXMapCoOrds, but for when we have the x,y
