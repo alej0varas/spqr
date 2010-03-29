@@ -59,7 +59,7 @@ class CMap:
 			if(yoff>(SPQR.HEX_FULLH/2)):
 				# it's in bottom half
 				yoff=SPQR.HEX_FULLH-yoff
-				if((yoff==0)or(float(float(xoff)/float(yoff))<HEX_GRAD)):
+				if((yoff==0)or(float(float(xoff)/float(yoff))<SPQR.HEX_GRAD)):
 					# bottom left of square
 					if(odd==True):
 						x-=1
@@ -86,19 +86,6 @@ class CMap:
 			y=0
 		return x,y
 
-	# returns index of hex when given map co-ords
-	# helper function, mainly
-	def getIndexFromMap(self,xpos,ypos):
-		"""Function returns hex index when given gfx co-ords"""
-		# find hex column we are on
-		x,y=self.getXYFromMap(xpos,ypos)
-		return(self.getHexIndex(x,y))
-
-	def hexLand(self,xpos,ypos):
-		"""Returns True if the given hex is a land hex,
-		   False otherwise"""
-		return(True)
-
 	def getMapPixel(self,xpos,ypos):
 		"""As getGFXMapCoOrds, but for when we have the x,y
 		   co-ords of the hexes instead"""
@@ -108,16 +95,6 @@ class CMap:
 			# adjust for hex offset
 			ynew+=SPQR.HEX_ODD_Y_OFF-1
 		return xnew,ynew
-
-	def hexSpaceFree(self,xpos,ypos):
-		"""Given the hex of co-ords xpos,ypos, return
-		   True or False depending on wether it's possible
-		   to move a unit there or not"""
-		index=self.getHexIndex(xpos,ypos)
-		if(len(self.hexes[index].units)<SPQR.MAX_STACKING):
-			return(True)
-		else:
-			return(False)
 
 	def getGFXMapCoOrds(self,xpos,ypos):
 		"""Returns co-ords of top-left corner of square containing
@@ -389,111 +366,8 @@ class CInfo:
 		return(False)
 
 	def unitRetreat(self,lgui,enemy,retreat):
-		"""Code to retreat the unit. There is no AI here, simply
-		   the unit moves away from the unit as far as possible
-		   Returns False if the enemy unit cannot retreat"""
-		
-		# we go in order, if possible: 
-		# 1: directly away from the unit
-		# 2: away in a hex next to the one that is directly away
-		# 3: To a hex next to the current unit (some% unit loss)
-		# Any other is failure: unit is automatically destroyed
-		   
-		# use a look-up table. Here is one that lists the alternate
-		# hexes a hex can go to.
-		hex_even=[(0,-1),(1,-1),(1,0),(0,1),(-1,0),(-1,-1)]
-		hex_odd=[(0,-1),(1,0),(1,1),(0,1),(-1,1),(-1,0)]
-		
-		# given a direction, list the next hexes to retreat to
-		# -1 indicates no hex. Each of these is an index into
-		# the above 2 tables
-		eabove=[(3,-1),(2,4),(1,5)]
-		etright=[(4,-1),(3,5),(2,0)]
-		ebright=[(5,-1),(4,0),(3,1)]
-		ebelow=[(0,-1),(5,1),(4,2)]
-		ebleft=[(1,-1),(0,2),(5,3)]
-		etleft=[(2,-1),(1,3),(0,4)]
-		emove=[eabove,etright,ebright,ebelow,ebleft,etleft]
-
-		# finally (!) we need a way of determining WHICH direction
-		# we come from,and thus which table above to use
-		# we can use the first table to do this for us
-		
-		# first, is retreat.xpos even or odd?
-		if((retreat.xpos&1)==1):
-			# use odd look-up table
-			mtable=hex_odd
-		else:
-			mtable=hex_even
-			
-		# calculate the offsets between the 2 hexes:		
-		xoff=enemy.xpos-retreat.xpos
-		yoff=enemy.ypos-retreat.ypos		
-		# some kind of error?
-		if((xoff==0)and(yoff==0)):
-			if(SPQR.DEBUG_MODE==True):
-				print "[SPQR]: Error: Unit has same position as enemy"
-			return(False)
-		
-		# the offset must exist within the table somewhere:
-		direction=0
-		for offset in mtable:
-			# does it match?
-			if(offset==(xoff,yoff)):
-				# leave this loop
-				break
-			# try next direction
-			direction+=1
-		# if there was no match, just remove the unit (there
-		# must have been some sort of error)
-		if(direction>5):
-			if(SPQR.DEBUG_MODE==True):
-				print "[SPQR]: Error: Couldn't locate enemy offset position for retreat"
-				return(False)
-		
-		# so now we have a direction, and we also know which lookup table to use
-		mpositions=emove[direction]
-		
-		# now we can buildup a list of hexes we might retreat to
-		# the first one is always a single hex (opposite the enemy)
-		directions=[]
-		directions.append(mpositions[0][0])
-		# for the last 2, which are pairs of hexes, choose randomly:
-		if(random.random()>0.5):
-			directions.append(mpositions[1][0])
-			directions.append(mpositions[1][1])
-		else:
-			directions.append(mpositions[1][1])
-			directions.append(mpositions[1][0])
-		if(random.random()>0.5):
-			directions.append(mpositions[2][0])
-			directions.append(mpositions[2][1])
-		else:
-			directions.append(mpositions[2][1])
-			directions.append(mpositions[2][0])
-
-		# now do the retreat
-		# check that the retreat is possible. For each hex, do the following:
-		# it's not off the map
-		# there is land in that hex
-		# it's not an enemy city or contains enemy units
-		
-		for new_hex in directions:
-			xpos=retreat.xpos+mtable[new_hex][0]
-			ypos=retreat.ypos+mtable[new_hex][1]
-		# is the hex land and free?
-		if((self.board.hexLand(xpos,ypos)==True)and
-			 (self.board.hexSpaceFree(xpos,ypos)==True)):
-			# everything was good, so move the unit
-
-			print "Found a hex - direction:",new_hex
-
-			return(lgui.animateUnitMove(retreat.xpos,retreat.ypos,
-				new_hex,retreat.id_number,False))
-		
-		# there was some problem (likely no hex), so just remove the unit
-		if(SPQR.DEBUG_MODE==True):
-			print("[SPQR]: Error: Couldn't find a retreat hex")
+		"""Placeholder function"""
+		# TODO: Remove this function
 		return(False)
 
 	def addPlayer(self,name,city,ptype,otext):
