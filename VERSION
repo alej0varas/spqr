@@ -1,5 +1,5 @@
+SPQR Game version history.
 
-Version::
 Current version: 0.3.5
 
 Version History.
@@ -83,6 +83,7 @@ Version History.
 0.3.51	The GUI code has been replaced with the updated code from another
 		project of mine.
 0.3.52	Replaced image map with region-based image map. Removed movement code.
+0.3.53	Updated key code. Tided up spqr.py somewhat (still needs work).
 
 Notable milestones:
 
@@ -93,5 +94,5 @@ Notable milestones:
 			It actually feels like a game now, even if there is nothing to play
 0.2.8:	The movement phase has been implemented, you can almost feel the game now
 0.3.3:	GUI much improved, looks and feels very GNOME-like
-
+0.3.52:	Move to region-based game. GUI had many bugs removed: code looks better.
 

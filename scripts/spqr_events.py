@@ -151,7 +151,7 @@ def menuPreferences(lgui,handle,xpos,ypos):
 	# make the window modal
 	lgui.windows[index].modal=True
 	# add the new key event: o=ok
-	lgui.keyboard.addKey(K_o,SPQR.KMOD_BASE,killModalWindow)
+	lgui.keyboard.addKey(K_o,killModalWindow)
 	lgui.keyboard.setModalKeys(1)
 	# turn off unit animations
 	lgui.unitFlashAndOff()
@@ -701,8 +701,8 @@ def cityDetails(lgui,handle,xpos,ypos):
 	# set it modal
 	lgui.windows[index].modal=True
 	# there is only one key, but don't forget to add an enter one button windows
-	lgui.keyboard.addKey(K_o,SPQR.KMOD_BASE,killModalWindow)
-	lgui.keyboard.addKey(K_RETURN,SPQR.KMOD_BASE,killModalWindow)
+	lgui.keyboard.addKey(K_o,killModalWindow)
+	lgui.keyboard.addKey(K_RETURN,killModalWindow)
 	lgui.keyboard.setModalKeys(2)
 	# turn off unit animations for the moment
 	lgui.unitFlashAndOff()
@@ -732,7 +732,7 @@ def nextTurn(lgui,handle,xpos,ypos):
 		lgui.updateGUI()
 		lgui.data.info.end_turn=False
 		# as start of new turn, add back the next unit key
-		lgui.keyboard.addKey(K_n,SPQR.KMOD_BASE,nextTurn)
+		lgui.keyboard.addKey(K_n,nextTurn)
 		# zoom to first unit by continuing this code
 	# get next free unit, if possible
 	index=lgui.data.getNextFree(lgui.data.troops.current_turn)
@@ -774,9 +774,9 @@ def nextTurn(lgui,handle,xpos,ypos):
 		lgui.screen.blit(lgui.images[SPQR.BTN_ENDTURN],update_rect)
 		pygame.display.update(update_rect)
 		# user shouldn't be able to press the 'next' key to end turn
-		lgui.keyboard.removeKey(K_n,SPQR.KMOD_BASE)
+		lgui.keyboard.removeKey(K_n)
 		# or the f key, for that matter
-		lgui.keyboard.removeKey(K_f,SPQR.KMOD_BASE)
+		lgui.keyboard.removeKey(K_f)
 		# set end turn flag and thats it
 		lgui.data.info.end_turn=True
 	return(True)
@@ -1101,11 +1101,11 @@ def welcomeScreen(lgui,handle,xpos,ypos):
 	# make modal
 	lgui.windows[index].modal=True	
 	# add the modal key events: n=new, l=load, o=options, a=about, q=quit
-	lgui.keyboard.addKey(K_n,SPQR.KMOD_BASE,startGame)
-	lgui.keyboard.addKey(K_l,SPQR.KMOD_BASE,menuLoad)
-	lgui.keyboard.addKey(K_o,SPQR.KMOD_BASE,menuPreferences)
-	lgui.keyboard.addKey(K_a,SPQR.KMOD_BASE,menuHelpAbout)
-	lgui.keyboard.addKey(K_q,SPQR.KMOD_BASE,quitSpqr)
+	lgui.keyboard.addKey(K_n,startGame)
+	lgui.keyboard.addKey(K_l,menuLoad)
+	lgui.keyboard.addKey(K_o,menuPreferences)
+	lgui.keyboard.addKey(K_a,menuHelpAbout)
+	lgui.keyboard.addKey(K_q,quitSpqr)
 	lgui.keyboard.setModalKeys(5)
 	# turn off unit animations
 	lgui.unitFlashAndOff()
@@ -1213,8 +1213,8 @@ def widgetTest(lgui,handle,xpos,ypos):
 	# set it modal
 	lgui.windows[index].modal=True
 	# there is only one key, but don't forget to add an enter one button windows
-	lgui.keyboard.addKey(K_q,SPQR.KMOD_BASE,killModalWindow)
-	lgui.keyboard.addKey(K_RETURN,SPQR.KMOD_BASE,killModalWindow)
+	lgui.keyboard.addKey(K_q,killModalWindow)
+	lgui.keyboard.addKey(K_RETURN,killModalWindow)
 	lgui.keyboard.setModalKeys(2)
 	# turn off unit animations for the moment and thats it
 	lgui.unitFlashAndOff()
@@ -1242,7 +1242,8 @@ def displayConsole(lgui,handle,xpos,ypos):
 		functions={"exit":lgui.exitConsole,
 				   "dunits":lgui.cfuncs.showUnits,
 				   "drunits":lgui.cfuncs.showRomanUnits,
-				   "dpeople":lgui.cfuncs.showPeople})
+				   "dpeople":lgui.cfuncs.showPeople,
+				   "windows":lgui.cfuncs.showWindows})
 	# console needs to stay displayed
 	lgui.console=True
 	while(True):

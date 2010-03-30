@@ -108,3 +108,18 @@ class CConsole:
 		# thats it!
 		return(string)
 
+	def showWindows(self):
+		"""Display a list of the current windows"""
+		string=""
+		index=0
+		for window in self.lgui.windows:
+			if(window.caption==""):
+				title="NONE"
+			else:
+				title=window.caption
+			string+="Window #"+str(index)+":"+title+"\n"
+			string+="          "+window.describe+"\n"
+			index+=1
+		return(string)
+
+

@@ -40,7 +40,7 @@ class CWindow:
 	   Call with gui - pointer the gui, x,y - position
 	   width,height, title - text on rop of window,
 	   draw - wether to place on screen or not"""
-	def __init__(self,gui,x,y,width,height,title,draw=True):
+	def __init__(self,gui,x,y,width,height,title,draw=True,describe="CWindow"):
 		self.lgui=gui
 		self.active=True
 		self.display=draw
@@ -48,7 +48,7 @@ class CWindow:
 		# set this to false if you want added items to NOT be
 		# offset by the border widths
 		self.border_offset=True
-		self.describe="CWindow"
+		self.describe=describe
 		# use info as a storage for any of your own stuff
 		# (you can use it to pass variables between function callbacks, for example)
 		self.info=0
@@ -263,7 +263,7 @@ class CWindow:
 				bwidget.callbacks.mouse_lclk=button.event
 				# and the keystuff, if needed:
 				if(button.key!=None):
-					self.lgui.keyboard.addKey(button.key,SPQR.KMOD_BASE,button.event)
+					self.lgui.keyboard.addKey(button.key,button.event)
 				# reset x position
 				xpos-=(2*SPQR.SPACER)+self.lgui.images[SPQR.BUTTON_STD].get_width()
 		else:

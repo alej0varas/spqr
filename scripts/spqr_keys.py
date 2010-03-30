@@ -39,7 +39,7 @@ class CKeyboard:
 		self.modal=[]
 		self.move_keys=0
 	
-	def addKey(self,key,mod,code):
+	def addKey(self,key,code,mod=0):
 		"""Call addKey with the keypress and the function
 		   to call, and it gets added to the list."""
 		# firstly, check we haven't already got this key:
@@ -51,7 +51,7 @@ class CKeyboard:
 		self.active_keys.append(CKeypress(key,mod,code))
 		return(True)
 		
-	def removeKey(self,key,mod):
+	def removeKey(self,key,mod=0):
 		"""Use removeKey to remove from the events list the
 		   keypress sent as a parameter. If False is received
 		   back, that key didn't exist anyway"""
@@ -63,7 +63,7 @@ class CKeyboard:
 			index+=1
 		return(False)
 	
-	def keyExists(self,key,mod):
+	def keyExists(self,key,mod=0):
 		"""Check if a keypress already exists"""
 		for i in self.keys:
 			if((i.key==key)and(i.mod==mod)):

@@ -675,7 +675,7 @@ class CGFXEngine:
 			self.windows[SPQR.WIN_INFO].items[self.display_units[2]].active=False
 			self.windows[SPQR.WIN_INFO].items[self.display_units[3]].active=False
 			# remove 'finish turn' key, if it was ever there
-			self.keyboard.removeKey(K_f,SPQR.KMOD_BASE)
+			self.keyboard.removeKey(K_f)
 			self.data.troops.current_highlight=-1
 			# turn off unit flashing and clear any move overlay
 			self.unitFlashAndClear()
@@ -822,14 +822,14 @@ class CGFXEngine:
 			x=self.data.troops.units[index].xpos
 			y=self.data.troops.units[index].ypos
 			# add possibilty of key f - finish current turn
-			self.keyboard.addKey(K_f,SPQR.KMOD_BASE,SEVENT.finishUnitTurn)
+			self.keyboard.addKey(K_f,SEVENT.finishUnitTurn)
 		else:
 			# an enemy unit, don't flash or add move area
 			# blit over the old move overlay
 			self.unitFlashAndClear()
 			self.data.troops.current_highlight=self.data.troops.units[index].id_number
 			# remove 'finish turn' key
-			self.keyboard.removeKey(K_f,SPQR.KMOD_BASE)
+			self.keyboard.removeKey(K_f)
 		return(True)
 
 	def drawUnitGraph(self,index):
@@ -1623,41 +1623,41 @@ class CGFXEngine:
 			self.windows[index].items[slot].active=True
 			x=x-(self.images[SPQR.BUTTON_STD].get_width()+12)
 			# add a key for this
-			self.keyboard.addKey(K_o,SPQR.KMOD_BASE,msgboxOK)
+			self.keyboard.addKey(K_o,msgboxOK)
 			total_buttons+=1
 		if((flags&SPQR.BUTTON_CANCEL)!=0):
 			slot=self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"Cancel"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxCancel
 			self.windows[index].items[slot].active=True
 			x=x-(self.images[SPQR.BUTTON_STD].get_width()+12)
-			self.keyboard.addKey(K_c,SPQR.KMOD_BASE,msgboxCancel)
+			self.keyboard.addKey(K_c,msgboxCancel)
 			total_buttons+=1
 		if((flags&SPQR.BUTTON_YES)!=0):
 			slot=self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"Yes"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxYes
 			self.windows[index].items[slot].active=True
 			x=x-(self.images[SPQR.BUTTON_STD].get_width()+12)
-			self.keyboard.addKey(K_y,SPQR.KMOD_BASE,msgboxYes)
+			self.keyboard.addKey(K_y,msgboxYes)
 			total_buttons+=1
 		if(((flags&SPQR.BUTTON_NO)!=0)&(total_buttons<3)):
 			slot=self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"No"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxNo
 			self.windows[index].items[slot].active=True
 			x=x-(self.images[SPQR.BUTTON_STD].get_width()+12)
-			self.keyboard.addKey(K_n,SPQR.KMOD_BASE,msgboxNo)
+			self.keyboard.addKey(K_n,msgboxNo)
 			total_buttons+=1
 		if(((flags&SPQR.BUTTON_QUIT)!=0)&(total_buttons<3)):
 			slot=self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"Quit"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxQuit
 			self.windows[index].items[slot].active=True
 			x=x-(self.images[SPQR.BUTTON_STD].get_width()+12)
-			self.keyboard.addKey(K_q,SPQR.KMOD_BASE,msgboxQuit)
+			self.keyboard.addKey(K_q,msgboxQuit)
 			total_buttons+=1
 		if(((flags&SPQR.BUTTON_IGNORE)!=0)&(total_buttons<3)):
 			slot=self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"Ignore"))
 			self.windows[index].items[slot].callbacks.mouse_lclk=msgboxIgnore
 			self.windows[index].items[slot].active=True
-			self.keyboard.addKey(K_i,SPQR.KMOD_BASE,msgboxIgnore)
+			self.keyboard.addKey(K_i,msgboxIgnore)
 			total_buttons+=1
 		# thats the graphics dealt with, make sure the whole window is modal
 		self.windows[index].modal=True
@@ -1665,7 +1665,7 @@ class CGFXEngine:
 		if(total_buttons==1):
 			# get the routine to call
 			rout=self.keyboard.active_keys[-1].function
-			self.keyboard.addKey(K_RETURN,SPQR.KMOD_BASE,rout)
+			self.keyboard.addKey(K_RETURN,rout)
 			# allow for extra key on key stack
 			total_buttons+=1
 		# set keyboard functions
