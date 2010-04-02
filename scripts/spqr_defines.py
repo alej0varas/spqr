@@ -22,14 +22,14 @@ import pygame.locals as PYGAME
 # as they are, unless you really know what you are doing. Probably the
 # most useful when debugging is SPQR_FULLSCREEN
 
-VERSION				= "v0.3.53"
+VERSION				= "v0.3.54"
 AUTHOR				= "Chris Smith"
 EMAIL				= "maximinus@gmail.com"
 SYSTEM				= "GNU/Linux"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
-LAST_UPDATE			= "30th Mar 2010"
-CODELINES			= "8337"
+LAST_UPDATE			= "2nd April 2010"
+CODELINES			= "8428"
 
 # before we go any further, this one is a must ;-)
 # currently adds debug menu bar , along with access to
@@ -39,20 +39,31 @@ DEBUG_MODE		=	True
 # now place the equivalent of some(!) defines
 SCREEN_WIDTH 		= 800
 SCREEN_HEIGHT 		= 600
-HEXES_WIDE			= 58
-HEXES_TALL			= 33
-HEX_PIX_W			= 36
-HEX_PIX_H			= 42
+
 # set this next one to true if you want a rh mouse click to exit
 RMOUSE_END			= True
+
+HEXES_WIDE			= 51
+HEXES_TALL			= 38
+
+# these are the sizes to mulitply by when finding the
+# gfx top left of a hex on the main map
+HEX_PIX_W			= 42
+HEX_PIX_H			= 36
+HEX_XOFFSET			= 26
+HEX_YOFFSET			= 6
+HEX_OFF_XOFF		= 21
+
 # the actual full gfx width/height of a rendered hex
-HEX_FULLW			= 48
-HEX_FULLH			= 42
+HEX_FULLW			= 42
+HEX_FULLH			= 47
 HEX_ODD_Y_OFF		= 22
 HEX_TOP				= 24
+
 # offsets to guarantee a click on a selected hex
 CLICK_X				= 17
 CLICK_Y				= 10
+
 # menu icons are always squares
 ICON_SIZE			= 24
 # size of console screen
@@ -189,10 +200,10 @@ BUTTON_HIGH			= 15
 SMALL_MAP			= 16
 CHECK_YES			= 17
 CHECK_NO			= 18
-ARROW_TOP			= 19
+ARROW_LEFT			= 19
 ARROW_TRGT			= 20
 ARROW_BRGT			= 21
-ARROW_BOT			= 22
+ARROW_RIGHT			= 22
 ARROW_BLFT			= 23
 ARROW_TLFT			= 24
 IMG_EAGLE			= 25

@@ -45,6 +45,17 @@ class CMap:
 		for x in range(width*height):
 			self.hexes.append(CHex(SPQR.MAP_LAND,0))
 
+	def getMapPixel(self,x,y):
+		"""Returns the x and y of the top left pixel of hex, given it's map
+		   x and y co-ordinates. Note that this is outside the hex"""
+		x*=SPQR.HEX_PIX_W
+		if((y&1)==1):
+			x-=SPQR.HEX_OFF_XOFF
+		y*=SPQR.HEX_PIX_H
+		x+=SPQR.HEX_XOFFSET
+		y+=SPQR.HEX_YOFFSET
+		return x,y
+
 	# returns x+y hex co-ords on board from map gfx co-ords
 	def getXYFromMap(self,xpos,ypos):
 		"""Returns the x and y position on the map board
@@ -53,11 +64,12 @@ class CMap:
 		odd=False
 		# find hex column we are on
 		x=xpos/SPQR.HEX_PIX_W
-		if((x&1)==1):
-			# we are on an odd column
-			odd=True
-			ypos-=SPQR.HEX_ODD_Y_OFF
 		y=ypos/SPQR.HEX_PIX_H
+		if((y&1)==1):
+			# we are on an odd row
+			odd=True
+			xpos-=SPQR.HEX_OFF_XOFF
+		
 		# now make that pixel perfect
 		# start by calculating the x and y offsets into this hex
 		xoff=xpos-(x*SPQR.HEX_PIX_W)
@@ -101,16 +113,6 @@ class CMap:
 		# find hex column we are on
 		x,y=self.getXYFromMap(xpos,ypos)
 		return(self.getHexIndex(x,y))
-
-	def getMapPixel(self,xpos,ypos):
-		"""As getGFXMapCoOrds, but for when we have the x,y
-		   co-ords of the hexes instead"""
-		xnew=xpos*SPQR.HEX_PIX_W
-		ynew=ypos*SPQR.HEX_PIX_H
-		if((xpos&1)==1):
-			# adjust for hex offset
-			ynew+=SPQR.HEX_ODD_Y_OFF-1
-		return xnew,ynew
 
 	def hexSpaceFree(self,xpos,ypos):
 		"""Given the hex of co-ords xpos,ypos, return

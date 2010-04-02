@@ -23,6 +23,7 @@
 
 import sys,pygame,re
 from pygame.locals import *
+
 import spqr_defines as SPQR
 import spqr_window as SWINDOW
 import spqr_widgets as SWIDGET
@@ -309,11 +310,7 @@ class CGFXEngine:
 		id_value=self.data.troops.getUnitFromHighlight().id_number
 		if len(self.data.troops.units)>0:
 			for piece in self.data.troops.units:
-				# just blit unit onto map
-				x=(piece.xpos*SPQR.HEX_PIX_W)
-				y=(piece.ypos*SPQR.HEX_PIX_H)
-				if(piece.xpos&1):
-					y+=SPQR.HEX_ODD_Y_OFF 
+				x,y=self.data.board.getMapPixel(piece.xpos.piece.ypos)
 				# blit the image
 				self.images[SPQR.BACK_MAP].blit(self.images[piece.image],(x,y))
 				# more than 1 unit here?
@@ -1020,41 +1017,27 @@ class CGFXEngine:
 	def renderPixelMap(self):
 		"""Routine generates map we actually display to the screen,
 		   having rendered cities, units, roads etc.
-			 The current ordering of the blits, from first to last, is:
-			 Back map, Cities, City names, Units""" 
+		   The current ordering of the blits, from first to last, is:
+		   Back map, Cities, City names, Units""" 
 		# blit the original map across first
 		self.images[SPQR.BACK_MAP].blit(self.images[SPQR.MAIN_MAP],(0,0))
 		# start by blitting the cities
 		if(len(self.data.cities)>0):
 			for city in self.data.cities:
-				x=(city.xpos*SPQR.HEX_PIX_W)
-				y=(city.ypos*SPQR.HEX_PIX_H)
-				if(city.xpos&1):
-					y+=SPQR.HEX_ODD_Y_OFF
+				x,y=self.data.board.getMapPixel(city.xpos,city.ypos)
 				# blit the image
 				self.images[SPQR.BACK_MAP].blit(self.images[city.image],(x,y))
-		# now display the city names
-		if(len(self.data.cities)>0):
-			for city in self.data.cities:
-				x=(city.xpos*SPQR.HEX_PIX_W)
-				y=(city.ypos*SPQR.HEX_PIX_H)
-				if(city.xpos&1):
-					y+=SPQR.HEX_ODD_Y_OFF
 				# correct to display underneath hex
 				y+=SPQR.HEX_PIX_H-city.txt_image.get_height()+SPQR.HALFSPCR
 				x-=(city.txt_image.get_width()-SPQR.HEX_FULLW)/2
 				self.images[SPQR.BACK_MAP].blit(city.txt_image,(x,y))
-				# now all the units
+
 		# save this image as it is for now without the images for using
 		# as the backdrop for all unit animations
 		self.map_render.blit(self.images[SPQR.BACK_MAP],(0,0))
 		if len(self.data.troops.units)>0:
 			for piece in self.data.troops.units:
-				# just blit unit onto map
-				x=(piece.xpos*SPQR.HEX_PIX_W)
-				y=(piece.ypos*SPQR.HEX_PIX_H)
-				if(piece.xpos&1):
-					y+=SPQR.HEX_ODD_Y_OFF 
+				x,y=self.data.board.getMapPixel(piece.xpos,piece.ypos)
 				# blit the image
 				self.images[SPQR.BACK_MAP].blit(self.images[piece.image],(x,y))
 				# more than one unit here?
@@ -1246,8 +1229,8 @@ class CGFXEngine:
 			# start at the top and go round:
 			if((self.data.board.hexes[index].left==True)and(free_tp==True)):
 				#(self.data.troops.units[index_tp].owner!=ROME_SIDE)):
-				self.flash_erase.blit(self.images[SPQR.ARROW_TOP],(0,0))
-				arrow_img.blit(self.images[SPQR.ARROW_TOP],(0,0))
+				self.flash_erase.blit(self.images[SPQR.ARROW_LEFT],(0,0))
+				arrow_img.blit(self.images[SPQR.ARROW_LEFT],(0,0))
 				index_tp=True
 			else:
 				# don't add move by key, either
@@ -1265,8 +1248,8 @@ class CGFXEngine:
 			else:
 				index_br=False
 			if((self.data.board.hexes[index].right==True)and(free_bt==True)):
-				self.flash_erase.blit(self.images[SPQR.ARROW_BOT],(0,0))
-				arrow_img.blit(self.images[SPQR.ARROW_BOT],(0,0))
+				self.flash_erase.blit(self.images[SPQR.ARROW_RIGHT],(0,0))
+				arrow_img.blit(self.images[SPQR.ARROW_RIGHT],(0,0))
 				index_bt=True
 			else:
 				index_bt=False
@@ -1418,10 +1401,7 @@ class CGFXEngine:
 		if len(self.data.troops.units)>0:
 			for piece in self.data.troops.units:
 				# just blit unit onto map
-				x=(piece.xpos*SPQR.HEX_PIX_W)
-				y=(piece.ypos*SPQR.HEX_PIX_H)
-				if(piece.xpos&1):
-					y+=SPQR.HEX_ODD_Y_OFF 
+				x,y=self.data.board.getMapPixel(piece.xpos,piece.ypos)
 				# blit the image, unless it's the main one
 				if(piece.name!=text):
 					self.images[SPQR.BACK_MAP].blit(self.images[piece.image],(x,y))
@@ -1592,10 +1572,7 @@ class CGFXEngine:
 		xoff=self.data.troops.chx()
 		yoff=self.data.troops.chy()
 		# get gfx map position
-		xp=(xoff*SPQR.HEX_PIX_W)
-		yp=(yoff*SPQR.HEX_PIX_H)
-		if(xoff&1):
-			yp+=SPQR.HEX_ODD_Y_OFF
+		xp,yp=self.data.board.getMapPixel(xoff,yoff)
 		unit_image=self.data.troops.getUnitFromHighlight().image
 		self.images[SPQR.BACK_MAP].blit(self.images[unit_image],(xp,yp))
 		self.updateArrowBackimage()

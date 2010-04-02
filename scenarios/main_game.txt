@@ -17,34 +17,34 @@ player Carthaginians
 # firstly the roman cities:
 
 city Roma
-	(23,18)
+	(19,22)
 	(IMG_ROME)
 	(Romans)
 city Pisae
-	(21,16)
+	(18,19)
 	(IMG_RSMALL)
 	(Romans)
 city Terentum
-	(27,20)
+	(22,24)
 	(IMG_RSMALL)
 	(Romans)
 city Syracuse
-	(25,23)
+	(21,27)
 	(IMG_RSMALL)
 	(Romans)
 city Panormus
-	(23,22)
+	(19,26)
 	(IMG_RSMALL)
 	(Romans)
 city Caralis
-	(19,21)
+	(16,25)
 	(IMG_RSMALL)
 	(Romans)
 
 # then the enemy ones:
 
 city Carthage
-	(20,24)
+	(17,28)
 	(IMG_EMEDIUM)
 	(Carthaginians)
 
@@ -53,17 +53,17 @@ city Carthage
 # Y is the troop quality (1-5) and Z is the morale (1-5), where low is best
 
 unit Preatorians
-	(23,18)
+	(19,22)
 	(IMG_PRAETOR)
 	(Romans)
 	(100,3,1)
 unit Legio_II
-	(24,19)
+	(22,23)
 	(IMG_LEGION)
 	(Romans)
 	(95,2,2)
 unit Legio_IV
-	(25,23)
+	(21,27)
 	(IMG_LEGION)
 	(Romans)
 	(95,2,2)
@@ -71,7 +71,7 @@ unit Legio_IV
 # and finally, the enemy ones
 
 unit Carthaginian_III
-	(10,17)
+	(19,20)
 	(IMG_BHORSE)
 	(Carthaginians)
 	(50,4,5)

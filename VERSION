@@ -1,6 +1,6 @@
 SPQR Game version history.
 
-Current version: 0.3.5
+Current version: 0.3.54
 
 Version History.
 
@@ -84,6 +84,7 @@ Version History.
 		project of mine.
 0.3.52	Replaced image map with region-based image map. Removed movement code.
 0.3.53	Updated key code. Tided up spqr.py somewhat (still needs work).
+0.3.54	Back to hex based code :-) But the hexes are the right way this time
 
 Notable milestones:
 
