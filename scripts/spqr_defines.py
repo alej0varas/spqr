@@ -136,12 +136,9 @@ GRAPHICS			= ["gui/win_tl.png","gui/win_lft.png","gui/win_bl.png",
 				  	   "gui/win_bot_lg.png","gui/win_rgt_lg.png",
 				  	   "gui/win_top_lg.png","gui/button.png","gui/button_high.png",
 				  	   "gui/small_map.png","gui/check_yes.png","gui/check_no.png",
-				  	   "move/arrow_top.png","move/arrow_top_right.png",
-				  	   "move/arrow_bottom_right.png","move/arrow_bottom.png",
+				  	   "move/arrow_left.png","move/arrow_top_right.png",
+				  	   "move/arrow_bottom_right.png","move/arrow_right.png",
 				  	   "move/arrow_bottom_left.png","move/arrow_top_left.png",
-				  	   "move/circle_top.png","move/circle_top_right.png",
-				  	   "move/circle_bottom_right.png","move/circle_bottom.png",
-				  	   "move/circle_bottom_left.png","move/circle_top_left.png",
 				  	   "gui/eagle.png","gui/soldier.png","gui/rome_button.png",
 				  	   "gui/nextturn_button.png","gui/endturn_button.png",
 				  	   "gui/slider_knob.png","gui/number_select.png","gui/city_infhex.png",
@@ -173,7 +170,6 @@ GRAPHICS			= ["gui/win_tl.png","gui/win_lft.png","gui/win_bl.png",
 				  	   "gui/test_image.png"]
 
 # and their index numbers
-
 MAIN_MAP			= 0
 BACK_MAP			= 1
 WIN_TL				= 2
@@ -199,45 +195,39 @@ ARROW_BRGT			= 21
 ARROW_BOT			= 22
 ARROW_BLFT			= 23
 ARROW_TLFT			= 24
-CIRCLE_TOP			= 25
-CIRCLE_TRGT			= 26
-CIRCLE_BRGT			= 27
-CIRCLE_BOT			= 28
-CIRCLE_BLFT			= 29
-CIRCLE_TLFT			= 30
-IMG_EAGLE			= 31
-IMG_SOLDIER			= 32
-BTN_ROME			= 33
-BTN_NEXT			= 34
-BTN_ENDTURN			= 35
-GUI_SLIDER			= 36
-GUI_CLICKER			= 37
-IMG_CTY_INF			= 38
-ARROW_UP			= 39
-ARROW_DOWN			= 40
-START_SCREEN		= 41
+IMG_EAGLE			= 25
+IMG_SOLDIER			= 26
+BTN_ROME			= 27
+BTN_NEXT			= 28
+BTN_ENDTURN			= 29
+GUI_SLIDER			= 30
+GUI_CLICKER			= 31
+IMG_CTY_INF			= 32
+ARROW_UP			= 33
+ARROW_DOWN			= 34
+START_SCREEN		= 35
 # icons for menu start here
-ICON_LOAD			= 42
+ICON_LOAD			= 36
 # just in case it ever gets blitted:
 ICON_NONE			= ICON_LOAD
-ICON_SAVE			= 43
-ICON_PREFS			= 44
-ICON_EXIT			= 45
-ICON_SENATE			= 46
-ICON_MILITARY		= 47
-ICON_STATS			= 48
-ICON_ABOUT			= 49
-ICON_HELP			= 50
-ICON_NEW			= 51
-ICON_DEBUG			= 52
-ICON_CONSOLE		= 53
-ICON_CITY			= 54
+ICON_SAVE			= 37
+ICON_PREFS			= 38
+ICON_EXIT			= 39
+ICON_SENATE			= 40
+ICON_MILITARY		= 41
+ICON_STATS			= 42
+ICON_ABOUT			= 43
+ICON_HELP			= 44
+ICON_NEW			= 45
+ICON_DEBUG			= 46
+ICON_CONSOLE		= 47
+ICON_CITY			= 48
 # graph stuff starts here
-GRAPH_UNIT			= 55
+GRAPH_UNIT			= 49
 # btinfo stands for 'battle info'
-GRAPH_BTINFO		= 56
+GRAPH_BTINFO		= 50
 # units start here
-IMG_USTART			= 57
+IMG_USTART			= 51
 IMG_BARCHER			= IMG_USTART
 IMG_BCHARIOT		= IMG_USTART+1
 IMG_BHORSE			= IMG_USTART+2

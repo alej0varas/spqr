@@ -30,6 +30,14 @@ class CHex:
 		self.surface=surface
 		self.resource=resource
 		self.units=[]
+		# following: lf=left, bl=bottom left etc of each hex
+		# True if you can move this way (sea handled a different way)
+		self.left=True
+		self.right=True
+		self.tr=True
+		self.br=True
+		self.bl=True
+		self.tl=True
 
 class CMap:
 	def __init__(self,width,height):
@@ -86,6 +94,14 @@ class CMap:
 			y=0
 		return x,y
 
+	# returns index of hex when given map co-ords
+	# helper function, mainly
+	def getIndexFromMap(self,xpos,ypos):
+		"""Function returns hex index when given gfx co-ords"""
+		# find hex column we are on
+		x,y=self.getXYFromMap(xpos,ypos)
+		return(self.getHexIndex(x,y))
+
 	def getMapPixel(self,xpos,ypos):
 		"""As getGFXMapCoOrds, but for when we have the x,y
 		   co-ords of the hexes instead"""
@@ -95,6 +111,16 @@ class CMap:
 			# adjust for hex offset
 			ynew+=SPQR.HEX_ODD_Y_OFF-1
 		return xnew,ynew
+
+	def hexSpaceFree(self,xpos,ypos):
+		"""Given the hex of co-ords xpos,ypos, return
+		   True or False depending on wether it's possible
+		   to move a unit there or not"""
+		index=self.getHexIndex(xpos,ypos)
+		if(len(self.hexes[index].units)<SPQR.MAX_STACKING):
+			return(True)
+		else:
+			return(False)
 
 	def getGFXMapCoOrds(self,xpos,ypos):
 		"""Returns co-ords of top-left corner of square containing

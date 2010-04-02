@@ -92,7 +92,11 @@ class CGFXEngine:
 			self.images[SPQR.MAIN_MAP].get_height()))
 		# now load all (!) the images we need
 		for i in SPQR.GRAPHICS:
-			self.images.append(pygame.image.load("../gfx/"+i).convert_alpha())
+			try:
+				self.images.append(pygame.image.load("../gfx/"+i).convert_alpha())
+			except:
+				print "[SPQR]: Error, couldn't find ../gfx/"+i
+				sys.exit(False)
 
 		# we have 2 blit areas for the flashing unit:
 		self.flash_draw=pygame.Surface((0,0))
@@ -1234,7 +1238,56 @@ class CGFXEngine:
 				area=pygame.Rect(29,0-ydisp,SPQR.UNIT_WIDTH,SPQR.UNIT_HEIGHT)
 				self.flash_erase.blit(self.images[self.data.troops.units[index_bl].image],
 					(0,34),area)
-			
+
+			# now we need to draw the arrows, ans we also have to draw them to
+			# to the back map. If you can't move there, don't draw the arrow
+			# what map hex are we talking about?
+			index=self.data.board.getHexIndex(xu,yu)
+			# start at the top and go round:
+			if((self.data.board.hexes[index].left==True)and(free_tp==True)):
+				#(self.data.troops.units[index_tp].owner!=ROME_SIDE)):
+				self.flash_erase.blit(self.images[SPQR.ARROW_TOP],(0,0))
+				arrow_img.blit(self.images[SPQR.ARROW_TOP],(0,0))
+				index_tp=True
+			else:
+				# don't add move by key, either
+				index_tp=False
+			if((self.data.board.hexes[index].tr==True)and(free_tr==True)):
+				self.flash_erase.blit(self.images[SPQR.ARROW_TRGT],(0,0))
+				arrow_img.blit(self.images[SPQR.ARROW_TRGT],(0,0))
+				index_tr=True
+			else:
+				index_tr=False
+			if((self.data.board.hexes[index].br==True)and(free_br==True)):
+				self.flash_erase.blit(self.images[SPQR.ARROW_BRGT],(0,0))
+				arrow_img.blit(self.images[SPQR.ARROW_BRGT],(0,0))
+				index_br=True
+			else:
+				index_br=False
+			if((self.data.board.hexes[index].right==True)and(free_bt==True)):
+				self.flash_erase.blit(self.images[SPQR.ARROW_BOT],(0,0))
+				arrow_img.blit(self.images[SPQR.ARROW_BOT],(0,0))
+				index_bt=True
+			else:
+				index_bt=False
+			if((self.data.board.hexes[index].bl==True)and(free_bl==True)):
+				self.flash_erase.blit(self.images[SPQR.ARROW_BLFT],(0,0))
+				arrow_img.blit(self.images[SPQR.ARROW_BLFT],(0,0))
+				index_bl=True
+			else:
+				index_bl=False
+			if((self.data.board.hexes[index].tl==True)and(free_tl==True)):
+				self.flash_erase.blit(self.images[SPQR.ARROW_TLFT],(0,0))
+				arrow_img.blit(self.images[SPQR.ARROW_TLFT],(0,0))
+				index_tl=True
+			else:
+				index_tl=False
+
+			# just to make things even more complex is the fact that we now use those
+			# index values to set new keypresses - the unit moves!
+			# however, to preserve some sanity I'll push this out to another function
+			self.keyboard.addKeyMoves(index_tp,index_tr,index_br,index_bt,index_bl,index_tl)
+
 			# now we can construct the draw image. Get a copy of the last image
 			self.flash_draw=pygame.Surface((SPQR.MOVESZ_X,SPQR.MOVESZ_Y),SRCALPHA)
 			self.flash_draw.blit(self.flash_erase,(0,0))
