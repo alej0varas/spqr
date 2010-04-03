@@ -371,15 +371,32 @@ class CGFXEngine:
 	def normalizeScrollArea(self):
 		"""Checks co-ords after scrolling the map to make sure
 		   they are not out of range. Resets them if needed"""
-		if self.map_screen.x<0:
+		if(self.map_screen.x<0):
 			self.map_screen.x=0
-		elif self.map_screen.x>self.map_max_x:
+		elif(self.map_screen.x>self.map_max_x):
 			self.map_screen.x=self.map_max_x
-		if self.map_screen.y<0:
+		if(self.map_screen.y<0):
 			self.map_screen.y=0
-		elif self.map_screen.y>self.map_max_y:
+		elif(self.map_screen.y>self.map_max_y):
 			self.map_screen.y=self.map_max_y
 		return(True)
+	
+	def handleKeypress(self,event):
+		"""Handle a keypress"""
+		# does it match anything?
+		foo,bar,handle=self.keyboard.getKeyFunction(event.key,event.mod)
+		if(foo==True):
+			# set win_index to TOP of current window list -2 to enable
+			# killing of current window from keyboard function
+			self.win_index=len(self.windows)-2
+			# now call the function
+			if(handle==None):
+				bar(self,0,-1,-1)
+			else:
+				bar(self,handle,-1,-1)
+			return(True)
+		else:
+			return(False)
 	
 	# routine captures what event we got, then passes that message along
 	# to the testing routine (i.e. this code only checks if a MOUSE event
@@ -388,24 +405,11 @@ class CGFXEngine:
 		"""checkInputs() is called on a loop whilst the game is waiting
 		   for user input (i.e. most of the time). It doens't actually do
 		   anything with the input except pass the event along to somewhere
-		   else, so think of it more like a sorting office for the post"""
+		   else, so think of it more like a sorting office"""
 		event=pygame.event.poll()
 		# lets start with the simple case: handling keypress values
 		if(event.type==KEYDOWN):
-			# did it match?
-			foo,bar,handle=self.keyboard.getKeyFunction(event.key,event.mod)
-			if(foo==True):
-				# set win_index to TOP of current window list -2 to enable
-				# killing of current window from keyboard function
-				self.win_index=len(self.windows)-2
-				# now call the function
-				if(handle==None):
-					bar(self,0,-1,-1)
-				else:
-					bar(self,handle,-1,-1)
-				return(True)
-			else:
-				return(False)
+			return(self.handleKeypress(event))
 		# now handle animation requests from the timer
 		if((event.type==pygame.USEREVENT)and(self.timer==True)):
 			self.flashUnit()
@@ -705,7 +709,7 @@ class CGFXEngine:
 		# blit hex area to it
 		rectd=pygame.Rect(xd,yd,draw.get_width(),draw.get_height())
 		draw.blit(self.images[SPQR.MAIN_MAP],
-			(SPQR.HEX_BDR_OFF,SPQR.HEX_BDR_OFF),rectd)
+			(6,2),rectd)
 		# the the map border over that
 		draw.blit(self.images[SPQR.HEX_BORDER],(0,0))
 		# get the widget to fiddle with

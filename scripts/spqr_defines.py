@@ -61,8 +61,8 @@ HEX_ODD_Y_OFF		= 22
 HEX_TOP				= 24
 
 # offsets to guarantee a click on a selected hex
-CLICK_X				= 17
-CLICK_Y				= 10
+CLICK_X				= HEX_FULLW/2
+CLICK_Y				= HEX_FULLH/2
 
 # menu icons are always squares
 ICON_SIZE			= 24
@@ -90,7 +90,8 @@ BATTLE_GRAPHX		= 100
 BATTLE_GRAPHY		= 18
 # gradiant of slope on side of hex
 HEX_GRAD			= float((HEX_PIX_W-HEX_TOP)/float(HEX_PIX_H/2))
-HEX_BDR_OFF			= 3
+# offset for gfx into hex display on info box
+HEX_BDR_OFF			= (6,2)
 SCROLL_SPEED		= 8
 SCROLL_DIAG			= 6
 KSCROLL_SPD			= 80
