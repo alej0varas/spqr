@@ -709,7 +709,7 @@ class CGFXEngine:
 		# blit hex area to it
 		rectd=pygame.Rect(xd,yd,draw.get_width(),draw.get_height())
 		draw.blit(self.images[SPQR.MAIN_MAP],
-			(6,2),rectd)
+			SPQR.HEX_BDR_OFF,rectd)
 		# the the map border over that
 		draw.blit(self.images[SPQR.HEX_BORDER],(0,0))
 		# get the widget to fiddle with

@@ -45,15 +45,18 @@ class CMap:
 		for x in range(width*height):
 			self.hexes.append(CHex(SPQR.MAP_LAND,0))
 
-	def getMapPixel(self,x,y):
+	def getMapPixel(self,x,y,offset=True):
 		"""Returns the x and y of the top left pixel of hex, given it's map
-		   x and y co-ordinates. Note that this is outside the hex"""
+		   x and y co-ordinates. Note that this is outside the hex.
+		   Set offset to False to stop offset addition"""
 		x*=SPQR.HEX_PIX_W
 		if((y&1)==1):
 			x-=SPQR.HEX_OFF_XOFF
 		y*=SPQR.HEX_PIX_H
-		x+=SPQR.HEX_XOFFSET
-		y+=SPQR.HEX_YOFFSET
+		if(offset==True):
+			# correct for hexes not matching map
+			x+=SPQR.HEX_XOFFSET
+			y+=SPQR.HEX_YOFFSET
 		return x,y
 
 	# returns x+y hex co-ords on board from map gfx co-ords
@@ -61,50 +64,43 @@ class CMap:
 		"""Returns the x and y position on the map board
 		   from the x and y positions on the map screen
 		   Returns -1,-1 if no hex was clicked (on map border etc..)"""
-		odd=False
-		# find hex column we are on
-		x=xpos/SPQR.HEX_PIX_W
+		# first, the hexes do no cover the entire map:
+		if(SPQR.HEX_AREA.collidepoint(xpos,ypos)==False):
+			return(-1,-1)
+		# ok, we are inside, take account of that offset:
+		xpos-=SPQR.HEX_AREA.x
+		ypos-=SPQR.HEX_AREA.y
+		# if we are on an even row, things get shifted
 		y=ypos/SPQR.HEX_PIX_H
-		if((y&1)==1):
-			# we are on an odd row
-			odd=True
-			xpos-=SPQR.HEX_OFF_XOFF
-		
+		if((y&1)==0):
+			# on an even row
+			xpos-=SPQR.HEX_FULLW/2
+			x=xpos/SPQR.HEX_PIX_W
+			even=True
+		else:
+			x=xpos/SPQR.HEX_PIX_W
+			even=False
 		# now make that pixel perfect
-		# start by calculating the x and y offsets into this hex
-		xoff=xpos-(x*SPQR.HEX_PIX_W)
-		yoff=ypos-(y*SPQR.HEX_PIX_H)
-		if(xoff<(SPQR.HEX_PIX_W-SPQR.HEX_TOP)):
-			# top or bottom half of hex?
-			if(yoff>(SPQR.HEX_FULLH/2)):
-				# it's in bottom half
-				yoff=SPQR.HEX_FULLH-yoff
-				if((yoff==0)or(float(float(xoff)/float(yoff))<SPQR.HEX_GRAD)):
-					# bottom left of square
-					if(odd==True):
-						x-=1
-						y-=1
-					else:
-						x-=1
-			else:
-				# in top half, check for division by 0:
-				if((yoff==0)or(float(float(xoff)/float(yoff))<SPQR.HEX_GRAD)):
-					# top left of square
-					if(odd==True):
-						x-=1
-					else:
-						x-=1
-						y-=1
-		# check to see x/y in range
-		if(x>=SPQR.HEXES_WIDE):
-			x=SPQR.HEXES_WIDE-1
-		elif(x<0):
-			x=0
-		if(y>=SPQR.HEXES_TALL):
-			y=SPQR.HEXES_TALL-1
-		elif(y<0):
-			y=0
-		return x,y
+		# start by calculating the x and y offsets into this hex		
+		xoff,yoff=self.getMapPixel(x,y,False)
+	
+		# if it's bigger than the triangle height, we're done
+		if(xoff>SPQR.HEX_TRIANGLE_H):
+			return(x,y)
+		# it's either in the left or right half
+		if(xoff<(SPQR.HEX_FULLW/2)):
+			# in the lhs
+			grad=float(float((SPQR.HEX_FULLW/2)-xoff)/float(SPQR.HEX_TRIANGLE_H))
+			if(float(float(x)/float(y))>grad):
+				# we correct, depending on row
+				y-=1
+				if(even==False):
+					x-=1
+				return(x,y)
+		else:
+			# in the rhs
+			pass
+		return(x,y)
 
 	# returns index of hex when given map co-ords
 	# helper function, mainly

@@ -50,14 +50,25 @@ HEXES_TALL			= 38
 # gfx top left of a hex on the main map
 HEX_PIX_W			= 42
 HEX_PIX_H			= 36
+
+# offsets from 0,0 of map where hexes start
 HEX_XOFFSET			= 26
-HEX_YOFFSET			= 6
+HEX_YOFFSET			= 7
 HEX_OFF_XOFF		= 21
 
+# the rectangle of the map that actually contains hexes
+HEX_AREA			= PYGAME.Rect(5,6,2100,1380)
+
 # the actual full gfx width/height of a rendered hex
+# important - HEX_FULL_W must be (?) an even number
 HEX_FULLW			= 42
 HEX_FULLH			= 47
-HEX_ODD_Y_OFF		= 22
+
+# top number of pixels of the hex image where the width of the
+# hex is not equal to the width of the rectangle
+HEX_TRIANGLE_H		= 11
+
+#HEX_ODD_Y_OFF		= 22
 HEX_TOP				= 24
 
 # offsets to guarantee a click on a selected hex
