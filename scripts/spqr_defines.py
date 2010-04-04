@@ -151,8 +151,10 @@ FONT_LARGE			= 16
 WIN_MENU			= 0
 WIN_INFO			= 1
 
-# the images to load
+# mask images
+FILE_HEXMASK		= "../gfx/masks/hex_mask.png"
 
+# the images to load
 GRAPHICS			= ["gui/win_tl.png","gui/win_lft.png","gui/win_bl.png",
 				  	   "gui/win_bot.png","gui/win_br.png","gui/win_rgt.png",
 				  	   "gui/win_tr.png","gui/win_top.png","gui/win_lft_lg.png",

@@ -164,6 +164,8 @@ class CGFXEngine:
 		self.mini_source=pygame.Rect(0,0,self.images[SPQR.SMALL_MAP].get_width(),
 			self.images[SPQR.SMALL_MAP].get_height())
 		self.mini_dest=pygame.Rect(self.mini_x_offset-1,self.mini_y_offset-1,0,0)
+		# load other data required by mapboard
+		self.data.board.initMasks()
 		self.updateMiniMap()
 
 	def displayLoadingScreen(self,width,height):

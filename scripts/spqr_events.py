@@ -17,6 +17,7 @@
 # get modules
 import sys,pygame
 from pygame.locals import *
+
 import spqr_data as SDATA
 import spqr_defines as SPQR
 import spqr_window as SWINDOW
@@ -185,11 +186,12 @@ def setVolume(lgui,handle,xpos,ypos):
 def killCurrentWindow(lgui,handle,xpos,ypos):
 	"""Removes current window from window list"""
 	# kill the current window
-	# let me explain the +1 here
-	# the main loop is a loop that counts the windows - this where lgui.win_index comes from.
-	# however, since we don't know how the loop is going to go, we increment the index pointer
-	# as soon as we have a copy of the window to work with. This means our index is 1 out. Since
-	# the routine counts down and not up, we are 1 less than we should be, hence the +1 :-)
+	# let me explain the +1 here: the main loop is a loop that counts the 
+	# windows - this where lgui.win_index comes from. However, since we don't
+	# know how the loop is going to go, we increment the index pointer as soon
+	# as we have a copy of the window to work with. This means our index is 1
+	# out. Since the routine counts down and not up, we are 1 less than we
+	# should be, hence the +1 :-)
 	lgui.killIndexedWindow(lgui.win_index+1)
 	return(True)
 	

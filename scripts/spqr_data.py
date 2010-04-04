@@ -44,6 +44,13 @@ class CMap:
 		self.hexes=[]
 		for x in range(width*height):
 			self.hexes.append(CHex(SPQR.MAP_LAND,0))
+		self.hex_mask=None
+	
+	def initMasks(self):
+		"""Because of the order in which we setup things, we cannot do
+		   any pygame things in the base init. We do them here instead"""
+		# we use a simple gfx for checking the hex
+		self.hex_mask=pygame.image.load(SPQR.FILE_HEXMASK).convert()
 
 	def getMapPixel(self,x,y,offset=True):
 		"""Returns the x and y of the top left pixel of hex, given it's map
@@ -83,23 +90,24 @@ class CMap:
 		# now make that pixel perfect
 		# start by calculating the x and y offsets into this hex		
 		xoff,yoff=self.getMapPixel(x,y,False)
-	
-		# if it's bigger than the triangle height, we're done
-		if(xoff>SPQR.HEX_TRIANGLE_H):
-			return(x,y)
-		# it's either in the left or right half
-		if(xoff<(SPQR.HEX_FULLW/2)):
-			# in the lhs
-			grad=float(float((SPQR.HEX_FULLW/2)-xoff)/float(SPQR.HEX_TRIANGLE_H))
-			if(float(float(x)/float(y))>grad):
-				# we correct, depending on row
-				y-=1
-				if(even==False):
-					x-=1
-				return(x,y)
-		else:
-			# in the rhs
-			pass
+		xpos-=xoff
+		if(even==False):
+			xpos-=SPQR.HEX_FULLW/2
+		ypos-=yoff
+		# grab the colour:
+		colour=self.hex_mask.get_at((xpos,ypos))
+		if(colour[1]==255):
+			y-=1
+			if(even==True):
+				x+=1
+		elif(colour[0]==255):
+			y-=1
+			if(even==False):
+				x-=1
+		# out of bounds? final check
+		if((x==-1)or(y==-1)):
+			return(-1,-1)
+		# that's it! pixel perfect
 		return(x,y)
 
 	# returns index of hex when given map co-ords

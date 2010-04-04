@@ -156,7 +156,7 @@ class CSPQR:
 			SPQR.ICON_NONE,"",SEVENT.notYetCoded))
 		menu[0].addChild(SMENU.CMenuChild("Exit SPQR",
 			SPQR.ICON_EXIT,"Ctrl+Q",SEVENT.quitSpqr))
-		menu[1].addChild(SMENU.CMenuChild("Vist Senate",
+		menu[1].addChild(SMENU.CMenuChild("Visit Senate",
 			SPQR.ICON_SENATE,"F2",SEVENT.menuEmpireSenate))
 		menu[1].addChild(SMENU.CMenuChild("Show Units",
 			SPQR.ICON_MILITARY,"F3",SEVENT.menuEmpireMilitary))
