@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>scripts.spqr_widgets.CScrollArea</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="scripts-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="scripts-module.html">Package&nbsp;scripts</a> ::
+        <a href="scripts.spqr_widgets-module.html">Script&nbsp;spqr_widgets</a> ::
+        Class&nbsp;CScrollArea
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="scripts.spqr_widgets.CScrollArea-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class CScrollArea</h1><p class="nomargin-top"><span class="codelink"><a href="scripts.spqr_widgets-pysrc.html#CScrollArea">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+<a href="scripts.spqr_widgets.CWidget-class.html">CWidget</a> --+
+          |
+         <strong class="uidshort">CScrollArea</strong>
+</pre>
+
+<hr />
+<p>ScrollArea class holds details for a ScrollArea Contains a graphical 
+  area that has a scroll bar on it's RHS Call with gui pointer, x/y 
+  positon, width and height and image *NOTE*: in the x size, you must allow
+  for the fact that this widget will add a scrollbar on the rhs of a given 
+  size! height of widget *MUST BE* &gt;61 pixels or funny gfx effects will 
+  occur border area, if true, adds 1 pixel on the lhs and 2 on the y 
+  axis</p>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="scripts.spqr_widgets.CScrollArea-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">gui</span>,
+        <span class="summary-sig-arg">x</span>,
+        <span class="summary-sig-arg">y</span>,
+        <span class="summary-sig-arg">width</span>,
+        <span class="summary-sig-arg">height</span>,
+        <span class="summary-sig-arg">image</span>,
+        <span class="summary-sig-arg">border</span>=<span class="summary-sig-default">True</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="scripts.spqr_widgets-pysrc.html#CScrollArea.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="scripts.spqr_widgets.CScrollArea-class.html#buildScrollImage" class="summary-sig-name">buildScrollImage</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Helper routine to build the base image that is displayed on screen.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="scripts.spqr_widgets-pysrc.html#CScrollArea.buildScrollImage">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="updateScrollArea"></a><span class="summary-sig-name">updateScrollArea</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Routine to build final image that is displayed on screen</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="scripts.spqr_widgets-pysrc.html#CScrollArea.updateScrollArea">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="scrollareaMouseLDown"></a><span class="summary-sig-name">scrollareaMouseLDown</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">lgui</span>,
+        <span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">xpos</span>,
+        <span class="summary-sig-arg">ypos</span>)</span><br />
+      Called when user clicks down with the mouse over a scroll knob 
+      Captures all input until user releases mouse button</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="scripts.spqr_widgets-pysrc.html#CScrollArea.scrollareaMouseLDown">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="scripts.spqr_widgets.CScrollArea-class.html#scrollareaMouseLClk" class="summary-sig-name">scrollareaMouseLClk</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">lgui</span>,
+        <span class="summary-sig-arg">handle</span>,
+        <span class="summary-sig-arg">xpos</span>,
+        <span class="summary-sig-arg">ypos</span>)</span><br />
+      For when the user clicks on the thing itself.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="scripts.spqr_widgets-pysrc.html#CScrollArea.scrollareaMouseLClk">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="scripts.spqr_widgets.CScrollArea-class.html#moveScrollHandle" class="summary-sig-name">moveScrollHandle</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">ydiff</span>)</span><br />
+      Move and update the handle graphic.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="scripts.spqr_widgets-pysrc.html#CScrollArea.moveScrollHandle">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="scripts.spqr_widgets.CScrollArea-class.html#updateScrollImage" class="summary-sig-name">updateScrollImage</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">image</span>)</span><br />
+      Call when you wish to change the scroll image display, but change 
+      nothing else.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="scripts.spqr_widgets-pysrc.html#CScrollArea.updateScrollImage">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">gui</span>,
+        <span class="sig-arg">x</span>,
+        <span class="sig-arg">y</span>,
+        <span class="sig-arg">width</span>,
+        <span class="sig-arg">height</span>,
+        <span class="sig-arg">image</span>,
+        <span class="sig-arg">border</span>=<span class="sig-default">True</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="scripts.spqr_widgets-pysrc.html#CScrollArea.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  
+  <dl class="fields">
+    <dt>Overrides:
+        <a href="scripts.spqr_widgets.CWidget-class.html#__init__">CWidget.__init__</a>
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="buildScrollImage"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">buildScrollImage</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="scripts.spqr_widgets-pysrc.html#CScrollArea.buildScrollImage">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Helper routine to build the base image that is displayed on screen. 
+  update_image() should be called to normally, this just sets everything 
+  up</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="scrollareaMouseLClk"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">scrollareaMouseLClk</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">lgui</span>,
+        <span class="sig-arg">handle</span>,
+        <span class="sig-arg">xpos</span>,
+        <span class="sig-arg">ypos</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="scripts.spqr_widgets-pysrc.html#CScrollArea.scrollareaMouseLClk">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>For when the user clicks on the thing itself. For the moment, just 
+  checks the arrows at the top and bottom</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="moveScrollHandle"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">moveScrollHandle</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">ydiff</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="scripts.spqr_widgets-pysrc.html#CScrollArea.moveScrollHandle">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Move and update the handle graphic. Parameter passed tells us by how 
+  many pixels we should update move the widget by</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="updateScrollImage"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">updateScrollImage</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">image</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="scripts.spqr_widgets-pysrc.html#CScrollArea.updateScrollImage">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Call when you wish to change the scroll image display, but change 
+  nothing else. Updates the screen for you</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="scripts-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Sun Apr  4 23:49:12 2010
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
