@@ -85,6 +85,7 @@ Version History.
 0.3.52	Replaced image map with region-based image map. Removed movement code.
 0.3.53	Updated key code. Tided up spqr.py somewhat (still needs work).
 0.3.54	Back to hex based code :-) But the hexes are the right way this time
+0.3.55	Flash animations pixel perfect. Almost ready to add new code.
 
 Notable milestones:
 
