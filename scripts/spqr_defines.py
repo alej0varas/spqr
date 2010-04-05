@@ -75,6 +75,10 @@ HEX_TOP				= 24
 CLICK_X				= HEX_FULLW/2
 CLICK_Y				= HEX_FULLH/2
 
+# co-ords for rectangle flashing
+#FLASH_GFX_OFF		= (-13,-8)
+#FLASH_RECT_SIZE		= (69,64)
+
 # menu icons are always squares
 ICON_SIZE			= 24
 # size of console screen
@@ -86,11 +90,28 @@ CHKBOX_SIZE			= 13
 UNIT_WIDTH			= 45
 UNIT_HEIGHT			= 41
 # offsets for move icons from hex corner
-MOVE_OFFX			= 7
-MOVE_OFFY			= 13
+MOVE_OFFX			= 13
+MOVE_OFFY			= 8
 # and their sizes
-MOVESZ_X			= 63
-MOVESZ_Y			= 69
+MOVESZ_X			= 69
+MOVESZ_Y			= 64
+
+# offsets for units around a hex
+# first one tells you where to blit from with the other unit
+# next one (ends in D) is the destination z,y offset
+MOVE_OFF_LEFT		= PYGAME.Rect(HEX_FULLW-13,0,13,UNIT_HEIGHT)
+MOVE_OFF_LEFTD		= (0,8)
+MOVE_OFF_RIGHT		= PYGAME.Rect(0,0,14,41)
+MOVE_OFF_RIGHTD		= (HEX_FULLW+13,8)
+MOVE_OFF_TL			= PYGAME.Rect(8,28,34,19)
+MOVE_OFF_TLD		= (0,0)
+MOVE_OFF_TR			= PYGAME.Rect(0,28,45,20)
+MOVE_OFF_TRD		= (34,0)
+MOVE_OFF_BL			= PYGAME.Rect(8,0,37,41)
+MOVE_OFF_BLD		= (0,44)
+MOVE_OFF_BR			= PYGAME.Rect(0,0,45,41)
+MOVE_OFF_BRD		= (34,44)
+
 # minimum size around move area
 MIN_MOVE_AREA		= (2*HEX_FULLH)
 # size of graphs in unit area

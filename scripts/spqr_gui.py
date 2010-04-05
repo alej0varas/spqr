@@ -1,4 +1,4 @@
-#!/usr/bin/python
+ww#!/usr/bin/python
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -312,7 +312,7 @@ class CGFXEngine:
 		id_value=self.data.troops.getUnitFromHighlight().id_number
 		if len(self.data.troops.units)>0:
 			for piece in self.data.troops.units:
-				x,y=self.data.board.getMapPixel(piece.xpos.piece.ypos)
+				x,y=self.data.board.getMapPixel(piece.xpos,piece.ypos)
 				# blit the image
 				self.images[SPQR.BACK_MAP].blit(self.images[piece.image],(x,y))
 				# more than 1 unit here?
@@ -1169,78 +1169,72 @@ class CGFXEngine:
 			# there are a fair few literal numbers here, I won't put them in the
 			# defines file for now as they are so specific
 			# faffing for left/right first as we have a funny offset
-			if((xu&1)==1):
-				# it's an odd column
-				yoff=1
-				ydisp=0
-				index_tr=self.data.getXYUnit(xu+1,yu)
-				free_tr=self.data.freeForRome(xu+1,yu)
-				index_br=self.data.getXYUnit(xu+1,yu+1)
-				free_br=self.data.freeForRome(xu+1,yu+1)
-				index_tl=self.data.getXYUnit(xu-1,yu)
-				free_tl=self.data.freeForRome(xu-1,yu)
-				index_bl=self.data.getXYUnit(xu-1,yu+1)
-				free_bl=self.data.freeForRome(xu-1,yu+1)
-			else:
-				yoff=0
-				ydisp=1
+			if((xu&1)==0):
+				# it's an even row
+				xoff=1
+				xdisp=0
+				index_tl=self.data.getXYUnit(xu,yu-1)
+				free_tl=self.data.freeForRome(xu,yu-1)
 				index_tr=self.data.getXYUnit(xu+1,yu-1)
 				free_tr=self.data.freeForRome(xu+1,yu-1)
-				index_br=self.data.getXYUnit(xu+1,yu)
-				free_br=self.data.freeForRome(xu+1,yu)
-				index_tl=self.data.getXYUnit(xu-1,yu-1)
-				free_tl=self.data.freeForRome(xu-1,yu-1)
-				index_bl=self.data.getXYUnit(xu-1,yu)
-				free_bl=self.data.freeForRome(xu-1,yu)
+				index_br=self.data.getXYUnit(xu+1,yu+1)
+				free_br=self.data.freeForRome(xu+1,yu+1)
+				index_bl=self.data.getXYUnit(xu,yu+1)
+				free_bl=self.data.freeForRome(xu,yu+1)
+			else:
+				# an odd row
+				xoff=0
+				xdisp=1
+				index_tl=self.data.getXYUnit(xu,yu-1)
+				free_tl=self.data.freeForRome(xu,yu-1)
+				index_tr=self.data.getXYUnit(xu+1,yu-1)
+				free_tr=self.data.freeForRome(xu+1,yu-1)
+				index_br=self.data.getXYUnit(xu+1,yu+1)
+				free_br=self.data.freeForRome(xu+1,yu+1)
+				index_bl=self.data.getXYUnit(xu,yu+1)
+				free_bl=self.data.freeForRome(xu,yu+1)
 			# start actual blitting with top unit
-			index_tp=self.data.getXYUnit(xu,yu-1)
-			free_tp=self.data.freeForRome(xu,yu-1)
-			if(index_tp!=-1):
-				# draw top unit
-				area=pygame.Rect(0,28+ydisp,SPQR.UNIT_WIDTH,SPQR.UNIT_HEIGHT-28)
-				self.flash_erase.blit(self.images[self.data.troops.units[index_tp].image],
-					(7,0),area)
-			index_bt=self.data.getXYUnit(xu,yu+1)
-			free_bt=self.data.freeForRome(xu,yu+1)
-			if(index_bt!=-1):
+			index_left=self.data.getXYUnit(xu-1,yu)
+			free_left=self.data.freeForRome(xu-1,yu)
+			if(index_left!=-1):
+				# draw left unit
+				self.flash_erase.blit(self.images[self.data.troops.units[index_left].image],
+					SPQR.MOVE_OFF_LEFTD,SPQR.MOVE_OFF_LEFT)
+			index_right=self.data.getXYUnit(xu+1,yu)
+			free_right=self.data.freeForRome(xu+1,yu)
+			if(index_right!=-1):
 				# draw bottom unit
-				area=pygame.Rect(0,0+ydisp,SPQR.UNIT_WIDTH,SPQR.UNIT_HEIGHT)
-				self.flash_erase.blit(self.images[self.data.troops.units[index_bt].image],
-					(7,56),area)
+				self.flash_erase.blit(self.images[self.data.troops.units[index_right].image],
+					SPQR.MOVE_OFF_RIGHTD,SPQR.MOVE_OFF_RIGHT)
 			if(index_tr!=-1):
 				# draw top right
-				area=pygame.Rect(0,8-ydisp,SPQR.UNIT_WIDTH,SPQR.UNIT_HEIGHT)
 				self.flash_erase.blit(self.images[self.data.troops.units[index_tr].image],
-					(43,0),area)
+					SPQR.MOVE_OFF_TRD,SPQR.MOVE_OFF_TR)
 			if(index_br!=-1):
 				# draw bottom right
-				area=pygame.Rect(0,0-ydisp,SPQR.UNIT_WIDTH,SPQR.UNIT_HEIGHT)
-				self.flash_erase.blit(self.images[self.data.troops.units[index_br].image],
-					(43,34),area)
+				self.flash_erase.blit(self.images[self.data.troops.units[index_tl].image],
+					SPQR.MOVE_OFF_BRD,SPQR.MOVE_OFF_BR)
 			if(index_tl!=-1):
 				# draw top left
-				area=pygame.Rect(29,8-ydisp,SPQR.UNIT_WIDTH,SPQR.UNIT_HEIGHT)
 				self.flash_erase.blit(self.images[self.data.troops.units[index_tl].image],
-					(0,0),area)
+					SPQR.MOVE_OFF_TLD,SPQR.MOVE_OFF_TL)
 			if(index_bl!=-1):
 				# draw bottom left
-				area=pygame.Rect(29,0-ydisp,SPQR.UNIT_WIDTH,SPQR.UNIT_HEIGHT)
 				self.flash_erase.blit(self.images[self.data.troops.units[index_bl].image],
-					(0,34),area)
-
-			# now we need to draw the arrows, ans we also have to draw them to
-			# to the back map. If you can't move there, don't draw the arrow
+					SPQR.MOVE_OFF_BLD,SPQR.MOVE_OFF_BL)
+			# now we need to draw the arrows, and we also have to draw them to
+			# to the back map. If you can't move there, we don't draw the arrow
 			# what map hex are we talking about?
 			index=self.data.board.getHexIndex(xu,yu)
 			# start at the top and go round:
-			if((self.data.board.hexes[index].left==True)and(free_tp==True)):
+			if((self.data.board.hexes[index].left==True)and(free_left==True)):
 				#(self.data.troops.units[index_tp].owner!=ROME_SIDE)):
 				self.flash_erase.blit(self.images[SPQR.ARROW_LEFT],(0,0))
 				arrow_img.blit(self.images[SPQR.ARROW_LEFT],(0,0))
-				index_tp=True
+				index_left=True
 			else:
 				# don't add move by key, either
-				index_tp=False
+				index_left=False
 			if((self.data.board.hexes[index].tr==True)and(free_tr==True)):
 				self.flash_erase.blit(self.images[SPQR.ARROW_TRGT],(0,0))
 				arrow_img.blit(self.images[SPQR.ARROW_TRGT],(0,0))
@@ -1253,12 +1247,12 @@ class CGFXEngine:
 				index_br=True
 			else:
 				index_br=False
-			if((self.data.board.hexes[index].right==True)and(free_bt==True)):
+			if((self.data.board.hexes[index].right==True)and(free_right==True)):
 				self.flash_erase.blit(self.images[SPQR.ARROW_RIGHT],(0,0))
 				arrow_img.blit(self.images[SPQR.ARROW_RIGHT],(0,0))
-				index_bt=True
+				index_right=True
 			else:
-				index_bt=False
+				index_right=False
 			if((self.data.board.hexes[index].bl==True)and(free_bl==True)):
 				self.flash_erase.blit(self.images[SPQR.ARROW_BLFT],(0,0))
 				arrow_img.blit(self.images[SPQR.ARROW_BLFT],(0,0))
@@ -1275,14 +1269,14 @@ class CGFXEngine:
 			# just to make things even more complex is the fact that we now use those
 			# index values to set new keypresses - the unit moves!
 			# however, to preserve some sanity I'll push this out to another function
-			self.keyboard.addKeyMoves(index_tp,index_tr,index_br,index_bt,index_bl,index_tl)
+			self.keyboard.addKeyMoves(index_left,index_tr,index_br,index_right,index_bl,index_tl)
 
 			# now we can construct the draw image. Get a copy of the last image
 			self.flash_draw=pygame.Surface((SPQR.MOVESZ_X,SPQR.MOVESZ_Y),SRCALPHA)
 			self.flash_draw.blit(self.flash_erase,(0,0))
 			# then draw the unit over it
 			index=self.data.troops.getUnitFromHighlight().image
-			self.flash_draw.blit(self.images[index],(SPQR.MOVE_OFFX,SPQR.MOVE_OFFY+yoff))
+			self.flash_draw.blit(self.images[index],(SPQR.MOVE_OFFX+xoff,SPQR.MOVE_OFFY))
 			
 			# another thing - we just have to make sure that the number of moves
 			# left by the unit is also displayed, on both images

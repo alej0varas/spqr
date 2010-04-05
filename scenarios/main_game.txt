@@ -70,8 +70,33 @@ unit Legio_IV
 
 # and finally, the enemy ones
 
+unit Carthaginian_I
+	(19,21)
+	(IMG_BHORSE)
+	(Carthaginians)
+	(50,4,5)
+	unit Carthaginian_II
+	(20,21)
+	(IMG_BHORSE)
+	(Carthaginians)
+	(50,4,5)
 unit Carthaginian_III
-	(19,20)
+	(20,22)
+	(IMG_BHORSE)
+	(Carthaginians)
+	(50,4,5)
+unit Carthaginian_IV
+	(20,23)
+	(IMG_BHORSE)
+	(Carthaginians)
+	(50,4,5)
+unit Carthaginian_V
+	(19,23)
+	(IMG_BHORSE)
+	(Carthaginians)
+	(50,4,5)
+unit Carthaginian_VI
+	(18,22)
 	(IMG_BHORSE)
 	(Carthaginians)
 	(50,4,5)
