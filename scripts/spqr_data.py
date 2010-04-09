@@ -146,6 +146,15 @@ class CMap:
 		index=((ypos*SPQR.HEXES_WIDE)+xpos)
 		return self.board[index]
 
+	def getHexMoveOffsets(self,direction,x,y):
+		"""Given the x and y of a hex (and the direction to move)
+		   return the offsets that point to the new hex"""
+		offsets=SPQR.MOVE_OFFSETS[direction]
+		if(y&1):
+			return(offsets[2],offsets[1])
+		else:
+			return(offsets[0],offsets[1])
+
 class CUnit:
 	"""Normally the calling functions read q and m from a file,
 		 hence the odd maths when it calculates morale and quality"""
@@ -253,9 +262,10 @@ class CArmy:
 		"""Routine to see if the current highlight unit, when
 		   moving in direction, meets an non-roman unit. If so, then
 		   return the index number of that unit; otherwise, return -1"""
-		
+
+		print "FIX ME!"
 		return(-1)
-		
+
 		# first, get the x,y coords of the highlight unit:
 		x=self.chx()
 		y=self.chy()

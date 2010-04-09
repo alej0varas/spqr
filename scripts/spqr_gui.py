@@ -1448,6 +1448,7 @@ class CGFXEngine:
 		   highlighted unit), and finally a boolean to indicate
 		   wether battles should happen (or the unit stops dead)
 		   Returns True if the move took place"""
+		# TODO: This code is ugly
 		# before doing anything else, we test to see if we have a battle:
 		enemy=self.data.troops.checkBattle(direction)
 		if(enemy>-1):
@@ -1463,44 +1464,18 @@ class CGFXEngine:
 				return(False)
 		# now we can actually do the animated move
 		# get standard move directions:
-		mvx=0
-		mvy=0
-		oddx=0
+		offsets=self.data.board.getHexMoveOffsets(direction,
+			self.data.troops.getUnitFromHighlight().xpos,
+			self.data.troops.getUnitFromHighlight().ypos)
 		yonly=False
-		if(direction==SPQR.LEFT):
-			mvx=-1
-			oddx=-1
-			yonly=True
-		elif(direction==SPQR.RIGHT):
-			mvx=1
-			oddx=1
-			yonly=True
-		elif(direction==SPQR.TOP_RIGHT):
-			mvx=1
-			oddx=0
-			mvy=-1
-		elif(direction==SPQR.BOTTOM_RIGHT):
-			mvx=1
-			oddx=0
-			mvy=1
-		elif(direction==SPQR.TOP_LEFT):
-			mvx=0
-			mvy=-1
-			oddx=-1
-		elif(direction==SPQR.BOTTOM_LEFT):	
-			mvx=0
-			mvy=1
-			oddx=-1
-	
+		mvx=offsets[0]
+		mvy=offsets[1]
+
+
 		# setup map gfx for movement
 		x,y=self.prepareMove()
 		# actually move the unit in data, of course
-		if((self.data.troops.getUnitFromHighlight().ypos&1)==1):
-			# it's an odd column
-			self.data.moveUnit(self.data.troops.current_highlight,oddx,mvy)
-		else:
-			# even column
-			self.data.moveUnit(self.data.troops.current_highlight,mvx,mvy)
+		self.data.moveUnit(self.data.troops.current_highlight,mvx,mvy)
 			
 		# simple correction for later
 		if(mvy==0):
