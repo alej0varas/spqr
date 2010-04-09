@@ -991,7 +991,7 @@ class CGFXEngine:
 				words=requested_line.split(' ')
 				# if any of our words are too long to fit, return.
 				for word in words:
-					if self.fonts[fnt].size(word)[0]>=x:
+					if(self.fonts[fnt].size(word)[0]>=x):
 						# TODO: should actually handle long words, since a web address
 						# has been found to be too long for this code!
 						# Possible answer: don't use long web addresses, or break them
@@ -1003,7 +1003,7 @@ class CGFXEngine:
 				for word in words:
 					test_line=accumulated_line+word+" "
 					# Build the line while the words fit.
-					if self.fonts[fnt].size(test_line)[0]<x:
+					if(self.fonts[fnt].size(test_line)[0]<x):
 						accumulated_line=test_line
 					else:
 						final_lines.append(accumulated_line)
@@ -1041,7 +1041,7 @@ class CGFXEngine:
 		# save this image as it is for now without the images for using
 		# as the backdrop for all unit animations
 		self.map_render.blit(self.images[SPQR.BACK_MAP],(0,0))
-		if len(self.data.troops.units)>0:
+		if(len(self.data.troops.units)>0):
 			for piece in self.data.troops.units:
 				x,y=self.data.board.getMapPixel(piece.xpos,piece.ypos)
 				# blit the image
@@ -1443,11 +1443,11 @@ class CGFXEngine:
 
 	def animateUnitMove(self,xpos,ypos,direction,unit,battle):
 		"""This is the routine that animates a unit move.
-			 Call with the xpos and ypos of the unit, a direction flag
-			 to indicate movement, the unit to move (or -1 to use current
-			 highlighted unit), and finally a boolean to indicate
-			 wether battles should happen (or the unit stops dead)
-			 Returns True if the move took place"""
+		   Call with the xpos and ypos of the unit, a direction flag
+		   to indicate movement, the unit to move (or -1 to use current
+		   highlighted unit), and finally a boolean to indicate
+		   wether battles should happen (or the unit stops dead)
+		   Returns True if the move took place"""
 		# before doing anything else, we test to see if we have a battle:
 		enemy=self.data.troops.checkBattle(direction)
 		if(enemy>-1):
@@ -1465,35 +1465,39 @@ class CGFXEngine:
 		# get standard move directions:
 		mvx=0
 		mvy=0
-		oddy=0
+		oddx=0
 		yonly=False
-		if(direction==SPQR.TOP):
-			mvy=-1
-			oddy=-1
+		if(direction==SPQR.LEFT):
+			mvx=-1
+			oddx=-1
 			yonly=True
-		elif(direction==SPQR.BOTTOM):
-			mvy=1
-			oddy=1
+		elif(direction==SPQR.RIGHT):
+			mvx=1
+			oddx=1
 			yonly=True
 		elif(direction==SPQR.TOP_RIGHT):
 			mvx=1
+			oddx=0
 			mvy=-1
 		elif(direction==SPQR.BOTTOM_RIGHT):
 			mvx=1
-			oddy=1
+			oddx=0
+			mvy=1
 		elif(direction==SPQR.TOP_LEFT):
-			mvx=-1
+			mvx=0
 			mvy=-1
+			oddx=-1
 		elif(direction==SPQR.BOTTOM_LEFT):	
-			mvx=-1
-			oddy=1
+			mvx=0
+			mvy=1
+			oddx=-1
 	
 		# setup map gfx for movement
 		x,y=self.prepareMove()
 		# actually move the unit in data, of course
-		if((self.data.troops.getUnitFromHighlight().xpos&1)==1):
+		if((self.data.troops.getUnitFromHighlight().ypos&1)==1):
 			# it's an odd column
-			self.data.moveUnit(self.data.troops.current_highlight,mvx,oddy)
+			self.data.moveUnit(self.data.troops.current_highlight,oddx,mvy)
 		else:
 			# even column
 			self.data.moveUnit(self.data.troops.current_highlight,mvx,mvy)

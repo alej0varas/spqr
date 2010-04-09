@@ -1023,12 +1023,12 @@ def selectUnitStack3(lgui,handle,xpos,ypos):
 # these are the callbacks that animate the movement of the unit
 # after user has pressed the relevant key
 def moveUpLeft(lgui,handle,xpos,ypos):
-	"""Move unit up"""
+	"""Move unit left"""
 	return(lgui.animateUnitMove(xpos,ypos,SPQR.TOP_LEFT,SPQR.USE_HIGHLIGHT,True))
 
-def moveUp(lgui,handle,xpos,ypos):
-	"""Move the unit upwards"""
-	return(lgui.animateUnitMove(xpos,ypos,SPQR.TOP,SPQR.USE_HIGHLIGHT,True))
+def moveRight(lgui,handle,xpos,ypos):
+	"""Move the unit right"""
+	return(lgui.animateUnitMove(xpos,ypos,SPQR.RIGHT,SPQR.USE_HIGHLIGHT,True))
 
 def moveUpRight(lgui,handle,xpos,ypos):
 	"""Move the unit up and right"""
@@ -1038,9 +1038,9 @@ def moveDownLeft(lgui,handle,xpos,ypos):
 	"""Move unit down left"""	   
 	return(lgui.animateUnitMove(xpos,ypos,SPQR.BOTTOM_LEFT,SPQR.USE_HIGHLIGHT,True))
 
-def moveDown(lgui,handle,xpos,ypos):
+def moveLeft(lgui,handle,xpos,ypos):
 	"""Move unit down"""
-	return(lgui.animateUnitMove(xpos,ypos,SPQR.BOTTOM,SPQR.USE_HIGHLIGHT,True))
+	return(lgui.animateUnitMove(xpos,ypos,SPQR.LEFT,SPQR.USE_HIGHLIGHT,True))
 
 def moveDownRight(lgui,handle,xpos,ypos):
 	"""Move unit down right"""

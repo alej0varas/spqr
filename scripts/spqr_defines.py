@@ -28,7 +28,7 @@ EMAIL				= "maximinus@gmail.com"
 SYSTEM				= "GNU/Linux"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
-LAST_UPDATE			= "5th April 2010"
+LAST_UPDATE			= "9th April 2010"
 CODELINES			= "8509"
 
 # before we go any further, this one is a must ;-)
@@ -390,11 +390,11 @@ WT_OPTMENU			= 10
 # move directions
 # you may choose any start point you like, but the values
 # *must* increment by 1 each time, and go clockwise from the top
-TOP					= 0
-TOP_RIGHT			= 1
+TOP_RIGHT			= 0
+RIGHT				= 1
 BOTTOM_RIGHT		= 2
-BOTTOM				= 3
-BOTTOM_LEFT			= 4
+BOTTOM_LEFT			= 3
+LEFT				= 4
 TOP_LEFT			= 5
 
 # text layout types

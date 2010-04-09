@@ -75,23 +75,23 @@ class CKeyboard:
 			self.move_keys-=1
 		# move_keys should now be 0
 		# now go through the list and insert, not append, these keys:
-		if(left==True):
-			self.active_keys.insert(0,CKeypress(K_KP4,0,SEVENT.moveUp))
-			self.move_keys+=1
 		if(tr==True):
 			self.active_keys.insert(0,CKeypress(K_KP9,0,SEVENT.moveUpRight))
+			self.move_keys+=1
+		if(right==True):
+			self.active_keys.insert(0,CKeypress(K_KP6,0,SEVENT.moveRight))
 			self.move_keys+=1
 		if(br==True):
 			self.active_keys.insert(0,CKeypress(K_KP3,0,SEVENT.moveDownRight))
 			self.move_keys+=1
-		if(right==True):
-			self.active_keys.insert(0,CKeypress(K_KP6,0,SEVENT.moveDown))
+		if(tl==True):
+			self.active_keys.insert(0,CKeypress(K_KP7,0,SEVENT.moveUpLeft))
+			self.move_keys+=1
+		if(left==True):
+			self.active_keys.insert(0,CKeypress(K_KP4,0,SEVENT.moveLeft))
 			self.move_keys+=1
 		if(bl==True):
 			self.active_keys.insert(0,CKeypress(K_KP1,0,SEVENT.moveDownLeft))
-			self.move_keys+=1
-		if(tl==True):
-			self.active_keys.insert(0,CKeypress(K_KP7,0,SEVENT.moveUpLeft))
 			self.move_keys+=1
 		return(True)
 

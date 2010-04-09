@@ -253,6 +253,9 @@ class CArmy:
 		"""Routine to see if the current highlight unit, when
 		   moving in direction, meets an non-roman unit. If so, then
 		   return the index number of that unit; otherwise, return -1"""
+		
+		return(-1)
+		
 		# first, get the x,y coords of the highlight unit:
 		x=self.chx()
 		y=self.chy()
