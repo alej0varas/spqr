@@ -1471,64 +1471,36 @@ class CGFXEngine:
 		mvx=offsets[0]
 		mvy=offsets[1]
 
-
 		# setup map gfx for movement
 		x,y=self.prepareMove()
 		# actually move the unit in data, of course
 		self.data.moveUnit(self.data.troops.current_highlight,mvx,mvy)
-			
-		# simple correction for later
-		if(mvy==0):
-			mvy=1
-			
-		# do all the other work before we update the screen:
-		if(x==-1):
-			print "[SPQR]: Error: No unit highlight on move"
-			return(False)
-		# now do the animation
-		# animating top to bottom or bottom to top?
-		if(mvy<0):
-			yup=SPQR.HEX_FULLH/2
-		else:
-			yup=0
-		# animating left to right or right to left?
-		if(mvx<0):
-			xup=SPQR.HEX_PIX_W
-			x-=SPQR.HEX_PIX_W
-		else:
-			xup=0
-		if(mvy<0):
-			y+=(SPQR.HEX_FULLH/2)*mvy
+
+		# what are the offsets?
+		offsets=SPQR.ANIM_UNIT_OFFSETS[direction]
+		# there is a +1 since afterwards (and very quickly) the game updates
+		# the map, showing the unit in it's new position, so we don't need to
+		# draw it there, thus gaining an apparent extra frame.
+		xmove=int(offsets[0]/(SPQR.ANIM_UNIT_FRAMES+1))
+		ymove=int(offsets[1]/(SPQR.ANIM_UNIT_FRAMES+1))
 		frames=[]
-		# have to grab larger area when moving up and down:
-		if(yonly==True):
-			cp_rect=pygame.Rect(x,y,SPQR.HEX_FULLW,SPQR.HEX_FULLH*2)
-		else:
-			cp_rect=pygame.Rect(x,y,SPQR.HEX_FULLW+SPQR.HEX_PIX_W,
-				(SPQR.HEX_FULLH*3)/2)
+		# we need to offset into the base image
+		cp_rect=pygame.Rect(x-SPQR.HEX_PIX_W,y-SPQR.HEX_PIX_H,
+							SPQR.ANIM_UNIT_RECTW,SPQR.ANIM_UNIT_RECTH)
+		basexy=[SPQR.HEX_PIX_W,SPQR.HEX_PIX_H]
 		unit_image=self.data.troops.getUnitFromHighlight().image
-		# generate each frame
-		if(yonly==False):
-			ymov=(SPQR.HEX_PIX_H/2)/7
-		else:
-			# have to move a whole hex
-			ymov=SPQR.HEX_FULLH/7
-			
-		xmov=(SPQR.HEX_PIX_W-1)/7
-		for i in range(7):
-			# again, need bigger area for up/down
-			if(yonly==True):
-				img=pygame.Surface((SPQR.HEX_FULLW,SPQR.HEX_FULLH*2),SRCALPHA)
-			else:
-				img=pygame.Surface((SPQR.HEX_FULLW+SPQR.HEX_PIX_W,SPQR.HEX_FULLH*2),SRCALPHA)
+		# generate the frames
+		for i in range(SPQR.ANIM_UNIT_FRAMES):
+			# update image position
+			basexy[0]+=xmove
+			basexy[1]+=ymove
+			img=pygame.Surface((SPQR.ANIM_UNIT_RECTW,SPQR.ANIM_UNIT_RECTW),SRCALPHA)
 			# take from the back map:
 			img.blit(self.images[SPQR.BACK_MAP],(0,0),cp_rect)
 			# render the unit over it
-			img.blit(self.images[unit_image],(xup,yup))
+			img.blit(self.images[unit_image],basexy)
 			frames.append(img)
-			yup-=ymov*(mvy*-1)
-			if(yonly==False):
-				xup+=(xmov*mvx)
+
 		# check for bounds
 		self.checkMoveBounds(cp_rect)
 		# now adjust copy rect to allow for screen:

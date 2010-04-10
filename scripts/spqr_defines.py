@@ -22,14 +22,14 @@ import pygame.locals as PYGAME
 # as they are, unless you really know what you are doing. Probably the
 # most useful when debugging is SPQR_FULLSCREEN
 
-VERSION				= "v0.3.55"
+VERSION				= "v0.3.56"
 AUTHOR				= "Chris Smith"
 EMAIL				= "maximinus@gmail.com"
 SYSTEM				= "GNU/Linux"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
-LAST_UPDATE			= "9th April 2010"
-CODELINES			= "8509"
+LAST_UPDATE			= "10th April 2010"
+CODELINES			= "8499"
 
 # before we go any further, this one is a must ;-)
 # currently adds debug menu bar , along with access to
@@ -407,6 +407,21 @@ TOP_LEFT_OFFSET		= (0,-1,-1)
 
 MOVE_OFFSETS		= [TOP_RIGHT_OFFSET,RIGHT_OFFSET,BOTTOM_RIGHT_OFFSET,
 					   BOTTOM_LEFT_OFFSET,LEFT_OFFSET,TOP_LEFT_OFFSET]
+
+# graphics offsets for animation, based on direction
+ANIM_TR_OFFSET		= (HEX_FULLW/2,-HEX_PIX_H)
+ANIM_RT_OFFSET		= (HEX_FULLW,0)
+ANIM_BR_OFFSET		= (HEX_FULLW/2,HEX_PIX_H)
+ANIM_BL_OFFSET		= (-HEX_FULLW/2,HEX_PIX_H)
+ANIM_LF_OFFSET		= (-HEX_FULLW,0)
+ANIM_TL_OFFSET		= (-HEX_FULLW/2,-HEX_PIX_H)
+
+ANIM_UNIT_OFFSETS	= [ANIM_TR_OFFSET,ANIM_RT_OFFSET,ANIM_BR_OFFSET,
+					   ANIM_BL_OFFSET,ANIM_LF_OFFSET,ANIM_TL_OFFSET]
+# area to blit to and number of frames
+ANIM_UNIT_RECTW		= HEX_FULLW*3
+ANIM_UNIT_RECTH		= HEX_FULLH*3
+ANIM_UNIT_FRAMES	= 7
 
 # text layout types
 LEFT_JUSTIFY		= 0
