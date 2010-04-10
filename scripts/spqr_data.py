@@ -154,6 +154,13 @@ class CMap:
 			return(offsets[2],offsets[1])
 		else:
 			return(offsets[0],offsets[1])
+	
+	def getHexMovePosition(self,direction,x,y):
+		"""Like getHexMoveOffsets, but return the  index of the new hex"""
+		offsets=self.getHexMoveOffsets(direction,x,y)
+		x+=offsets[0]
+		y+=offsets[1]
+		return(x,y)
 
 class CUnit:
 	"""Normally the calling functions read q and m from a file,

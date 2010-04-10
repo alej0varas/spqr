@@ -1166,42 +1166,31 @@ class CGFXEngine:
 			# get x,y of unit
 			xu=self.data.troops.chx()
 			yu=self.data.troops.chy()
-			# there are a fair few literal numbers here, I won't put them in the
-			# defines file for now as they are so specific
-			# faffing for left/right first as we have a funny offset
-			if((xu&1)==0):
-				# it's an even row
-				xoff=1
-				xdisp=0
-				index_tl=self.data.getXYUnit(xu,yu-1)
-				free_tl=self.data.freeForRome(xu,yu-1)
-				index_tr=self.data.getXYUnit(xu+1,yu-1)
-				free_tr=self.data.freeForRome(xu+1,yu-1)
-				index_br=self.data.getXYUnit(xu+1,yu+1)
-				free_br=self.data.freeForRome(xu+1,yu+1)
-				index_bl=self.data.getXYUnit(xu,yu+1)
-				free_bl=self.data.freeForRome(xu,yu+1)
-			else:
-				# an odd row
-				xoff=0
-				xdisp=1
-				index_tl=self.data.getXYUnit(xu,yu-1)
-				free_tl=self.data.freeForRome(xu,yu-1)
-				index_tr=self.data.getXYUnit(xu+1,yu-1)
-				free_tr=self.data.freeForRome(xu+1,yu-1)
-				index_br=self.data.getXYUnit(xu+1,yu+1)
-				free_br=self.data.freeForRome(xu+1,yu+1)
-				index_bl=self.data.getXYUnit(xu,yu+1)
-				free_bl=self.data.freeForRome(xu,yu+1)
-			# start actual blitting with top unit
-			index_left=self.data.getXYUnit(xu-1,yu)
-			free_left=self.data.freeForRome(xu-1,yu)
+			# get the unit and rome stats for all surrounding hexes
+			xo,yo=self.data.board.getHexMovePosition(SPQR.TOP_LEFT,xu,yu)
+			index_tl=self.data.getXYUnit(xo,yo)
+			free_tl=self.data.freeForRome(xo,yo)
+			xo,yo=self.data.board.getHexMovePosition(SPQR.TOP_RIGHT,xu,yu)
+			index_tr=self.data.getXYUnit(xo,yo)
+			free_tr=self.data.freeForRome(xo,yo)
+			xo,yo=self.data.board.getHexMovePosition(SPQR.BOTTOM_RIGHT,xu,yu)
+			index_br=self.data.getXYUnit(xo,yo)
+			free_br=self.data.freeForRome(xo,yo)
+			xo,yo=self.data.board.getHexMovePosition(SPQR.BOTTOM_LEFT,xu,yu)
+			index_bl=self.data.getXYUnit(xo,yo)
+			free_bl=self.data.freeForRome(xo,yo)
+			xo,yo=self.data.board.getHexMovePosition(SPQR.LEFT,xu,yu)
+			index_left=self.data.getXYUnit(xo,yo)
+			free_left=self.data.freeForRome(xo,yo)
+			xo,yo=self.data.board.getHexMovePosition(SPQR.RIGHT,xu,yu)
+			index_right=self.data.getXYUnit(xo,yo)
+			free_right=self.data.freeForRome(xo,yo)
+			# start actual blitting with left unit
 			if(index_left!=-1):
 				# draw left unit
 				self.flash_erase.blit(self.images[self.data.troops.units[index_left].image],
 					SPQR.MOVE_OFF_LEFTD,SPQR.MOVE_OFF_LEFT)
-			index_right=self.data.getXYUnit(xu+1,yu)
-			free_right=self.data.freeForRome(xu+1,yu)
+
 			if(index_right!=-1):
 				# draw bottom unit
 				self.flash_erase.blit(self.images[self.data.troops.units[index_right].image],
@@ -1276,7 +1265,7 @@ class CGFXEngine:
 			self.flash_draw.blit(self.flash_erase,(0,0))
 			# then draw the unit over it
 			index=self.data.troops.getUnitFromHighlight().image
-			self.flash_draw.blit(self.images[index],(SPQR.MOVE_OFFX+xoff,SPQR.MOVE_OFFY))
+			self.flash_draw.blit(self.images[index],(SPQR.MOVE_OFFX,SPQR.MOVE_OFFY))
 			
 			# another thing - we just have to make sure that the number of moves
 			# left by the unit is also displayed, on both images

@@ -70,36 +70,36 @@ unit Preatorians
 
 # and finally, the enemy ones
 
-#unit Carthaginian_I
-#	(19,20)
-#	(IMG_BHORSE)
-#	(Carthaginians)
-#	(50,4,5)
-#unit Carthaginian_II
-#	(20,20)
-#	(IMG_BHORSE)
-#	(Carthaginians)
-#	(50,4,5)
-#unit Carthaginian_III
-#	(20,21)
-#	(IMG_BHORSE)
-#	(Carthaginians)
-#	(50,4,5)
-#unit Carthaginian_IV
-#	(20,22)
-#	(IMG_BHORSE)
-#	(Carthaginians)
-#	(50,4,5)
-#unit Carthaginian_V
-#	(19,22)
-#	(IMG_BHORSE)
-#	(Carthaginians)
-#	(50,4,5)
-#unit Carthaginian_VI
-#	(18,21)
-#	(IMG_BHORSE)
-#	(Carthaginians)
-#	(50,4,5)
+unit Carthaginian_I
+	(23,20)
+	(IMG_BHORSE)
+	(Carthaginians)
+	(50,4,5)
+unit Carthaginian_II
+	(24,20)
+	(IMG_BHORSE)
+	(Carthaginians)
+	(50,4,5)
+unit Carthaginian_III
+	(25,21)
+	(IMG_BHORSE)
+	(Carthaginians)
+	(50,4,5)
+unit Carthaginian_IV
+	(24,22)
+	(IMG_BHORSE)
+	(Carthaginians)
+	(50,4,5)
+unit Carthaginian_V
+	(23,22)
+	(IMG_BHORSE)
+	(Carthaginians)
+	(50,4,5)
+unit Carthaginian_VI
+	(23,21)
+	(IMG_BHORSE)
+	(Carthaginians)
+	(50,4,5)
 
 # now we get the individuals.
 # they are defined as follows:
