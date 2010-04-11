@@ -1430,7 +1430,7 @@ class CGFXEngine:
 		self.normalizeScrollArea()
 		return(True)
 
-	def animateUnitMove(self,xpos,ypos,direction,unit,battle):
+	def animateUnitMove(self,xpos,ypos,direction,unit,battle=True):
 		"""This is the routine that animates a unit move.
 		   Call with the xpos and ypos of the unit, a direction flag
 		   to indicate movement, the unit to move (or -1 to use current
@@ -1439,7 +1439,7 @@ class CGFXEngine:
 		   Returns True if the move took place"""
 		# TODO: This code is ugly
 		# before doing anything else, we test to see if we have a battle:
-		enemy=self.data.troops.checkBattle(direction)
+		enemy=self.data.troops.checkBattle(direction,self.data.board)
 		if(enemy>-1):
 			# do the battle or not?
 			if(battle==False):

@@ -1024,27 +1024,27 @@ def selectUnitStack3(lgui,handle,xpos,ypos):
 # after user has pressed the relevant key
 def moveUpLeft(lgui,handle,xpos,ypos):
 	"""Move unit left"""
-	return(lgui.animateUnitMove(xpos,ypos,SPQR.TOP_LEFT,SPQR.USE_HIGHLIGHT,True))
+	return(lgui.animateUnitMove(xpos,ypos,SPQR.TOP_LEFT,SPQR.USE_HIGHLIGHT))
 
 def moveRight(lgui,handle,xpos,ypos):
 	"""Move the unit right"""
-	return(lgui.animateUnitMove(xpos,ypos,SPQR.RIGHT,SPQR.USE_HIGHLIGHT,True))
+	return(lgui.animateUnitMove(xpos,ypos,SPQR.RIGHT,SPQR.USE_HIGHLIGHT))
 
 def moveUpRight(lgui,handle,xpos,ypos):
 	"""Move the unit up and right"""
-	return(lgui.animateUnitMove(xpos,ypos,SPQR.TOP_RIGHT,SPQR.USE_HIGHLIGHT,True))
+	return(lgui.animateUnitMove(xpos,ypos,SPQR.TOP_RIGHT,SPQR.USE_HIGHLIGHT))
 
 def moveDownLeft(lgui,handle,xpos,ypos):
 	"""Move unit down left"""	   
-	return(lgui.animateUnitMove(xpos,ypos,SPQR.BOTTOM_LEFT,SPQR.USE_HIGHLIGHT,True))
+	return(lgui.animateUnitMove(xpos,ypos,SPQR.BOTTOM_LEFT,SPQR.USE_HIGHLIGHT))
 
 def moveLeft(lgui,handle,xpos,ypos):
 	"""Move unit down"""
-	return(lgui.animateUnitMove(xpos,ypos,SPQR.LEFT,SPQR.USE_HIGHLIGHT,True))
+	return(lgui.animateUnitMove(xpos,ypos,SPQR.LEFT,SPQR.USE_HIGHLIGHT))
 
 def moveDownRight(lgui,handle,xpos,ypos):
 	"""Move unit down right"""
-	return(lgui.animateUnitMove(xpos,ypos,SPQR.BOTTOM_RIGHT,SPQR.USE_HIGHLIGHT,True))
+	return(lgui.animateUnitMove(xpos,ypos,SPQR.BOTTOM_RIGHT,SPQR.USE_HIGHLIGHT))
 
 def displayPygameInfo(lgui,handle,xpos,ypos):
 	"""Simple messagebox to tell user about Pygame"""

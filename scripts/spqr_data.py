@@ -20,6 +20,7 @@ from pygame.locals import *
 
 import spqr_defines as SPQR
 import spqr_people as SPEOPLE
+from battles import spqr_battle as SBATTLE
 
 # definitions for the map, players and units
 # if any value holds an index number, then that is a bug,
@@ -156,7 +157,7 @@ class CMap:
 			return(offsets[0],offsets[1])
 	
 	def getHexMovePosition(self,direction,x,y):
-		"""Like getHexMoveOffsets, but return the  index of the new hex"""
+		"""Like getHexMoveOffsets, but return the x/y of the new hex"""
 		offsets=self.getHexMoveOffsets(direction,x,y)
 		x+=offsets[0]
 		y+=offsets[1]
@@ -265,43 +266,17 @@ class CArmy:
 		# nothing found
 		return(-1)
 
-	def checkBattle(self,direction):
+	def checkBattle(self,direction,board):
 		"""Routine to see if the current highlight unit, when
 		   moving in direction, meets an non-roman unit. If so, then
 		   return the index number of that unit; otherwise, return -1"""
-
-		print "FIX ME!"
-		return(-1)
-
 		# first, get the x,y coords of the highlight unit:
 		x=self.chx()
 		y=self.chy()
-		# now find out if we have a unit:
-		odd=False
-		# column odd?
-		if((x&1)==1):
-			odd=True
-		if(direction==SPQR.TOP):
-			y-=1
-		elif(direction==SPQR.TOP_RIGHT):
-			x+=1
-			if(odd==False):
-				y-=1
-		elif(direction==SPQR.BOTTOM_RIGHT):
-			x+=1
-			if(odd==True):
-				y+=1
-		elif(direction==SPQR.BOTTOM):
-			y+=1
-		elif(direction==SPQR.BOTTOM_LEFT):
-			x-=1
-			if(odd==True):
-				y+=1
-		elif(direction==SPQR.TOP_LEFT):
-			x-=1
-			if(odd==False):
-				y-=1
-		# now we have the x,y coords of the square to move to.
+		offset=board.getHexMovePosition(direction,x,y)
+		x=offset[0]
+		y=offset[1]
+		# now we have the x,y coords of the square we move to.
 		# the function call returns the same value that the calling routine needs
 		index=self.checkXYUnit(x,y)
 		# if index is -1, then return that
@@ -403,17 +378,9 @@ class CInfo:
 				print "[SPQR]: Error: CInfo.battle() routine found no valid id match"
 			# assume the battle was won
 			return(True)
-		
-		# make it *real* simple. Let's just make it retreat. Show a
-		# victory message first:
-		lgui.messagebox(SPQR.BUTTON_OK,"You have won!","Battle Results")
-		# force the retreat, if it can be done
-		if(self.unitRetreat(lgui,oppo1,oppo2)==False):
-			# no, so delete the unit
-			self.deleteUnitFromID(enemy)
-			# we need to update the map here
-			lgui.updateUnits()
-			return(True)
+
+		SBATTLE.test(lgui,0,-1,-1)
+
 		# we lost! ah well...
 		return(False)
 

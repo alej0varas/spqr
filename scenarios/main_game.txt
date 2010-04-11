@@ -53,7 +53,7 @@ city Carthage
 # Y is the troop quality (1-5) and Z is the morale (1-5), where low is best
 
 unit Preatorians
-	(19,21)
+	(21,21)
 	(IMG_PRAETOR)
 	(Romans)
 	(100,3,1)
