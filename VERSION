@@ -1,6 +1,6 @@
 SPQR Game version history.
 
-Current version: 0.3.54
+Current version: 0.3.56
 
 Version History.
 
@@ -87,6 +87,7 @@ Version History.
 0.3.54	Back to hex based code :-) But the hexes are the right way this time
 0.3.55	Flash animations pixel perfect. Almost ready to add new code.
 0.3.56	Movement keys and animations now also work just fine.
+0.3.57	Added new map graphics; updated main scenario file.
 
 Notable milestones:
 
