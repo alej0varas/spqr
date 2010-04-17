@@ -51,7 +51,7 @@ unit Preatorians
 	(Romans)
 	(100,3,1)
 unit Legio_II
-	(27,22)
+	(25,21)
 	(IMG_LEGION)
 	(Romans)
 	(95,2,2)
@@ -64,7 +64,7 @@ unit Legio_IV
 # and finally, the enemy ones
 
 unit Carthaginian_I
-	(23,18)
+	(24,20)
 	(IMG_BHORSE)
 	(Carthaginians)
 	(50,4,5)

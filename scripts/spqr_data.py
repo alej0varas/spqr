@@ -145,7 +145,7 @@ class CMap:
 	def getHex(self,xpos,ypos):
 		"""Returns the actual hex given the board x/y co-ords"""
 		index=((ypos*SPQR.HEXES_WIDE)+xpos)
-		return self.board[index]
+		return(self.hexes[index])
 
 	def getHexMoveOffsets(self,direction,x,y):
 		"""Given the x and y of a hex (and the direction to move)
@@ -181,6 +181,12 @@ class CUnit:
 		self.owner=otext
 		# no commmander to start with
 		self.commander=-1
+
+	def __str__(self):
+		"""Return a string representing the unit"""
+		return(self.name+"\n"+"  ID:"+str(self.id_number)+"  X:"+
+				str(self.xpos)+"  Y:"+str(self.ypos)+"\n  M/Q/S:"+
+				str(self.morale)+"|"+str(self.quality)+"|"+str(self.strength))
 
 	def checkMorale(self,modifier):
 		"""Standard morale check: If rnd(100)>(troopm+mod),
@@ -255,7 +261,7 @@ class CArmy:
 		return(SPQR.IMG_NONE)
 
 	def checkXYUnit(self,xpos,ypos):
-		"""Returns  index number of any unit first found
+		"""Returns index number of any unit first found
 		   that has same xpos/ypos. Returns -1 if no
 		   such unit has been found"""
 		index=0
@@ -366,7 +372,7 @@ class CInfo:
 		if(oppo2==None):
 			# oops!
 			if(SPQR.DEBUG_MODE==True):
-				print "[SPQR]: Error: CInfo.battle() routine found no valid id match"
+				print "[SPQR]: Error: No valid id match for enemy in battle"
 			# assume the battle was won
 			return(True)
 		# might as well do the same with the friend
@@ -375,11 +381,11 @@ class CInfo:
 		if(oppo1==None):
 			# oops!
 			if(SPQR.DEBUG_MODE==True):
-				print "[SPQR]: Error: CInfo.battle() routine found no valid id match"
+				print "[SPQR]: Error: No valid id match for attacker in battle"
 			# assume the battle was won
 			return(True)
 
-		SBATTLE.test(lgui,0,-1,-1)
+		SBATTLE.test(lgui,oppo1,oppo2)
 
 		# we lost! ah well...
 		return(False)

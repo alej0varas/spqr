@@ -22,14 +22,28 @@ from .. import spqr_defines as SPQR
 from .. import spqr_widgets as SWIDGET
 from .. import spqr_events as SEVENT
 
-def test(lgui,handle,xpos,ypos):
+def test(lgui,attack,defend):
 	"""Routine to test whatever the latest version of the window
 	   code is. Does nothing clever really"""
+	# get a list of all the units on this hex
+	a_units=lgui.data.board.getHex(attack.xpos,attack.ypos).units
+	d_units=lgui.data.board.getHex(defend.xpos,defend.ypos).units
+	# these are just the id numbers, so get the units themselves
+	attackers=[lgui.data.troops.getUnitFromID(i) for i in a_units]
+	defenders=[lgui.data.troops.getUnitFromID(i) for i in d_units]
+
+	# display them
+	for i in attackers:
+		print(i)
+	for i in defenders:
+		print (i)
+
 	# get a window
-	index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,320,100,"Battle",True))
-	# make a list of 2 buttons
+	index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,360,100,"Battle",True))
+	# make a list of 3 buttons
 	buttons=[]
-	buttons.append(SWINDOW.CButtonDetails("Win",K_o,SEVENT.killModalWindow))
+	buttons.append(SWINDOW.CButtonDetails("Destroy",K_o,SEVENT.killModalWindow))
+	buttons.append(SWINDOW.CButtonDetails("Beat",None,SEVENT.killModalWindow))
 	buttons.append(SWINDOW.CButtonDetails("Lose",None,SEVENT.killModalWindow))
 	lgui.windows[index].buildButtonArea(buttons,False)
 	# we have to add modal keypresses ourselves
@@ -42,4 +56,5 @@ def test(lgui,handle,xpos,ypos):
 	win_img=lgui.windows[index].drawWindow()
 	lgui.addDirtyRect(win_img,lgui.windows[index].rect)
 	return(True)
+
 
