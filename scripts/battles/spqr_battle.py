@@ -31,12 +31,20 @@ def test(lgui,attack,defend):
 	# these are just the id numbers, so get the units themselves
 	attackers=[lgui.data.troops.getUnitFromID(i) for i in a_units]
 	defenders=[lgui.data.troops.getUnitFromID(i) for i in d_units]
+	# if attackers is empty, an error: if defenders is empty, we win
+	if(attackers==[]):
+		print "[SPQR]: Error: Found empty attack stack"
+		# we take that a lose, for what it counts
+		return(False)
+	if(defenders==[]):
+		return(True)
+	
+	# now we can start to build up the window. This is a complex one.
+	# from the top, we must show the units, then a message showing both
+	# enemy state and your attack options; then the status of both
+	# finally the option buttons below all of this
 
-	# display them
-	for i in attackers:
-		print(i)
-	for i in defenders:
-		print (i)
+
 
 	# get a window
 	index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,360,100,"Battle",True))
@@ -56,5 +64,4 @@ def test(lgui,attack,defend):
 	win_img=lgui.windows[index].drawWindow()
 	lgui.addDirtyRect(win_img,lgui.windows[index].rect)
 	return(True)
-
 

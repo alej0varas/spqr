@@ -384,11 +384,8 @@ class CInfo:
 				print "[SPQR]: Error: No valid id match for attacker in battle"
 			# assume the battle was won
 			return(True)
-
-		SBATTLE.test(lgui,oppo1,oppo2)
-
-		# we lost! ah well...
-		return(False)
+		# battle code does the rest
+		return(SBATTLE.test(lgui,oppo1,oppo2))
 
 	def unitRetreat(self,lgui,enemy,retreat):
 		"""Placeholder function"""
