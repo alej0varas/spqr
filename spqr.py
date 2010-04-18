@@ -431,6 +431,6 @@ def main():
 	# call the gui main loop
 	game.gui.mainLoop()
 
-if __name__=='__main__':
+if(__name__=='__main__'):
 	main()
 

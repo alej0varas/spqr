@@ -21,6 +21,7 @@ from .. import spqr_window as SWINDOW
 from .. import spqr_defines as SPQR
 from .. import spqr_widgets as SWIDGET
 from .. import spqr_events as SEVENT
+from ..data import spqr_battle_text as BTEXT
 
 def test(lgui,attack,defend):
 	"""Routine to test whatever the latest version of the window
@@ -38,13 +39,15 @@ def test(lgui,attack,defend):
 		return(False)
 	if(defenders==[]):
 		return(True)
+
+	# get the various texts:
+	atext=[]
+	btext=[]
 	
 	# now we can start to build up the window. This is a complex one.
 	# from the top, we must show the units, then a message showing both
 	# enemy state and your attack options; then the status of both
 	# finally the option buttons below all of this
-
-
 
 	# get a window
 	index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,360,100,"Battle",True))
@@ -63,5 +66,10 @@ def test(lgui,attack,defend):
 	# add the window as a dirty image
 	win_img=lgui.windows[index].drawWindow()
 	lgui.addDirtyRect(win_img,lgui.windows[index].rect)
-	return(True)
+	return(False)
 
+def getAttackersText():
+	pass
+
+def getDefendersText():
+	pass

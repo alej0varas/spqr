@@ -421,7 +421,7 @@ def menuEmpireCities(lgui,handle,xpos,ypos):
 	lgui.windows[index].modal=True
 
 	# add the extra buttons
-	b1=SWINDOWCButtonDetails("Cancel",K_c,killModalWindow)
+	b1=SWINDOW.CButtonDetails("Cancel",K_c,killModalWindow)
 	lgui.windows[index].buildButtonArea([b1],False)
 	lgui.keyboard.setModalKeys(1)
 
