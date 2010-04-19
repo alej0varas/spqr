@@ -1448,7 +1448,7 @@ class CGFXEngine:
 			# do the battle, and return if result was false
 			# (otherwise, we won the battle and can do the move)
 			foo=self.data.troops.current_highlight
-			if(self.data.battle(self,foo,enemy)==False):
+			if(self.data.battle.initBattle(self,foo,enemy)==False):
 				# battle failed, so no movement
 				return(False)
 		# now we can actually do the animated move

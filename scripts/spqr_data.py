@@ -21,30 +21,17 @@ from pygame.locals import *
 import spqr_defines as SPQR
 import spqr_people as SPEOPLE
 from battles import spqr_battle as SBATTLE
+from hexes import spqr_hex as SHEX
 
 # definitions for the map, players and units
 # if any value holds an index number, then that is a bug,
 # since we should always store the id value when referring to data 
 
-class CHex:
-	def __init__(self,surface,resource):
-		self.surface=surface
-		self.resource=resource
-		self.units=[]
-		# following: lf=left, bl=bottom left etc of each hex
-		# True if you can move this way (sea handled a different way)
-		self.left=True
-		self.right=True
-		self.tr=True
-		self.br=True
-		self.bl=True
-		self.tl=True
-
 class CMap:
 	def __init__(self,width,height):
 		self.hexes=[]
 		for x in range(width*height):
-			self.hexes.append(CHex(SPQR.MAP_LAND,0))
+			self.hexes.append(SHEX.CHex(SPQR.MAP_LAND,0))
 		self.hex_mask=None
 	
 	def initMasks(self):
@@ -347,6 +334,7 @@ class CInfo:
 		self.people=[]
 		self.people_id=0
 		self.info=CStore()
+		self.battle=SBATTLE.CBEngine()
 		self.city_highlight=-1
 		# following set to True if the last time a unit
 		# was flashed, the frame was drawn (i.e. so the unit
@@ -360,32 +348,6 @@ class CInfo:
 		self.cities.append(CCity(name,self.city_id,xpos,ypos,gfx,owner))
 		self.city_id+=1
 		return(len(self.cities)-1)
-
-	def battle(self,lgui,friend,enemy):
-		"""Battle goes through the whole process of enacting a battle.
-		   Call with a pointer to lgui, and then the id_numbers of firstly
-		   the friend (attacking) unit, and then the enemy.
-		   Returns True if the battle was won, false otherwise"""
-		# enemy value is the id_number, so go get the unit itself:
-		oppo2=self.troops.getUnitFromID(enemy)
-		# actually a unit there?
-		if(oppo2==None):
-			# oops!
-			if(SPQR.DEBUG_MODE==True):
-				print "[SPQR]: Error: No valid id match for enemy in battle"
-			# assume the battle was won
-			return(True)
-		# might as well do the same with the friend
-		oppo1=self.troops.getUnitFromID(friend)
-		# actually a unit there?
-		if(oppo1==None):
-			# oops!
-			if(SPQR.DEBUG_MODE==True):
-				print "[SPQR]: Error: No valid id match for attacker in battle"
-			# assume the battle was won
-			return(True)
-		# battle code does the rest
-		return(SBATTLE.test(lgui,oppo1,oppo2))
 
 	def unitRetreat(self,lgui,enemy,retreat):
 		"""Placeholder function"""
