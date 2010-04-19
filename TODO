@@ -1,6 +1,5 @@
 Current TODO:
 
-Make animated move work properly again.
 Make sure every unit and city has a person assigned.
 Make auto-retreat work.
 Make sure you can't walk on sea or water.
@@ -57,4 +56,5 @@ This is list of TODO's (earliest first) that I have on record.
 *DONE* Change all code so we have import spqr_defines as SPQR
 *DONE* Rotate all hexes by 90 degrees
 *DONE* Make flash animation pixel perfect
+*DONE*	Make animated move work properly again.
 
