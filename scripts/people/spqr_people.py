@@ -14,9 +14,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-# get modules
+from __future__ import absolute_import
 import sys,pygame
-import spqr_defines as SPQR
+from .. import spqr_defines as SPQR
 
 # this module holds the class definitions for a person
 # this defines who they are, what they control etc...
