@@ -59,7 +59,14 @@ class CInfo:
 		# was flashed, the frame was drawn (i.e. so the unit
 		# is displayed on screen)
 		self.flash_on=True
-		
+
+	def dataPygameInit(self,lgui):
+		"""Some of the data structures need to init some pygame data.
+		   We do this here because Pygame is not avaliable when we first
+		   set-up the data"""
+		self.board.initMasks()
+		self.battle.getStringLengths(lgui)
+
 	# some extra co-ordinating routines
 	# returns index number of city in list
 	def addCity(self,name,xpos,ypos,gfx,owner):

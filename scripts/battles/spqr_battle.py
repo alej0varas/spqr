@@ -15,6 +15,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 from __future__ import absolute_import
+import pygame
 from pygame.locals import *
 from .. import spqr_window as SWINDOW
 from .. import spqr_defines as SPQR
@@ -25,7 +26,20 @@ import random as RAND
 
 class CBEngine:
 	def __init__(self):
-		pass
+		self.max_battle_string=0
+
+	def getStringLengths(self,lgui):
+		"""Calculate the longest string in the battle texts"""
+		# do the funky alfonso - a def inside a def!
+		def getData(data):
+			for entry in data:
+				for name,values in entry.iteritems():
+					length=lgui.fonts[SPQR.FONT_VERA].size(values[0])
+					if(length[0]>self.max_battle_string):
+						self.max_battle_string=length[0]
+		getData(BTEXT.ground)
+		getData(BTEXT.change)
+		getData(BTEXT.morale)
 
 	def initBattle(self,lgui,friend,enemy):
 		"""Battle goes through the whole process of enacting a battle.
