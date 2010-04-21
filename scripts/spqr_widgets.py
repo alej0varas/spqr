@@ -39,7 +39,7 @@ class CCallbacks:
 # in almost all cases you'll use the widgets defined by the library
 class CWidget:
 	"""Base class for widgets: All other widgets should build on this one"""
-	def __init__(self,gui,x,y,rect,htype,image,describe,
+	def __init__(self,gui,rect,htype,image,describe,
 				 parent=False,active=False,visible=True):
 		self.lgui=gui
 		self.active=active
@@ -61,7 +61,7 @@ class CWidget:
 class CLabel(CWidget):
 	"""Label class stes and stores details for a simple label"""
 	def __init__(self,gui,x,y,width,height,text):
-		CWidget.__init__(self,gui,x,y,pygame.Rect(x,y,width,height),"WT_LABEL",
+		CWidget.__init__(self,gui,pygame.Rect(x,y,width,height),"WT_LABEL",
 					     None,"CLabel") 
 		self.background_colour=SPQR.BGUI_COL
 		self.text_colour=SPQR.COL_BLACK
@@ -134,7 +134,7 @@ class CImage(CWidget):
 	def __init__(self,gui,x,y,width,height,image):
 		tmp_image=pygame.Surface((width,height))
 		tmp_image.blit(gui.images[image],(0,0))
-		CWidget.__init__(self,gui,x,y,pygame.Rect(x,y,width,height),
+		CWidget.__init__(self,gui,pygame.Rect(x,y,width,height),
 						 SPQR.WT_IMAGE,tmp_image,"CImage")
 
 # and the simplest of all - a seperator bar
@@ -146,7 +146,7 @@ class CSeperator(CWidget):
 		# now blit the 2 colours to the image
 		pygame.draw.line(image,SPQR.SEP_DARK,(0,0),(width,0),1)
 		pygame.draw.line(image,SPQR.SEP_LIGHT,(0,1),(width,1),1)
-		CWidget.__init__(self,gui,x,y,pygame.Rect(x,y,width,2),SPQR.WT_SEP,
+		CWidget.__init__(self,gui,pygame.Rect(x,y,width,2),SPQR.WT_SEP,
 						 image,"CSeperator")
 
 # and now a button
@@ -158,7 +158,7 @@ class CButton(CWidget):
 	def __init__(self,gui,x,y,text):
 		width=gui.images[SPQR.BUTTON_STD].get_width()
 		height=gui.images[SPQR.BUTTON_STD].get_height()
-		CWidget.__init__(self,gui,x,y,pygame.Rect(x,y,width,height),
+		CWidget.__init__(self,gui,pygame.Rect(x,y,width,height),
 						 SPQR.WT_BUTTON,None,"CButton")
 		# get the images
 		self.image,self.pressed=self.drawButton(text)
@@ -198,7 +198,7 @@ class CCheckBox(CWidget):
 			image=gui.images[SPQR.CHECK_YES]
 		else:
 			image=gui.images[SPQR.CHECK_NO]
-		CWidget.__init__(self,gui,x,y,pygame.Rect(x,y,SPQR.CHKBOX_SIZE,SPQR.CHKBOX_SIZE),
+		CWidget.__init__(self,gui,pygame.Rect(x,y,SPQR.CHKBOX_SIZE,SPQR.CHKBOX_SIZE),
 						 SPQR.WT_CHECK,image,"CCheckBox")
 		# status is the inital boolean value
 		self.status=initial
@@ -251,7 +251,7 @@ class CSlider(CWidget):
 		if(width<gui.images[SPQR.GUI_SLIDER].get_width()):
 			width=gui.images[SPQR.GUI_SLIDER].get_width()
 		height=gui.images[SPQR.GUI_SLIDER].get_height()
-		CWidget.__init__(self,gui,x,y,pygame.Rect(x,y,width,height),
+		CWidget.__init__(self,gui,pygame.Rect(x,y,width,height),
 						 SPQR.WT_SLIDER,pygame.Surface((width,height)),
 						 "CSlider")
 		# we have to check wether the slider knob is being pressed
@@ -423,7 +423,7 @@ class CScrollArea(CWidget):
 	   height of widget *MUST BE* >61 pixels or funny gfx effects will occur
 	   border area, if true, adds 1 pixel on the lhs and 2 on the y axis"""
 	def __init__(self,gui,x,y,width,height,image,border=True):
-		CWidget.__init__(self,gui,x,y,None,SPQR.WT_SCROLLAREA,None,"CScrollArea")
+		CWidget.__init__(self,gui,None,SPQR.WT_SCROLLAREA,None,"CScrollArea")
 		self.border=border
 		# get size of the area to display:
 		vsize=image.get_height()
@@ -650,7 +650,7 @@ class CItemList(CWidget):
 	   the element to take up (including the header height)"""
 	def __init__(self,gui,x,y,elements,sorts,id_values,total_height):
 		# let's do the easy stuff first - this will be a long routine
-		CWidget.__init__(self,gui,x,y,pygame.Rect(x,y,0,0),
+		CWidget.__init__(self,gui,pygame.Rect(x,y,0,0),
 						 SPQR.WT_ITEMLIST,None,"CItemList")
 		self.data=[]
 
@@ -1001,7 +1001,7 @@ class COptionMenu(CWidget):
 	   Call with gui pointer, the x and y position, and then a
 	   list of the options, in text format"""
 	def __init__(self,gui,x,y,options):
-		CWidget.__init__(self,gui,x,y,None,SPQR.WT_OPTMENU,None,"COptionMenu")
+		CWidget.__init__(self,gui,None,SPQR.WT_OPTMENU,None,"COptionMenu")
 		# just a simple check - there has to be at least 1 option!
 		if(len(options)<1):
 			if(SPQR.DEBUG_MODE==True):

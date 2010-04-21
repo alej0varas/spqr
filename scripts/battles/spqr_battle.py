@@ -92,21 +92,42 @@ class CBEngine:
 		atext.extend(a3)
 		dtext.extend(d2)
 		dtext.extend(d3)
-		print atext
+	
+		print atext,"\n"
 		print dtext
 	
 		# now we can start to build up the window. This is a complex one.
 		# from the top, we must show the units, then a message showing both
 		# enemy state and your attack options; then the status of both
 		# finally the option buttons below all of this
-	
+		# whats the width and height?
+		width=(SPQR.SPACER*4)+SPQR.QTRSPCR+(self.max_battle_string*2)
+		height=300
 		# get a window
-		index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,360,100,"Battle",True))
-		# make a list of 3 buttons
+		index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,width,height,"Battle",True))
+		# now can add the texts as labels
+		textx=SPQR.SPACER
+		texty=SPQR.SPACER
+		for entry in atext:
+			label=SWIDGET.buildLabel(lgui,entry[0])
+			label.rect.x=textx
+			label.rect.y=texty
+			lgui.windows[index].addWidget(label)
+			texty+=SPQR.SPACER*3
+		# do the same for the defender
+		textx=width-((SPQR.SPACER*2)+self.max_battle_string)
+		texty=SPQR.SPACER
+		for entry in dtext:
+			label=SWIDGET.buildLabel(lgui,entry[0])
+			label.rect.x=textx
+			label.rect.y=texty
+			lgui.windows[index].addWidget(label)
+			texty+=SPQR.SPACER*3
+		
+		# make a list of 2 buttons
 		buttons=[]
-		buttons.append(SWINDOW.CButtonDetails("Destroy",K_o,SEVENT.killModalWindow))
-		buttons.append(SWINDOW.CButtonDetails("Beat",None,SEVENT.killModalWindow))
-		buttons.append(SWINDOW.CButtonDetails("Lose",None,SEVENT.killModalWindow))
+		buttons.append(SWINDOW.CButtonDetails("Attack",K_o,SEVENT.killModalWindow))
+		buttons.append(SWINDOW.CButtonDetails("Retreat",None,SEVENT.killModalWindow))
 		lgui.windows[index].buildButtonArea(buttons,False)
 		# we have to add modal keypresses ourselves
 		lgui.keyboard.setModalKeys(1)
