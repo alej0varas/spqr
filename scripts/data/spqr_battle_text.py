@@ -36,11 +36,6 @@ change=[{"attack_pro":["Defenders disorganised",3],
 		 "defend_pro":["Well entrenched",5],
 		 "defend_con":["Disorganised",-1]},
 
-	    {"attack_pro":["Well Organised",2],
-		 "attack_con":["Disorganised",-9],
-		 "defend_pro":["Well Organised",-2],
-		 "defend_con":["Disorganised",-6]},
-
 	    {"attack_pro":["Sun behind troops",2],
 		 "attack_con":["Facing the sun",-3],
 		 "defend_pro":["Sun behind trops",-1],

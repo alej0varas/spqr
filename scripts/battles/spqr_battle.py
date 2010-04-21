@@ -101,28 +101,46 @@ class CBEngine:
 		# enemy state and your attack options; then the status of both
 		# finally the option buttons below all of this
 		# whats the width and height?
-		width=(SPQR.SPACER*4)+SPQR.QTRSPCR+(self.max_battle_string*2)
+		width=(SPQR.SPACER*5)+(self.max_battle_string*2)
 		height=300
 		# get a window
 		index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,width,height,"Battle",True))
+		
+		# add the units as gfx widgets
+		xpos=SPQR.SPACER
+		ypos=SPQR.SPACER*2
+		for unit in attackers:
+			gfx=SWIDGET.buildImageAlpha(lgui,unit.image)
+			gfx.rect.x=xpos
+			gfx.rect.y=ypos
+			lgui.windows[index].addWidget(gfx)
+			xpos+=SPQR.UNIT_WIDTH+SPQR.SPACER
+		xpos=(SPQR.SPACER*4)+self.max_battle_string
+		for unit in defenders:
+			gfx=SWIDGET.buildImageAlpha(lgui,unit.image)
+			gfx.rect.x=xpos
+			gfx.rect.y=ypos
+			lgui.windows[index].addWidget(gfx)
+			xpos+=SPQR.UNIT_WIDTH+SPQR.SPACER			
+		
 		# now can add the texts as labels
-		textx=SPQR.SPACER
-		texty=SPQR.SPACER
+		xpos=SPQR.SPACER
+		ypos=(SPQR.SPACER*4)+SPQR.UNIT_HEIGHT
 		for entry in atext:
 			label=SWIDGET.buildLabel(lgui,entry[0])
-			label.rect.x=textx
-			label.rect.y=texty
+			label.rect.x=xpos+((self.max_battle_string-label.rect.width)/2)
+			label.rect.y=ypos
 			lgui.windows[index].addWidget(label)
-			texty+=SPQR.SPACER*3
+			ypos+=SPQR.SPACER*3
 		# do the same for the defender
-		textx=width-((SPQR.SPACER*2)+self.max_battle_string)
-		texty=SPQR.SPACER
+		xpos=width-((SPQR.SPACER*2)+self.max_battle_string)
+		ypos=(SPQR.SPACER*4)+SPQR.UNIT_HEIGHT
 		for entry in dtext:
 			label=SWIDGET.buildLabel(lgui,entry[0])
-			label.rect.x=textx
-			label.rect.y=texty
+			label.rect.x=xpos+((self.max_battle_string-label.rect.width)/2)
+			label.rect.y=ypos
 			lgui.windows[index].addWidget(label)
-			texty+=SPQR.SPACER*3
+			ypos+=SPQR.SPACER*3
 		
 		# make a list of 2 buttons
 		buttons=[]
