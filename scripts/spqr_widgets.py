@@ -54,18 +54,16 @@ class CWidget:
 		# widget... False if there is no valid parent
 		self.parent=False
 		self.describe=describe
-		
-# TODO: Build all of these items by subclassing CWidget
 
 # place the standard items here, starting with a label
 class CLabel(CWidget):
 	"""Label class stes and stores details for a simple label"""
-	def __init__(self,gui,x,y,width,height,text):
-		CWidget.__init__(self,gui,pygame.Rect(x,y,width,height),"WT_LABEL",
+	def __init__(self,gui,x,y,width,height,text,font=SPQR.FONT_VERA):
+		CWidget.__init__(self,gui,pygame.Rect(x,y,width,height),SPQR.WT_LABEL,
 					     None,"CLabel") 
 		self.background_colour=SPQR.BGUI_COL
 		self.text_colour=SPQR.COL_BLACK
-		self.font=SPQR.FONT_VERA
+		self.font=font
 		self.justification=SPQR.LEFT_JUSTIFY
 		self.text=text	
 		# render the image text
@@ -1194,16 +1192,15 @@ class COptionMenu(CWidget):
 		return(False)
 
 # helper routines to build stuff follow
-def buildLabel(gui,text):
+def buildLabel(gui,text,font=SPQR.FONT_VERA):
 	"""Helper function to build a label given just the text.
 	   Uses standard font, which is FONT_VERA. Returns the new label"""
 	# get the size
-	w,h=gui.fonts[SPQR.FONT_VERA].size(text)
-	# and then create
-	# note: annoyingly enough, despite asking what size the font is, if
+	w,h=gui.fonts[font].size(text)
+	# TODO: annoyingly enough, despite asking what size the font is, if
 	# I render to an image of that size, it doesn't work. So we have to add 1
 	# any answers to this one, or have I missed something?
-	return(CLabel(gui,0,0,w,h+1,text))
+	return(CLabel(gui,0,0,w,h+1,text,font))
 
 def buildImage(gui,image):
 	"""Helper function to build a image given just the image

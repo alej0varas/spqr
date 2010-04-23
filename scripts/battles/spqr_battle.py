@@ -84,7 +84,6 @@ class CBEngine:
 			return(True)
 	
 		# get the various texts:
-		print "\nNew:\n"
 		atext,dtext=self.getTexts(BTEXT.ground,1,3)
 		a2,d2=self.getTexts(BTEXT.change,1,4)
 		a3,d3=self.getTexts(BTEXT.morale,0,2)
@@ -92,10 +91,17 @@ class CBEngine:
 		atext.extend(a3)
 		dtext.extend(d2)
 		dtext.extend(d3)
-	
-		print atext,"\n"
-		print dtext
-	
+
+		# get commander names
+		if(attackers[0].commander==-1):
+			a_name="ERROR"
+		else:
+			a_name=lgui.data.people[attackers[0].commander].getShortName()
+		if(defenders[0].commander==-1):
+			d_name="Unknown"
+		else:
+			d_name=lgui.data.people[defenders[0].commander].getShortName()
+
 		# now we can start to build up the window. This is a complex one.
 		# from the top, we must show the units, then a message showing both
 		# enemy state and your attack options; then the status of both
@@ -122,10 +128,23 @@ class CBEngine:
 			gfx.rect.y=ypos
 			lgui.windows[index].addWidget(gfx)
 			xpos+=SPQR.UNIT_WIDTH+SPQR.SPACER			
-		
+
+		# add the commanders names
+		xpos=SPQR.SPACER
+		ypos+=SPQR.UNIT_HEIGHT+SPQR.SPACER
+		label=SWIDGET.buildLabel(lgui,a_name,SPQR.FONT_VERA_LG)
+		label.rect.x=xpos+((self.max_battle_string-label.rect.width)/2)
+		label.rect.y=ypos
+		lgui.windows[index].addWidget(label)
+		xpos=width-((SPQR.SPACER*2)+self.max_battle_string)
+		label=SWIDGET.buildLabel(lgui,d_name,SPQR.FONT_VERA_LG)
+		label.rect.x=xpos+((self.max_battle_string-label.rect.width)/2)
+		label.rect.y=ypos
+		lgui.windows[index].addWidget(label)
+
 		# now can add the texts as labels
 		xpos=SPQR.SPACER
-		ypos=(SPQR.SPACER*4)+SPQR.UNIT_HEIGHT
+		ypos=(SPQR.SPACER*6)+SPQR.UNIT_HEIGHT+SPQR.HALFSPCR
 		for entry in atext:
 			label=SWIDGET.buildLabel(lgui,entry[0])
 			label.rect.x=xpos+((self.max_battle_string-label.rect.width)/2)
@@ -134,7 +153,7 @@ class CBEngine:
 			ypos+=SPQR.SPACER*3
 		# do the same for the defender
 		xpos=width-((SPQR.SPACER*2)+self.max_battle_string)
-		ypos=(SPQR.SPACER*4)+SPQR.UNIT_HEIGHT
+		ypos=(SPQR.SPACER*6)+SPQR.UNIT_HEIGHT+SPQR.HALFSPCR
 		for entry in dtext:
 			label=SWIDGET.buildLabel(lgui,entry[0])
 			label.rect.x=xpos+((self.max_battle_string-label.rect.width)/2)
