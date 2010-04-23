@@ -998,6 +998,8 @@ class COptionMenu(CWidget):
 	"""OptionMenu widget lets user choose from a drop-down menu.
 	   Call with gui pointer, the x and y position, and then a
 	   list of the options, in text format"""
+	   # TODO: If you move the optmenu, you must manually set the
+	   # drop_rect co-ords as well
 	def __init__(self,gui,x,y,options):
 		CWidget.__init__(self,gui,None,SPQR.WT_OPTMENU,None,"COptionMenu")
 		# just a simple check - there has to be at least 1 option!
@@ -1089,6 +1091,21 @@ class COptionMenu(CWidget):
 		# before we finish off, we need somewhere to store the current option
 		self.option=options[0]
 
+	def setPositionX(self,x):
+		"""Used when you change the position of the optmenu"""
+		self.rect.x=x
+		self.drop_rect.x=x
+		for i in self.menu_highlights:
+			i[0].x=x+3
+
+	def setPositionY(self,y):
+		"""Used when you change the position of the optmenu"""
+		self.drop_rect.y=y+self.image.get_height()+SPQR.QTRSPCR
+		for i in self.menu_highlights:
+			# tricky shit, programming computers :-)
+			i[0].y+=(y-self.rect.y)
+		self.rect.y=y
+
 	def optionsSelect(self,lgui,handle,xpos,ypos):
 		"""Called when the OptionMenu is clicked
 			 Returns False if option did not change"""
@@ -1106,12 +1123,11 @@ class COptionMenu(CWidget):
 				self.drop_rect.y+=SPQR.WINSZ_TOP
 			# now the highlight rects:
 			for item in self.menu_highlights:
-				rect=item[0]
-				rect.x+=self.parent.rect.x
-				rect.y+=self.parent.rect.y
+				item[0].x+=self.parent.rect.x
+				item[0].y+=self.parent.rect.y
 				if(self.parent.border_offset==True):
-					rect.x+=SPQR.WINSZ_SIDE
-					rect.y+=SPQR.WINSZ_TOP
+					item[0].x+=SPQR.WINSZ_SIDE
+					item[0].y+=SPQR.WINSZ_TOP
 			self.drop_rect_update=True
 		
 		# got the click: firstly, update the screen with a new dirty

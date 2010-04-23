@@ -111,9 +111,7 @@ class CBEngine:
 		# finally the option buttons below all of this
 		# whats the width and height?
 		width=(SPQR.SPACER*5)+(self.max_battle_string*2)
-		height=300
-		# get a window
-		index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,width,height,"Battle",True))
+		widgets=[]
 		
 		# add the units as gfx widgets
 		n=len(attackers)
@@ -124,7 +122,7 @@ class CBEngine:
 			gfx=SWIDGET.buildImageAlpha(lgui,unit.image)
 			gfx.rect.x=xpos
 			gfx.rect.y=ypos
-			lgui.windows[index].addWidget(gfx)
+			widgets.append(gfx)
 			xpos+=SPQR.UNIT_WIDTH+SPQR.SPACER
 		n=len(defenders)
 		xs=(self.max_battle_string-((SPQR.UNIT_WIDTH*n)+(SPQR.SPACER*(n-1))))/2
@@ -133,7 +131,7 @@ class CBEngine:
 			gfx=SWIDGET.buildImageAlpha(lgui,unit.image)
 			gfx.rect.x=xpos
 			gfx.rect.y=ypos
-			lgui.windows[index].addWidget(gfx)
+			widgets.append(gfx)
 			xpos+=SPQR.UNIT_WIDTH+SPQR.SPACER			
 
 		# add the commanders names
@@ -142,12 +140,12 @@ class CBEngine:
 		label=SWIDGET.buildLabel(lgui,a_name,SPQR.FONT_VERA_LG)
 		label.rect.x=xpos+((self.max_battle_string-label.rect.width)/2)
 		label.rect.y=ypos
-		lgui.windows[index].addWidget(label)
+		widgets.append(label)
 		xpos=width-((SPQR.SPACER*2)+self.max_battle_string)
 		label=SWIDGET.buildLabel(lgui,d_name,SPQR.FONT_VERA_LG)
 		label.rect.x=xpos+((self.max_battle_string-label.rect.width)/2)
 		label.rect.y=ypos
-		lgui.windows[index].addWidget(label)
+		widgets.append(label)
 
 		# now can add the texts as labels
 		xpos=SPQR.SPACER
@@ -155,8 +153,8 @@ class CBEngine:
 		for entry in atext:
 			label=SWIDGET.buildLabel(lgui,entry[0])
 			label.rect.x=xpos+((self.max_battle_string-label.rect.width)/2)
-			label.rect.y=ypos
-			lgui.windows[index].addWidget(label)
+			label.rect.y=ypos1
+			widgets.append(label)
 			ypos1+=SPQR.SPACER*3
 		# do the same for the defender
 		xpos=width-((SPQR.SPACER*2)+self.max_battle_string)
@@ -164,20 +162,41 @@ class CBEngine:
 		for entry in dtext:
 			label=SWIDGET.buildLabel(lgui,entry[0])
 			label.rect.x=xpos+((self.max_battle_string-label.rect.width)/2)
-			label.rect.y=ypos
-			lgui.windows[index].addWidget(label)
+			label.rect.y=ypos2
+			widgets.append(label)
 			ypos2+=SPQR.SPACER*3
 		
 		# finally, we must add the battle options
 		if(ypos1>ypos2):
-			ypos=ypos1+(2*SPACER)
+			ypos=ypos1+(2*SPQR.SPACER)
 		else:
-			ypos=ypos2+(2*SPACER)
-		xpos=SPACER
-		#label=
-		#options=
+			ypos=ypos2+(2*SPQR.SPACER)
+			
+		label=SWIDGET.buildLabel(lgui,"Our attack must be ")
+		label.rect.y=ypos
+		ypos-=SPQR.HALFSPCR
+		options=SWIDGET.COptionMenu(lgui,0,ypos,["As normal",
+												 "Aggressive",
+												 "Defensive"])
+		options.active=True
+		# place in the middle
+		xpos=(width-(label.rect.width+options.rect.width+SPQR.HALFSPCR))/2
+		label.rect.x=xpos
+		xpos+=label.rect.width+SPQR.HALFSPCR
+		options.setPositionX(xpos)
+		widgets.append(label)
+		widgets.append(options)
+
+		# calculate total height
+		ypos+=5*SPQR.SPACER
+
+		# get a window
+		index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,width,ypos,"Battle",True))
+		# add the widgets to it
+		for i in widgets:
+			lgui.windows[index].addWidget(i)
 		
-		# make a list of 2 buttons
+		# make a list of the extra buttons
 		buttons=[]
 		buttons.append(SWINDOW.CButtonDetails("Attack",K_o,SEVENT.killModalWindow))
 		buttons.append(SWINDOW.CButtonDetails("Retreat",None,SEVENT.killModalWindow))
