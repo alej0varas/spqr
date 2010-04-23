@@ -40,6 +40,9 @@ class CBEngine:
 		getData(BTEXT.ground)
 		getData(BTEXT.change)
 		getData(BTEXT.morale)
+		# unit draw length might be even bigger:
+		if(((SPQR.UNIT_WIDTH*4)+(SPQR.SPACER*3))>self.max_battle_string):
+			self.max_battle_string=((SPQR.UNIT_WIDTH*4)+(SPQR.SPACER*3))
 
 	def initBattle(self,lgui,friend,enemy):
 		"""Battle goes through the whole process of enacting a battle.
@@ -113,7 +116,9 @@ class CBEngine:
 		index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,width,height,"Battle",True))
 		
 		# add the units as gfx widgets
-		xpos=SPQR.SPACER
+		n=len(attackers)
+		xpos=(self.max_battle_string-((SPQR.UNIT_WIDTH*n)+(SPQR.SPACER*(n-1))))/2
+		xpos+=SPQR.SPACER
 		ypos=SPQR.SPACER*2
 		for unit in attackers:
 			gfx=SWIDGET.buildImageAlpha(lgui,unit.image)
@@ -121,7 +126,9 @@ class CBEngine:
 			gfx.rect.y=ypos
 			lgui.windows[index].addWidget(gfx)
 			xpos+=SPQR.UNIT_WIDTH+SPQR.SPACER
-		xpos=(SPQR.SPACER*4)+self.max_battle_string
+		n=len(defenders)
+		xs=(self.max_battle_string-((SPQR.UNIT_WIDTH*n)+(SPQR.SPACER*(n-1))))/2
+		xpos=(SPQR.SPACER*3)+self.max_battle_string+xs
 		for unit in defenders:
 			gfx=SWIDGET.buildImageAlpha(lgui,unit.image)
 			gfx.rect.x=xpos
@@ -144,22 +151,31 @@ class CBEngine:
 
 		# now can add the texts as labels
 		xpos=SPQR.SPACER
-		ypos=(SPQR.SPACER*6)+SPQR.UNIT_HEIGHT+SPQR.HALFSPCR
+		ypos1=(SPQR.SPACER*6)+SPQR.UNIT_HEIGHT+SPQR.HALFSPCR
 		for entry in atext:
 			label=SWIDGET.buildLabel(lgui,entry[0])
 			label.rect.x=xpos+((self.max_battle_string-label.rect.width)/2)
 			label.rect.y=ypos
 			lgui.windows[index].addWidget(label)
-			ypos+=SPQR.SPACER*3
+			ypos1+=SPQR.SPACER*3
 		# do the same for the defender
 		xpos=width-((SPQR.SPACER*2)+self.max_battle_string)
-		ypos=(SPQR.SPACER*6)+SPQR.UNIT_HEIGHT+SPQR.HALFSPCR
+		ypos2=(SPQR.SPACER*6)+SPQR.UNIT_HEIGHT+SPQR.HALFSPCR
 		for entry in dtext:
 			label=SWIDGET.buildLabel(lgui,entry[0])
 			label.rect.x=xpos+((self.max_battle_string-label.rect.width)/2)
 			label.rect.y=ypos
 			lgui.windows[index].addWidget(label)
-			ypos+=SPQR.SPACER*3
+			ypos2+=SPQR.SPACER*3
+		
+		# finally, we must add the battle options
+		if(ypos1>ypos2):
+			ypos=ypos1+(2*SPACER)
+		else:
+			ypos=ypos2+(2*SPACER)
+		xpos=SPACER
+		#label=
+		#options=
 		
 		# make a list of 2 buttons
 		buttons=[]
