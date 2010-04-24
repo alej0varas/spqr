@@ -1,5 +1,6 @@
 Current TODO:
 
+Make battles work.
 Make sure every unit and city has a person assigned.
 Make auto-retreat work.
 Make sure you can't walk on sea or water.
@@ -7,7 +8,6 @@ Make load and save work.
 Add right-click context menu.
 Add A* routine for hexes (I'll use a library)
 Add region viewing to the map.
-Add battle screen and code.
 Add naval units, and movement.
 Add SR movement.
 Add simple economy.
@@ -22,7 +22,7 @@ This is list of TODO's (earliest first) that I have on record.
 		local pointer to lgui, and so on.
 *DONE*	Click on hex also checks unit and displays it
 *DONE*	Only allow map panning above the map itself
-*DONE* Make map co-ords checking perfect (lots of fussy debugging)
+*DONE*	Make map co-ords checking perfect (lots of fussy debugging)
 *DONE*	Make detection of hex clicking pixel perfect
 *DONE*	Make the menus look better (more space, icons, shortcuts)
 *DONE*	Add keyboard detection in events, and add some keyboard shortcuts for the menus
@@ -51,10 +51,11 @@ This is list of TODO's (earliest first) that I have on record.
 *DONE*	Amend keys at end turn
 *DONE*	Add 1 more key: f - move finished
 *DONE*	Add some unit details to the parser and game
-*DONE* Use the new GUI code
-*DONE* Create a class of all the code in spqr.py
-*DONE* Change all code so we have import spqr_defines as SPQR
-*DONE* Rotate all hexes by 90 degrees
-*DONE* Make flash animation pixel perfect
-*DONE*	Make animated move work properly again.
+*DONE*	Use the new GUI code
+*DONE*	Create a class of all the code in spqr.py
+*DONE*	Change all code so we have import spqr_defines as SPQR
+*DONE*	Rotate all hexes by 90 degrees
+*DONE*	Make flash animation pixel perfect
+*DONE*	Make animated move work properly again
+*DONE*	Add battle screen and code
 
