@@ -189,13 +189,12 @@ class CBEngine:
 
 		# calculate total height
 		ypos+=5*SPQR.SPACER
-
 		# get a window
 		index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,width,ypos,"Battle",True))
 		# add the widgets to it
 		for i in widgets:
 			lgui.windows[index].addWidget(i)
-		
+
 		# make a list of the extra buttons
 		buttons=[]
 		buttons.append(SWINDOW.CButtonDetails("Attack",K_o,SEVENT.killModalWindow))

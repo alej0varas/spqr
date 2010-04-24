@@ -1008,6 +1008,8 @@ class COptionMenu(CWidget):
 				print "Error: Asked for OptionMenu with no options"
 				# enter the error options
 				options=["Error","No","Options","Given"]
+
+		# first we must build the image as seen when the widget is unused
 		# calculate width
 		width=0
 		for i in options:
@@ -1066,12 +1068,15 @@ class COptionMenu(CWidget):
 		xpos=SPQR.SPACER+self.lgui.images[SPQR.OPTM_LHAND].get_width()
 		# we'll build the rects for menu checks as well
 		self.menu_highlights=[]
+		ymstart=self.rect.y+self.image.get_height()+SPQR.QTRSPCR+3
 		for txt in options:
 			rend=self.lgui.fonts[SPQR.FONT_VERA].render(txt,True,SPQR.COL_BLACK)
 			self.drop_image.blit(rend,(xpos,ypos))
 			ypos+=row_height
 			self.menu_highlights.append([(pygame.Rect(self.rect.x+3,
-				ypos+self.rect.h+4,xsize-6,row_height)),txt])
+				ymstart,xsize-6,row_height)),txt])
+			ymstart+=row_height
+
 		self.drop_rect=pygame.Rect(self.rect.x,
 			self.rect.y+self.image.get_height()+SPQR.QTRSPCR,xsize,ysize)
 		# we'll need to update it on the first loop:

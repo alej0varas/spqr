@@ -1212,6 +1212,7 @@ def widgetTest(lgui,handle,xpos,ypos):
 	lgui.windows[index].addWidget(scl_widget)
 	lgui.windows[index].addWidget(dc_widget)
 	lgui.windows[index].addWidget(opt_widget)
+	
 	# set it modal
 	lgui.windows[index].modal=True
 	# there is only one key, but don't forget to add an enter one button windows
