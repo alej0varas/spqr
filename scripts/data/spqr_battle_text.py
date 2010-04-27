@@ -5,7 +5,7 @@
 # these things will not change unless they are bad for the defender
 
 ground=[{"attack_pro":["On high ground",7],
-		 "attack_con":["On low gorund",-3],
+		 "attack_con":["On low ground",-3],
 		 "defend_pro":["On high ground",-4],
 		 "defend_con":["On low ground",2]},
 		  
@@ -38,7 +38,7 @@ change=[{"attack_pro":["Defenders disorganised",3],
 
 	    {"attack_pro":["Sun behind troops",2],
 		 "attack_con":["Facing the sun",-3],
-		 "defend_pro":["Sun behind trops",-1],
+		 "defend_pro":["Sun behind troops",-1],
 		 "defend_con":["Facing the sun",3]},
 
 	    {"attack_pro":["Good weather",1],
@@ -89,6 +89,24 @@ morale=[{"attack_pro":["Auspices good",2],
 		  "defend_con":["",0]},
 	   ]
 
+# we also hold here the win / lose texts and scores
+# these are prefaced with the text win_text when displayed
+# list after holds 2 values: the win / loser % unit loss
+win_text="You have achieved a "
+win_result=[["crushing victory!",0.3,0.9],
+		 	["massive win!",0.5,0.8],
+	 		["big victory.",0.12,0.7],
+ 			["win.",0.25,0.6],
+			["phyrric victory.",0.4,0.5]]
+
+# these are prefaced with
+lose_text="Your forces have been "
+lose_result=[["wiped out!",0.9,0.3],
+			 ["crushed!",0.8,0.5],
+			 ["severely beaten.",0.7,0.12],
+			 ["beaten.",0.6,0.25],
+			 ["fought to a stop.",0.5,0.4]]
+			 
 if(__name__=='__main__'):
 	print "[SPQR]: Syntax OK"
 

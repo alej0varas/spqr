@@ -27,6 +27,11 @@ import random as RAND
 class CBEngine:
 	def __init__(self):
 		self.max_battle_string=0
+		self.battle_odds=0
+		self.attack_str=0
+		self.defend_str=0
+		self.attackers=[]
+		self.defenders=[]
 
 	def getStringLengths(self,lgui):
 		"""Calculate the longest string in the battle texts"""
@@ -76,14 +81,14 @@ class CBEngine:
 		a_units=lgui.data.board.getHex(attack.xpos,attack.ypos).units
 		d_units=lgui.data.board.getHex(defend.xpos,defend.ypos).units
 		# these are just the id numbers, so get the units themselves
-		attackers=[lgui.data.troops.getUnitFromID(i) for i in a_units]
-		defenders=[lgui.data.troops.getUnitFromID(i) for i in d_units]
+		self.attackers=[lgui.data.troops.getUnitFromID(i) for i in a_units]
+		self.defenders=[lgui.data.troops.getUnitFromID(i) for i in d_units]
 		# if attackers is empty, an error: if defenders is empty, we win
-		if(attackers==[]):
+		if(self.attackers==[]):
 			print "[SPQR]: Error: Found empty attack stack"
 			# we take that a lose, for what it counts
 			return(False)
-		if(defenders==[]):
+		if(self.defenders==[]):
 			return(True)
 	
 		# get the various texts:
@@ -96,14 +101,14 @@ class CBEngine:
 		dtext.extend(d3)
 
 		# get commander names
-		if(attackers[0].commander==-1):
+		if(self.attackers[0].commander==-1):
 			a_name="ERROR"
 		else:
-			a_name=lgui.data.people[attackers[0].commander].getShortName()
-		if(defenders[0].commander==-1):
+			a_name=lgui.data.people[self.attackers[0].commander].getShortName()
+		if(self.defenders[0].commander==-1):
 			d_name="Unknown"
 		else:
-			d_name=lgui.data.people[defenders[0].commander].getShortName()
+			d_name=lgui.data.people[self.defenders[0].commander].getShortName()
 
 		# now we can start to build up the window. This is a complex one.
 		# from the top, we must show the units, then a message showing both
@@ -114,20 +119,25 @@ class CBEngine:
 		widgets=[]
 		
 		# add the units as gfx widgets
-		n=len(attackers)
+		n=len(self.attackers)
 		xpos=(self.max_battle_string-((SPQR.UNIT_WIDTH*n)+(SPQR.SPACER*(n-1))))/2
 		xpos+=SPQR.SPACER
 		ypos=SPQR.SPACER*2
-		for unit in attackers:
+		# store relative strengths here as well
+		self.attack_str=0
+		self.defend_str=0
+		for unit in self.attackers:
+			self.attack_str+=unit.strength*unit.quality
 			gfx=SWIDGET.buildImageAlpha(lgui,unit.image)
 			gfx.rect.x=xpos
 			gfx.rect.y=ypos
 			widgets.append(gfx)
 			xpos+=SPQR.UNIT_WIDTH+SPQR.SPACER
-		n=len(defenders)
+		n=len(self.defenders)
 		xs=(self.max_battle_string-((SPQR.UNIT_WIDTH*n)+(SPQR.SPACER*(n-1))))/2
 		xpos=(SPQR.SPACER*3)+self.max_battle_string+xs
-		for unit in defenders:
+		for unit in self.defenders:
+			self.defend_str+=unit.strength*unit.quality
 			gfx=SWIDGET.buildImageAlpha(lgui,unit.image)
 			gfx.rect.x=xpos
 			gfx.rect.y=ypos
@@ -150,7 +160,10 @@ class CBEngine:
 		# now can add the texts as labels
 		xpos=SPQR.SPACER
 		ypos1=(SPQR.SPACER*6)+SPQR.UNIT_HEIGHT+SPQR.HALFSPCR
+		# store the battle odds here as well
+		self.battle_odds=0	
 		for entry in atext:
+			self.battle_odds+=entry[1]
 			label=SWIDGET.buildLabel(lgui,entry[0])
 			label.rect.x=xpos+((self.max_battle_string-label.rect.width)/2)
 			label.rect.y=ypos1
@@ -160,6 +173,7 @@ class CBEngine:
 		xpos=width-((SPQR.SPACER*2)+self.max_battle_string)
 		ypos2=(SPQR.SPACER*6)+SPQR.UNIT_HEIGHT+SPQR.HALFSPCR
 		for entry in dtext:
+			self.battle_odds+=entry[1]
 			label=SWIDGET.buildLabel(lgui,entry[0])
 			label.rect.x=xpos+((self.max_battle_string-label.rect.width)/2)
 			label.rect.y=ypos2
@@ -197,7 +211,7 @@ class CBEngine:
 
 		# make a list of the extra buttons
 		buttons=[]
-		buttons.append(SWINDOW.CButtonDetails("Attack",K_o,SEVENT.killModalWindow))
+		buttons.append(SWINDOW.CButtonDetails("Attack",None,self.doAttack))
 		buttons.append(SWINDOW.CButtonDetails("Retreat",None,SEVENT.killModalWindow))
 		lgui.windows[index].buildButtonArea(buttons,False)
 		# we have to add modal keypresses ourselves
@@ -210,6 +224,43 @@ class CBEngine:
 		win_img=lgui.windows[index].drawWindow()
 		lgui.addDirtyRect(win_img,lgui.windows[index].rect)
 		return(False)
+
+	def doAttack(self,lgui,handle,x,y):
+		"""Calculate the battle results, display the damages, and
+		   move the units around the map"""
+		# calculate the % odds	
+		win_chance=((self.battle_odds+100)*self.attack_str)
+		win_chance=float(win_chance)/float(win_chance+(self.defend_str*100.0))
+		# we use a REALLY simple yes / no battle calculation for now
+		if(RAND.random()<win_chance):
+			# the battle has been won, get a random text
+			results=RAND.choice(BTEXT.win_result)
+			text=BTEXT.win_text+results[0]
+		else:
+			# the battle has been lost, get a random text
+			results=RAND.choice(BTEXT.lose_result)
+			text=BTEXT.lose_text+results[0]
+		# calculate losses
+		alosses=0
+		for unit in self.attackers:
+			new_str=int(unit.strength*results[1])
+			alosses+=unit.strength-new_str
+			unit.strength=new_str
+		# and for the defenders
+		dlosses=0
+		for unit in self.attackers:
+			new_str=int(unit.strength*results[2])
+			dlosses+=unit.strength-new_str
+			unit.strength=new_str
+		# randomise that number somewhat
+		error=int(((RAND.random()/4.0)+0.8)*dlosses)
+		# now display all of that in a messagebox
+		message=text+"\n\n"+"Your losses: "+str(alosses)
+		message+="\nEnemy losses: "+str(error)
+		lgui.messagebox(SPQR.BUTTON_OK,message,"Results")
+		# TODO: move the units here
+		# close the battle window
+		SEVENT.killModalWindow(lgui,None,-1,-1)
 	
 	def getTexts(self,sample,min_texts,max_texts):
 		"""Return the data for the ground attack texts

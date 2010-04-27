@@ -49,17 +49,17 @@ unit Preatorians
 	(25,22)
 	(IMG_PRAETOR)
 	(Romans)
-	(100,3,1)
+	(100,2,1)
 unit Legio_II
 	(25,21)
 	(IMG_LEGION)
 	(Romans)
-	(95,2,2)
+	(95,1,2)
 unit Legio_IV
 	(28,27)
 	(IMG_LEGION)
 	(Romans)
-	(95,2,2)
+	(95,1,2)
 
 # and finally, the enemy ones
 
@@ -67,32 +67,32 @@ unit Carthaginian_I
 	(24,20)
 	(IMG_BHORSE)
 	(Carthaginians)
-	(50,4,5)
+	(25,5,5)
 unit Carthaginian_II
 	(24,18)
 	(IMG_BHORSE)
 	(Carthaginians)
-	(50,4,5)
+	(25,5,5)
 unit Carthaginian_III
 	(25,19)
 	(IMG_BHORSE)
 	(Carthaginians)
-	(50,4,5)
+	(25,5,5)
 unit Carthaginian_IV
 	(24,20)
 	(IMG_BHORSE)
 	(Carthaginians)
-	(50,4,5)
+	(25,5,5)
 unit Carthaginian_V
 	(23,20)
 	(IMG_BHORSE)
 	(Carthaginians)
-	(50,4,5)
+	(25,5,5)
 unit Carthaginian_VI
-	(23,19)
+	(25,19)
 	(IMG_BHORSE)
 	(Carthaginians)
-	(50,4,5)
+	(25,5,5)
 
 # now we get the individuals.
 # they are defined as follows:
