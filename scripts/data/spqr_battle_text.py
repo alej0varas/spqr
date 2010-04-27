@@ -93,16 +93,16 @@ morale=[{"attack_pro":["Auspices good",2],
 # these are prefaced with the text win_text when displayed
 # list after holds 2 values: the win / loser % unit loss
 win_text="You have achieved a "
-win_result=[["crushing victory!",0.3,0.9],
-		 	["massive win!",0.5,0.8],
+win_result=[["crushing victory!",0.03,0.9],
+		 	["massive win!",0.05,0.8],
 	 		["big victory.",0.12,0.7],
  			["win.",0.25,0.6],
 			["phyrric victory.",0.4,0.5]]
 
 # these are prefaced with
 lose_text="Your forces have been "
-lose_result=[["wiped out!",0.9,0.3],
-			 ["crushed!",0.8,0.5],
+lose_result=[["wiped out!",0.9,0.03],
+			 ["crushed!",0.8,0.05],
 			 ["severely beaten.",0.7,0.12],
 			 ["beaten.",0.6,0.25],
 			 ["fought to a stop.",0.5,0.4]]
