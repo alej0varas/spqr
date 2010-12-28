@@ -16,13 +16,6 @@
 
 import sys,fileinput
 import spqr_defines as SPQR
-from people import spqr_people as SPEOPLE
-from battles import spqr_battle as SBATTLE
-from maps import spqr_map as SMAP
-from units import spqr_unit as SUNIT
-from army import spqr_army as SARMY
-from cities import spqr_city as SCITY
-from player import spqr_player as SPLAYER
 
 # definitions for the map, players and units
 # if any value holds an index number, then that is a bug,

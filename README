@@ -3,8 +3,8 @@ SPQR
 Open a terminal and run the program spqr.py. You can run spqr.py -? to see the
 command line options.
 
-Currently the game is not playable, but you can scroll the map, move the units
-and check out the GUI so far.
+Currently the game is not playable, but you can scroll the map and check out the GUI so far.
+It's easiest to drag the map with the middle mouse down for now.
 
 Please leave any comments etc at the website forum: 
 

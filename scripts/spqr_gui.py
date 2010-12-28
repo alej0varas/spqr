@@ -80,7 +80,7 @@ class CGFXEngine:
 		pygame.display.set_caption("SPQR "+SPQR.VERSION)
 		# next up is to load in some images into the gfx array
 		self.images=[]
-		self.images.append(pygame.image.load("../gfx/map.png").convert())
+		self.images.append(pygame.image.load("../gfx/map/map.jpg").convert())
 		# add a back buffer map render.. this will become the map that we render
 		foo=pygame.Surface((self.images[SPQR.MAIN_MAP].get_width(),
 			self.images[SPQR.MAIN_MAP].get_height()))
