@@ -42,7 +42,7 @@ class CDirtyRect:
 # this class also inits the gfx display
 # call with the x and y resolution of the screen, and a pointer to the data
 class CGFXEngine:
-	def __init__(self,width,height,info,fullscreen):
+	def __init__(self,width,height,fullscreen):
 		"""Long, boring routine that initiates the gui"""
 		pygame.init()
 		# ok, now init the basic screen
@@ -53,7 +53,6 @@ class CGFXEngine:
 		else:
 			self.screen=pygame.display.set_mode((width,height),HWSURFACE|DOUBLEBUF)
 		self.displayLoadingScreen(width,height)
-		self.data=info
 		self.windows=[]
 		# the font that the messagebox will use:
 		self.msg_font=SPQR.FONT_VERA
@@ -116,7 +115,7 @@ class CGFXEngine:
 		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf",SPQR.FONT_SMALL))
 		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf",SPQR.FONT_LARGE))
 		# enable keyboard reponses
-		self.keyboard=SKEY.CKeyboard()	
+		self.keyboard=SKEY.CKeyboard()
 		# render the city texts
 		self.renderCityNames()
 		# set up sound
@@ -125,7 +124,7 @@ class CGFXEngine:
 		self.noise.startNextSong()
 		# some basic variables that SPQR uses regularly
 		# where to start the map blit from when blasting it to the screen
-		foo=(SPQR.SCREEN_HEIGHT-(SPQR.BBOX_HEIGHT+self.images[SPQR.WIN_TL].get_height()))+1
+		foo=(SPQR.SCREEN_HEIGHT-self.images[SPQR.WIN_TL].get_height())+1
 		# define the 'from' rectangle
 		self.map_screen=pygame.Rect((0,0,SPQR.SCREEN_WIDTH,foo))
 		# and the target rectangle for the blit:
@@ -165,8 +164,8 @@ class CGFXEngine:
 			self.images[SPQR.SMALL_MAP].get_height())
 		self.mini_dest=pygame.Rect(self.mini_x_offset-1,self.mini_y_offset-1,0,0)
 		# load other data required by mapboard
-		self.data.dataPygameInit(self)
 		self.updateMiniMap()
+		self.flash_on=False
 
 	def displayLoadingScreen(self,width,height):
 		"""Displays the loading screen"""
@@ -181,11 +180,6 @@ class CGFXEngine:
 		"""Routine renders all the images for the city names,
 		   and places them in the city instances. Must be done
 		   in main init routine before any map rendering is performed"""
-		for city in self.data.cities:
-			# the True part means use antialiasing
-			city.txt_image=self.fonts[SPQR.FONT_VERA_SM].render(city.name,
-				True,SPQR.CITY_TXT_COL)
-		# that was pretty painless
 		return(True)
 		
 	# now a function to add a window
@@ -283,8 +277,8 @@ class CGFXEngine:
 		"""Updates (i.e. redraws) map to main screen"""
 		self.screen.blit(self.images[SPQR.BACK_MAP],self.map_rect,self.map_screen)
 		# before blitting the mini map rect, we need to update the mini map itself
-		self.screen.blit(self.images[SPQR.SMALL_MAP],self.mini_dest,self.mini_source)
-		pygame.draw.rect(self.screen,(0,0,0),self.blit_rect,1)
+		#self.screen.blit(self.images[SPQR.SMALL_MAP],self.mini_dest,self.mini_source)
+		#pygame.draw.rect(self.screen,(0,0,0),self.blit_rect,1)
 		pygame.display.flip()
 		# doing this *always* redraws the units as well, so make sure that
 		# the next flash unit action will be to erase the unit
@@ -294,6 +288,7 @@ class CGFXEngine:
 	def updateMiniMap(self):
 		"""Redraws mini-map, usually called after any changes to
 		   the map on the main screen"""
+		return(True)
 		# work out what the corrent co-ords are for the mini-map cursor
 		xpos=self.map_screen.x/self.width_ratio
 		ypos=self.map_screen.y/self.height_ratio
@@ -309,25 +304,6 @@ class CGFXEngine:
 		   removed from the map. Always returns True"""
 		# blit the map_render original across first
 		self.images[SPQR.BACK_MAP].blit(self.map_render,(0,0))
-		id_value=self.data.troops.getUnitFromHighlight().id_number
-		if len(self.data.troops.units)>0:
-			for piece in self.data.troops.units:
-				x,y=self.data.board.getMapPixel(piece.xpos,piece.ypos)
-				# blit the image
-				self.images[SPQR.BACK_MAP].blit(self.images[piece.image],(x,y))
-				# more than 1 unit here?
-				index=self.data.board.getHexIndex(piece.xpos,piece.ypos)
-				total=len(self.data.board.hexes[index].units)
-				# subtract 1 from total if current highlight is on hex
-				# as it will *not* be there after the animation!
-				if(self.data.board.hexes[index].units.count(id_value)==1):
-					total-=1
-				if(total>1):
-					# yes, blit the graphic as well then
-					self.images[SPQR.BACK_MAP].blit(self.images[SPQR.MV_OVRLY_EXT],
-						(SPQR.MV_OBCK_X+x,SPQR.MV_OBCK_Y+y))
-		# best to update the map now as well
-		# this call also takes care of any unit flash issues we may have
 		self.updateMap()
 		return(True)
 
@@ -352,24 +328,6 @@ class CGFXEngine:
 		self.map_screen.y=ypos
 		return(True)
 		
-	def getHexOnscreen(self,xpos,ypos):
-		"""Call routine with x and y co-ords of a hex on the board.
-		   It will attempt to return the x and y co-ords of a pixel
-		   on the screen that is in that hex (or else returns -1,-1)"""
-		# firstly, get the x/y coords for the top_left of that hex
-		xpos,ypos=self.data.board.getMapPixel(xpos,ypos)
-		# offset into centre of hex
-		xpos+=SPQR.CLICK_X
-		ypos+=SPQR.CLICK_Y+SPQR.WINSZ_TOP
-		# just check that matches our render area:
-		if(self.map_screen.collidepoint(xpos,ypos)==True):
-			# yes, it's fine, just offset to screen position
-			xpos-=self.map_screen.x
-			ypos-=self.map_screen.y
-			return(xpos,ypos)
-		else:
-			return(-1,-1)
-	
 	def normalizeScrollArea(self):
 		"""Checks co-ords after scrolling the map to make sure
 		   they are not out of range. Resets them if needed"""
@@ -651,266 +609,6 @@ class CGFXEngine:
 		"""Updates information in bottom box, dependant on users click
 		   over the map. Call with x and y, being the click on the map
 		   in screen co-ords"""
-		# subtract height of menu window from y location
-		# nasty bug that took some finding!
-		y-=SPQR.WINSZ_TOP
-		# always update the given hex
-		self.drawSmallHex(x,y)
-		# need to update the unit as well?
-		bx,by=self.data.board.getXYFromMap(x+self.map_screen.x,y+self.map_screen.y)
-		uindex=self.data.getXYUnit(bx,by)
-		# uindex holds index of unit, or -1 if no match
-		if(uindex!=-1):
-			self.drawHexUnitContents(bx,by)
-			self.drawUnitInfo(uindex)
-			# store the unit id
-			idvalue=self.data.troops.units[uindex].id_number
-			self.windows[SPQR.WIN_INFO].items[self.unit_widget].data=idvalue
-		else:
-			# no unit, so blank this area next refresh
-			self.windows[SPQR.WIN_INFO].items[self.unit_widget].visible=False
-			self.windows[SPQR.WIN_INFO].items[self.unit_widget].active=False
-			self.windows[SPQR.WIN_INFO].items[self.unit_txt_widget].visible=False
-			self.windows[SPQR.WIN_INFO].items[self.unit_graph_widget].visible=False
-			# kill display of units on current hex
-			self.windows[SPQR.WIN_INFO].items[self.display_units[0]].visible=False
-			self.windows[SPQR.WIN_INFO].items[self.display_units[1]].visible=False
-			self.windows[SPQR.WIN_INFO].items[self.display_units[2]].visible=False
-			self.windows[SPQR.WIN_INFO].items[self.display_units[3]].visible=False
-			self.windows[SPQR.WIN_INFO].items[self.display_units[0]].active=False
-			self.windows[SPQR.WIN_INFO].items[self.display_units[1]].active=False
-			self.windows[SPQR.WIN_INFO].items[self.display_units[2]].active=False
-			self.windows[SPQR.WIN_INFO].items[self.display_units[3]].active=False
-			# remove 'finish turn' key, if it was ever there
-			self.keyboard.removeKey(K_f)
-			self.data.troops.current_highlight=-1
-			# turn off unit flashing and clear any move overlay
-			self.unitFlashAndClear()
-		# do the same for the city area, practically the same as above
-		uindex=self.data.getXYCity(bx,by)
-		# as above
-		if(uindex!=-1):
-			self.drawCityInfo(uindex)
-		else:
-			self.windows[SPQR.WIN_INFO].items[self.city_widget].visible=False
-			self.windows[SPQR.WIN_INFO].items[self.city_widget].active=False
-			self.windows[SPQR.WIN_INFO].items[self.city_txt_widget].visible=False
-			self.data.city_highlight=-1
-		# thats it, update the screen and we can go
-		self.updateGUI()
-		return(True)
-		
-	def drawSmallHex(self,x,y):
-		"""Updates the small hex drawn in the information box
-		   Call with the co-ords (x,y) of the mouse click"""
-		# get the gfx co-ords
-		xd,yd=self.data.board.getGFXMapCoOrds(x+self.map_screen.x,y+self.map_screen.y)
-		# create a new alpha image
-		draw=pygame.Surface((self.images[SPQR.HEX_BORDER].get_width(),
-			self.images[SPQR.HEX_BORDER].get_height()),SRCALPHA)
-		# blit hex area to it
-		rectd=pygame.Rect(xd,yd,draw.get_width(),draw.get_height())
-		draw.blit(self.images[SPQR.MAIN_MAP],
-			SPQR.HEX_BDR_OFF,rectd)
-		# the the map border over that
-		draw.blit(self.images[SPQR.HEX_BORDER],(0,0))
-		# get the widget to fiddle with
-		hx_draw=self.windows[SPQR.WIN_INFO].items[self.hex_widget]
-		# blit the new gfx onto it, make it visible and update
-		hx_draw.image.blit(draw,(0,0))	
-		hx_draw.visible=True
-		return(True)
-		
-	def drawHexUnitContents(self,x,y):
-		"""Draws and updates the 4 unit details to the left
-		   of the mini map. Call with x and y pos of hex"""
-		# first of, erase all current display blocks:
-		self.windows[SPQR.WIN_INFO].items[self.display_units[0]].visible=False
-		self.windows[SPQR.WIN_INFO].items[self.display_units[1]].visible=False
-		self.windows[SPQR.WIN_INFO].items[self.display_units[2]].visible=False
-		self.windows[SPQR.WIN_INFO].items[self.display_units[3]].visible=False
-		# and de-activate:
-		self.windows[SPQR.WIN_INFO].items[self.display_units[0]].active=False
-		self.windows[SPQR.WIN_INFO].items[self.display_units[1]].active=False
-		self.windows[SPQR.WIN_INFO].items[self.display_units[2]].active=False
-		self.windows[SPQR.WIN_INFO].items[self.display_units[3]].active=False
-		# now see how many units there are
-		i=len(self.data.board.hexes[self.data.board.getHexIndex(x,y)].units)
-		# nothing to do if no units
-		if(i<1):
-			return(True)
-		# start at index 3
-		index=3
-		# and get the unit info ready
-		unit_info=self.data.board.hexes[self.data.board.getHexIndex(x,y)].units
-		while(i>0):
-			# now we need to actually blit the graphic we really want
-			# firstly let's build up what we want:
-			img=pygame.Surface((self.images[SPQR.IMG_LEGION].get_width(),
-				self.images[SPQR.IMG_LEGION].get_height()),SRCALPHA)
-			# flood fill with background color
-			img.fill(SPQR.BGUI_COL)
-			# are we drawing the last unit, i.e. the one to highlight?
-			if(i==1):
-				# yes, so do it
-				img.blit(self.images[SPQR.UNIT_BACKDROP],(0,0))
-			# and then draw the unit
-			img.blit(self.images[self.data.troops.unitImgFromID(unit_info[i-1])],(0,0))
-			# we have to overlay 2 parts: a mini graph of the stats, and
-			# how many moves are left
-			# unit_info[i-1] is the id number
-			foo=self.data.troops.units[self.data.troops.getIndexFromID(unit_info[i-1])]
-			# calculate heights
-			height=img.get_height()/2
-			sh=int(float(height/100.0)*float(foo.morale))
-			mh=int(float(height/100.0)*float(foo.morale))
-			qh=int(float(height/100.0)*float(foo.quality))
-			# blit the 3 basic graphs
-			grect=pygame.Rect(img.get_width()-(SPQR.HALFSPCR*3),0,SPQR.HALFSPCR,0)
-			grect.y=img.get_height()-sh
-			grect.h=sh
-			pygame.draw.rect(img,SPQR.COLG_BLUE,grect,0)
-			grect.x+=SPQR.HALFSPCR
-			grect.y=img.get_height()-mh
-			grect.h=mh
-			pygame.draw.rect(img,SPQR.COLG_RED,grect,0)
-			grect.x+=SPQR.HALFSPCR
-			grect.y=img.get_height()-qh
-			grect.h=qh
-			pygame.draw.rect(img,SPQR.COLG_GREEN,grect,0)
-			# Now do the movement left
-			if(foo.moves_left>0):
-				image=(SPQR.MV_OVRLY_1+foo.moves_left)-1
-				# get image sizes:
-				img.blit(self.images[SPQR.MV_OVRLY_BACK],(0,0))
-				img.blit(self.images[image],(0,0))
-			# get the actual widget and update it
-			udraw=self.windows[SPQR.WIN_INFO].items[self.display_units[index]]
-			udraw.image.blit(img,(0,0))
-			udraw.visible=True
-			udraw.active=True
-			i-=1
-			index-=1
-		return(True)
-		
-	def drawUnitInfo(self,index):
-		"""Call with the unit index number you want to display. Ultimatly 
-			 this will show all the unit details you need to see"""
-		# create alpha to blit to
-		draw=pygame.Surface((self.images[SPQR.IMG_LEGION].get_width(),
-			self.images[SPQR.IMG_LEGION].get_height()),SRCALPHA)
-		# flood fill with background color
-		draw.fill(SPQR.BGUI_COL)
-		# blit the unit gfx over it
-		img=self.data.troops.units[index].image
-		draw.blit(self.images[img],(0,0))
-		# get the actual widget to update, draw and update it
-		u_draw=self.windows[SPQR.WIN_INFO].items[self.unit_widget]
-		u_draw.image.blit(draw,(0,0))
-		u_draw.visible=True
-		u_draw.active=True
-		# now set the name label
-		name=self.windows[SPQR.WIN_INFO].items[self.unit_txt_widget]
-		name.visible=True
-		name.text=self.data.troops.units[index].name
-		# redraw the label
-		name.buildLabel()
-		# build the graph
-		self.drawUnitGraph(index)
-		self.windows[SPQR.WIN_INFO].items[self.unit_graph_widget].visible=True
-		# remember, store the id number, *not* the index
-		# oh the grief caused by this changeover would thus vex even the gods!
-		self.data.troops.current_highlight=self.data.troops.units[index].id_number
-		# make this the current active unit if Roman
-		if((self.data.troops.units[index].owner==SPQR.ROME_SIDE)and
-			(self.data.troops.units[index].turn_done==False)):
-			self.timer=True
-			# draw move overlay
-			x=self.data.troops.units[index].xpos
-			y=self.data.troops.units[index].ypos
-			# add possibilty of key f - finish current turn
-			self.keyboard.addKey(K_f,SEVENT.finishUnitTurn)
-		else:
-			# an enemy unit, don't flash or add move area
-			# blit over the old move overlay
-			self.unitFlashAndClear()
-			self.data.troops.current_highlight=self.data.troops.units[index].id_number
-			# remove 'finish turn' key
-			self.keyboard.removeKey(K_f)
-		return(True)
-
-	def drawUnitGraph(self,index):
-		"""Call this to update the unit graph display
-		   Pass the unit index number you wish to use"""
-		# get the new graph and blit it over the area
-		img=self.windows[SPQR.WIN_INFO].items[self.unit_graph_widget]
-		new_img=self.returnGraphImage(index)
-		img.image.blit(new_img,(0,0))
-		return(True)
-
-	def returnGraphImage(self,index):
-		"""Does the grunt work of producing a graph of the unit's stats
-		   Returns the actual new image
-		   Call with the index of the unit"""
-		img=pygame.Surface((self.images[SPQR.GRAPH_UNIT].get_width(),
-		                  	self.images[SPQR.GRAPH_UNIT].get_height()))	
-		# blit the basic graph background
-		img.blit(self.images[SPQR.GRAPH_UNIT],(0,0))
-		# now draw the 3 graphs
-		grect=pygame.Rect(1,0,SPQR.UNIT_GRAPHX,0)
-		grect.h=(float(SPQR.UNIT_GRAPHY/100.0)*float(self.data.troops.units[index].strength))
-		grect.y=(SPQR.UNIT_GRAPHY-grect.h)+1
-		# draw the rect
-		pygame.draw.rect(img,SPQR.COLG_BLUE,grect,0)
-		# draw highlights
-		pygame.draw.line(img,SPQR.COLG_BHIGH,(grect.x,grect.y),
-			(grect.x+grect.w-1,grect.y),1)
-		pygame.draw.line(img,SPQR.COLG_BHIGH,(grect.x,grect.y),
-			(grect.x,grect.y+grect.h-1),1)
-		# now do morale
-		grect.x+=SPQR.UNIT_GRAPHX
-		grect.h=(float(SPQR.UNIT_GRAPHY/100.0)*float(self.data.troops.units[index].morale))
-		grect.y=(SPQR.UNIT_GRAPHY-grect.h)+1
-		pygame.draw.rect(img,SPQR.COLG_RED,grect,0)
-		pygame.draw.line(img,SPQR.COLG_RHIGH,(grect.x,grect.y),
-			(grect.x+grect.w-1,grect.y),1)
-		pygame.draw.line(img,SPQR.COLG_RHIGH,(grect.x,grect.y),
-			(grect.x,grect.y+grect.h-1),1)
-		# then quality
-		grect.x+=SPQR.UNIT_GRAPHX
-		grect.h=(float(SPQR.UNIT_GRAPHY/100.0)*float(self.data.troops.units[index].quality))
-		grect.y=(SPQR.UNIT_GRAPHY-grect.h)+1
-		pygame.draw.rect(img,SPQR.COLG_GREEN,grect,0)
-		pygame.draw.line(img,SPQR.COLG_GHIGH,(grect.x,grect.y),
-			(grect.x+grect.w-1,grect.y),1)
-		pygame.draw.line(img,SPQR.COLG_GHIGH,(grect.x,grect.y),
-			(grect.x,grect.y+grect.h-1),1)
-		return(img)
-
-	def drawCityInfo(self,index):
-		"""Call with the city index number you want to display. Works
-		   in almost the same way as drawUnitInfo()"""
-		# create alpha blit
-		draw=pygame.Surface((self.images[SPQR.IMG_ROME].get_width(),
-			self.images[SPQR.IMG_ROME].get_height()),SRCALPHA)
-		# flood fill with background color
-		draw.fill(SPQR.BGUI_COL)
-		# blit the city gfx over it
-		img=self.data.cities[index].image
-		draw.blit(self.images[img],(0,0))
-		# get the actual widget to update, draw and update it
-		u_draw=self.windows[SPQR.WIN_INFO].items[self.city_widget]
-		u_draw.image.blit(draw,(0,0))
-		u_draw.visible=True
-		u_draw.active=True
-		# now set the name label
-		name=self.windows[SPQR.WIN_INFO].items[self.city_txt_widget]
-		name.visible=True
-		name.text=self.data.cities[index].name
-		# redraw the label
-		name.buildLabel()
-		# make this the current active city
-		self.data.city_highlight=index
 		return(True)
 
 	# this is the main game loop. There are 2 varients of it, one which keeps
@@ -1028,54 +726,14 @@ class CGFXEngine:
 		# blit the original map across first
 		self.images[SPQR.BACK_MAP].blit(self.images[SPQR.MAIN_MAP],(0,0))
 		# start by blitting the cities
-		if(len(self.data.cities)>0):
-			for city in self.data.cities:
-				x,y=self.data.board.getMapPixel(city.xpos,city.ypos)
-				# blit the image
-				self.images[SPQR.BACK_MAP].blit(self.images[city.image],(x,y))
-				# correct to display underneath hex
-				y+=SPQR.HEX_PIX_H-city.txt_image.get_height()+SPQR.HALFSPCR
-				x-=(city.txt_image.get_width()-SPQR.HEX_FULLW)/2
-				self.images[SPQR.BACK_MAP].blit(city.txt_image,(x,y))
-
 		# save this image as it is for now without the images for using
 		# as the backdrop for all unit animations
 		self.map_render.blit(self.images[SPQR.BACK_MAP],(0,0))
-		if(len(self.data.troops.units)>0):
-			for piece in self.data.troops.units:
-				x,y=self.data.board.getMapPixel(piece.xpos,piece.ypos)
-				# blit the image
-				self.images[SPQR.BACK_MAP].blit(self.images[piece.image],(x,y))
-				# more than one unit here?
-				index=self.data.board.getHexIndex(piece.xpos,piece.ypos)
-				if(len(self.data.board.hexes[index].units)>1):
-					# yes, blit the graphic as well then
-					self.images[SPQR.BACK_MAP].blit(self.images[SPQR.MV_OVRLY_EXT],
-						(SPQR.MV_OBCK_X+x,SPQR.MV_OBCK_Y+y))
 		return(True)
 
 	def renderGameTurn(self):
 		"""Routine draws image for the game turn counter. Call at the
 		   start of every turn, just before updating the screen"""
-		# get an alpha surface
-		draw=pygame.Surface((self.images[SPQR.IMG_EAGLE].get_width(),
-			SPQR.TXT_MIN_LG),SRCALPHA)
-		# render top part of eagle to it
-		draw.blit(self.images[SPQR.IMG_EAGLE],(0,0))
-		# get text for game turn
-		if(self.data.info.year<0):
-			string=str(self.data.info.year*(-1))
-			string+=" B.C."
-		else:
-			string=str(data.year)+" A.D."
-		# render the text and then over the main image
-		self.fonts[SPQR.FONT_VERA_LG].set_bold(True)
-		txt_img=self.fonts[SPQR.FONT_VERA_LG].render(string,True,SPQR.GAME_TRN_TXT)
-		self.fonts[SPQR.FONT_VERA_LG].set_bold(True)
-		x=(draw.get_width()-txt_img.get_width())/2
-		draw.blit(txt_img,(x,0))
-		# thats it, store the new image
-		self.windows[SPQR.WIN_INFO].items[self.turn_widget].image=draw
 		return
 
 	def blitCheckbox(self,status,xpos,ypos):
@@ -1290,7 +948,7 @@ class CGFXEngine:
 					(SPQR.MV_OVER_EXX,SPQR.MV_OVER_EXY))
 						
 			# make sure that we draw the erase part of the image first
-			self.data.flash_on=True
+			self.flash_on=True
 			# finally (!) we can update the back map. We've already rendered back
 			# the original image from last time, so let's just blit our new part:
 			self.images[SPQR.BACK_MAP].blit(arrow_img,self.flash_rect)
@@ -1315,21 +973,21 @@ class CGFXEngine:
 			if(dest.y==SPQR.WINSZ_TOP-1):
 				area.y=SPQR.MOVESZ_Y-dest.h
 			# now blit the right rectangle:
-			if(self.data.flash_on==True):
+			if(self.flash_on==True):
 				self.screen.blit(self.flash_erase,dest,area)
 				# be prepared for next time...
-				self.data.flash_on=False
+				self.flash_on=False
 			else:
 				self.screen.blit(self.flash_draw,dest,area)
-				self.data.flash_on=True
+				self.flash_on=True
 			# update the screen and we're done
 			pygame.display.update(dest)
 			return(True)
 		# the rectangles didn't overlap, but get ready for next round:
-		if(self.data.flash_on==True):
-			self.data.flash_on=False
+		if(self.flash_on==True):
+			self.flash_on=False
 		else:
-			self.data.flash_on=True
+			self.flash_on=True
 		return(False)
 
 	def clearFlash(self):
@@ -1345,11 +1003,11 @@ class CGFXEngine:
 		if(self.timer==False):
 			return
 		# is unit currently on screen?
-		if(self.data.flash_on==False):
+		if(self.flash_on==False):
 			# no, so update it
 			self.images[SPQR.BACK_MAP].blit(self.flash_draw,self.flash_rect)
 			self.updateMap()
-			self.data.flash_on=True
+			self.flash_on=True
 		# turn flashing off
 		self.timer=False
 
@@ -1363,172 +1021,16 @@ class CGFXEngine:
 		   didn't happen for some reason"""
 		# if the end turn flag is on, then don't highlight, whatever
 		# else is happening
-		if(self.data.info.end_turn==True):
-			return(False)
+		#if(self.data.info.end_turn==True):
+		#	return(False)
 		# already on?
-		if(self.timer==True):
-			return(True)
+		#if(self.timer==True):
+		#	return(True)
 		# make sure first call is show the erase frame
-		self.data.flash_on=True
+		#self.flash_on=True
 		# only flash if current unit is roman
-		if(self.data.troops.getUnitFromHighlight().owner==SPQR.ROME_SIDE):
-			self.timer=True
-		return(True)
-
-	# some code to prepare for unit movement:
-	def prepareMove(self):
-		"""Routine to redraw all units EXCEPT the current highlight one
-		   onto a new back map. Returns the x,y postion of the current
-		   unit on the BACK_MAP screen (or at least, where it should be)"""
-		# blit the map_render original across first
-		self.images[SPQR.BACK_MAP].blit(self.map_render,(0,0))
-		text=self.data.troops.getUnitFromHighlight().name
-		id_value=self.data.troops.getUnitFromHighlight().id_number
-		# prepare for possible error
-		xoff=-1
-		yoff=-1
-		if len(self.data.troops.units)>0:
-			for piece in self.data.troops.units:
-				# just blit unit onto map
-				x,y=self.data.board.getMapPixel(piece.xpos,piece.ypos)
-				# blit the image, unless it's the main one
-				if(piece.name!=text):
-					self.images[SPQR.BACK_MAP].blit(self.images[piece.image],(x,y))
-					# more than 1 unit here?
-					index=self.data.board.getHexIndex(piece.xpos,piece.ypos)
-					total=len(self.data.board.hexes[index].units)
-					# subtract 1 from total if current highlight is on hex
-					# as it will *not* be there after the animation!
-					if(self.data.board.hexes[index].units.count(id_value)==1):
-						total-=1
-					if(total>1):
-						# yes, blit the graphic as well then
-						self.images[SPQR.BACK_MAP].blit(self.images[SPQR.MV_OVRLY_EXT],
-							(SPQR.MV_OBCK_X+x,SPQR.MV_OBCK_Y+y))
-				else:
-					# save data for later
-					xoff=x
-					yoff=y
-		return(xoff,yoff)
-		
-	def checkMoveBounds(self,rect):
-		"""To ensure that the whole move area gfx fits on the screen,
-		   we move the map if that's needed. Cheap but effective, since
-		   we have to display the hex the unit goes on afterwards anyway"""
-		# don't forget that the rect passed contains the gfx co-ords,
-		# NOT the screen ones
-		if(rect.x<(self.map_screen.x+SPQR.MIN_MOVE_AREA)):
-			self.map_screen.x-=SPQR.MIN_MOVE_AREA
-		elif((rect.x+rect.w)>((self.map_screen.x+self.map_screen.w)-SPQR.MIN_MOVE_AREA)):
-			self.map_screen.x+=SPQR.MIN_MOVE_AREA
-		# check along y axis as well
-		if(rect.y<(self.map_screen.y+SPQR.MIN_MOVE_AREA)):
-			self.map_screen.y-=SPQR.MIN_MOVE_AREA
-		elif((rect.y+rect.h)>((self.map_screen.y+self.map_screen.h)-SPQR.MIN_MOVE_AREA)):
-			self.map_screen.y+=SPQR.MIN_MOVE_AREA
-		# make sure the coords are within bounds
-		self.normalizeScrollArea()
-		return(True)
-
-	def animateUnitMove(self,xpos,ypos,direction,unit,battle=True):
-		"""This is the routine that animates a unit move.
-		   Call with the xpos and ypos of the unit, a direction flag
-		   to indicate movement, the unit to move (or -1 to use current
-		   highlighted unit), and finally a boolean to indicate
-		   wether battles should happen (or the unit stops dead)
-		   Returns True if the move took place"""
-		# TODO: This code is ugly
-		# before doing anything else, we test to see if we have a battle:
-		enemy=self.data.troops.checkBattle(direction,self.data.board)
-		if(enemy>-1):
-			# do the battle or not?
-			if(battle==False):
-				# no, just return false
-				return(False)
-			# do the battle, and return if result was false
-			# (otherwise, we won the battle and can do the move)
-			foo=self.data.troops.current_highlight
-			if(self.data.battle.initBattle(self,foo,enemy)==False):
-				# battle failed, so no movement
-				return(False)
-		# now we can actually do the animated move
-		# get standard move directions:
-		offsets=self.data.board.getHexMoveOffsets(direction,
-			self.data.troops.getUnitFromHighlight().xpos,
-			self.data.troops.getUnitFromHighlight().ypos)
-		yonly=False
-		mvx=offsets[0]
-		mvy=offsets[1]
-
-		# setup map gfx for movement
-		x,y=self.prepareMove()
-		# actually move the unit in data, of course
-		self.data.moveUnit(self.data.troops.current_highlight,mvx,mvy)
-
-		# what are the offsets?
-		offsets=SPQR.ANIM_UNIT_OFFSETS[direction]
-		# there is a +1 since afterwards (and very quickly) the game updates
-		# the map, showing the unit in it's new position, so we don't need to
-		# draw it there, thus gaining an apparent extra frame.
-		xmove=int(offsets[0]/(SPQR.ANIM_UNIT_FRAMES+1))
-		ymove=int(offsets[1]/(SPQR.ANIM_UNIT_FRAMES+1))
-		frames=[]
-		# we need to offset into the base image
-		cp_rect=pygame.Rect(x-SPQR.HEX_PIX_W,y-SPQR.HEX_PIX_H,
-							SPQR.ANIM_UNIT_RECTW,SPQR.ANIM_UNIT_RECTH)
-		basexy=[SPQR.HEX_PIX_W,SPQR.HEX_PIX_H]
-		unit_image=self.data.troops.getUnitFromHighlight().image
-		# generate the frames
-		for i in range(SPQR.ANIM_UNIT_FRAMES):
-			# update image position
-			basexy[0]+=xmove
-			basexy[1]+=ymove
-			img=pygame.Surface((SPQR.ANIM_UNIT_RECTW,SPQR.ANIM_UNIT_RECTW),SRCALPHA)
-			# take from the back map:
-			img.blit(self.images[SPQR.BACK_MAP],(0,0),cp_rect)
-			# render the unit over it
-			img.blit(self.images[unit_image],basexy)
-			frames.append(img)
-
-		# check for bounds
-		self.checkMoveBounds(cp_rect)
-		# now adjust copy rect to allow for screen:
-		cp_rect.x-=self.map_screen.x
-		cp_rect.y-=self.map_screen.y-SPQR.WINSZ_TOP+1
-		# now we have all of the frames, so blit between them at MOVE_FRAME speed
-		self.updateMap()
-		for i in frames:
-			# blit the image
-			self.screen.blit(i,cp_rect)
-			pygame.display.update(cp_rect)
-			# I really should use time.wait, but this is more accurate
-			pygame.time.delay(SPQR.MOVE_FRAME)
-		# right, now just reset everything
-		cp_rect=pygame.Rect(x,y,0,0)
-		self.data.troops.getUnitFromHighlight().moves_left-=1
-		if(self.data.troops.getUnitFromHighlight().moves_left==0):
-			self.data.troops.getUnitFromHighlight().turn_done=True
-		# having done that, we just need to update everything, starting with the screen
-		xoff=self.data.troops.chx()
-		yoff=self.data.troops.chy()
-		# get gfx map position
-		xp,yp=self.data.board.getMapPixel(xoff,yoff)
-		unit_image=self.data.troops.getUnitFromHighlight().image
-		self.images[SPQR.BACK_MAP].blit(self.images[unit_image],(xp,yp))
-		self.updateArrowBackimage()
-
-		# redraw all this new stuff	
-		self.updateMap()
-		# now we need to highlight the new location of the unit and we're done
-		# if we are out of turns for this, then just move to the next unit
-		# first, make sure the flash unit graphics are updated
-		self.flash_highlight-=1
-		if(self.data.troops.getUnitFromHighlight().turn_done==True):
-			SEVENT.nextTurn(self,0,-1,-1)
-			return(True)
-		xoff,yoff=self.getHexOnscreen(xoff,yoff)
-		self.updateInfoBox(xoff,yoff)
-		# thats it!
+		#if(self.data.troops.getUnitFromHighlight().owner==SPQR.ROME_SIDE):
+		#	self.timer=True
 		return(True)
 
 	def updateArrowBackimage(self):
