@@ -119,10 +119,8 @@ class CSPQR:
 		   And yes, it is very long but it's not at all complicated"""
 		# The interface. there are 3 parts to this: the menu bar at the top - 
 		# DO NOT add widgets here, only the menu and the version number info
-		# are held here; The main map - also, do NOT add widgets here, unless
-		# you are prepared to have the image wiped when the map updates
-		# (so a pop-up menu would be just about be ok). Finally, the bottom
-		# info screen. THIS is where to place new widgets.
+		# are held here; The main map and then the widgets on the main map.
+		# we make a seperate blank window to hold all of these widgets
 		# build up a menu
 		menu=[]
 		menu.append(SMENU.CMenuParent("File"))
@@ -193,46 +191,46 @@ class CSPQR:
 		# render current game turn
 		#self.gui.renderGameTurn()
 		
-		# a button that either says 'Next', or 'End Turn' depending on wether there
-		# are units to be moved
-		# since you always start with at least 1 unit, then this can be
-		# 'next' to start with
-		#wh=self.gui.images[SPQR.BTN_NEXT].get_width()
-		#hh=self.gui.images[SPQR.BTN_NEXT].get_height()
-		#xoff=SPQR.HALFSPCR+((w-wh)/2)
-		#yoff=SPQR.BBOX_HEIGHT-hh
-		#self.gui.next_button=self.gui.windows[index].addWidget(SWIDGET.CImage
-		#	(self.gui,xoff,yoff,wh,hh,SPQR.BTN_NEXT))
-		# set callback
-		#self.gui.windows[index].items[self.gui.next_button].callbacks.mouse_lclk=SEVENT.nextTurn
-		#self.gui.windows[index].items[self.gui.next_button].active=True
-		#self.gui.windows[index].items[self.gui.next_button].describe="Next/End turn button"
-	
-			
+		bwindow=SWINDOW.CWindow(self.gui,0,SPQR.SCREEN_HEIGHT-SPQR.BBOX_HEIGHT,
+								SPQR.SCREEN_WIDTH,SPQR.BBOX_HEIGHT,"",
+								False,"map_widgets")
 		# and the mini-map on the rhs
-		#w=self.gui.images[SPQR.SMALL_MAP].get_width()
-		#h=self.gui.images[SPQR.SMALL_MAP].get_height()
-		# horribly horribly hacky, nasty, awful code that I must simply fix
-		# TODO: This works, but something silly is going on
-		#y=SPQR.SCREEN_HEIGHT-(self.gui.images[SPQR.SMALL_MAP].get_height()+17)
-		#x=SPQR.SCREEN_WIDTH-(self.gui.images[SPQR.SMALL_MAP].get_width()+SPQR.HALFSPCR)
-		#slot=self.gui.windows[index].addWidget(SWIDGET.CImage(self.gui,x+9,-9,w,h,SPQR.SMALL_MAP))
+		w=self.gui.images[SPQR.SMALL_MAP].get_width()
+		h=self.gui.images[SPQR.SMALL_MAP].get_height()
+		y=SPQR.SCREEN_HEIGHT-(self.gui.images[SPQR.SMALL_MAP].get_height()+SPQR.SPACER)
+		x=SPQR.SCREEN_WIDTH-(self.gui.images[SPQR.SMALL_MAP].get_width()+SPQR.SPACER)
+
+		w=self.gui.images[SPQR.BTN_ROME].get_width()
+		h=self.gui.images[SPQR.BTN_ROME].get_height()
+		x=50
+		y=50
+
+		#mini_map=SWIDGET.CImage(self.gui,x,y,w,h,SPQR.SMALL_MAP)
+		mini_map=SWIDGET.CImage(self.gui,x,y,w,h,SPQR.BTN_ROME)
 		# allow left mouse button dragging as well
 		# this code also simulates a mini-map click
-		#self.gui.windows[index].items[slot].callbacks.mouse_ldown=SEVENT.miniMapDrag
-		#self.gui.windows[index].items[slot].active=True
-		#self.gui.windows[index].items[slot].describe="mini-map"
-		
+		mini_map.callbacks.mouse_ldown=SEVENT.miniMapDrag
+		mini_map.active=True
+		mini_map.describe="mini-map"
+		bwindow.addWidget(mini_map)
+
 		# complete with centre on rome button
-		#w=self.gui.images[SPQR.BTN_ROME].get_width()
-		#h=self.gui.images[SPQR.BTN_ROME].get_height()
-		#x+=self.gui.images[SPQR.SMALL_MAP].get_width()-(SPQR.SPACER+w)
-		#y=SPQR.BBOX_HEIGHT-h
-		#slot=self.gui.windows[index].addWidget(SWIDGET.CImage(self.gui,x,y,w,h,SPQR.BTN_ROME))
-		#self.gui.windows[index].items[slot].callbacks.mouse_lclk=SEVENT.centreMap
-		#self.gui.windows[index].items[slot].active=True
-		#self.gui.windows[index].items[slot].describe="centre button"
-		
+		w=self.gui.images[SPQR.BTN_ROME].get_width()
+		h=self.gui.images[SPQR.BTN_ROME].get_height()
+		x+=self.gui.images[SPQR.SMALL_MAP].get_width()-(SPQR.SPACER+w)
+		y=SPQR.BBOX_HEIGHT-h
+
+		x=400
+		y=50
+
+		centre_button=SWIDGET.CImage(self.gui,x,y,w,h,SPQR.BTN_ROME)
+		centre_button.callbacks.mouse_lclk=SEVENT.centreMap
+		centre_button.active=True
+		centre_button.describe="centre button"
+		bwindow.addWidget(centre_button)		
+
+		self.gui.addWindow(bwindow)
+
 		# blit offscreen map
 		self.gui.renderPixelMap()
 		# draw the screen

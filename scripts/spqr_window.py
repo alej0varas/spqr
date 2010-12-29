@@ -135,9 +135,6 @@ class CWindow:
 			foo.y=((self.lgui.images[SPQR.WIN_TL].get_height()-bar.get_height())/2)+1
 			# render to image
 			self.image.blit(bar,foo)
-		else:
-			# just in case we ever accidentally blit it, we define it anyway:
-			self.image=pygame.Surface((0,0))
 	
 	def centreWindow(self):
 		"""Call to reset the rect co-ordinates to the centre of the screen"""

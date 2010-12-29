@@ -429,7 +429,7 @@ RIGHT_JUSTIFY		= 1
 CENTRE_HORIZ		= 2
 
 # height of bottom box from bottom of screen
-BBOX_HEIGHT			= 140
+BBOX_HEIGHT			= 200
 
 # offsets for when we draw a pop-up menu to screen
 MENU_X_OFFSET		= 2
