@@ -38,7 +38,7 @@ class CButtonDetails:
 class CWindow:
 	"""Base window class
 	   Call with gui - pointer the gui, x,y - position
-	   width,height, title - text on rop of window,
+	   width,height, title - text on top of window,
 	   draw - wether to place on screen or not"""
 	def __init__(self,gui,x,y,width,height,title,draw=True,describe="CWindow"):
 		self.lgui=gui
@@ -47,7 +47,7 @@ class CWindow:
 		self.modal=False
 		# set this to false if you want added items to NOT be
 		# offset by the border widths
-		self.border_offset=True
+		self.border_offset=draw
 		self.describe=describe
 		# use info as a storage for any of your own stuff
 		# (you can use it to pass variables between function callbacks, for example)
@@ -144,6 +144,7 @@ class CWindow:
 	
 	def addWidget(self,new_item):
 		"""Function to add a widget to the window. Call with widget to add""" 
+		print "Adding:", new_item.describe		
 		self.items.append(new_item)
 		# we add to the last item, index is thus len()-1
 		index=len(self.items)-1
