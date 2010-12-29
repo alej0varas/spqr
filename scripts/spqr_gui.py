@@ -132,8 +132,7 @@ class CGFXEngine:
 			SPQR.SCREEN_WIDTH,foo))
 		# area that the map covers on the screen:
 		self.map_area=pygame.Rect((0,self.images[SPQR.WIN_TL].get_height(),
-			SPQR.SCREEN_WIDTH,(SPQR.SCREEN_HEIGHT-
-				(SPQR.BBOX_HEIGHT+self.images[SPQR.WIN_TL].get_height()))))
+			SPQR.SCREEN_WIDTH,(SPQR.SCREEN_HEIGHT-self.images[SPQR.WIN_TL].get_height())))
 		# centre the map for the start blit
 		self.map_screen.x=SPQR.ROME_XPOS-(self.map_rect.w/2)
 		self.map_screen.y=SPQR.ROME_YPOS-(self.map_rect.h/2)
@@ -253,11 +252,8 @@ class CGFXEngine:
 		# object blitted is on the 'bottom' of the screen, and we have to test from the top
 		for foo in self.windows:
 			if foo.display==True:
-				#print "Displaying window #",index
-				#print "x=",foo.rect.x,"  y=",foo.rect.y
 				self.screen.blit(foo.image,(foo.rect.x,foo.rect.y))
 			for bar in foo.items:
-				# print "Got an ",bar.describe,"!"
 				if bar.visible==True:
 					# is this the mini-map?
 					if bar.describe=="mini-map":
@@ -553,14 +549,8 @@ class CGFXEngine:
 				# check all of the points inside the window
 				for bar in foo.items:
 					if(bar.active==True):
-						# debugging: uncomment next line to display WHAT meeting in this loop
-						#print "Found:",bar.describe
-						#print "  Rect=",bar.rect
-						# don't forget to include the offsets into the window
 						x_off=x-foo.rect.x
 						y_off=y-foo.rect.y
-						# more debugging
-						#print "You are at:",x_off,y_off
 						if(bar.rect.collidepoint(x_off,y_off)==True):						
 							# get offset into widget
 							x_widget=x_off-bar.rect.x
