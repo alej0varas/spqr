@@ -471,10 +471,10 @@ def welcomeScreen(lgui,handle,xpos,ypos):
 	w=lgui.images[SPQR.START_SCREEN].get_width()
 	h=lgui.images[SPQR.START_SCREEN].get_height()
 	# build the window
-	index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,w,h,"SPQR "+SPQR.VERSION,True))
+	welcome=SWINDOW.CWindow(lgui,-1,-1,w,h,"SPQR "+SPQR.VERSION,True)
 	# add the image that pretty much takes up the whole area:
 	main_img=SWIDGET.buildImage(lgui,SPQR.START_SCREEN)
-	lgui.windows[index].addWidget(main_img)
+	welcome.addWidget(main_img)
 	# create the 4 main buttons
 	btn_new=SWIDGET.CButton(lgui,460,12,"New")
 	btn_load=SWIDGET.CButton(lgui,460,52,"Load")
@@ -482,11 +482,6 @@ def welcomeScreen(lgui,handle,xpos,ypos):
 	btn_about=SWIDGET.CButton(lgui,460,132,"About")
 	btn_quit=SWIDGET.CButton(lgui,460,192,"Quit")
 	# make active
-	btn_new.active=True
-	btn_load.active=True
-	btn_options.active=True
-	btn_about.active=True
-	btn_quit.active=True
 	# add callbacks
 	btn_new.callbacks.mouse_lclk=startGame
 	btn_load.callbacks.mouse_lclk=menuLoad
@@ -501,19 +496,15 @@ def welcomeScreen(lgui,handle,xpos,ypos):
 	btn_pygame.rect.width=127
 	btn_pygame.rect.height=45
 	btn_pygame.visible=False
-	btn_pygame.active=True
 	# add a simple callback
 	btn_pygame.callbacks.mouse_lclk=displayPygameInfo
 	
 	# add all that to the window
-	lgui.windows[index].addWidget(btn_new)
-	lgui.windows[index].addWidget(btn_load)
-	lgui.windows[index].addWidget(btn_options)
-	lgui.windows[index].addWidget(btn_about)
-	lgui.windows[index].addWidget(btn_quit)
-	lgui.windows[index].addWidget(btn_pygame)
+	for i in [btn_new, 	btn_load, btn_options, btn_about, btn_quit, btn_pygame]:
+		i.active=True
+		welcome.addWidget(i)
 	# make modal
-	lgui.windows[index].modal=True	
+	welcome.modal=True	
 	# add the modal key events: n=new, l=load, o=options, a=about, q=quit
 	lgui.keyboard.addKey(K_n,startGame)
 	lgui.keyboard.addKey(K_l,menuLoad)
@@ -524,8 +515,8 @@ def welcomeScreen(lgui,handle,xpos,ypos):
 	# turn off unit animations
 	lgui.unitFlashAndOff()
 	# add the window as a dirty image
-	lgui.addDirtyRect(lgui.windows[index].drawWindow(),
-		lgui.windows[index].rect)
+	lgui.addDirtyRect(welcome.drawWindow(),welcome.rect)
+	lgui.addWindow(welcome)
 	return(True)
 
 # place all debugging events below this line

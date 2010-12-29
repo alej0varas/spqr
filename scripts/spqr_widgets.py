@@ -130,10 +130,10 @@ class CLabel(CWidget):
 class CImage(CWidget):
 	"""Image class states and stores details for a simple image"""	
 	def __init__(self,gui,x,y,width,height,image):
-		tmp_image=pygame.Surface((width,height))
+		tmp_image=pygame.Surface((width,height),pygame.SRCALPHA,32)
 		tmp_image.blit(gui.images[image],(0,0))
 		CWidget.__init__(self,gui,pygame.Rect(x,y,width,height),
-						 SPQR.WT_IMAGE,tmp_image,"CImage")
+						 SPQR.WT_IMAGE,tmp_image.convert_alpha(),"CImage")
 
 # and the simplest of all - a seperator bar
 # regardless of width, they all have a height of 2

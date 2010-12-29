@@ -143,8 +143,7 @@ class CWindow:
 		return(True)
 	
 	def addWidget(self,new_item):
-		"""Function to add a widget to the window. Call with widget to add""" 
-		print "Adding:", new_item.describe		
+		"""Function to add a widget to the window. Call with widget to add""" 	
 		self.items.append(new_item)
 		# we add to the last item, index is thus len()-1
 		index=len(self.items)-1

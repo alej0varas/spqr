@@ -191,16 +191,15 @@ class CSPQR:
 		# render current game turn
 		#self.gui.renderGameTurn()
 		
+		# add a window with no frame that holds the widgets to overlay on the map
 		bwindow=SWINDOW.CWindow(self.gui,0,SPQR.SCREEN_HEIGHT-SPQR.BBOX_HEIGHT,
-								SPQR.SCREEN_WIDTH,SPQR.BBOX_HEIGHT,"Test",
-								True,"map_widgets")
+								SPQR.SCREEN_WIDTH,SPQR.BBOX_HEIGHT,"",
+								False,"map_widgets")
 		# and the mini-map on the rhs
 		w=self.gui.images[SPQR.SMALL_MAP].get_width()
 		h=self.gui.images[SPQR.SMALL_MAP].get_height()
-		y=SPQR.SCREEN_HEIGHT-(self.gui.images[SPQR.SMALL_MAP].get_height()+SPQR.SPACER)
-		x=SPQR.SCREEN_WIDTH-(self.gui.images[SPQR.SMALL_MAP].get_width()+SPQR.SPACER)
-		x=50
-		y=50
+		x=SPQR.SCREEN_WIDTH-(self.gui.images[SPQR.SMALL_MAP].get_width()+SPQR.SPACER+bwindow.rect.x)
+		y=SPQR.SCREEN_HEIGHT-(self.gui.images[SPQR.SMALL_MAP].get_height()+(2*SPQR.SPACER)+1+bwindow.rect.y)
 		mini_map=SWIDGET.CImage(self.gui,x,y,w,h,SPQR.SMALL_MAP)
 		# allow left mouse button dragging as well (also simulates a mini-map click)
 		mini_map.callbacks.mouse_ldown=SEVENT.miniMapDrag
@@ -211,23 +210,13 @@ class CSPQR:
 		# complete with centre on rome button
 		w=self.gui.images[SPQR.BTN_ROME].get_width()
 		h=self.gui.images[SPQR.BTN_ROME].get_height()
-		x+=self.gui.images[SPQR.SMALL_MAP].get_width()-(SPQR.SPACER+w)
+		x+=self.gui.images[SPQR.SMALL_MAP].get_width()-w
 		y=SPQR.BBOX_HEIGHT-h
-		x=400
-		y=50
 		centre_button=SWIDGET.CImage(self.gui,x,y,w,h,SPQR.BTN_ROME)
 		centre_button.callbacks.mouse_lclk=SEVENT.centreMap
 		centre_button.active=True
 		centre_button.describe="centre button"
 		bwindow.addWidget(centre_button)
-
-		dentre_button=SWIDGET.CImage(self.gui,500,y,w,h,SPQR.BTN_ROME)
-		dentre_button.callbacks.mouse_lclk=SEVENT.centreMap
-		dentre_button.active=True
-		dentre_button.describe="centre button"
-		bwindow.addWidget(dentre_button)
-		print "items: ",len(bwindow.items)
-	
 		self.gui.addWindow(bwindow)
 
 		# blit offscreen map

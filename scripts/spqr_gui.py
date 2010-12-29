@@ -262,7 +262,10 @@ class CGFXEngine:
 					# is this the mini-map?
 					if bar.describe=="mini-map":
 						# just update it
-						self.updateMiniMap()
+						#self.updateMiniMap()
+						x1=foo.rect.x+bar.rect.x
+						y1=foo.rect.y+bar.rect.y
+						self.screen.blit(bar.image,(x1,y1))
 					else:
 						x1=foo.rect.x+bar.rect.x
 						y1=foo.rect.y+bar.rect.y
@@ -270,7 +273,14 @@ class CGFXEngine:
 			index+=1
 		pygame.display.flip()
 		return(True)
-		
+	
+	def updateOverlayWindow(self):
+		"""Draw the window with the widget overlays only"""
+		# TODO: a better way of finding the window
+		offset=self.windows[-1].rect
+		for i in self.windows[-1].items:
+			self.screen.blit(i.image,(i.rect.x+offset.x,i.rect.y+offset.y))
+	
 	# this one merely updates the map, rather than blit all those
 	# gui things as well
 	def updateMap(self):
@@ -279,6 +289,8 @@ class CGFXEngine:
 		# before blitting the mini map rect, we need to update the mini map itself
 		#self.screen.blit(self.images[SPQR.SMALL_MAP],self.mini_dest,self.mini_source)
 		#pygame.draw.rect(self.screen,(0,0,0),self.blit_rect,1)
+		# now redraw all the items in the top map window:
+		self.updateOverlayWindow()
 		pygame.display.flip()
 		# doing this *always* redraws the units as well, so make sure that
 		# the next flash unit action will be to erase the unit
@@ -288,15 +300,14 @@ class CGFXEngine:
 	def updateMiniMap(self):
 		"""Redraws mini-map, usually called after any changes to
 		   the map on the main screen"""
-		return(True)
 		# work out what the corrent co-ords are for the mini-map cursor
-		xpos=self.map_screen.x/self.width_ratio
-		ypos=self.map_screen.y/self.height_ratio
-		self.blit_rect.x=xpos+self.mini_x_offset
-		self.blit_rect.y=ypos+self.mini_y_offset
-		self.screen.blit(self.images[SPQR.SMALL_MAP],self.mini_dest,self.mini_source)
-		pygame.draw.rect(self.screen,(0,0,0),self.blit_rect,1)
-		pygame.display.flip()
+		#xpos=self.map_screen.x/self.width_ratio
+		#ypos=self.map_screen.y/self.height_ratio
+		#self.blit_rect.x=xpos+self.mini_x_offset
+		#self.blit_rect.y=ypos+self.mini_y_offset
+		#self.screen.blit(self.images[SPQR.SMALL_MAP],self.mini_dest,self.mini_source)
+		#pygame.draw.rect(self.screen,(0,0,0),self.blit_rect,1)
+		#pygame.display.flip()
 		return(True)
 	
 	def updateUnits(self):
