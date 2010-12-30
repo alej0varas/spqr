@@ -64,12 +64,12 @@ def setupWindow(gui):
 	options.rect.x = 12 + options.rect.width
 	options.describe = "opt-Resolution"
 	
-	sepbar = SWIDGET.CSeperator(gui,6,label1.rect.y + 116, SCREEN_WIDTH - 9)
+	sepbar = SWIDGET.CSeperator(gui,6,label1.rect.y + 106, SCREEN_WIDTH - 9)
 	
-	ok_button = SWIDGET.CButton(gui, 165, 152, "OK")
+	ok_button = SWIDGET.CButton(gui, 165, 148, "OK")
 	ok_button.callbacks.mouse_lclk = okClick
 	
-	cancel_button = SWIDGET.CButton(gui, 50, 152, "Cancel")
+	cancel_button = SWIDGET.CButton(gui, 50, 148, "Cancel")
 	cancel_button.callbacks.mouse_lclk = cancelClick
 	
 	for i in [options, label1, label2, music, label3, intro,
