@@ -27,8 +27,8 @@ from scripts import spqr_gui as SGFX
 from scripts import spqr_window as SWINDOW
 from scripts import spqr_widgets as SWIDGET
 
-SCREEN_WIDTH = 450
-SCREEN_HEIGHT = 250
+SCREEN_WIDTH = 285
+SCREEN_HEIGHT = 192
 
 def okClick(lgui, handle, x, y):
 	for i in lgui.windows[0].items:
@@ -46,18 +46,34 @@ def setupWindow(gui):
 							 "", False, "main-window")
 	window.fillWindowImage()
 	# an optionmenu, a label, a seperator and 2 buttons
-	label = SWIDGET.buildLabel(gui, "Resolution")
-	label.rect.x = 20
-	label.rect.y = 20
+	label1 = SWIDGET.buildLabel(gui, "Resolution")
+	label1.rect.x = 37
+	label1.rect.y = 26
+	
+	label2 = SWIDGET.buildLabel(gui, "Play Music")
+	label2.rect.x = 40
+	label2.rect.y = 64
+	music = SWIDGET.CCheckBox(gui, 140, 64, True)
+	
+	label3 = SWIDGET.buildLabel(gui, "Show intro")
+	label3.rect.x = 38
+	label3.rect.y = 100
+	intro = SWIDGET.CCheckBox(gui, 140, 100, True)
+	
 	options = SWIDGET.COptionMenu(gui, 120, 20, ["800x600", "1024x768", "Fullscreen"])
 	options.rect.x = 12 + options.rect.width
 	options.describe = "opt-Resolution"
-	sepbar = SWIDGET.CSeperator(gui,4,label.rect.y + 40, SCREEN_WIDTH -  8)
-	ok_button = SWIDGET.CButton(gui, 20, 100, "OK")
+	
+	sepbar = SWIDGET.CSeperator(gui,6,label1.rect.y + 116, SCREEN_WIDTH - 9)
+	
+	ok_button = SWIDGET.CButton(gui, 165, 152, "OK")
 	ok_button.callbacks.mouse_lclk = okClick
-	cancel_button = SWIDGET.CButton(gui, 220, 100, "Cancel")
+	
+	cancel_button = SWIDGET.CButton(gui, 50, 152, "Cancel")
 	cancel_button.callbacks.mouse_lclk = cancelClick
-	for i in [options, label, sepbar, ok_button, cancel_button]:
+	
+	for i in [options, label1, label2, music, label3, intro,
+			   sepbar, ok_button, cancel_button]:
 		i.active = True
 		window.addWidget(i)
 	# only 1 window, set it modal
