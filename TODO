@@ -1,16 +1,13 @@
 Current TODO:
 
-Make battles work.
-Make sure every unit and city has a person assigned.
-Make auto-retreat work.
-Make sure you can't walk on sea or water.
-Make load and save work.
-Add right-click context menu.
-Add A* routine for hexes (I'll use a library)
-Add region viewing to the map.
-Add naval units, and movement.
-Add SR movement.
-Add simple economy.
+Make widgets active by default.
+Clean-up the code style.
+Remove un-needed code.
+Build a setup program.
+Put regions into code.
+Add units.
+Let units move beteen regions.
+Put a simple game turn in.
 
 This is list of TODO's (earliest first) that I have on record.
 

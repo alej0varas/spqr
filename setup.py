@@ -43,19 +43,22 @@ def setupWindow(gui):
 	label = SWIDGET.buildLabel(gui, "Resolution")
 	label.rect.x = 20
 	label.rect.y = 20
-	label.callbacks.mouse_lclk = okClick
 	options = SWIDGET.COptionMenu(gui, 120, 20, ["800x600", "1024x768", "Fullscreen"])
 	options.rect.x = 32 + options.rect.width
 	sepbar = SWIDGET.CSeperator(gui,4,label.rect.y + 40, SCREEN_WIDTH - 8)
-	ok_button = SWIDGET.CButton(gui, 20, 200, "OK")
-	ok_button.visible = True
-	cancel_button = SWIDGET.CButton(gui, 220, 200, "Cancel")
+	ok_button = SWIDGET.CButton(gui, 20, 100, "OK")
+	ok_button.callbacks.mouse_lclk = okClick
+	cancel_button = SWIDGET.CButton(gui, 220, 100, "Cancel")
 	for i in [options, label, sepbar, ok_button, cancel_button]:
+		i.active = True
 		window.addWidget(i)
+	# only 1 window, set it modal
+	window.modal = True
 	gui.addWindow(window)
 
 if __name__ == "__main__":
 	gui=SGFX.CGFXEngine(320, 200, False, False)
 	setupWindow(gui)
+	gui.updateGUI()
 	gui.mainLoop()
 

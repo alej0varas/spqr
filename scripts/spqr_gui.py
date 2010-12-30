@@ -542,7 +542,7 @@ class CGFXEngine:
 		self.win_index=len(self.windows)-1
 		while(self.win_index>-1):
 			# define a new variable that we can use later to kill the current window off
-			foo=self.windows[self.win_index]
+			foo=self.windows[self.win_index]			
 			self.win_index=self.win_index-1
 			if(quit==True):
 				return(False)
@@ -553,6 +553,7 @@ class CGFXEngine:
 				# check all of the points inside the window
 				for bar in foo.items:
 					if(bar.active==True):
+						print "item ->",bar.describe
 						x_off=x-foo.rect.x
 						y_off=y-foo.rect.y
 						if(bar.rect.collidepoint(x_off,y_off)==True):						
@@ -1080,7 +1081,6 @@ class CGFXEngine:
 		# ok, the window gets rendered for us here
 		index=self.addWindow(SWINDOW.CWindow(self,-1,-1,width,wheight,win_title,True))
 		y=SPQR.SPACER
-		# print "Window details on messagebox():",y,width,height
 		self.windows[index].addWidget(SWIDGET.CLabel(self,6,y,txt_width,height,text))
 		# now add the seperator bar
 		x=6
