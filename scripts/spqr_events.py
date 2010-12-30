@@ -49,7 +49,7 @@ def quitSpqr(lgui,handle,xpos,ypos):
 		"Really quit SPQR?","Quit Message")
 	if result==SPQR.BUTTON_OK:
 		# exit the game
-		sys.exit(0)
+		sys.exit(True)
 	return(True)
 		
 def centreMap(lgui,handle,xpos,ypos):

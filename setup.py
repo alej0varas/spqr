@@ -19,7 +19,7 @@
 # setup code for game
 # for now, you can only set the game resolution
 
-import sys,pygame
+import sys, pygame
 from pygame.locals import *
 
 from scripts import spqr_defines as SPQR
@@ -31,8 +31,14 @@ SCREEN_WIDTH = 450
 SCREEN_HEIGHT = 250
 
 def okClick(lgui, handle, x, y):
-	result=lgui.messagebox((SPQR.BUTTON_OK|SPQR.BUTTON_CANCEL),
-		"Save and quit?","All Done")
+	for i in lgui.windows[0].items:
+		if i.describe == "opt-Resolution":
+			print "You selected a resolution of", i.option
+			sys.exit(True)
+
+def cancelClick(lgui, handle, x, y):
+	"""quit utility and don't change anything"""
+	sys.exit(True)
 
 def setupWindow(gui):
 	# get a fullsize window, and add the options to it
@@ -44,11 +50,13 @@ def setupWindow(gui):
 	label.rect.x = 20
 	label.rect.y = 20
 	options = SWIDGET.COptionMenu(gui, 120, 20, ["800x600", "1024x768", "Fullscreen"])
-	options.rect.x = 32 + options.rect.width
-	sepbar = SWIDGET.CSeperator(gui,4,label.rect.y + 40, SCREEN_WIDTH - 8)
+	options.rect.x = 12 + options.rect.width
+	options.describe = "opt-Resolution"
+	sepbar = SWIDGET.CSeperator(gui,4,label.rect.y + 40, SCREEN_WIDTH -  8)
 	ok_button = SWIDGET.CButton(gui, 20, 100, "OK")
 	ok_button.callbacks.mouse_lclk = okClick
 	cancel_button = SWIDGET.CButton(gui, 220, 100, "Cancel")
+	cancel_button.callbacks.mouse_lclk = cancelClick
 	for i in [options, label, sepbar, ok_button, cancel_button]:
 		i.active = True
 		window.addWidget(i)
@@ -57,7 +65,7 @@ def setupWindow(gui):
 	gui.addWindow(window)
 
 if __name__ == "__main__":
-	gui=SGFX.CGFXEngine(320, 200, False, False)
+	gui=SGFX.CGFXEngine(SCREEN_WIDTH, SCREEN_HEIGHT, False, False)
 	setupWindow(gui)
 	gui.updateGUI()
 	gui.mainLoop()

@@ -553,7 +553,6 @@ class CGFXEngine:
 				# check all of the points inside the window
 				for bar in foo.items:
 					if(bar.active==True):
-						print "item ->",bar.describe
 						x_off=x-foo.rect.x
 						y_off=y-foo.rect.y
 						if(bar.rect.collidepoint(x_off,y_off)==True):						
