@@ -16,12 +16,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-# get modules
 import sys,pygame
 from pygame.locals import *
 
 # now include my own libs
-
 from scripts import spqr_defines as SPQR
 from scripts import spqr_data as SDATA
 from scripts import spqr_gui as SGFX

@@ -136,6 +136,12 @@ class CWindow:
 			# render to image
 			self.image.blit(bar,foo)
 	
+	def fillWindowImage(self):
+		"""Sometimes you need a simple window with a background"""
+		self.image=pygame.Surface((self.rect.width,self.rect.height)).convert()
+		self.image.fill(SPQR.BGUI_COL)
+		self.display=True
+	
 	def centreWindow(self):
 		"""Call to reset the rect co-ordinates to the centre of the screen"""
 		self.rect.x=(SPQR.SCREEN_WIDTH-self.rect.w)/2

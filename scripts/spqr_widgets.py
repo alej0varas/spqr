@@ -150,7 +150,7 @@ class CSeperator(CWidget):
 # and now a button
 class CButton(CWidget):
 	"""Init routine to create a button widget. Call with a gui pointer,
-		 x and y positons, and the text on the button. Returns a
+		 x and y positions, and the text on the button. Returns a
 		 button widget item for you to use.
 		 Buttons are automagically highlighted when the mouse is over them"""
 	def __init__(self,gui,x,y,text):

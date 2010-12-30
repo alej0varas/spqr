@@ -42,7 +42,7 @@ class CDirtyRect:
 # this class also inits the gfx display
 # call with the x and y resolution of the screen, and a pointer to the data
 class CGFXEngine:
-	def __init__(self,width,height,fullscreen):
+	def __init__(self,width,height,fullscreen,game_setup=True):
 		"""Long, boring routine that initiates the gui"""
 		pygame.init()
 		# ok, now init the basic screen
@@ -52,7 +52,23 @@ class CGFXEngine:
 				HWSURFACE|FULLSCREEN|DOUBLEBUF)
 		else:
 			self.screen=pygame.display.set_mode((width,height),HWSURFACE|DOUBLEBUF)
-		self.displayLoadingScreen(width,height)
+		if(game_setup==True):
+			self.displayLoadingScreen(width,height)
+			# next up is to load in some images into the gfx array
+			self.images=[]
+			self.images.append(pygame.image.load("../gfx/map/map.jpg").convert())
+			# add a back buffer map render.. this will become the map that we render
+			foo=pygame.Surface((self.images[SPQR.MAIN_MAP].get_width(),
+				self.images[SPQR.MAIN_MAP].get_height()))
+			self.images.append(foo)
+			# we will need a copy of the board without the units rendered, for movement, flashing
+			# etc.. It is not stored with the other images, but I'll declare it here anyway. Start
+			# it with a dummy image:
+			self.map_render=pygame.Surface((self.images[SPQR.MAIN_MAP].get_width(),
+				self.images[SPQR.MAIN_MAP].get_height()))
+		else:
+			# render a null map
+			self.images=[pygame.Surface((1,1)),pygame.Surface((1,1))]
 		self.windows=[]
 		# the font that the messagebox will use:
 		self.msg_font=SPQR.FONT_VERA
@@ -78,18 +94,6 @@ class CGFXEngine:
 		self.console=False
 		
 		pygame.display.set_caption("SPQR "+SPQR.VERSION)
-		# next up is to load in some images into the gfx array
-		self.images=[]
-		self.images.append(pygame.image.load("../gfx/map/map.jpg").convert())
-		# add a back buffer map render.. this will become the map that we render
-		foo=pygame.Surface((self.images[SPQR.MAIN_MAP].get_width(),
-			self.images[SPQR.MAIN_MAP].get_height()))
-		self.images.append(foo)
-		# we will need a copy of the board without the units rendered, for movement, flashing
-		# etc.. It is not stored with the other images, but I'll declare it here anyway. Start
-		# it with a dummy image:
-		self.map_render=pygame.Surface((self.images[SPQR.MAIN_MAP].get_width(),
-			self.images[SPQR.MAIN_MAP].get_height()))
 		# now load all (!) the images we need
 		for i in SPQR.GRAPHICS:
 			try:
