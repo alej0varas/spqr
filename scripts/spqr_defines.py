@@ -176,6 +176,8 @@ WIN_INFO			= 1
 FILE_HEXMASK		= "../gfx/masks/hex_mask.png"
 
 # the images to load
+# just list the folders inside gfx: the game will pull all of the png files
+GRAPHICS_F			= ["gui", "icons", "units", "cities"]
 GRAPHICS			= ["gui/win_tl.png","gui/win_lft.png","gui/win_bl.png",
 				  	   "gui/win_bot.png","gui/win_br.png","gui/win_rgt.png",
 				  	   "gui/win_tr.png","gui/win_top.png","gui/win_lft_lg.png",
