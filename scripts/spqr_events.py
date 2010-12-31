@@ -115,7 +115,7 @@ def menuPreferences(lgui,handle,xpos,ypos):
 	# first off, let's make the window that we need
 	index=lgui.addWindow(SWINDOW.CWindow(lgui,-1,-1,288,152,"SPQR Preferences",True))
 	# we'll need an image first
-	img=SWIDGET.buildImageAlpha(lgui,SPQR.IMG_MUSIC)
+	img=SWIDGET.buildImageAlpha(lgui,"img_music")
 	img.rect.x=20
 	img.rect.y=20
 	# a couple of labels, and there positions
@@ -251,6 +251,10 @@ def menuEmpireSenate(lgui,handle,xpos,ypos):
 def menuEmpireMilitary(lgui,handle,xpos,ypos):
 	"""Routine sets up and displays the unit display box
 	   Always returns True"""
+	   
+	# OLD CODE TO DISPLAY EXAMPLE OF AN ITEMLIST
+	# TODO: Replace as soon as possible!
+	   
 	# we need to create the following data to creata an ItemList:
 	# lgui,x,y - gui pointer and x/y position (as per normal)
 	# a list to say what the column types are (where True is text)
@@ -468,12 +472,12 @@ def welcomeScreen(lgui,handle,xpos,ypos):
 	"""Routine displays opening screen, with load/save/new/about
 	   buttons. Always returns True after doing it's work"""
 	# set the sizes
-	w=lgui.images[SPQR.START_SCREEN].get_width()
-	h=lgui.images[SPQR.START_SCREEN].get_height()
+	w=lgui.iWidth("startup")
+	h=lgui.iHeight("startup")
 	# build the window
 	welcome=SWINDOW.CWindow(lgui,-1,-1,w,h,"SPQR "+SPQR.VERSION,True)
 	# add the image that pretty much takes up the whole area:
-	main_img=SWIDGET.buildImage(lgui,SPQR.START_SCREEN)
+	main_img=SWIDGET.buildImage(lgui,"startup")
 	welcome.addWidget(main_img)
 	# create the 4 main buttons
 	btn_new=SWIDGET.CButton(lgui,460,12,"New")
@@ -600,8 +604,8 @@ def widgetTest(lgui,handle,xpos,ypos):
 	options=["Romans","Iberians","Greeks","Selucids"]
 	opt_widget=SWIDGET.COptionMenu(lgui,120,30,options)
 	opt_widget.active=True
-	w=lgui.images[SPQR.IMG_TEST].get_width()
-	scl_widget=SWIDGET.CScrollArea(lgui,10,114,w,96,lgui.images[SPQR.IMG_TEST])
+	w=lgui.iWidth("test_image")
+	scl_widget=SWIDGET.CScrollArea(lgui,10,114,w,96,lgui.image("test_image"))
 	scl_widget.active=True
 	# make sure we have a console output for the example slider
 	sld_widget.setUpdateFunction(displaySliderContents)

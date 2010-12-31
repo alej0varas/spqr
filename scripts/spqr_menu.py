@@ -172,8 +172,9 @@ class CMenu:
 					text_image.get_height()+(SPQR.MNU_HSPACE*2)),SRCALPHA)
 				final_text.fill(SPQR.MENU_COL)
 				# blit the icon
-				final_text.blit(self.lgui.images[foo.icon],
-					(SPQR.MNU_LSPACE,(SPQR.ICON_SIZE-final_text.get_height())/2))
+				if foo.icon != None:
+					final_text.blit(self.lgui.image(foo.icon),
+						(SPQR.MNU_LSPACE,(SPQR.ICON_SIZE-final_text.get_height())/2))
 				final_text.blit(text_image,((2*SPQR.MNU_LSPACE)+SPQR.ICON_SIZE,SPQR.MNU_HSPACE))
 				pics.append(final_text)
 				height+=final_text.get_height()

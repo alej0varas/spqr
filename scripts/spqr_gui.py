@@ -56,19 +56,21 @@ class CGFXEngine:
 			self.displayLoadingScreen(width,height)
 			# next up is to load in some images into the gfx array
 			self.images = []
+			self.himages = {}
+			self.himages["map"] = pygame.image.load("../gfx/map/map.jpg").convert()
 			self.images.append(pygame.image.load("../gfx/map/map.jpg").convert())
 			# add a back buffer map render.. this will become the map that we render
-			foo = pygame.Surface((self.images[SPQR.MAIN_MAP].get_width(),
-				self.images[SPQR.MAIN_MAP].get_height()))
+			foo = pygame.Surface((self.iWidth("map"),self.iHeight("map")))
 			self.images.append(foo)
+			self.himages["buffer"] = foo
 			# we will need a copy of the board without the units rendered, for movement, flashing
 			# etc.. It is not stored with the other images, but I'll declare it here anyway. Start
 			# it with a dummy image:
-			self.map_render = pygame.Surface((self.images[SPQR.MAIN_MAP].get_width(),
-				self.images[SPQR.MAIN_MAP].get_height()))
+			self.map_render = pygame.Surface((self.iWidth("map"), self.iHeight("map")))
 		else:
 			# render a null map
 			self.images = [pygame.Surface((1,1)),pygame.Surface((1,1))]
+			self.himages = {}
 		self.windows = []
 		# the font that the messagebox will use:
 		self.msg_font = SPQR.FONT_VERA
@@ -96,9 +98,13 @@ class CGFXEngine:
 		pygame.display.set_caption("SPQR "+SPQR.VERSION)
 		
 		# get all filenames:
+		files = []
 		for i in SPQR.GRAPHICS_F:
-			files=os.listdir("../gfx/" + i + "/")
-			print files
+			files.extend(["../gfx/" + i +"/" + name for name in os.listdir("../gfx/" + i + "/")])
+		# if it's a png, strip the name and insert it into a new hash
+		for i in files:
+			if i[-4:] == ".png":
+				self.himages[i.split("/")[-1][:-4]] = pygame.image.load(i).convert_alpha()
 		
 		# now load all (!) the images we need
 		for i in SPQR.GRAPHICS:
@@ -134,24 +140,24 @@ class CGFXEngine:
 		self.noise.startNextSong()
 		# some basic variables that SPQR uses regularly
 		# where to start the map blit from when blasting it to the screen
-		foo = (SPQR.SCREEN_HEIGHT-self.images[SPQR.WIN_TL].get_height())+1
+		foo = (SPQR.SCREEN_HEIGHT - self.iHeight("win_tl")) + 1
 		# define the 'from' rectangle
 		self.map_screen = pygame.Rect((0,0,SPQR.SCREEN_WIDTH,foo))
 		# and the target rectangle for the blit:
-		self.map_rect = pygame.Rect((0,(self.images[SPQR.WIN_TL].get_height())-1,
+		self.map_rect = pygame.Rect((0,(self.iHeight("win_tl"))-1,
 			SPQR.SCREEN_WIDTH,foo))
 		# area that the map covers on the screen:
-		self.map_area = pygame.Rect((0,self.images[SPQR.WIN_TL].get_height(),
-			SPQR.SCREEN_WIDTH,(SPQR.SCREEN_HEIGHT-self.images[SPQR.WIN_TL].get_height())))
+		self.map_area = pygame.Rect((0,self.iHeight("win_tl"),
+			SPQR.SCREEN_WIDTH,(SPQR.SCREEN_HEIGHT-self.iHeight("win_tl"))))
 		# centre the map for the start blit
 		self.map_screen.x = SPQR.ROME_XPOS-(self.map_rect.w/2)
 		self.map_screen.y = SPQR.ROME_YPOS-(self.map_rect.h/2)
 		# store a rect of the maximum map limits we can scroll to
 		# obviously 0/0 for top left corner - this just denotes bottom right corner
-		self.map_max_x = self.images[SPQR.MAIN_MAP].get_width()-SPQR.SCREEN_WIDTH
-		self.map_max_y = self.images[SPQR.MAIN_MAP].get_height()-self.map_rect.h
+		self.map_max_x = self.iWidth("map") - SPQR.SCREEN_WIDTH
+		self.map_max_y = self.iHeight("map") - self.map_rect.h
 		# damn silly variable for the mini map rect blit
-		self.y_offset_mini_map = SPQR.BBOX_HEIGHT+self.images[SPQR.WIN_TL].get_height()
+		self.y_offset_mini_map = SPQR.BBOX_HEIGHT + self.iHeight("win_tl")
 		# a temp image for some uses
 		self.temp_image = pygame.Surface((0,0))
 		# variables so callbacks and external code can communicate
@@ -161,16 +167,15 @@ class CGFXEngine:
 		# set up the mini map
 		self.blit_rect = pygame.Rect(0,0,0,0)
 		# calculate width and height of square to blit
-		self.width_ratio = float(self.images[SPQR.MAIN_MAP].get_width())/float(self.images[SPQR.SMALL_MAP].get_width()-2)
-		self.height_ratio = float(self.images[SPQR.MAIN_MAP].get_height())/float(self.images[SPQR.SMALL_MAP].get_height()-2)
+		self.width_ratio = float(self.iWidth("map")) / float(self.iWidth("small_map") - 2)
+		self.height_ratio = float(self.iHeight("map")) / float(self.iHeight("small_map") - 2)
 		# LESSON: in python, you need to force the floats sometimes
-		self.blit_rect.w = int(float(self.map_rect.w)/self.width_ratio)
-		self.blit_rect.h = int(float(self.map_rect.h)/self.height_ratio)
+		self.blit_rect.w = int(float(self.map_rect.w) / self.width_ratio)
+		self.blit_rect.h = int(float(self.map_rect.h) / self.height_ratio)
 		# pre-calculate some stuff
-		self.mini_x_offset = SPQR.SCREEN_WIDTH-(self.images[SPQR.SMALL_MAP].get_width()+7)
-		self.mini_y_offset = SPQR.SCREEN_HEIGHT-(self.images[SPQR.SMALL_MAP].get_height()+17)
-		self.mini_source = pygame.Rect(0,0,self.images[SPQR.SMALL_MAP].get_width(),
-			self.images[SPQR.SMALL_MAP].get_height())
+		self.mini_x_offset = SPQR.SCREEN_WIDTH - (self.iWidth("small_map") + 7)
+		self.mini_y_offset = SPQR.SCREEN_HEIGHT - (self.iHeight("small_map") + 17)
+		self.mini_source = pygame.Rect(0, 0, self.iWidth("small_map"), self.iHeight("small_map"))
 		self.mini_dest = pygame.Rect(self.mini_x_offset-1,self.mini_y_offset-1,0,0)
 		# load other data required by mapboard
 		self.updateMiniMap()
@@ -180,10 +185,19 @@ class CGFXEngine:
 		"""Displays the loading screen"""
 		load_screen = pygame.image.load("../gfx/load_screen.png").convert()
 		self.screen.fill(SPQR.COL_BLACK)
-		xpos = (width-load_screen.get_width())/2
-		ypos = (height-load_screen.get_height())/2
-		self.screen.blit(load_screen,(xpos,ypos))
+		xpos = (width - load_screen.get_width()) / 2
+		ypos = (height - load_screen.get_height()) / 2
+		self.screen.blit(load_screen, (xpos, ypos))
 		pygame.display.update()
+
+	def iWidth(self, name):
+		return(self.himages[name].get_width())
+	
+	def iHeight(self, name):
+		return(self.himages[name].get_height())
+	
+	def image(self, name):
+		return(self.himages[name])
 
 	def renderCityNames(self):
 		"""Routine renders all the images for the city names,
@@ -202,7 +216,7 @@ class CGFXEngine:
 		self.windows.append(window)
 		# since we always append to the list, the index is always
 		# the size of the array minus 1 (since we start the array at 0)
-		index = len(self.windows)-1
+		index = len(self.windows) - 1
 		return(index)
 	
 	def addDirtyRect(self,new,rectangle):
@@ -256,7 +270,7 @@ class CGFXEngine:
 			pygame.display.update(self.dirty[-1].rect)
 			return(True)
 		# before doing anything else, blit the map
-		self.screen.blit(self.images[SPQR.BACK_MAP],self.map_rect,self.map_screen)
+		self.screen.blit(self.image("buffer"), self.map_rect, self.map_screen)
 		index = 0
 		# we have to do the window testing in reverse to the way we blit, as the first
 		# object blitted is on the 'bottom' of the screen, and we have to test from the top
@@ -291,9 +305,9 @@ class CGFXEngine:
 	# gui things as well
 	def updateMap(self):
 		"""Updates (i.e. redraws) map to main screen"""
-		self.screen.blit(self.images[SPQR.BACK_MAP],self.map_rect,self.map_screen)
+		self.screen.blit(self.image("buffer"),self.map_rect,self.map_screen)
 		# before blitting the mini map rect, we need to update the mini map itself
-		#self.screen.blit(self.images[SPQR.SMALL_MAP],self.mini_dest,self.mini_source)
+		#self.screen.blit(self.image("small_map"),self.mini_dest,self.mini_source)
 		#pygame.draw.rect(self.screen,(0,0,0),self.blit_rect,1)
 		# now redraw all the items in the top map window:
 		self.updateOverlayWindow()
@@ -311,7 +325,7 @@ class CGFXEngine:
 		#ypos = self.map_screen.y/self.height_ratio
 		#self.blit_rect.x = xpos+self.mini_x_offset
 		#self.blit_rect.y = ypos+self.mini_y_offset
-		#self.screen.blit(self.images[SPQR.SMALL_MAP],self.mini_dest,self.mini_source)
+		#self.screen.blit(self.image["small_map"],self.mini_dest,self.mini_source)
 		#pygame.draw.rect(self.screen,(0,0,0),self.blit_rect,1)
 		#pygame.display.flip()
 		return(True)
@@ -320,7 +334,7 @@ class CGFXEngine:
 		"""Unit is to be called when a unit is placed or
 		   removed from the map. Always returns True"""
 		# blit the map_render original across first
-		self.images[SPQR.BACK_MAP].blit(self.map_render,(0,0))
+		self.image("buffer").blit(self.map_render,(0,0))
 		self.updateMap()
 		return(True)
 
@@ -333,18 +347,18 @@ class CGFXEngine:
 		ypos -= self.map_screen.h/2
 		if(xpos<0):
 			xpos = 0
-		elif(xpos>(self.images[SPQR.MAIN_MAP].get_width()-self.map_screen.w)):
-			xpos = self.images[SPQR.MAIN_MAP].get_width()-self.map_sceen.w
+		elif(xpos > (self.iWidth("map") - self.map_screen.w)):
+			xpos = self.iWidth("map") - self.map_sceen.w
 		# and then check y size
 		if(ypos<0):
 			ypos = 0
-		elif(ypos>(self.images[SPQR.MAIN_MAP].get_height()-self.map_screen.h)):
-			ypos = self.images[SPQR.MAIN_MAP].get_height()-self.map_screen.h
+		elif(ypos > (self.iHeight("map") - self.map_screen.h)):
+			ypos = self.iWidth("map") - self.map_screen.h
 		# set new co-ords
 		self.map_screen.x = xpos
 		self.map_screen.y = ypos
 		return(True)
-		
+
 	def normalizeScrollArea(self):
 		"""Checks co-ords after scrolling the map to make sure
 		   they are not out of range. Resets them if needed"""
@@ -735,11 +749,11 @@ class CGFXEngine:
 		   The current ordering of the blits, from first to last, is:
 		   Back map, Cities, City names, Units""" 
 		# blit the original map across first
-		self.images[SPQR.BACK_MAP].blit(self.images[SPQR.MAIN_MAP],(0,0))
+		self.image("buffer").blit(self.image("map"),(0,0))
 		# start by blitting the cities
 		# save this image as it is for now without the images for using
 		# as the backdrop for all unit animations
-		self.map_render.blit(self.images[SPQR.BACK_MAP],(0,0))
+		self.map_render.blit(self.image("buffer"),(0,0))
 		return(True)
 
 	def renderGameTurn(self):
@@ -753,12 +767,12 @@ class CGFXEngine:
 		   of the checkbox widget code"""
 		# which gfx to draw?
 		if(status == True):
-			chkbox = SPQR.CHECK_YES
+			chkbox = "check_yes"
 		else:
-			chkbox = SPQR.CHECK_NO
+			chkbox = "check_no"
 		# now just blit the image and update
 		# we have the xpos and ypos, this should be easy:
-		self.screen.blit(self.images[chkbox],(xpos,ypos,0,0))
+		self.screen.blit(self.image(chkbox),(xpos,ypos,0,0))
 		pygame.display.update((xpos,ypos,SPQR.CHKBOX_SIZE,SPQR.CHKBOX_SIZE))
 		return(True)
 		
@@ -796,7 +810,7 @@ class CGFXEngine:
 		# area so that we can restore the original state later
 		# and I don't really like long routines either, but this is pretty boring
 		# so I've let it ride
-		   
+
 		# do we need to flash at all?
 		if(self.data.troops.current_highlight == -1):
 			return(False)
@@ -808,7 +822,7 @@ class CGFXEngine:
 		if(self.flash_highlight != self.data.troops.current_highlight):
 			# we now have an new flashing unit. Firstly, remove the
 			# old blit area:
-			self.images[SPQR.BACK_MAP].blit(self.flash_old,self.flash_rect)
+			self.image("buffer").blit(self.flash_old,self.flash_rect)
 			# ok, let's store this new highlight
 			self.flash_highlight = self.data.troops.current_highlight			
 			# now we generate the part we use to erase the area.
@@ -826,143 +840,24 @@ class CGFXEngine:
 			self.flash_erase.blit(self.map_render,(0,0),self.flash_rect)
 			# also make a copy of the area to blit back to the back map:
 			self.flash_old = pygame.Surface((SPQR.MOVESZ_X,SPQR.MOVESZ_Y))
-			self.flash_old.blit(self.images[SPQR.BACK_MAP],(0,0),self.flash_rect)
+			self.flash_old.blit(self.image("buffer"),(0,0),self.flash_rect)
 			# create another copy, this time for the arrows
 			arrow_img = pygame.Surface((SPQR.MOVESZ_X,SPQR.MOVESZ_Y),SRCALPHA)
-			arrow_img.blit(self.images[SPQR.BACK_MAP],(0,0),self.flash_rect)
+			arrow_img.blit(self.image("buffer"),(0,0),self.flash_rect)
 			
-			# bitchy routine to draw all units we potentially overwrite
-			# get x,y of unit
-			xu = self.data.troops.chx()
-			yu = self.data.troops.chy()
-			# get the unit and rome stats for all surrounding hexes
-			xo,yo = self.data.board.getHexMovePosition(SPQR.TOP_LEFT,xu,yu)
-			index_tl = self.data.getXYUnit(xo,yo)
-			free_tl = self.data.freeForRome(xo,yo)
-			xo,yo = self.data.board.getHexMovePosition(SPQR.TOP_RIGHT,xu,yu)
-			index_tr = self.data.getXYUnit(xo,yo)
-			free_tr = self.data.freeForRome(xo,yo)
-			xo,yo = self.data.board.getHexMovePosition(SPQR.BOTTOM_RIGHT,xu,yu)
-			index_br = self.data.getXYUnit(xo,yo)
-			free_br = self.data.freeForRome(xo,yo)
-			xo,yo = self.data.board.getHexMovePosition(SPQR.BOTTOM_LEFT,xu,yu)
-			index_bl = self.data.getXYUnit(xo,yo)
-			free_bl = self.data.freeForRome(xo,yo)
-			xo,yo = self.data.board.getHexMovePosition(SPQR.LEFT,xu,yu)
-			index_left = self.data.getXYUnit(xo,yo)
-			free_left = self.data.freeForRome(xo,yo)
-			xo,yo = self.data.board.getHexMovePosition(SPQR.RIGHT,xu,yu)
-			index_right = self.data.getXYUnit(xo,yo)
-			free_right = self.data.freeForRome(xo,yo)
-			# start actual blitting with left unit
-			if(index_left != -1):
-				# draw left unit
-				self.flash_erase.blit(self.images[self.data.troops.units[index_left].image],
-					SPQR.MOVE_OFF_LEFTD,SPQR.MOVE_OFF_LEFT)
-
-			if(index_right != -1):
-				# draw bottom unit
-				self.flash_erase.blit(self.images[self.data.troops.units[index_right].image],
-					SPQR.MOVE_OFF_RIGHTD,SPQR.MOVE_OFF_RIGHT)
-			if(index_tr != -1):
-				# draw top right
-				self.flash_erase.blit(self.images[self.data.troops.units[index_tr].image],
-					SPQR.MOVE_OFF_TRD,SPQR.MOVE_OFF_TR)
-			if(index_br != -1):
-				# draw bottom right
-				self.flash_erase.blit(self.images[self.data.troops.units[index_tl].image],
-					SPQR.MOVE_OFF_BRD,SPQR.MOVE_OFF_BR)
-			if(index_tl != -1):
-				# draw top left
-				self.flash_erase.blit(self.images[self.data.troops.units[index_tl].image],
-					SPQR.MOVE_OFF_TLD,SPQR.MOVE_OFF_TL)
-			if(index_bl != -1):
-				# draw bottom left
-				self.flash_erase.blit(self.images[self.data.troops.units[index_bl].image],
-					SPQR.MOVE_OFF_BLD,SPQR.MOVE_OFF_BL)
-			# now we need to draw the arrows, and we also have to draw them to
-			# to the back map. If you can't move there, we don't draw the arrow
-			# what map hex are we talking about?
-			index = self.data.board.getHexIndex(xu,yu)
-			# start at the top and go round:
-			if((self.data.board.hexes[index].left == True)and(free_left == True)):
-				#(self.data.troops.units[index_tp].owner != ROME_SIDE)):
-				self.flash_erase.blit(self.images[SPQR.ARROW_LEFT],(0,0))
-				arrow_img.blit(self.images[SPQR.ARROW_LEFT],(0,0))
-				index_left = True
-			else:
-				# don't add move by key, either
-				index_left = False
-			if((self.data.board.hexes[index].tr == True)and(free_tr == True)):
-				self.flash_erase.blit(self.images[SPQR.ARROW_TRGT],(0,0))
-				arrow_img.blit(self.images[SPQR.ARROW_TRGT],(0,0))
-				index_tr = True
-			else:
-				index_tr = False
-			if((self.data.board.hexes[index].br == True)and(free_br == True)):
-				self.flash_erase.blit(self.images[SPQR.ARROW_BRGT],(0,0))
-				arrow_img.blit(self.images[SPQR.ARROW_BRGT],(0,0))
-				index_br = True
-			else:
-				index_br = False
-			if((self.data.board.hexes[index].right == True)and(free_right == True)):
-				self.flash_erase.blit(self.images[SPQR.ARROW_RIGHT],(0,0))
-				arrow_img.blit(self.images[SPQR.ARROW_RIGHT],(0,0))
-				index_right = True
-			else:
-				index_right = False
-			if((self.data.board.hexes[index].bl == True)and(free_bl == True)):
-				self.flash_erase.blit(self.images[SPQR.ARROW_BLFT],(0,0))
-				arrow_img.blit(self.images[SPQR.ARROW_BLFT],(0,0))
-				index_bl = True
-			else:
-				index_bl = False
-			if((self.data.board.hexes[index].tl == True)and(free_tl == True)):
-				self.flash_erase.blit(self.images[SPQR.ARROW_TLFT],(0,0))
-				arrow_img.blit(self.images[SPQR.ARROW_TLFT],(0,0))
-				index_tl = True
-			else:
-				index_tl = False
-
-			# just to make things even more complex is the fact that we now use those
-			# index values to set new keypresses - the unit moves!
-			# however, to preserve some sanity I'll push this out to another function
-			self.keyboard.addKeyMoves(index_left,index_tr,index_br,index_right,index_bl,index_tl)
-
 			# now we can construct the draw image. Get a copy of the last image
 			self.flash_draw = pygame.Surface((SPQR.MOVESZ_X,SPQR.MOVESZ_Y),SRCALPHA)
 			self.flash_draw.blit(self.flash_erase,(0,0))
 			# then draw the unit over it
-			index = self.data.troops.getUnitFromHighlight().image
-			self.flash_draw.blit(self.images[index],(SPQR.MOVE_OFFX,SPQR.MOVE_OFFY))
+			index = "rome_legion"
+			self.flash_draw.blit(self.image(index),(SPQR.MOVE_OFFX,SPQR.MOVE_OFFY))
 			
-			# another thing - we just have to make sure that the number of moves
-			# left by the unit is also displayed, on both images
-			moves = self.data.troops.getUnitFromHighlight().moves_left
-			# get the image this refers to
-			moves += (SPQR.MV_OVRLY_1-1)
-			# then do the blitting
-			self.flash_draw.blit(self.images[moves],(SPQR.MV_OVER_X,SPQR.MV_OVER_Y))
-			self.flash_erase.blit(self.images[moves],(SPQR.MV_OVER_X,SPQR.MV_OVER_Y))
-			
-			# finally (?) we add the bit that tells us wether there are
-			# any troops below this one or not
-			# more units?
-			x = self.data.troops.chx()
-			y = self.data.troops.chy()
-			index = self.data.board.getHexIndex(x,y)
-			if(len(self.data.board.hexes[index].units)>1):
-				# yes, there are more units, so do the blit
-				self.flash_draw.blit(self.images[SPQR.MV_OVRLY_EXT],
-					(SPQR.MV_OVER_EXX,SPQR.MV_OVER_EXY))
-				self.flash_erase.blit(self.images[SPQR.MV_OVRLY_EXT],
-					(SPQR.MV_OVER_EXX,SPQR.MV_OVER_EXY))
-						
+				
 			# make sure that we draw the erase part of the image first
 			self.flash_on = True
 			# finally (!) we can update the back map. We've already rendered back
 			# the original image from last time, so let's just blit our new part:
-			self.images[SPQR.BACK_MAP].blit(arrow_img,self.flash_rect)
+			self.image("buffer").blit(arrow_img,self.flash_rect)
 			# screen map probably needs updating, do it here
 			self.updateMap()
 		
@@ -1004,7 +899,7 @@ class CGFXEngine:
 	def clearFlash(self):
 		"""Routine clears any gfx stuff on the map due to flashing"""
 		# really simple code at the moment
-		self.images[SPQR.BACK_MAP].blit(self.flash_old,self.flash_rect)
+		self.image("buffer").blit(self.flash_old,self.flash_rect)
 		self.updateMap()
 
 	def unitFlashAndOff(self):
@@ -1016,7 +911,7 @@ class CGFXEngine:
 		# is unit currently on screen?
 		if(self.flash_on == False):
 			# no, so update it
-			self.images[SPQR.BACK_MAP].blit(self.flash_draw,self.flash_rect)
+			self.image("buffer").blit(self.flash_draw,self.flash_rect)
 			self.updateMap()
 			self.flash_on = True
 		# turn flashing off
@@ -1047,7 +942,7 @@ class CGFXEngine:
 	def updateArrowBackimage(self):
 		"""Called to update the image that overwrites the whole
 		   area used in the flash animation"""
-		self.flash_old.blit(self.images[SPQR.BACK_MAP],(0,0),self.flash_rect)
+		self.flash_old.blit(self.image("buffer"),(0,0),self.flash_rect)
 		return(True)
 
 	# there are always some standard routines in any gui...here is a messagebox
@@ -1060,7 +955,7 @@ class CGFXEngine:
 		if flags == 0:
 			return(SPQR.BUTTON_FAIL)
 		# start by calculating the MINIMUM size for this messagebox and txt label
-		txt_width = ((self.images[SPQR.BUTTON_STD].get_width()+8)*3)+4
+		txt_width = ((self.iWidth("button")+8)*3)+4
 		width = txt_width+(SPQR.SPACER*2)
 		# get average size of height..
 		height = (self.fonts[self.msg_font].size("X")[1])+1
@@ -1081,7 +976,7 @@ class CGFXEngine:
 		# start with a window, but work out the height first...
 		wheight = height+SPQR.SPACER
 		# add height for sep bar (2) and buttons (2*button height)
-		wheight += (self.images[SPQR.BUTTON_STD].get_height()*2)+2
+		wheight += (self.iHeight("button")*2)+2
 
 		# ok, the window gets rendered for us here
 		index = self.addWindow(SWINDOW.CWindow(self,-1,-1,width,wheight,win_title,True))
@@ -1091,9 +986,9 @@ class CGFXEngine:
 		x = 6
 		y += height
 		self.windows[index].addWidget(SWIDGET.CSeperator(self,x,y,width-24))
-		y += 1+(self.images[SPQR.BUTTON_STD].get_height()/2)
+		y += 1+(self.iHeight("button")/2)
 		# move x to the right, buttons are blitted from right to left
-		x = width-16-(self.images[SPQR.BUTTON_STD].get_width())
+		x = width-16-(self.iWidth("button"))
 		# now we are ready to start printing buttons
 		total_buttons = 0
 		# logic is simple: found a button? yes, display it and 
@@ -1103,7 +998,7 @@ class CGFXEngine:
 			# same for every instance of this little loop: add the callbacks
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxOK
 			self.windows[index].items[slot].active = True
-			x = x-(self.images[SPQR.BUTTON_STD].get_width()+12)
+			x = x-(self.iWidth("button")+12)
 			# add a key for this
 			self.keyboard.addKey(K_o,msgboxOK)
 			total_buttons += 1
@@ -1111,28 +1006,28 @@ class CGFXEngine:
 			slot = self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"Cancel"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxCancel
 			self.windows[index].items[slot].active = True
-			x = x-(self.images[SPQR.BUTTON_STD].get_width()+12)
+			x = x-(self.iWidth("button")+12)
 			self.keyboard.addKey(K_c,msgboxCancel)
 			total_buttons += 1
 		if((flags&SPQR.BUTTON_YES) != 0):
 			slot = self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"Yes"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxYes
 			self.windows[index].items[slot].active = True
-			x = x-(self.images[SPQR.BUTTON_STD].get_width()+12)
+			x = x-(self.iWidth("button")+12)
 			self.keyboard.addKey(K_y,msgboxYes)
 			total_buttons += 1
 		if(((flags&SPQR.BUTTON_NO) != 0)&(total_buttons<3)):
 			slot = self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"No"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxNo
 			self.windows[index].items[slot].active = True
-			x = x-(self.images[SPQR.BUTTON_STD].get_width()+12)
+			x = x-(self.iWidth("button")+12)
 			self.keyboard.addKey(K_n,msgboxNo)
 			total_buttons += 1
 		if(((flags&SPQR.BUTTON_QUIT) != 0)&(total_buttons<3)):
 			slot = self.windows[index].addWidget(SWIDGET.CButton(self,x,y,"Quit"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxQuit
 			self.windows[index].items[slot].active = True
-			x = x-(self.images[SPQR.BUTTON_STD].get_width()+12)
+			x = x-(self.iWidth("button")+12)
 			self.keyboard.addKey(K_q,msgboxQuit)
 			total_buttons += 1
 		if(((flags&SPQR.BUTTON_IGNORE) != 0)&(total_buttons<3)):

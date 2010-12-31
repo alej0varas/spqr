@@ -341,13 +341,6 @@ MOVE_FRAME			= 24
 # (400 is the Gnome standard)
 DCLICK_SPEED		= 400
 
-# movement rates for troops
-STD_MOVE			= 6
-# number of troops at 100%
-UNIT_STRENGTH		= 10000
-# when there is no commander
-NO_COMMANDER		= "Town Council"
-
 # most times, when animating a unit, you'll use the
 # current highlighted unit. When a function needs a value for
 # a unit, you can use this value instead
@@ -371,10 +364,6 @@ BUTTON_YES			= 4
 BUTTON_NO			= 8
 BUTTON_QUIT			= 16
 BUTTON_IGNORE		= 32
-# used by battle callback
-BUTTON_ATTACK		= BUTTON_YES
-BUTTON_WAIT			= BUTTON_NO
-BUTTON_RTRT			= BUTTON_CANCEL
 
 # standard widget types
 WT_ROOT				= 0
@@ -480,11 +469,6 @@ MENU_ALPHA			= 64
 MENU_HLCOL			= (170,83,83)
 MENU_HBORDER		= 6
 
-# defines needed for the map database
-MAP_NULL			= 0
-MAP_LAND			= 1
-MAP_WATER			= 2
-
 # game factor designs
 # start year is always 1 year before you want the game to start, as
 # the start of the first turn will increment it by 1
@@ -533,14 +517,6 @@ INIT_VOLUME			= 0
 MUSIC_BUFFER		= 8192
 MUSIC_ON			= True
 SFX_ON				= True
-
-# some AI defines here
-AI_STANDARD			= 0
-AI_AGRESSIVE		= 1
-AI_DEFENSIVE		= 2
-AI_SURVIVE			= 3
-AI_MAKEMONEY		= 4
-AI_ROMAN			= 5
 
 # these are the standard callbacks, they should never be called
 # they are here to prevent an exception should an unregistered

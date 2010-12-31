@@ -131,7 +131,7 @@ class CImage(CWidget):
 	"""Image class states and stores details for a simple image"""	
 	def __init__(self,gui,x,y,width,height,image):
 		tmp_image=pygame.Surface((width,height),pygame.SRCALPHA,32)
-		tmp_image.blit(gui.images[image],(0,0))
+		tmp_image.blit(gui.image(image),(0,0))
 		CWidget.__init__(self,gui,pygame.Rect(x,y,width,height),
 						 SPQR.WT_IMAGE,tmp_image.convert_alpha(),"CImage")
 
@@ -1226,20 +1226,20 @@ def buildLabel(gui,text,font=SPQR.FONT_VERA):
 def buildImage(gui,image):
 	"""Helper function to build a image given just the image
 	   title. Pass index of image. Returns the new widget"""
-	w=gui.images[image].get_width()
-	h=gui.images[image].get_height()
+	w=gui.iWidth(image)
+	h=gui.iHeight(image)
 	# create and return
 	return(CImage(gui,0,0,w,h,image))
 
 def buildImageAlpha(gui,image):
 	"""As buildImage, but blits alpha image over gui color"""
-	w=gui.images[image].get_width()
-	h=gui.images[image].get_height()
+	w=gui.iWidth(image)
+	h=gui.iHeight(image)
 	# create out initial image and make it the right color
 	piccy=pygame.Surface((w,h))
 	piccy.fill(SPQR.BGUI_COL)
 	# now blit over the real image
-	piccy.blit(gui.images[image],(0,0))
+	piccy.blit(gui.image(image),(0,0))
 	# and thats almost it
 	return(buildUniqueImage(gui,piccy))
 

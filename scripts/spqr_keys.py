@@ -65,36 +65,6 @@ class CKeyboard:
 			index+=1
 		return(False)
 
-	def addKeyMoves(self,left,tr,br,right,bl,tl):
-		"""Call with status of possible moves. For each variable,
-		   a value of True means that this key becomes active.
-		   Resets the keys 1,4,7,9,6 and 3"""
-		# first of all, delete the number keys:
-		while(self.move_keys>0):
-			self.active_keys.pop(0)
-			self.move_keys-=1
-		# move_keys should now be 0
-		# now go through the list and insert, not append, these keys:
-		if(tr==True):
-			self.active_keys.insert(0,CKeypress(K_KP9,0,SEVENT.moveUpRight))
-			self.move_keys+=1
-		if(right==True):
-			self.active_keys.insert(0,CKeypress(K_KP6,0,SEVENT.moveRight))
-			self.move_keys+=1
-		if(br==True):
-			self.active_keys.insert(0,CKeypress(K_KP3,0,SEVENT.moveDownRight))
-			self.move_keys+=1
-		if(tl==True):
-			self.active_keys.insert(0,CKeypress(K_KP7,0,SEVENT.moveUpLeft))
-			self.move_keys+=1
-		if(left==True):
-			self.active_keys.insert(0,CKeypress(K_KP4,0,SEVENT.moveLeft))
-			self.move_keys+=1
-		if(bl==True):
-			self.active_keys.insert(0,CKeypress(K_KP1,0,SEVENT.moveDownLeft))
-			self.move_keys+=1
-		return(True)
-
 	def keyExists(self,key,mod=0):
 		"""Check if a keypress already exists"""
 		for i in self.keys:

@@ -118,21 +118,21 @@ class CWindow:
 					foo.x+=1
 			# now draw in all of the corners
 			foo=pygame.Rect((0,0,0,0))
-			self.image.blit(self.lgui.images[SPQR.WIN_TL],foo)
-			foo.y=self.rect.h-self.lgui.images[SPQR.WIN_BL].get_height()
-			self.image.blit(self.lgui.images[SPQR.WIN_BL],foo)
-			foo.x=self.rect.w-self.lgui.images[SPQR.WIN_BR].get_width()
-			self.image.blit(self.lgui.images[SPQR.WIN_BR],foo)
+			self.image.blit(self.lgui.image("win_tl"),foo)
+			foo.y=self.rect.h-self.lgui.iHeight("win_bl")
+			self.image.blit(self.lgui.image("win_bl"),foo)
+			foo.x=self.rect.w-self.lgui.iWidth("win_br")
+			self.image.blit(self.lgui.image("win_br"),foo)
 			foo.y=0
-			self.image.blit(self.lgui.images[SPQR.WIN_TR],foo)
+			self.image.blit(self.lgui.image("win_tr"),foo)
 			# right, all that's left to do is draw the text over the title bar
 			# firstly render the text in it's own little gfx area
 			self.lgui.fonts[SPQR.FONT_VERA].set_bold(True)
 			bar=self.lgui.fonts[SPQR.FONT_VERA].render(title,True,SPQR.COL_WINTITLE)
 			self.lgui.fonts[SPQR.FONT_VERA].set_bold(False)
 			# set it to centre of title bar
-			foo.x=((self.rect.w+(self.lgui.images[SPQR.WIN_TL].get_width()*2))-bar.get_width())/2
-			foo.y=((self.lgui.images[SPQR.WIN_TL].get_height()-bar.get_height())/2)+1
+			foo.x=((self.rect.w+(self.lgui.iWidth("win_tl")*2))-bar.get_width())/2
+			foo.y=((self.lgui.iHeight("win_tl")-bar.get_height())/2)+1
 			# render to image
 			self.image.blit(bar,foo)
 	

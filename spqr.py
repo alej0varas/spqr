@@ -127,54 +127,32 @@ class CSPQR:
 		if(SPQR.DEBUG_MODE==True):
 			menu.append(SMENU.CMenuParent("Debug"))
 		# then add the sub menus below these
-		menu[0].addChild(SMENU.CMenuChild("New Game",
-			SPQR.ICON_NEW,"Ctrl+N",SEVENT.menuNew))
-		menu[0].addChild(SMENU.CMenuChild("sep",
-			SPQR.ICON_NONE,"",SEVENT.notYetCoded))
-		menu[0].addChild(SMENU.CMenuChild("Load Game",
-			SPQR.ICON_LOAD,"Ctrl+L",SEVENT.menuLoad))
-		menu[0].addChild(SMENU.CMenuChild("Save Game",
-			SPQR.ICON_SAVE,"Ctrl+S",SEVENT.menuSave))
+		menu[0].addChild(SMENU.CMenuChild("New Game","new","Ctrl+N",SEVENT.menuNew))
+		menu[0].addChild(SMENU.CMenuChild("sep",None,"",SEVENT.notYetCoded))
+		menu[0].addChild(SMENU.CMenuChild("Load Game","open","Ctrl+L",SEVENT.menuLoad))
+		menu[0].addChild(SMENU.CMenuChild("Save Game","save","Ctrl+S",SEVENT.menuSave))
 		# this is a seperate, drawn bar to split the text
-		menu[0].addChild(SMENU.CMenuChild("sep",
-			SPQR.ICON_NONE,"",SEVENT.notYetCoded))
-		menu[0].addChild(SMENU.CMenuChild("Preferences",
-			SPQR.ICON_PREFS,"Ctrl+P",SEVENT.menuPreferences))
-		menu[0].addChild(SMENU.CMenuChild("sep",
-			SPQR.ICON_NONE,"",SEVENT.notYetCoded))
-		menu[0].addChild(SMENU.CMenuChild("Exit SPQR",
-			SPQR.ICON_EXIT,"Ctrl+Q",SEVENT.quitSpqr))
-		menu[1].addChild(SMENU.CMenuChild("Visit Senate",
-			SPQR.ICON_SENATE,"F2",SEVENT.menuEmpireSenate))
-		menu[1].addChild(SMENU.CMenuChild("Statistics",
-			SPQR.ICON_STATS,"",SEVENT.menuEmpireStatistics))
-		menu[2].addChild(SMENU.CMenuChild("About",
-			SPQR.ICON_ABOUT,"Ctrl+A",SEVENT.menuHelpAbout))
-		menu[2].addChild(SMENU.CMenuChild("sep",
-			SPQR.ICON_NONE,"",SEVENT.notYetCoded))
-		menu[2].addChild(SMENU.CMenuChild("Help",
-			SPQR.ICON_HELP,"F1",SEVENT.menuHelpHelp))
+		menu[0].addChild(SMENU.CMenuChild("sep",None,"",SEVENT.notYetCoded))
+		menu[0].addChild(SMENU.CMenuChild("Preferences","preferences","Ctrl+P",SEVENT.menuPreferences))
+		menu[0].addChild(SMENU.CMenuChild("sep",None,"",SEVENT.notYetCoded))
+		menu[0].addChild(SMENU.CMenuChild("Exit SPQR","exit","Ctrl+Q",SEVENT.quitSpqr))
+		menu[1].addChild(SMENU.CMenuChild("Visit Senate","senate","F2",SEVENT.menuEmpireSenate))
+		menu[1].addChild(SMENU.CMenuChild("Statistics","statistics","",SEVENT.menuEmpireStatistics))
+		menu[2].addChild(SMENU.CMenuChild("About","about","Ctrl+A",SEVENT.menuHelpAbout))
+		menu[2].addChild(SMENU.CMenuChild("sep",None,"",SEVENT.notYetCoded))
+		menu[2].addChild(SMENU.CMenuChild("Help","help","F1",SEVENT.menuHelpHelp))
 	
 		# debug menu is always last - it's easy to remove then
 		if(SPQR.DEBUG_MODE==True):
-			menu[3].addChild(SMENU.CMenuChild("Show unit names",
-				SPQR.ICON_DEBUG,"",SEVENT.consoleUnitNames))
-			menu[3].addChild(SMENU.CMenuChild("Show unit IDs",
-				SPQR.ICON_DEBUG,"",SEVENT.consoleUnitNumbers))
-			menu[3].addChild(SMENU.CMenuChild("Show unit owners",
-				SPQR.ICON_DEBUG,"",SEVENT.consoleUnitOwners))
-			menu[3].addChild(SMENU.CMenuChild("Show city names",
-				SPQR.ICON_DEBUG,"",SEVENT.consoleCityNames))
-			menu[3].addChild(SMENU.CMenuChild("sep",
-				SPQR.ICON_NONE,"",SEVENT.notYetCoded))
-			menu[3].addChild(SMENU.CMenuChild("Window test",
-				SPQR.ICON_DEBUG,"",SEVENT.windowTest))
-			menu[3].addChild(SMENU.CMenuChild("Widget test",
-				SPQR.ICON_DEBUG,"",SEVENT.widgetTest))
-			menu[3].addChild(SMENU.CMenuChild("sep",
-				SPQR.ICON_NONE,"",SEVENT.notYetCoded))
-			menu[3].addChild(SMENU.CMenuChild("Open Console",
-				SPQR.ICON_CONSOLE,"",SEVENT.displayConsole))
+			menu[3].addChild(SMENU.CMenuChild("Show unit names","debug","",SEVENT.consoleUnitNames))
+			menu[3].addChild(SMENU.CMenuChild("Show unit IDs","debug","",SEVENT.consoleUnitNumbers))
+			menu[3].addChild(SMENU.CMenuChild("Show unit owners","debug","",SEVENT.consoleUnitOwners))
+			menu[3].addChild(SMENU.CMenuChild("Show city names","debug","",SEVENT.consoleCityNames))
+			menu[3].addChild(SMENU.CMenuChild("sep","debug","",SEVENT.notYetCoded))
+			menu[3].addChild(SMENU.CMenuChild("Window test","debug","",SEVENT.windowTest))
+			menu[3].addChild(SMENU.CMenuChild("Widget test","debug","",SEVENT.widgetTest))
+			menu[3].addChild(SMENU.CMenuChild("sep","debug","",SEVENT.notYetCoded))
+			menu[3].addChild(SMENU.CMenuChild("Open Console","debug","",SEVENT.displayConsole))
 	
 		# Add the menubar at the top. It has no drawn window
 		# THIS MUST BE THE FIRST WINDOW
@@ -194,11 +172,11 @@ class CSPQR:
 								SPQR.SCREEN_WIDTH,SPQR.BBOX_HEIGHT,"",
 								False,"map_widgets")
 		# and the mini-map on the rhs
-		w=self.gui.images[SPQR.SMALL_MAP].get_width()
-		h=self.gui.images[SPQR.SMALL_MAP].get_height()
-		x=SPQR.SCREEN_WIDTH-(self.gui.images[SPQR.SMALL_MAP].get_width()+SPQR.SPACER+bwindow.rect.x)
-		y=SPQR.SCREEN_HEIGHT-(self.gui.images[SPQR.SMALL_MAP].get_height()+(2*SPQR.SPACER)+1+bwindow.rect.y)
-		mini_map=SWIDGET.CImage(self.gui,x,y,w,h,SPQR.SMALL_MAP)
+		w=self.gui.iWidth("small_map")
+		h=self.gui.iHeight("small_map")
+		x=SPQR.SCREEN_WIDTH-(self.gui.iWidth("small_map")+SPQR.SPACER+bwindow.rect.x)
+		y=SPQR.SCREEN_HEIGHT-(self.gui.iHeight("small_map")+(2*SPQR.SPACER)+1+bwindow.rect.y)
+		mini_map=SWIDGET.CImage(self.gui,x,y,w,h,"small_map")
 		# allow left mouse button dragging as well (also simulates a mini-map click)
 		mini_map.callbacks.mouse_ldown=SEVENT.miniMapDrag
 		mini_map.active=True
@@ -206,11 +184,11 @@ class CSPQR:
 		bwindow.addWidget(mini_map)
 
 		# complete with centre on rome button
-		w=self.gui.images[SPQR.BTN_ROME].get_width()
-		h=self.gui.images[SPQR.BTN_ROME].get_height()
-		x+=self.gui.images[SPQR.SMALL_MAP].get_width()-w
+		w=self.gui.iWidth("rome_button")
+		h=self.gui.iHeight("rome_button")
+		x+=self.gui.iWidth("small_map")-w
 		y=SPQR.BBOX_HEIGHT-h
-		centre_button=SWIDGET.CImage(self.gui,x,y,w,h,SPQR.BTN_ROME)
+		centre_button=SWIDGET.CImage(self.gui,x,y,w,h,"rome_button")
 		centre_button.callbacks.mouse_lclk=SEVENT.centreMap
 		centre_button.active=True
 		centre_button.describe="centre button"
