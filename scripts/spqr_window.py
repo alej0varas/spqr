@@ -76,44 +76,44 @@ class CWindow:
 			# ok, we start with the sides, with some clever blitting
 			# basically blit 4*4 images until you can only do 4*1 ones
 			foo.x=0
-			foo.y=self.lgui.images[SPQR.WIN_TL].get_height()
+			foo.y=self.lgui.iHeight("win_tl")
 			lrg_draw=int((self.rect.h-foo.y)/4)
 			sml_draw=(self.rect.h-foo.y)-(lrg_draw*4)
-			offset=self.rect.w-self.lgui.images[SPQR.WIN_RGT].get_width()
+			offset=self.rect.w-self.lgui.iWidth("win_rgt")
 			for bar in range(lrg_draw):
 				# blit the large images
-				self.image.blit(self.lgui.images[SPQR.WIN_LFT_LG],foo)
+				self.image.blit(self.lgui.image("win_lft_lg"),foo)
 				foo.x+=offset
-				self.image.blit(self.lgui.images[SPQR.WIN_RGT_LG],foo)
+				self.image.blit(self.lgui.image("win_rgt_lg"),foo)
 				foo.x-=offset	
 				foo.y+=4
 			# ok, now the final small ones
 			if(sml_draw!=0):
 				for bar in range(sml_draw):
-					self.image.blit(self.lgui.images[SPQR.WIN_LFT],foo)
+					self.image.blit(self.lgui.image("win_lft"),foo)
 					foo.x+=offset
-					self.image.blit(self.lgui.images[SPQR.WIN_RGT],foo)
+					self.image.blit(self.lgui.image("win_rgt"),foo)
 					foo.x-=offset
 					foo.y+=1
 			# same sort of routine for the top and bottom
 			foo.y=0
-			foo.x=self.lgui.images[SPQR.WIN_TL].get_width()
+			foo.x=self.lgui.iWidth("win_tl")
 			lrg_draw=int((self.rect.w-foo.x)/4)
 			sml_draw=(self.rect.w-foo.x)-(lrg_draw*4)
-			offset=self.rect.h-self.lgui.images[SPQR.WIN_BOT].get_height()
+			offset=self.rect.h-self.lgui.iHeight("win_bot")
 			for bar in range(lrg_draw):
 				# again, the large blits (as can be seen from their name)
-				self.image.blit(self.lgui.images[SPQR.WIN_TOP_LG],foo)
+				self.image.blit(self.lgui.image("win_top_lg"),foo)
 				foo.y+=offset
-				self.image.blit(self.lgui.images[SPQR.WIN_BOT_LG],foo)
+				self.image.blit(self.lgui.image("win_bot_lg"),foo)
 				foo.y-=offset
 				foo.x+=4
 			# then the small top/bottom fillers
 			if sml_draw!=0:
 				for bar in range(sml_draw):
-					self.image.blit(self.lgui.images[SPQR.WIN_TOP],foo)
+					self.image.blit(self.lgui.image("win_top"),foo)
 					foo.y+=offset
-					self.image.blit(self.lgui.images[SPQR.WIN_BOT],foo)
+					self.image.blit(self.lgui.image("win_bot"),foo)
 					foo.y-=offset
 					foo.x+=1
 			# now draw in all of the corners
@@ -195,7 +195,7 @@ class CWindow:
 		# get the real width of the window minus it's sides
 		width=self.rect.w-(2*SPQR.WINSZ_SIDE)
 		# and the button size:
-		bwidth=self.lgui.images[SPQR.BUTTON_STD].get_width()
+		bwidth=self.lgui.iWidth("button")
 
 		# the basic button layout is as follows:
 		# we add a sep bar immediatly below. This is always 2 pixels in height
@@ -216,7 +216,7 @@ class CWindow:
 		if(totb>=(len(button_list))):
 			# yes, all buttons go on the one line
 			# start by extending the size of the window and rebuilding the image
-			extend_height=(self.lgui.images[SPQR.BUTTON_STD].get_height()*2)+2
+			extend_height=(self.lgui.iHeight("button")*2)+2
 			self.rect.h+=extend_height
 			new_image=pygame.Surface((self.rect.w,self.rect.h))
 			new_image.fill(SPQR.BGUI_COL)
@@ -247,9 +247,9 @@ class CWindow:
 				(self.rect.w-(2*(SPQR.WINSZ_SIDE+SPQR.SPACER)))))
 				
 			# now we add the buttons
-			xpos=width-((2*SPQR.SPACER)+self.lgui.images[SPQR.BUTTON_STD].get_width())
+			xpos=width-((2*SPQR.SPACER)+self.lgui.iWidth("button"))
 			ypos=(self.rect.h-(extend_height+SPQR.WINSZ_TOP))
-			ypos+=(extend_height-self.lgui.images[SPQR.BUTTON_STD].get_height())/2
+			ypos+=(extend_height-self.lgui.iHeight("button")/2)
 			while(len(button_list)>0):	
 				# get the next button
 				button=button_list.pop(0)
@@ -268,7 +268,7 @@ class CWindow:
 				if(button.key!=None):
 					self.lgui.keyboard.addKey(button.key,button.event)
 				# reset x position
-				xpos-=(2*SPQR.SPACER)+self.lgui.images[SPQR.BUTTON_STD].get_width()
+				xpos-=(2*SPQR.SPACER)+self.lgui.iwidth("button")
 		else:
 			# 2 lines of buttons not implemented
 			if(SPQR.DEBUG_MODE==True):

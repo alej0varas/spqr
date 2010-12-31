@@ -69,7 +69,7 @@ class CGFXEngine:
 			self.map_render = pygame.Surface((self.iWidth("map"), self.iHeight("map")))
 		else:
 			# render a null map
-			self.images = [pygame.Surface((1,1)),pygame.Surface((1,1))]
+			#self.images = [pygame.Surface((1,1)),pygame.Surface((1,1))]
 			self.himages = {}
 		self.windows = []
 		# the font that the messagebox will use:

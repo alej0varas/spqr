@@ -154,8 +154,8 @@ class CButton(CWidget):
 		 button widget item for you to use.
 		 Buttons are automagically highlighted when the mouse is over them"""
 	def __init__(self,gui,x,y,text):
-		width=gui.images[SPQR.BUTTON_STD].get_width()
-		height=gui.images[SPQR.BUTTON_STD].get_height()
+		width=gui.iWidth("button")
+		height=gui.iHeight("button")
 		CWidget.__init__(self,gui,pygame.Rect(x,y,width,height),
 						 SPQR.WT_BUTTON,None,"CButton")
 		# get the images
@@ -168,18 +168,16 @@ class CButton(CWidget):
 			 routine will draw the button for you. Returns
 			 the image that has been drawn AND the highlight button"""
 		# make a copy of the button bitmap and the highlight one
-		foo=pygame.Surface((self.lgui.images[SPQR.BUTTON_STD].get_width(),
-			self.lgui.images[SPQR.BUTTON_STD].get_height()))
-		bar=pygame.Surface((self.lgui.images[SPQR.BUTTON_STD].get_width(),
-			self.lgui.images[SPQR.BUTTON_STD].get_height()))
+		foo=pygame.Surface((self.lgui.iWidth("button"),self.lgui.iHeight("button")))
+		bar=pygame.Surface((self.lgui.iWidth("button"),self.lgui.iHeight("button")))
 		area=pygame.Rect((0,0,foo.get_width(),foo.get_height()))
-		foo.blit(self.lgui.images[SPQR.BUTTON_STD],area)
-		bar.blit(self.lgui.images[SPQR.BUTTON_HIGH],area)
+		foo.blit(self.lgui.image("button"),area)
+		bar.blit(self.lgui.image("button_high"),area)
 		# render the text
 		txt=self.lgui.fonts[SPQR.FONT_VERA].render(text,True,SPQR.COL_BUTTON)
 		# centre the text and overlay it
-		x=(self.lgui.images[SPQR.BUTTON_STD].get_width()-txt.get_width())/2
-		y=(self.lgui.images[SPQR.BUTTON_STD].get_height()-txt.get_height())/2
+		x=(self.lgui.iWidth("button")-txt.get_width())/2
+		y=(self.lgui.iHeight("button")-txt.get_height())/2
 		area=pygame.Rect((x,y,bar.get_width(),bar.get_height()))
 		foo.blit(txt,area)
 		bar.blit(txt,area)
@@ -193,9 +191,9 @@ class CCheckBox(CWidget):
 		   x,y - the offset into the window
 		   initial - a boolean describing the start status of the widget"""
 		if(initial==True):
-			image=gui.images[SPQR.CHECK_YES]
+			image=gui.image("check_yes")
 		else:
-			image=gui.images[SPQR.CHECK_NO]
+			image=gui.image("check_no")
 		CWidget.__init__(self,gui,pygame.Rect(x,y,SPQR.CHKBOX_SIZE,SPQR.CHKBOX_SIZE),
 						 SPQR.WT_CHECK,image,"CCheckBox")
 		# status is the inital boolean value
@@ -212,10 +210,10 @@ class CCheckBox(CWidget):
 		   updates it's own gfx. In the parent window"""
 		if(self.status==True):
 			self.status=False
-			self.image=lgui.images[SPQR.CHECK_NO]
+			self.image=lgui.image("check_no")
 		else:
 			self.status=True
-			self.image=lgui.images[SPQR.CHECK_YES]
+			self.image=lgui.image("check_yes")
 		# the image will have to be updated. Since we know that the widget
 		# must be active and on display (since we just got a click), we can
 		# just update the small bit of screen. Firstly, we get the window
@@ -246,17 +244,15 @@ class CSlider(CWidget):
 	   end - value on rhs of widget, initial - initial value"""
 	def __init__(self,gui,x,y,width,start,end,initial):
 		# width is at least what the gfx width is
-		if(width<gui.images[SPQR.GUI_SLIDER].get_width()):
-			width=gui.images[SPQR.GUI_SLIDER].get_width()
-		height=gui.images[SPQR.GUI_SLIDER].get_height()
+		if(width<gui.iWidth("slider_knob")):
+			width=gui.iWidth("slider_knob")
+		height=gui.iHeight("slider_knob")
 		CWidget.__init__(self,gui,pygame.Rect(x,y,width,height),
 						 SPQR.WT_SLIDER,pygame.Surface((width,height)),
 						 "CSlider")
 		# we have to check wether the slider knob is being pressed
 		# or if it's some other part of the widget 
-		self.knob_rect=pygame.Rect(0,0,
-			gui.images[SPQR.GUI_SLIDER].get_width(),
-			gui.images[SPQR.GUI_SLIDER].get_height())
+		self.knob_rect=pygame.Rect(0,0,gui.iWidth("slider_knob"),gui.iHeight("slider_knob"))
 		# some more specific slider variables
 		# just check the range is ok
 		if(start>end):
@@ -273,7 +269,7 @@ class CSlider(CWidget):
 		# width of slider, since the slider 'overhangs' the bar at
 		# both ends of the bar (the left part on the left, and the same
 		# on the right, by half the slider width)
-		self.slide_bar_width=self.rect.w-gui.images[SPQR.GUI_SLIDER].get_width()
+		self.slide_bar_width=self.rect.w-gui.iWidth("slider_knob")
 		self.pixel_increment=(float)(end-start)/(float)(width)
 		# mainly with a slider you'll let it do it's own thing
 		self.callbacks.mouse_ldown=self.sliderMouseLDown
@@ -294,11 +290,11 @@ class CSlider(CWidget):
 		spoint=(float)(self.current_value)/(float)(self.right_value-self.left_value)
 		spoint=(int)(spoint*self.slide_bar_width)
 		# make sure bars are in middle of slider
-		yoff=(self.lgui.images[SPQR.GUI_SLIDER].get_height()/2)-2
+		yoff=(self.lgui.iHeight("slider_knob")/2)-2
 		# also, allow for fact slide bar is not as long as the widget width
 		# because the slider knob 'overhangs'. To make things easier, we just
 		# adjust the middle point by half the slider knob width
-		spoint+=self.lgui.images[SPQR.GUI_SLIDER].get_width()/2
+		spoint+=self.lgui.iWidth("slider_knob")/2
 		# blue bar is from left hand side up to the spoint
 		pygame.draw.line(self.image,SPQR.SLIDER_BDARK,(0,yoff),
 			(spoint,yoff),1)
@@ -327,8 +323,8 @@ class CSlider(CWidget):
 			(self.rect.w-1,self.rect.y+3),1)
 		# that was a lot of line drawing... now we just have to blit the
 		# slider bar itself, in the right place
-		xpos=spoint-(self.lgui.images[SPQR.GUI_SLIDER].get_width()/2)
-		self.image.blit(self.lgui.images[SPQR.GUI_SLIDER],(xpos,0))
+		xpos=spoint-(self.lgui.iWidth("slider_knob")/2)
+		self.image.blit(self.lgui.image("slider_knob"),(xpos,0))
 		# set knob_rect so we can catch events as well
 		self.knob_rect.x=xpos
 		# and that's it! updating is all up to you...
@@ -426,7 +422,7 @@ class CScrollArea(CWidget):
 		# get size of the area to display:
 		vsize=image.get_height()
 		# get offset size:
-		width+=gui.images[SPQR.SCHAN_MIDDLE].get_width()
+		width+=gui.iWidth("schan_mid")
 		if(self.border==True):
 			height+=2
 			width+=1
@@ -435,8 +431,8 @@ class CScrollArea(CWidget):
 		# a value of 0 means 'start at the top'
 		self.display_ypos=0
 		# we need to know how big the 'handle' is:
-		w=gui.images[SPQR.SCHAN_MIDDLE].get_width()
-		y=gui.images[SPQR.SCROLL_TOP].get_height()
+		w=gui.iWidth("schan_mid")
+		y=gui.iHeight("scrollbar_top")
 		# for the handle height, just make sure the math is ok:
 		if(vsize<height):
 			vsize=height
@@ -490,17 +486,17 @@ class CScrollArea(CWidget):
 		pygame.draw.line(piccy,SPQR.SCROLL_BORDER,(self.rect.w,0),
 			(self.rect.w,self.rect.h))
 		# now blit in the arrows at the top and bottom:
-		xpos=self.rect.w-self.lgui.images[SPQR.SCROLL_TOP].get_width()
-		piccy.blit(self.lgui.images[SPQR.SCROLL_TOP],(xpos,0))
-		piccy.blit(self.lgui.images[SPQR.SCROLL_BOTTOM],
-			(xpos,(self.rect.h-self.lgui.images[SPQR.SCROLL_BOTTOM].get_height())))
+		xpos=self.rect.w-self.lgui.iWidth("scrollbar_top")
+		piccy.blit(self.lgui.image("scrollbar_top"),(xpos,0))
+		piccy.blit(self.lgui.image("scrollbar_bottom"),
+			(xpos,(self.rect.h-self.lgui.iHeight("scrollbar_bottom"))))
 		# now draw the handlebar for the widget
 		# start by making a new surface
 		handle_gfx=pygame.Surface((self.handle_rect.w,self.handle_rect.h))
 		# fill the area in first
 		pixels=self.handle_rect.h
 		ypos=0
-		fill=self.lgui.images[SPQR.SCHAN_FILL].get_height()
+		fill=self.lgui.iHeight("schand_bulk")
 		while(pixels>0):
 			if(pixels<self.lgui.images[SPQR.SCHAN_FILL].get_height()):
 				handle_gfx.blit(self.lgui.images[SPQR.SCHAN_FILL],(0,ypos))
