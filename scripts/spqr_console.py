@@ -42,10 +42,10 @@ class CConsole(object):
 		string=""
 		index=0
 		for window in SGFX.gui.windows:
-			if(window.caption==""):
-				title="NONE"
+			if window.caption == "":
+				title = "NONE"
 			else:
-				title=window.caption
+				title = window.caption
 			string += "Window #" + str(index) + ":" + title + "\n"
 			string += "          " + window.describe + "\n"
 			index += 1
