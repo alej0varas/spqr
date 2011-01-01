@@ -20,7 +20,6 @@ from pygame.locals import *
 import spqr_defines as SPQR
 
 # sound and music routines for SPQR
-# essentially stored as a single class
 
 class CSound(object):
 	"""Class stores and sets music parameters"""
@@ -81,4 +80,6 @@ class CSound(object):
 		pygame.mixer.music.unpause()
 		self.music_playing = True
 		return True
+
+sound = CSound()
 

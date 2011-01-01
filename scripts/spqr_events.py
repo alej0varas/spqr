@@ -23,6 +23,7 @@ import spqr_defines as SPQR
 import spqr_window as SWINDOW
 import spqr_widgets as SWIDGET
 import spqr_gui as SGFX
+import spqr_sound as SSFX
 
 # thanks go to John Schanck for the following module
 import pyconsole
@@ -127,12 +128,12 @@ def menuPreferences(handle, xpos, ypos):
 	lbl_Volume.rect.x = 88
 	lbl_Volume.rect.y = 60
 	# a checkbox for the music option
-	chk_Volume = SWIDGET.CCheckBox(247, 30, SGFX.gui.noise.music_playing)
+	chk_Volume = SWIDGET.CCheckBox(247, 30, SSFX.sound.music_playing)
 	chk_Volume.active = True
 	# connect it to some code
 	chk_Volume.addAfterClick(musicCheckbox)
 	# a slider for the volume
-	sld_Volume = SWIDGET.CSlider(160, 62, 100, 0, 100, SGFX.gui.noise.getVolume())
+	sld_Volume = SWIDGET.CSlider(160, 62, 100, 0, 100, SSFX.sound.getVolume())
 	sld_Volume.active = True
 	# connect to some code
 	sld_Volume.setUpdateFunction(setVolume)
@@ -168,10 +169,10 @@ def musicCheckbox(handle, xpos, ypos):
 	"""Starts / stops music"""
 	if handle.status == True:
 		# start music
-		SGFX.gui.noise.startMusic()
+		SSFX.sound.startMusic()
 	else:
 		# stop music
-		SGFX.gui.noise.stopMusic()
+		SSFX.sound.stopMusic()
 	return True
 	
 def setVolume(handle, xpos, ypos):
@@ -179,7 +180,7 @@ def setVolume(handle, xpos, ypos):
 	# get current slider value
 	volume = handle.getSliderValue()
 	# set new volume
-	SGFX.gui.noise.setVolume(volume)
+	SSFX.sound.setVolume(volume)
 	# so simple!
 	return True
 

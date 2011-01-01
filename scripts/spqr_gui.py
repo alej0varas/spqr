@@ -23,7 +23,7 @@ import spqr_widgets as SWIDGET
 import spqr_keys as SKEY
 import spqr_events as SEVENT
 import spqr_console as SCONSOLE
-import spqr_sound as SSOUND
+import spqr_sound as SSFX
 
 # class that holds the dirty rectangle updates
 class CDirtyRect(object):
@@ -105,10 +105,8 @@ class CGFXEngine(object):
 		self.keyboard = SKEY.CKeyboard()
 		# render the city texts
 		self.renderCityNames()
-		# set up sound
-		self.noise = SSOUND.CSound()
 		# start the first song here, as well
-		self.noise.startNextSong()
+		SSFX.sound.startNextSong()
 		# some basic variables that SPQR uses regularly
 		# where to start the map blit from when blasting it to the screen
 		foo = (SPQR.SCREEN_HEIGHT - self.iHeight("win_tl")) + 1
@@ -381,7 +379,7 @@ class CGFXEngine(object):
 		# perhaps it was just that the song ended?
 		if event.type == SPQR.EVENT_SONGEND:
 			# just start the next song
-			self.noise.startNextSong()
+			SSFX.sound.startNextSong()
 			return True
 		# was it the end of a double-click check?
 		if event.type == SPQR.EVENT_DC_END:

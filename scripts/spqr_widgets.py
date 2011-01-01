@@ -131,7 +131,8 @@ class CImage(CWidget):
 	"""Image class states and stores details for a simple image"""	
 	def __init__(self,x,y,width,height,image):
 		tmp_image=pygame.Surface((width,height),pygame.SRCALPHA,32)
-		tmp_image.blit(SGFX.gui.image(image),(0,0))
+		if image != None:
+			tmp_image.blit(SGFX.gui.image(image),(0,0))
 		CWidget.__init__(self,pygame.Rect(x,y,width,height),
 						 SPQR.WT_IMAGE,tmp_image.convert_alpha(),"CImage")
 
@@ -1239,7 +1240,7 @@ def buildImageAlpha(image):
 
 def buildUniqueImage(picture):
 	"""As buildImage, but this time you pass your own image"""
-	new=CImage(0,0,0,0,SPQR.IMG_NONE)
+	new=CImage(0, 0, 0, 0, None)
 	# now amend that image
 	new.rect.w=picture.get_width()
 	new.rect.h=picture.get_height()
