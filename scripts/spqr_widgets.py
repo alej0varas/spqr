@@ -172,8 +172,8 @@ class CButton(CWidget):
 		bar=pygame.Surface((self.lgui.iWidth("button"),self.lgui.iHeight("button")))
 		area=pygame.Rect((0,0,foo.get_width(),foo.get_height()))
 		foo.blit(self.lgui.image("button"),area)
-		bar.blit(self.lgui.image("button_high"),area)
 		# render the text
+		bar.blit(self.lgui.image("button_high"),area)
 		txt=self.lgui.fonts[SPQR.FONT_VERA].render(text,True,SPQR.COL_BUTTON)
 		# centre the text and overlay it
 		x=(self.lgui.iWidth("button")-txt.get_width())/2
@@ -498,19 +498,19 @@ class CScrollArea(CWidget):
 		ypos=0
 		fill=self.lgui.iHeight("schand_bulk")
 		while(pixels>0):
-			if(pixels<self.lgui.images[SPQR.SCHAN_FILL].get_height()):
-				handle_gfx.blit(self.lgui.images[SPQR.SCHAN_FILL],(0,ypos))
+			if(pixels<self.lgui.iHeight("schand_bulk")):
+				handle_gfx.blit(self.lgui.image("schand_bulk"),(0,ypos))
 				pixels=0
 			else:
-				handle_gfx.blit(self.lgui.images[SPQR.SCHAN_FILL],(0,ypos))
+				handle_gfx.blit(self.lgui.image("schand_bulk"),(0,ypos))
 				ypos+=fill
 				pixels-=fill
 		# do the top and bottom:
-		handle_gfx.blit(self.lgui.images[SPQR.SCHAN_TOP],(0,0))
-		handle_gfx.blit(self.lgui.images[SPQR.SCHAN_BOTTOM],(0,(self.handle_rect.h)-2))
+		handle_gfx.blit(self.lgui.image("schan_top"),(0,0))
+		handle_gfx.blit(self.lgui.image("schan_bot"),(0,(self.handle_rect.h)-2))
 		# work out middle of area and blit that
-		middle=(self.handle_rect.h-self.lgui.images[SPQR.SCHAN_MIDDLE].get_height())/2
-		handle_gfx.blit(self.lgui.images[SPQR.SCHAN_MIDDLE],(0,middle))
+		middle=(self.handle_rect.h-self.lgui.iHeight("schan_mid"))/2
+		handle_gfx.blit(self.lgui.image("schan_mid"),(0,middle))
 		# draw the border here if we have to
 		if(self.border==True):
 			pygame.draw.line(piccy,SPQR.SCROLL_BORDER,
@@ -523,7 +523,7 @@ class CScrollArea(CWidget):
 			self.handle_rect.x=self.display_image.get_width()+1
 		else:
 			self.handle_rect.x=self.display_image.get_width()
-		self.handle_rect.y=self.lgui.images[SPQR.SCROLL_TOP].get_height()
+		self.handle_rect.y=self.lgui.iHeight("scrollbar_top")
 		return(piccy,handle_gfx)
 
 	def updateScrollArea(self):
@@ -767,7 +767,7 @@ class CItemList(CWidget):
 			xsize_blit=width
 			xpos=0
 			while(xsize_blit>0):
-				row_image.blit(self.lgui.images[SPQR.GRADBAR+index],
+				row_image.blit(self.lgui.image(SPQR.GRADBAR_NAMES[index]),
 					(xpos,0),(0,yoffset,SPQR.GRADBAR_WIDTH,SPQR.GRADBAR_SIZES[index]))
 				xpos+=SPQR.GRADBAR_WIDTH
 				xsize_blit-=SPQR.GRADBAR_WIDTH
@@ -928,12 +928,12 @@ class CItemList(CWidget):
 		# we also have to delete the other arrows
 		# what arrow graphic do we use?
 		if(self.data[1][column]==True):
-			arrow=lgui.images[SPQR.ARROW_DOWN]
+			arrow=lgui.image("arrown_down")
 			# invert for next time
 			self.data[1][column]=False
 		else:
 			# similar code
-			arrow=lgui.images[SPQR.ARROW_UP]
+			arrow=lgui.image("arrow_up")
 			self.data[1][column]=True
 		
 		# create another image to blit over the other arrows
@@ -1015,21 +1015,21 @@ class COptionMenu(CWidget):
 		# add a spacer either side
 		width+=(2*SPQR.SPACER)
 		# then allow for the graphics on either side
-		width+=self.lgui.images[SPQR.OPTM_LHAND].get_width()
+		width+=self.lgui.iWidth("optionmenu_rhand")
 		# save info for later
 		xpos=width
-		width+=self.lgui.images[SPQR.OPTM_RHAND].get_width()
+		width+=self.lgui.iWidth("optionmenu_rhand")
 		# we can now work out the rect size
-		height=self.lgui.images[SPQR.OPTM_RHAND].get_height()
+		height=self.lgui.iHeight("optionmenu_rhand")
 		self.rect=pygame.Rect(x,y,width,height)
 		# we can now start to build the base image
 		self.image=pygame.Surface((width,height),SRCALPHA)
 		# build up the base image
 		self.image.fill(SPQR.COL_WHITE)
-		self.image.blit(self.lgui.images[SPQR.OPTM_LHAND],(0,0))
-		self.image.blit(self.lgui.images[SPQR.OPTM_RHAND],(xpos,0))
+		self.image.blit(self.lgui.image("optionmenu_lhand"),(0,0))
+		self.image.blit(self.lgui.image("optionmenu_rhand"),(xpos,0))
 		# now we draw the lines at the top and bottom
-		xstart=self.lgui.images[SPQR.OPTM_LHAND].get_width()
+		xstart=self.lgui.iWidth("optionmenu_lhand")
 		pygame.draw.line(self.image,SPQR.BGUI_HIGH,(xstart,0),(xpos,0),1)
 		pygame.draw.line(self.image,SPQR.COLG_RED,(xstart,1),(xpos,1),1)
 		pygame.draw.line(self.image,SPQR.COLG_RHIGH,(xstart,2),(xpos,2),1)
@@ -1061,7 +1061,7 @@ class COptionMenu(CWidget):
 		pygame.draw.rect(self.drop_image,SPQR.COL_WHITE,(3,3,xsize-6,ysize-6),0)
 		# now we need to render the text names:
 		ypos=SPQR.HALFSPCR+SPQR.QTRSPCR+1
-		xpos=SPQR.SPACER+self.lgui.images[SPQR.OPTM_LHAND].get_width()
+		xpos=SPQR.SPACER+self.lgui.iWidth("optionmenu_lhand")
 		# we'll build the rects for menu checks as well
 		self.menu_highlights=[]
 		ymstart=self.rect.y+self.image.get_height()+SPQR.QTRSPCR+3
@@ -1181,12 +1181,12 @@ class COptionMenu(CWidget):
 						newtxt=lgui.fonts[SPQR.FONT_VERA].render(self.option,True,SPQR.COL_BLACK)
 						# now erase old text
 						oldtxt=pygame.Rect(0,3,0,self.image.get_height()-6)
-						oldtxt.x=lgui.images[SPQR.OPTM_LHAND].get_width()+SPQR.SPACER
-						oldtxt.w=self.rect.w-lgui.images[SPQR.OPTM_LHAND].get_width()
-						oldtxt.w-=(lgui.images[SPQR.OPTM_RHAND].get_width()+SPQR.SPACER)
+						oldtxt.x=lgui.iWidth("optionmenu_lhand")+SPQR.SPACER
+						oldtxt.w=self.rect.w-lgui.iWidth("optionmenu_lhand")
+						oldtxt.w-=(lgui.iWidth("optionmenu_rhand")+SPQR.SPACER)
 						pygame.draw.rect(self.image,SPQR.COL_WHITE,oldtxt)
 						# blit text into image
-						xpos=lgui.images[SPQR.OPTM_LHAND].get_width()+SPQR.SPACER
+						xpos=lgui.iWidth("optionmenu_lhand")+SPQR.SPACER
 						ypos=(self.rect.h-newtxt.get_height())/2
 						self.image.blit(newtxt,(xpos,ypos))
 						# erase menu drop

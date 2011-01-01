@@ -28,8 +28,8 @@ EMAIL				= "maximinus@gmail.com"
 SYSTEM				= "GNU/Linux"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
-LAST_UPDATE			= "28th December 2010"
-CODELINES			= "5943"
+LAST_UPDATE			= "1st Jan 2011"
+CODELINES			= "5675"
 
 # before we go any further, this one is a must ;-)
 # currently adds debug menu bar , along with access to
@@ -145,6 +145,7 @@ MAX_STACKING		= 4
 
 # sizes of various gradiant bars used in ItemList widget
 GRADBAR_SIZES		= [64,96,128]
+GRADBAR_NAMES		= ["gradbar64","gradbar96","gradbar128"]
 GRADBAR_WIDTH		= 128
 
 # player types
@@ -178,159 +179,6 @@ FILE_HEXMASK		= "../gfx/masks/hex_mask.png"
 # the images to load
 # just list the folders inside gfx: the game will pull all of the png files
 GRAPHICS_F			= ["gui", "icons", "units", "cities"]
-GRAPHICS			= ["gui/win_tl.png","gui/win_lft.png","gui/win_bl.png",
-				  	   "gui/win_bot.png","gui/win_br.png","gui/win_rgt.png",
-				  	   "gui/win_tr.png","gui/win_top.png","gui/win_lft_lg.png",
-				  	   "gui/win_bot_lg.png","gui/win_rgt_lg.png",
-				  	   "gui/win_top_lg.png","gui/button.png","gui/button_high.png",
-				  	   "gui/small_map.png","gui/check_yes.png","gui/check_no.png",
-				  	   "move/arrow_left.png","move/arrow_top_right.png",
-				  	   "move/arrow_bottom_right.png","move/arrow_right.png",
-				  	   "move/arrow_bottom_left.png","move/arrow_top_left.png",
-				  	   "gui/eagle.png","gui/soldier.png","gui/rome_button.png",
-				  	   "gui/nextturn_button.png","gui/endturn_button.png",
-				  	   "gui/slider_knob.png","gui/number_select.png","gui/city_infhex.png",
-				  	   "gui/arrow_up.png","gui/arrow_down.png","gui/startup.png",
-				  	   "icons/open.png","icons/save.png","icons/preferences.png",
-				  	   "icons/exit.png","icons/senate.png","icons/military.png",
-				  	   "icons/statistics.png","icons/about.png","icons/help.png",
-				  	   "icons/new.png","icons/debug.png","icons/console.png",
-  				  	   "icons/city.png","gui/unit_graph.png","gui/battle_info.png",
-				  	   "units/barbarian_archer.png","units/barbarian_chariot.png",
-				  	   "units/barbarian_horse.png","units/barbarians.png",
-				  	   "units/camel.png","units/desert_warrior.png","units/elephant.png",
-				  	   "units/fedorati.png","units/praetorians.png","units/rome_general.png",
-				  	   "units/rome_legion.png","units/siege_train.png","units/warrior.png",
-				  	   "cities/enemy_large.png","cities/enemy_medium.png",
-				  	   "cities/enemy_small.png","cities/roman_large.png",
-				  	   "cities/roman_medium.png","cities/roman_small.png",
-				  	   "cities/rome.png","gui/hex_border.png","gui/img_music.png",
-				  	   "units/overlays/moves1.png","units/overlays/moves2.png",
-				  	   "units/overlays/moves3.png","units/overlays/moves4.png",
-				  	   "units/overlays/moves5.png","units/overlays/moves6.png",
-				  	   "units/overlays/moves7.png","units/overlays/moves8.png",
-				  	   "units/overlays/extra.png","units/overlays/back.png",
-				  	   "gui/scrollbar_top.png","gui/scrollbar_bottom.png",
-				  	   "gui/schan_mid.png","gui/schan_top.png","gui/schan_bot.png",
-				  	   "gui/schand_bulk.png","gui/gradbar64.png","gui/gradbar96.png",
-				  	   "gui/gradbar128.png","gui/optionmenu_lhand.png",
-				  	   "gui/optionmenu_rhand.png","gui/unit_backdrop.png",
-				  	   "gui/test_image.png"]
-
-# and their index numbers
-MAIN_MAP			= 0
-BACK_MAP			= 1
-WIN_TL				= 2
-WIN_LFT				= 3
-WIN_BL				= 4
-WIN_BOT				= 5
-WIN_BR				= 6
-WIN_RGT				= 7
-WIN_TR				= 8
-WIN_TOP				= 9
-WIN_LFT_LG			= 10
-WIN_BOT_LG			= 11
-WIN_RGT_LG			= 12
-WIN_TOP_LG			= 13
-BUTTON_STD			= 14
-BUTTON_HIGH			= 15
-SMALL_MAP			= 16
-CHECK_YES			= 17
-CHECK_NO			= 18
-ARROW_LEFT			= 19
-ARROW_TRGT			= 20
-ARROW_BRGT			= 21
-ARROW_RIGHT			= 22
-ARROW_BLFT			= 23
-ARROW_TLFT			= 24
-IMG_EAGLE			= 25
-IMG_SOLDIER			= 26
-BTN_ROME			= 27
-BTN_NEXT			= 28
-BTN_ENDTURN			= 29
-GUI_SLIDER			= 30
-GUI_CLICKER			= 31
-IMG_CTY_INF			= 32
-ARROW_UP			= 33
-ARROW_DOWN			= 34
-START_SCREEN		= 35
-# icons for menu start here
-ICON_LOAD			= 36
-# just in case it ever gets blitted:
-ICON_NONE			= ICON_LOAD
-ICON_SAVE			= 37
-ICON_PREFS			= 38
-ICON_EXIT			= 39
-ICON_SENATE			= 40
-ICON_MILITARY		= 41
-ICON_STATS			= 42
-ICON_ABOUT			= 43
-ICON_HELP			= 44
-ICON_NEW			= 45
-ICON_DEBUG			= 46
-ICON_CONSOLE		= 47
-ICON_CITY			= 48
-# graph stuff starts here
-GRAPH_UNIT			= 49
-# btinfo stands for 'battle info'
-GRAPH_BTINFO		= 50
-# units start here
-IMG_USTART			= 51
-IMG_BARCHER			= IMG_USTART
-IMG_BCHARIOT		= IMG_USTART+1
-IMG_BHORSE			= IMG_USTART+2
-IMG_BARBS			= IMG_USTART+3
-IMG_CAMEL			= IMG_USTART+4
-IMG_DESERTW			= IMG_USTART+5
-IMG_ELEPHANT		= IMG_USTART+6
-IMG_FEDORATI		= IMG_USTART+7
-IMG_PRAETOR			= IMG_USTART+8
-IMG_GENERAL			= IMG_USTART+9
-IMG_LEGION			= IMG_USTART+10
-IMG_SIEGET			= IMG_USTART+11
-IMG_WARRIOR			= IMG_USTART+12
-# cities start here
-IMG_ELARGE			= IMG_USTART+13
-IMG_EMEDIUM			= IMG_USTART+14
-IMG_ESMALL			= IMG_USTART+15
-IMG_RLARGE			= IMG_USTART+16
-IMG_RMEDIUM			= IMG_USTART+17
-IMG_RSMALL			= IMG_USTART+18
-IMG_ROME			= IMG_USTART+19
-# other stuff follows
-HEX_BORDER			= IMG_USTART+20
-IMG_MUSIC			= IMG_USTART+21
-# there are various overlays for information, starting with
-# the number of moves left:
-MV_OVRLY_1			= IMG_USTART+22
-MV_OVRLY_2			= IMG_USTART+23
-MV_OVRLY_3			= IMG_USTART+24
-MV_OVRLY_4			= IMG_USTART+25
-MV_OVRLY_5			= IMG_USTART+26
-MV_OVRLY_6			= IMG_USTART+27
-MV_OVRLY_7			= IMG_USTART+28
-MV_OVRLY_8			= IMG_USTART+29
-MV_OVRLY_EXT		= IMG_USTART+30
-MV_OVRLY_BACK		= IMG_USTART+31
-# more GUI images
-# I should really tidy this list up but it doens't really
-# matter what order they come in to us as programmers
-SCROLL_TOP			= IMG_USTART+32
-SCROLL_BOTTOM		= IMG_USTART+33
-SCHAN_MIDDLE		= IMG_USTART+34
-SCHAN_TOP			= IMG_USTART+35
-SCHAN_BOTTOM		= IMG_USTART+36
-SCHAN_FILL			= IMG_USTART+37
-GRADBAR				= IMG_USTART+38
-GRADBAR_MED			= IMG_USTART+39
-GRADBAR_LGE			= IMG_USTART+40
-OPTM_LHAND			= IMG_USTART+41
-OPTM_RHAND			= IMG_USTART+42
-UNIT_BACKDROP		= IMG_USTART+43
-# an image purely for experimentation with
-IMG_TEST			= IMG_USTART+44
-# sometimes, there really is no image
-IMG_NONE			= 0
 
 # milliseconds between unit flash
 # (all animation times are in milliseconds)
