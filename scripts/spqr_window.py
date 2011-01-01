@@ -268,7 +268,7 @@ class CWindow:
 				if(button.key!=None):
 					SGFX.gui.keyboard.addKey(button.key,button.event)
 				# reset x position
-				xpos-=(2*SPQR.SPACER)+SGFX.gui.iwidth("button")
+				xpos-=(2*SPQR.SPACER)+SGFX.gui.iWidth("button")
 		else:
 			# 2 lines of buttons not implemented
 			if(SPQR.DEBUG_MODE==True):
