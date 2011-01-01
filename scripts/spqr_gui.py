@@ -189,7 +189,7 @@ class CGFXEngine:
 		"""Routine renders all the images for the city names,
 		   and places them in the city instances. Must be done
 		   in main init routine before any map rendering is performed"""
-		return(True)
+		return True
 		
 	# now a function to add a window
 	# it has it's own function because it has to return the index number
@@ -214,20 +214,20 @@ class CGFXEngine:
 		self.screen.blit(new, (rectangle.x, rectangle.y))
 		pygame.display.update(rectangle)
 		self.dirty.append(CDirtyRect(img, rectangle))
-		return(True)
+		return True
 
 	def deleteTopDirty(self):
 		"""Routine deletes current top dirty window, and draws
 		   back the old image"""
 		# actually got something to do?
-		if(len(self.dirty)>0):
+		if len(self.dirty) > 0:
 			# yes, update the screen first
 			self.screen.blit(self.dirty[-1].image, self.dirty[-1].rect)
 			pygame.display.update(self.dirty[-1].rect)
 			self.dirty.pop()
 		else:
-			return(False)
-		return(True)
+			return False
+		return True
 	
 	# TODO: Sort out wether we need to really update the gui here
 	# this one deletes the current indexed window, and then redraws the gui
@@ -237,13 +237,13 @@ class CGFXEngine:
 		   gui as well"""
 		del self.windows[index]
 		#self.updateGUI()
-		return(True)
+		return True
 	
 	def killTopWindow(self):
 		"""Remove top window. Redraws gui as well"""
 		self.windows.pop()
 		#self.updateGUI()
-		return(True)
+		return True
 
 	def updateGUI(self):
 		"""Redraws entire screen. Should avoid calling this really and use
@@ -251,10 +251,10 @@ class CGFXEngine:
 		   that slow either"""
 		# if we have anything in the dirty list, we merely have to update that area
 		# with the new image etc...
-		if(len(self.dirty)>0):
+		if len(self.dirty) > 0:
 			self.screen.blit(self.dirty[-1].image, self.dirty[-1].rect)
 			pygame.display.update(self.dirty[-1].rect)
-			return(True)
+			return True
 		# before doing anything else, blit the map
 		self.screen.blit(self.image("buffer"), self.map_rect, self.map_screen)
 		index = 0
@@ -278,7 +278,7 @@ class CGFXEngine:
 						self.screen.blit(bar.image, (x1, y1))
 			index += 1
 		pygame.display.flip()
-		return(True)
+		return True
 	
 	def updateOverlayWindow(self):
 		"""Draw the window with the widget overlays only"""
@@ -314,7 +314,7 @@ class CGFXEngine:
 		#self.screen.blit(self.image["small_map"], self.mini_dest, self.mini_source)
 		#pygame.draw.rect(self.screen, (0, 0, 0), self.blit_rect, 1)
 		#pygame.display.flip()
-		return(True)
+		return True
 	
 	def updateUnits(self):
 		"""Unit is to be called when a unit is placed or
@@ -322,7 +322,7 @@ class CGFXEngine:
 		# blit the map_render original across first
 		self.image("buffer").blit(self.map_render, (0, 0))
 		self.updateMap()
-		return(True)
+		return True
 
 	def centreMap(self, xpos, ypos):
 		"""Centre map to the given co-ords, or at least as close as you we
@@ -331,49 +331,49 @@ class CGFXEngine:
 		# centre of the screen
 		xpos -= self.map_screen.w/2
 		ypos -= self.map_screen.h/2
-		if(xpos<0):
+		if xpos < 0:
 			xpos = 0
-		elif(xpos > (self.iWidth("map") - self.map_screen.w)):
+		elif xpos > (self.iWidth("map") - self.map_screen.w):
 			xpos = self.iWidth("map") - self.map_sceen.w
 		# and then check y size
-		if(ypos<0):
+		if ypos < 0:
 			ypos = 0
-		elif(ypos > (self.iHeight("map") - self.map_screen.h)):
+		elif ypos > (self.iHeight("map") - self.map_screen.h):
 			ypos = self.iWidth("map") - self.map_screen.h
 		# set new co-ords
 		self.map_screen.x = xpos
 		self.map_screen.y = ypos
-		return(True)
+		return True
 
 	def normalizeScrollArea(self):
 		"""Checks co-ords after scrolling the map to make sure
 		   they are not out of range. Resets them if needed"""
-		if(self.map_screen.x<0):
+		if self.map_screen.x < 0:
 			self.map_screen.x = 0
-		elif(self.map_screen.x>self.map_max_x):
+		elif self.map_screen.x > self.map_max_x:
 			self.map_screen.x = self.map_max_x
-		if(self.map_screen.y<0):
+		if self.map_screen.y < 0:
 			self.map_screen.y = 0
-		elif(self.map_screen.y>self.map_max_y):
+		elif self.map_screen.y > self.map_max_y:
 			self.map_screen.y = self.map_max_y
-		return(True)
+		return True
 	
 	def handleKeypress(self, event):
 		"""Handle a keypress"""
 		# does it match anything?
 		foo, bar, handle = self.keyboard.getKeyFunction(event.key, event.mod)
-		if(foo  ==  True):
+		if foo == True:
 			# set win_index to TOP of current window list -2 to enable
 			# killing of current window from keyboard function
 			self.win_index = len(self.windows)-2
 			# now call the function
-			if(handle  ==  None):
+			if handle == None:
 				bar(self, 0, -1, -1)
 			else:
 				bar(self, handle, -1, -1)
-			return(True)
+			return True
 		else:
-			return(False)
+			return False
 	
 	# routine captures what event we got, then passes that message along
 	# to the testing routine (i.e. this code only checks if a MOUSE event
@@ -385,83 +385,83 @@ class CGFXEngine:
 		   else, so think of it more like a sorting office"""
 		event = pygame.event.poll()
 		# lets start with the simple case: handling keypress values
-		if(event.type  ==  KEYDOWN):
+		if event.type == KEYDOWN:
 			return(self.handleKeypress(event))
 		# now handle animation requests from the timer
-		if((event.type  ==  pygame.USEREVENT)and(self.timer  ==  True)):
+		if event.type == pygame.USEREVENT and self.timer == True:
 			self.flashUnit()
-			return(False)
+			return False
 		action = SPQR.MOUSE_NONE
 		# catch other stuff here, before we process the mouse
 		# perhaps it was just that the song ended?
-		if(event.type  ==  SPQR.EVENT_SONGEND):
+		if event.type == SPQR.EVENT_SONGEND:
 			# just start the next song
 			self.noise.startNextSong()
-			return(True)
+			return True
 		# was it the end of a double-click check?
-		if(event.type  ==  SPQR.EVENT_DC_END):
+		if event.type == SPQR.EVENT_DC_END:
 			# kill timer and handle data
 			pygame.time.set_timer(SPQR.EVENT_DC_END, 0)
 			self.dclick_handle = None
-			return(True)
+			return True
 		# worst of all, could be an instant quit!
-		if(event.type  ==  pygame.QUIT):
+		if event.type == pygame.QUIT:
 			SEVENT.quitSpqr(self, None, -1, -1)
-			return(True)
+			return True
 		# cancel current menu if we got mouse button down
-		if((event.type  ==  MOUSEBUTTONDOWN)and(self.menu_active  ==  True)):
+		if event.type == MOUSEBUTTONDOWN and self.menu_active == True:
 			self.menu_active = False
 			return False
-		if(event.type != NOEVENT):
+		if event.type != NOEVENT:
 			# if it's a rmb down, then possibly exit
-			if((event.type  ==  MOUSEBUTTONDOWN)and(event.button  ==  3)):
-				if(SPQR.RMOUSE_END  ==  True):
+			if event.type == MOUSEBUTTONDOWN and event.button == 3:
+				if SPQR.RMOUSE_END == True:
 					sys.exit(False)
 			# was it left mouse button up?
-			elif((event.type  ==  MOUSEBUTTONUP)and(event.button  ==  1)):
+			elif event.type == MOUSEBUTTONUP and event.button == 1:
 				x, y = pygame.mouse.get_pos()
 				action = SPQR.MOUSE_LCLK
 				self.testMouse(x, y, action)
 			# some things (like sliders) respond to a mousedown event
-			elif((event.type  ==  MOUSEBUTTONDOWN)and(event.button  ==  1)):
+			elif event.type == MOUSEBUTTONDOWN and event.button == 1:
 				x, y = pygame.mouse.get_pos()
 				action = SPQR.MOUSE_LDOWN
 				self.testMouse(x, y, action)
 			# was it a middle click?
-			elif((event.type  ==  MOUSEBUTTONDOWN)and(event.button == 2)):
+			elif event.type == MOUSEBUTTONDOWN and event.button == 2:
 				# pan the map, unless we have a modal window:
-				if(self.windows[len(self.windows)-1].modal == False):
+				if self.windows[len(self.windows) - 1].modal == False:
 					# must be over main map for panning to work
 					x, y = pygame.mouse.get_pos()
-					if(self.map_area.collidepoint(x, y) == True):
+					if self.map_area.collidepoint(x, y) == True:
 						self.panMap()
 			else:
 				# have we moved?
 				if event.type == MOUSEMOTION:
 					x, y = pygame.mouse.get_pos()
 					action = SPQR.MOUSE_OVER
-					if(self.testMouse(x, y, action) == False):
+					if self.testMouse(x, y, action) == False:
 						self.checkButtonHighlights(x, y)
 			if action == SPQR.MOUSE_NONE:
-				return(False)
+				return False
 			else:	
-				return(True)
+				return True
 
 	def checkButtonHighlights(self, x, y):	
 		"""Check all of the buttons inside the top-layer window to see
 		   if any need to be highlighted. Returns True if anything
 		   on the screen needed to be updated"""
 		for bar in self.windows[-1].items:
-			if((bar.active == True)and(bar.wtype == SPQR.WT_BUTTON)):
+			if bar.active == True and bar.wtype == SPQR.WT_BUTTON:
 				xoff = x-self.windows[-1].rect.x
 				yoff = y-self.windows[-1].rect.y
-				if(bar.rect.collidepoint(xoff, yoff) == True):
+				if bar.rect.collidepoint(xoff, yoff) == True:
 					# don't forget to test here if it's actually visible or not... ;-)
-					if(bar.visible == False):
-						return(False)
+					if bar.visible == False:
+						return False
 					# already highlighted?
-					if(bar.highlight == True):
-						return(False)
+					if bar.highlight == True:
+						return False
 					else:
 						# update a dirty rect
 						bar.highlight = True
@@ -469,16 +469,16 @@ class CGFXEngine:
 							bar.rect.y+self.windows[-1].rect.y, bar.rect.w, bar.rect.h)
 						self.screen.blit(bar.pressed, dest)
 						pygame.display.update(dest)
-						return(True)
-				if((bar.highlight == True)and(bar.wtype == SPQR.WT_BUTTON)):
+						return True
+				if bar.highlight == True and bar.wtype == SPQR.WT_BUTTON:
 					# an old highlight needs rubbing out
 					bar.highlight = False
 					dest = pygame.Rect(bar.rect.x+self.windows[-1].rect.x,
 						bar.rect.y+self.windows[-1].rect.y, bar.rect.w, bar.rect.h)
 					self.screen.blit(bar.image, dest)
 					pygame.display.update(dest)
-					return(True)
-		return(False)
+					return True
+		return False
 
 	# simple: do we have to scroll the map? If so, do it now!
 	def checkScrollArea(self, x, y):
@@ -486,13 +486,13 @@ class CGFXEngine:
 		   this routine with the x and y mouse co-ords. Returns True
 		   if the screen (and thus the map) were updated"""
 		update = False
-		if(x == 0):
-			if(y == 0):
+		if x == 0:
+			if y == 0:
 				# scroll down right
 				self.map_screen.x -= SPQR.SCROLL_DIAG
 				self.map_screen.y -= SPQR.SCROLL_DIAG
 				update=True
-			elif(y == (SPQR.SCREEN_HEIGHT-1)):
+			elif y == (SPQR.SCREEN_HEIGHT - 1):
 				# scroll up right
 				self.map_screen.x -= SPQR.SCROLL_DIAG
 				self.map_screen.y += SPQR.SCROLL_DIAG
@@ -501,13 +501,13 @@ class CGFXEngine:
 				# scroll the map right
 				self.map_screen.x -= SPQR.SCROLL_SPEED
 				update = True
-		elif(x == (SPQR.SCREEN_WIDTH-1)):
-			if(y == 0):
+		elif x == (SPQR.SCREEN_WIDTH - 1):
+			if y == 0:
 				# scroll down left
 				self.map_screen.x += SPQR.SCROLL_DIAG
 				self.map_screen.y -= SPQR.SCROLL_DIAG
 				update = True
-			elif(y == (SPQR.SCREEN_HEIGHT-1)):
+			elif y == (SPQR.SCREEN_HEIGHT-1):
 				# scroll up left
 				self.map_screen.x += SPQR.SCROLL_DIAG
 				self.map_screen.y += SPQR.SCROLL_DIAG
@@ -525,7 +525,7 @@ class CGFXEngine:
 			self.map_screen.y += SPQR.SCROLL_SPEED
 			update = True
 		# so, if something, then we need to re-draw the screen display
-		if(update == True):
+		if update == True:
 			# clear any menu flags we have
 			self.mouse_active = False
 			# check the scroll areas...
@@ -533,9 +533,9 @@ class CGFXEngine:
 			# and then finally draw it!
 			self.updateMiniMap()
 			self.updateMap()				
-			return(True)
+			return True
 		# return false if no update done
-		return(False)
+		return False
 	
 	# use this function to test the mouse against all objects
 	def testMouse(self, x, y, action):
@@ -550,77 +550,77 @@ class CGFXEngine:
 			# define a new variable that we can use later to kill the current window off
 			foo = self.windows[self.win_index]			
 			self.win_index = self.win_index-1
-			if(quit == True):
-				return(False)
+			if quit == True:
+				return False
 			# if this is a modal window, then stop after processing:
 			quit = foo.modal
 			# is the mouse pointer inside the window, or is there any window at all?
-			if((foo.rect.collidepoint(x, y) == True)or(foo.display == False)):
+			if foo.rect.collidepoint(x, y) == True or foo.display == False:
 				# check all of the points inside the window
 				for bar in foo.items:
-					if(bar.active == True):
+					if bar.active == True:
 						x_off = x-foo.rect.x
 						y_off = y-foo.rect.y
-						if(bar.rect.collidepoint(x_off, y_off) == True):						
+						if bar.rect.collidepoint(x_off, y_off) == True:
 							# get offset into widget
 							x_widget = x_off-bar.rect.x
 							y_widget = y_off-bar.rect.y
 							# now test to see if we need to make a call
-							if((action == SPQR.MOUSE_OVER)and(bar.callbacks.mouse_over != SPQR.mouse_over_std)):
+							if action == SPQR.MOUSE_OVER and bar.callbacks.mouse_over != SPQR.mouse_over_std:
 								# widget asked for callback on mouse over
 								bar.callbacks.mouse_over(self, bar, x_widget, y_widget)
-								return(True)
-							elif((action == SPQR.MOUSE_LCLK)and(bar.callbacks.mouse_lclk != SPQR.mouse_lclk_std)):
+								return True
+							elif action == SPQR.MOUSE_LCLK and bar.callbacks.mouse_lclk != SPQR.mouse_lclk_std:
 								# widget asked for callback on mouse left click								
 								bar.callbacks.mouse_lclk(self, bar, x_widget, y_widget)
-								return(True)
-							elif((action == SPQR.MOUSE_LCLK)and
-									 (bar.callbacks.mouse_dclick != SPQR.mouse_dclick_std)and
-									 (self.dclick_handle != bar)):
+								return True
+							elif action == SPQR.MOUSE_LCLK and \
+									 bar.callbacks.mouse_dclick != SPQR.mouse_dclick_std and \
+									 self.dclick_handle != bar:
 								# widget wants a double-click: this was the first one, so we need
 								# to keep an eye out for the next click
 								self.dclick_handle = bar
 								# set our timer
 								pygame.time.set_timer(SPQR.EVENT_DC_END, SPQR.DCLICK_SPEED)
-								return(False)
-							elif((action == SPQR.MOUSE_LCLK)and
-									 (bar.callbacks.mouse_dclick != SPQR.mouse_dclick_std)and
-									 (self.dclick_handle == bar)):	 
+								return False
+							elif action == SPQR.MOUSE_LCLK and \
+									bar.callbacks.mouse_dclick != SPQR.mouse_dclick_std and \
+									self.dclick_handle == bar:	 
 								# it's a real bona-fida double-click
 								# firstly clear all double-click data, then run the code
 								pygame.time.set_timer(SPQR.EVENT_DC_END, 0)
 								self.dclick_handle = None
 								bar.callbacks.mouse_dclick(self, bar, x_widget, y_widget)
-								return(True)
-							elif(action == SPQR.MOUSE_DCLICK):
+								return True
+							elif action == SPQR.MOUSE_DCLICK:
 								# obviously we got a double-click where it wasn't needed
 								pygame.time.set_timer(SPQR.EVENT_DC_END, 0)
 								self.dclick_handle = None
-								return(False)
-							elif((action == SPQR.MOUSE_LDOWN)and(bar.callbacks.mouse_ldown != SPQR.mouse_ldown_std)):
+								return False
+							elif action == SPQR.MOUSE_LDOWN and bar.callbacks.mouse_ldown != SPQR.mouse_ldown_std:
 								# widget asked for callback on mouse left down
 								bar.callbacks.mouse_ldown(self, bar, x_widget, y_widget)
-								return(True)
-							elif((action == SPQR.MOUSE_RCLK)and(bar.callbacks.mouse_rclk != mouse_rclk_std)):
+								return True
+							elif action == SPQR.MOUSE_RCLK and bar.callbacks.mouse_rclk != mouse_rclk_std:
 								# whilst still debugging, I've left this one out
 								print "Do a mouse right click on ", bar.describe
-								return(True)
+								return True
 							# and then exit
-							return(False)
+							return False
 		# finally, if NO message was met, then check to see if the event was
 		# a click on the main map
-		if(action == SPQR.MOUSE_LCLK):
-			if(self.map_area.collidepoint(x, y) == True):
+		if action == SPQR.MOUSE_LCLK:
+			if self.map_area.collidepoint(x, y) == True:
 				# yes, update the info area
 				self.updateInfoBox(x, y)
-				return(True)
-		return(False)
+				return True
+		return False
 		
 	def updateInfoBox(self, x, y):
 		"""Updates information in bottom box, dependant on users click
 		   over the map. Call with x and y, being the click on the map
 		   in screen co-ords"""
-		return(True)
+		return True
 
 	# this is the main game loop. There are 2 varients of it, one which keeps
 	# looping forever, and a solo version which runs only once
@@ -633,7 +633,7 @@ class CGFXEngine:
 			# ok main loop: after setting everything up, just keep calling self.checkInputs()
 			# we ignore any map scrolls if the top level window is model
 			x, y = pygame.mouse.get_pos()
-			if(self.windows[-1].modal == False):
+			if self.windows[-1].modal == False:
 				if self.checkScrollArea(x, y) == True:
 					continue
 			# now check normal events
@@ -677,12 +677,12 @@ class CGFXEngine:
 		   Returns True if map moved, false otherwise"""
 		pygame.event.pump()
 		x, y = pygame.mouse.get_pos()
-		if(self.windows[len(self.windows)-1].modal == False):
+		if self.windows[len(self.windows)-1].modal == False:
 			if self.checkScrollArea(x, y) == True:
-				return(True)
+				return True
 		# now check normal events
 		self.checkInputs()
-		return(False)
+		return False
 	
 	# tries to fit text onto a surface
 	# returns False if area is too small, otherwise returns
@@ -696,23 +696,23 @@ class CGFXEngine:
 		requested_lines = text.splitlines()
 		# Create a series of lines that will fit on the provided rectangle
 		for requested_line in requested_lines:
-			if(self.fonts[fnt].size(requested_line)[0]>x):
+			if self.fonts[fnt].size(requested_line)[0] > x:
 				words = requested_line.split(' ')
 				# if any of our words are too long to fit, return.
 				for word in words:
-					if(self.fonts[fnt].size(word)[0]>=x):
+					if self.fonts[fnt].size(word)[0] >= x:
 						# TODO: should actually handle long words, since a web address
 						# has been found to be too long for this code!
 						# Possible answer: don't use long web addresses, or break them
 						# up first.
 						print "Error: Word was too long in label"
-						return(False)
+						return False
 				# Start a new line
 				accumulated_line = ""
 				for word in words:
 					test_line = accumulated_line+word+" "
 					# Build the line while the words fit.
-					if(self.fonts[fnt].size(test_line)[0]<x):
+					if self.fonts[fnt].size(test_line)[0] < x:
 						accumulated_line = test_line
 					else:
 						final_lines.append(accumulated_line)
@@ -723,7 +723,7 @@ class CGFXEngine:
 		# everything seemed to work ok.. so far!
 		accumulated_height = 0
 		for line in final_lines:
-			if(accumulated_height+self.fonts[fnt].size(line)[1]>=y):
+			if accumulated_height + self.fonts[fnt].size(line)[1] >= y:
 				return False
 			accumulated_height += self.fonts[fnt].size(line)[1]
 		return True
@@ -740,7 +740,7 @@ class CGFXEngine:
 		# save this image as it is for now without the images for using
 		# as the backdrop for all unit animations
 		self.map_render.blit(self.image("buffer"), (0, 0))
-		return(True)
+		return True
 
 	def renderGameTurn(self):
 		"""Routine draws image for the game turn counter. Call at the
@@ -752,7 +752,7 @@ class CGFXEngine:
 		   Very simple, just used to isolate gfx drawing out
 		   of the checkbox widget code"""
 		# which gfx to draw?
-		if(status == True):
+		if status == True:
 			chkbox = "check_yes"
 		else:
 			chkbox = "check_no"
@@ -760,21 +760,21 @@ class CGFXEngine:
 		# we have the xpos and ypos, this should be easy:
 		self.screen.blit(self.image(chkbox), (xpos, ypos, 0, 0))
 		pygame.display.update((xpos, ypos, SPQR.CHKBOX_SIZE, SPQR.CHKBOX_SIZE))
-		return(True)
+		return True
 		
 	def blitSlider(self, xpos, ypos, width, height, image):
 		"""Renders the slider bar at given position"""
 		# just blit image and update
 		self.screen.blit(image, (xpos, ypos, 0, 0))
 		pygame.display.update((xpos, ypos, width, height))
-		return(True)
+		return True
 		
 	def blitScrollarea(self, xpos, ypos, width, height, image):
 		"""Renders the scrollarea at given position"""
 		# very similar to blitSlider
 		self.screen.blit(image, (xpos, ypos, 0, 0))
 		pygame.display.update((xpos, ypos, width, height))
-		return(True)
+		return True
 
 	# here follows the timer routines. They mainly deal with unit
 	# flashing, animation etc...
@@ -798,14 +798,14 @@ class CGFXEngine:
 		# so I've let it ride
 
 		# do we need to flash at all?
-		if(self.data.troops.current_highlight == -1):
-			return(False)
+		if self.data.troops.current_highlight == -1:
+			return False
 		# ok, here we go, second attempt, here's the logic to this:
 		# we need 2 images: the first has the area WITH the unit gfx and
 		# the movement arrows, the second has just the area from with the
 		# movement arrows. We just blit between the 2. Firstly we need
 		# to see if the unit highlight has changed at all
-		if(self.flash_highlight != self.data.troops.current_highlight):
+		if self.flash_highlight != self.data.troops.current_highlight:
 			# we now have an new flashing unit. Firstly, remove the
 			# old blit area:
 			self.image("buffer").blit(self.flash_old, self.flash_rect)
@@ -856,16 +856,16 @@ class CGFXEngine:
 		dest.x -= self.map_screen.x
 		dest.y -= (self.map_screen.y-SPQR.WINSZ_TOP+1)
 		dest = dest.clip(self.map_rect)
-		if(dest.h != 0):
+		if dest.h != 0:
 			# yes, we still have work to do
 			area = pygame.Rect(0, 0, dest.w, dest.h)
 			# correct for top and left of screen
-			if(dest.x == 0):
+			if dest.x == 0:
 				area.x = SPQR.MOVESZ_X-dest.w
-			if(dest.y == SPQR.WINSZ_TOP-1):
+			if dest.y == SPQR.WINSZ_TOP-1:
 				area.y = SPQR.MOVESZ_Y-dest.h
 			# now blit the right rectangle:
-			if(self.flash_on == True):
+			if self.flash_on == True:
 				self.screen.blit(self.flash_erase, dest, area)
 				# be prepared for next time...
 				self.flash_on = False
@@ -874,13 +874,13 @@ class CGFXEngine:
 				self.flash_on = True
 			# update the screen and we're done
 			pygame.display.update(dest)
-			return(True)
+			return True
 		# the rectangles didn't overlap, but get ready for next round:
-		if(self.flash_on == True):
+		if self.flash_on == True:
 			self.flash_on = False
 		else:
 			self.flash_on = True
-		return(False)
+		return False
 
 	def clearFlash(self):
 		"""Routine clears any gfx stuff on the map due to flashing"""
@@ -892,10 +892,10 @@ class CGFXEngine:
 		"""Call to turn off unit flashing. Also draws unit back to screen
 		   if it is currently not on"""
 		# if the timer is not currently active, don't do a thing
-		if(self.timer == False):
+		if self.timer == False:
 			return
 		# is unit currently on screen?
-		if(self.flash_on == False):
+		if self.flash_on == False:
 			# no, so update it
 			self.image("buffer").blit(self.flash_draw, self.flash_rect)
 			self.updateMap()
@@ -914,22 +914,22 @@ class CGFXEngine:
 		# if the end turn flag is on, then don't highlight, whatever
 		# else is happening
 		#if(self.data.info.end_turn == True):
-		#	return(False)
+		#	return False
 		# already on?
 		#if(self.timer == True):
-		#	return(True)
+		#	return True
 		# make sure first call is show the erase frame
 		#self.flash_on = True
 		# only flash if current unit is roman
 		#if(self.data.troops.getUnitFromHighlight().owner == SPQR.ROME_SIDE):
 		#	self.timer = True
-		return(True)
+		return True
 
 	def updateArrowBackimage(self):
 		"""Called to update the image that overwrites the whole
 		   area used in the flash animation"""
 		self.flash_old.blit(self.image("buffer"), (0, 0), self.flash_rect)
-		return(True)
+		return True
 
 	# there are always some standard routines in any gui...here is a messagebox
 	def messagebox(self, flags, text, win_title):
@@ -946,7 +946,7 @@ class CGFXEngine:
 		# get average size of height..
 		height = (self.fonts[self.msg_font].size("X")[1])+1
 		# really short message? (as long as there are no cr's inside)
-		if((self.fonts[self.msg_font].size(text)[0]<txt_width)and(re.search("\n", text) == False)):
+		if self.fonts[self.msg_font].size(text)[0] < txt_width and re.search("\n", text) == False:
 			# then don't even bother with a 2nd line...easy
 			# render text to spare image
 			self.temp_image = self.fonts[self.msg_font].render(text, 1, (0, 0, 0))
@@ -979,7 +979,7 @@ class CGFXEngine:
 		total_buttons = 0
 		# logic is simple: found a button? yes, display it and 
 		# modify next print pos. quit if 4th button found
-		if((flags&SPQR.BUTTON_OK) != 0):
+		if (flags & SPQR.BUTTON_OK) != 0:
 			slot = self.windows[index].addWidget(SWIDGET.CButton(self, x, y, "OK"))
 			# same for every instance of this little loop: add the callbacks
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxOK
@@ -988,35 +988,35 @@ class CGFXEngine:
 			# add a key for this
 			self.keyboard.addKey(K_o, msgboxOK)
 			total_buttons += 1
-		if((flags&SPQR.BUTTON_CANCEL) != 0):
+		if (flags & SPQR.BUTTON_CANCEL) != 0:
 			slot = self.windows[index].addWidget(SWIDGET.CButton(self, x, y, "Cancel"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxCancel
 			self.windows[index].items[slot].active = True
 			x = x-(self.iWidth("button")+12)
 			self.keyboard.addKey(K_c, msgboxCancel)
 			total_buttons += 1
-		if((flags&SPQR.BUTTON_YES) != 0):
+		if (flags & SPQR.BUTTON_YES) != 0:
 			slot = self.windows[index].addWidget(SWIDGET.CButton(self, x, y, "Yes"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxYes
 			self.windows[index].items[slot].active = True
 			x = x-(self.iWidth("button")+12)
 			self.keyboard.addKey(K_y, msgboxYes)
 			total_buttons += 1
-		if(((flags&SPQR.BUTTON_NO) != 0)&(total_buttons<3)):
+		if (flags & SPQR.BUTTON_NO) != 0 and total_buttons < 3:
 			slot = self.windows[index].addWidget(SWIDGET.CButton(self, x, y, "No"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxNo
 			self.windows[index].items[slot].active = True
-			x = x-(self.iWidth("button")+12)
+			x = x-(self.iWidth("button") + 12)
 			self.keyboard.addKey(K_n, msgboxNo)
 			total_buttons += 1
-		if(((flags&SPQR.BUTTON_QUIT) != 0)&(total_buttons<3)):
+		if (flags & SPQR.BUTTON_QUIT) != 0 and total_buttons < 3:
 			slot = self.windows[index].addWidget(SWIDGET.CButton(self, x, y, "Quit"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxQuit
 			self.windows[index].items[slot].active = True
-			x = x-(self.iWidth("button")+12)
+			x = x-(self.iWidth("button") + 12)
 			self.keyboard.addKey(K_q, msgboxQuit)
 			total_buttons += 1
-		if(((flags&SPQR.BUTTON_IGNORE) != 0)&(total_buttons<3)):
+		if (flags & SPQR.BUTTON_IGNORE) != 0 and total_buttons < 3:
 			slot = self.windows[index].addWidget(SWIDGET.CButton(self, x, y, "Ignore"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxIgnore
 			self.windows[index].items[slot].active = True
@@ -1025,7 +1025,7 @@ class CGFXEngine:
 		# thats the graphics dealt with, make sure the whole window is modal
 		self.windows[index].modal = True
 		# if there was only one button, then make the enter key also activate it
-		if(total_buttons == 1):
+		if total_buttons == 1:
 			# get the routine to call
 			rout = self.keyboard.active_keys[-1].function
 			self.keyboard.addKey(K_RETURN, rout)
@@ -1051,7 +1051,7 @@ class CGFXEngine:
 		# remove the window
 		self.windows.pop()
 		# put the animation back if the top window is NOT modal
-		if(self.windows[-1].modal == False):
+		if self.windows[-1].modal == False:
 			self.unitFlashOn()
 		# return the value we got
 		return(self.callback_temp)
@@ -1060,7 +1060,7 @@ class CGFXEngine:
 		"""Here's an easy one: kill the current console
 		   by setting the console flag to false"""
 		self.console = False
-		return(True)
+		return True
 
 # callbacks for the messegebox routines (if needed)
 def msgboxOK(gui, handle, xpos, ypos): 
