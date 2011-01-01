@@ -37,8 +37,7 @@ class CSPQR:
 		if self.data.INIT_ONLY == True:
 			# no, so exit here
 			sys.exit(True)
-		self.gui = SGFX.CGFXEngine(SPQR.SCREEN_WIDTH, SPQR.SCREEN_HEIGHT,
-			self.data.SPQR_FULLSCR)
+		SGFX.gui.mainInit(SPQR.SCREEN_WIDTH, SPQR.SCREEN_HEIGHT, self.data.SPQR_FULLSCR)
 
 	# TODO: use optparse, don't re-invent the wheel
 	def executeFlag(self, flag):
@@ -156,21 +155,21 @@ class CSPQR:
 	
 		# Add the menubar at the top. It has no drawn window
 		# THIS MUST BE THE FIRST WINDOW
-		index = self.gui.addWindow(SWINDOW.CWindow(self.gui, 0, 0, 0, 0, "", False, describe="Menus"))
-		self.gui.windows[index].border_offset = False
+		index = SGFX.gui.addWindow(SWINDOW.CWindow(0, 0, 0, 0, "", False, describe="Menus"))
+		SGFX.gui.windows[index].border_offset = False
 		# add the prepared menu onto this
-		self.gui.windows[index].addWidget(SMENU.CMenu(self.gui, menu))
+		SGFX.gui.windows[index].addWidget(SMENU.CMenu(menu))
 	
 		# add a window with no frame that holds the widgets to overlay on the map
-		bwindow = SWINDOW.CWindow(self.gui, 0, SPQR.SCREEN_HEIGHT - SPQR.BBOX_HEIGHT, 
+		bwindow = SWINDOW.CWindow(0, SPQR.SCREEN_HEIGHT - SPQR.BBOX_HEIGHT, 
 								  SPQR.SCREEN_WIDTH, SPQR.BBOX_HEIGHT, "",
 								  False, "map_widgets")
 		# and the mini-map on the rhs
-		w = self.gui.iWidth("small_map")
-		h = self.gui.iHeight("small_map")
-		x = SPQR.SCREEN_WIDTH - (self.gui.iWidth("small_map") + SPQR.SPACER + bwindow.rect.x)
-		y = SPQR.SCREEN_HEIGHT - (self.gui.iHeight("small_map") + (2*SPQR.SPACER) + 1 + bwindow.rect.y)
-		mini_map = SWIDGET.CImage(self.gui, x, y, w, h, "small_map")
+		w = SGFX.gui.iWidth("small_map")
+		h = SGFX.gui.iHeight("small_map")
+		x = SPQR.SCREEN_WIDTH - (SGFX.gui.iWidth("small_map") + SPQR.SPACER + bwindow.rect.x)
+		y = SPQR.SCREEN_HEIGHT - (SGFX.gui.iHeight("small_map") + (2*SPQR.SPACER) + 1 + bwindow.rect.y)
+		mini_map = SWIDGET.CImage(x, y, w, h, "small_map")
 		# allow left mouse button dragging as well (also simulates a mini-map click)
 		mini_map.callbacks.mouse_ldown = SEVENT.miniMapDrag
 		mini_map.active = True
@@ -178,31 +177,31 @@ class CSPQR:
 		bwindow.addWidget(mini_map)
 
 		# complete with centre on rome button
-		w = self.gui.iWidth("rome_button")
-		h = self.gui.iHeight("rome_button")
-		x += self.gui.iWidth("small_map") - w
+		w = SGFX.gui.iWidth("rome_button")
+		h = SGFX.gui.iHeight("rome_button")
+		x += SGFX.gui.iWidth("small_map") - w
 		y = SPQR.BBOX_HEIGHT - h
-		centre_button = SWIDGET.CImage(self.gui, x, y, w, h, "rome_button")
+		centre_button = SWIDGET.CImage(x, y, w, h, "rome_button")
 		centre_button.callbacks.mouse_lclk = SEVENT.centreMap
 		centre_button.active = True
 		centre_button.describe = "centre button"
 		bwindow.addWidget(centre_button)
-		self.gui.addWindow(bwindow)
+		SGFX.gui.addWindow(bwindow)
 
 		# blit offscreen map
-		self.gui.renderPixelMap()
+		SGFX.gui.renderPixelMap()
 		# draw the screen
-		self.gui.updateGUI()
-		self.gui.updateMap()
+		SGFX.gui.updateGUI()
+		SGFX.gui.updateMap()
 		self.addKeys()	
 		# make sure Rome is centered and highlighted
-		SEVENT.centreMap(self.gui, 0, -1, -1)
+		SEVENT.centreMap(0, -1, -1)
 		# finally, the last thing we do is start the animation timer
 		pygame.time.set_timer(pygame.USEREVENT, SPQR.ANIM_TIME)
 		# display the welcome screen if needed
 		if self.data.SPQR_INTRO == True:
 			# start with intro window displayed
-			SEVENT.welcomeScreen(self.gui, 0, 0, 0)
+			SEVENT.welcomeScreen(0, 0, 0)
 
 	def addKeys(self):
 		"""Adds keys needed at the start of the game"""
@@ -211,35 +210,35 @@ class CSPQR:
 		# n - next unit turn, f7 - show city info, f6 - show unit info
 		# f - finish this units turn, m - next unit on stack
 		# k - display standard keys list;  c - centre map on current unit
-		self.gui.keyboard.addKey(K_r, SEVENT.centreMap)
-		self.gui.keyboard.addKey(K_f, SEVENT.keyMenuFile, KMOD_LALT)
-		self.gui.keyboard.addKey(K_e, SEVENT.keyMenuEmpire, KMOD_LALT)
-		self.gui.keyboard.addKey(K_h, SEVENT.keyMenuHelp, KMOD_LALT)
+		SGFX.gui.keyboard.addKey(K_r, SEVENT.centreMap)
+		SGFX.gui.keyboard.addKey(K_f, SEVENT.keyMenuFile, KMOD_LALT)
+		SGFX.gui.keyboard.addKey(K_e, SEVENT.keyMenuEmpire, KMOD_LALT)
+		SGFX.gui.keyboard.addKey(K_h, SEVENT.keyMenuHelp, KMOD_LALT)
 		# debug menu added?
 		if SPQR.DEBUG_MODE == True:
-			self.gui.keyboard.addKey(K_d, SEVENT.keyMenuDebug, KMOD_LALT)
-		self.gui.keyboard.addKey(K_ESCAPE, SEVENT.keyMenuEscape)
+			SGFX.gui.keyboard.addKey(K_d, SEVENT.keyMenuDebug, KMOD_LALT)
+		SGFX.gui.keyboard.addKey(K_ESCAPE, SEVENT.keyMenuEscape)
 		# allow map scrolling with curser keys
-		self.gui.keyboard.addKey(K_UP, SEVENT.keyScrollUp)
-		self.gui.keyboard.addKey(K_DOWN, SEVENT.keyScrollDown)
-		self.gui.keyboard.addKey(K_RIGHT, SEVENT.keyScrollRight)
-		self.gui.keyboard.addKey(K_LEFT, SEVENT.keyScrollLeft)
+		SGFX.gui.keyboard.addKey(K_UP, SEVENT.keyScrollUp)
+		SGFX.gui.keyboard.addKey(K_DOWN, SEVENT.keyScrollDown)
+		SGFX.gui.keyboard.addKey(K_RIGHT, SEVENT.keyScrollRight)
+		SGFX.gui.keyboard.addKey(K_LEFT, SEVENT.keyScrollLeft)
 		# add menu shortcut keys
-		self.gui.keyboard.addKey(K_n, SEVENT.menuNew, KMOD_LCTRL)
-		self.gui.keyboard.addKey(K_l, SEVENT.menuLoad, KMOD_LCTRL)
-		self.gui.keyboard.addKey(K_s, SEVENT.menuSave, KMOD_LCTRL)
-		self.gui.keyboard.addKey(K_p, SEVENT.menuPreferences, KMOD_LCTRL)
-		self.gui.keyboard.addKey(K_q, SEVENT.quitSpqr, KMOD_LCTRL)
-		self.gui.keyboard.addKey(K_F5, SEVENT.menuEmpireStatistics)
-		self.gui.keyboard.addKey(K_a, SEVENT.menuHelpAbout, KMOD_LCTRL)
-		self.gui.keyboard.addKey(K_F1, SEVENT.menuHelpHelp)
-		self.gui.keyboard.addKey(K_k, SEVENT.keyShowKeys)
+		SGFX.gui.keyboard.addKey(K_n, SEVENT.menuNew, KMOD_LCTRL)
+		SGFX.gui.keyboard.addKey(K_l, SEVENT.menuLoad, KMOD_LCTRL)
+		SGFX.gui.keyboard.addKey(K_s, SEVENT.menuSave, KMOD_LCTRL)
+		SGFX.gui.keyboard.addKey(K_p, SEVENT.menuPreferences, KMOD_LCTRL)
+		SGFX.gui.keyboard.addKey(K_q, SEVENT.quitSpqr, KMOD_LCTRL)
+		SGFX.gui.keyboard.addKey(K_F5, SEVENT.menuEmpireStatistics)
+		SGFX.gui.keyboard.addKey(K_a, SEVENT.menuHelpAbout, KMOD_LCTRL)
+		SGFX.gui.keyboard.addKey(K_F1, SEVENT.menuHelpHelp)
+		SGFX.gui.keyboard.addKey(K_k, SEVENT.keyShowKeys)
 
 def main():
 	game = CSPQR()
 	game.setupStart()
 	# call the gui main loop
-	game.gui.mainLoop()
+	SGFX.gui.mainLoop()
 
 if __name__ == '__main__':
 	main()

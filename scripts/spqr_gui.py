@@ -14,13 +14,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-# file contains the gui class
-# All the code that writes to the screen gets dumped here. Also, as SPQR
-# is an event-driven game, I made the decision to make the gui class also
-# hold all of the game data. Since I am passing a pointer to lgui
-# everywhere, I may as well use that to pass data as well (or make it
-# global).
-
 import sys, pygame, re, os
 from pygame.locals import *
 
@@ -42,7 +35,10 @@ class CDirtyRect:
 # this class also inits the gfx display
 # call with the x and y resolution of the screen, and a pointer to the data
 class CGFXEngine:
-	def __init__(self, width, height, fullscreen, game_setup = True):
+	def __init__(self):
+		pass
+
+	def mainInit(self, width, height, fullscreen, game_setup = True):
 		"""Long, boring routine that initiates the gui"""
 		pygame.init()
 		# ok, now init the basic screen
@@ -52,14 +48,14 @@ class CGFXEngine:
 				HWSURFACE|FULLSCREEN|DOUBLEBUF)
 		else:
 			self.screen = pygame.display.set_mode((width, height), HWSURFACE|DOUBLEBUF)
-		self.himages = {}
+		self.images = {}
 		if(game_setup == True):
 			self.displayLoadingScreen(width, height)
 			# next up is to load in some images into the gfx array
-			self.himages["map"] = pygame.image.load("../gfx/map/map.jpg").convert()
+			self.images["map"] = pygame.image.load("../gfx/map/map.jpg").convert()
 			# add a back buffer map render.. this will become the map that we render
 			foo = pygame.Surface((self.iWidth("map"), self.iHeight("map")))
-			self.himages["buffer"] = foo
+			self.images["buffer"] = foo
 			# we will need a copy of the board without the units rendered, for movement, flashing
 			# etc.. It is not stored with the other images, but I'll declare it here anyway. Start
 			# it with a dummy image:
@@ -98,7 +94,7 @@ class CGFXEngine:
 		# if it's a png, strip the name and insert it into a new hash
 		for i in files:
 			if i[-4:] == ".png":
-				self.himages[i.split("/")[-1][:-4]] = pygame.image.load(i).convert_alpha()
+				self.images[i.split("/")[-1][:-4]] = pygame.image.load(i).convert_alpha()
 
 		# we have 2 blit areas for the flashing unit:
 		self.flash_draw = pygame.Surface((0, 0))
@@ -177,13 +173,13 @@ class CGFXEngine:
 		pygame.display.update()
 
 	def iWidth(self, name):
-		return(self.himages[name].get_width())
+		return(self.images[name].get_width())
 	
 	def iHeight(self, name):
-		return(self.himages[name].get_height())
+		return(self.images[name].get_height())
 	
 	def image(self, name):
-		return(self.himages[name])
+		return(self.images[name])
 
 	def renderCityNames(self):
 		"""Routine renders all the images for the city names,
@@ -568,11 +564,11 @@ class CGFXEngine:
 							# now test to see if we need to make a call
 							if action == SPQR.MOUSE_OVER and bar.callbacks.mouse_over != SPQR.mouse_over_std:
 								# widget asked for callback on mouse over
-								bar.callbacks.mouse_over(self, bar, x_widget, y_widget)
+								bar.callbacks.mouse_over(bar, x_widget, y_widget)
 								return True
 							elif action == SPQR.MOUSE_LCLK and bar.callbacks.mouse_lclk != SPQR.mouse_lclk_std:
 								# widget asked for callback on mouse left click								
-								bar.callbacks.mouse_lclk(self, bar, x_widget, y_widget)
+								bar.callbacks.mouse_lclk(bar, x_widget, y_widget)
 								return True
 							elif action == SPQR.MOUSE_LCLK and \
 									 bar.callbacks.mouse_dclick != SPQR.mouse_dclick_std and \
@@ -590,7 +586,7 @@ class CGFXEngine:
 								# firstly clear all double-click data, then run the code
 								pygame.time.set_timer(SPQR.EVENT_DC_END, 0)
 								self.dclick_handle = None
-								bar.callbacks.mouse_dclick(self, bar, x_widget, y_widget)
+								bar.callbacks.mouse_dclick(bar, x_widget, y_widget)
 								return True
 							elif action == SPQR.MOUSE_DCLICK:
 								# obviously we got a double-click where it wasn't needed
@@ -599,7 +595,7 @@ class CGFXEngine:
 								return False
 							elif action == SPQR.MOUSE_LDOWN and bar.callbacks.mouse_ldown != SPQR.mouse_ldown_std:
 								# widget asked for callback on mouse left down
-								bar.callbacks.mouse_ldown(self, bar, x_widget, y_widget)
+								bar.callbacks.mouse_ldown(bar, x_widget, y_widget)
 								return True
 							elif action == SPQR.MOUSE_RCLK and bar.callbacks.mouse_rclk != mouse_rclk_std:
 								# whilst still debugging, I've left this one out
@@ -965,13 +961,13 @@ class CGFXEngine:
 		wheight += (self.iHeight("button")*2)+2
 
 		# ok, the window gets rendered for us here
-		index = self.addWindow(SWINDOW.CWindow(self, -1, -1, width, wheight, win_title, True))
+		index = self.addWindow(SWINDOW.CWindow(-1, -1, width, wheight, win_title, True))
 		y = SPQR.SPACER
-		self.windows[index].addWidget(SWIDGET.CLabel(self, 6, y, txt_width, height, text))
+		self.windows[index].addWidget(SWIDGET.CLabel(6, y, txt_width, height, text))
 		# now add the seperator bar
 		x = 6
 		y += height
-		self.windows[index].addWidget(SWIDGET.CSeperator(self, x, y, width-24))
+		self.windows[index].addWidget(SWIDGET.CSeperator(x, y, width-24))
 		y += 1+(self.iHeight("button")/2)
 		# move x to the right, buttons are blitted from right to left
 		x = width-16-(self.iWidth("button"))
@@ -980,7 +976,7 @@ class CGFXEngine:
 		# logic is simple: found a button? yes, display it and 
 		# modify next print pos. quit if 4th button found
 		if (flags & SPQR.BUTTON_OK) != 0:
-			slot = self.windows[index].addWidget(SWIDGET.CButton(self, x, y, "OK"))
+			slot = self.windows[index].addWidget(SWIDGET.CButton(x, y, "OK"))
 			# same for every instance of this little loop: add the callbacks
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxOK
 			self.windows[index].items[slot].active = True
@@ -989,35 +985,35 @@ class CGFXEngine:
 			self.keyboard.addKey(K_o, msgboxOK)
 			total_buttons += 1
 		if (flags & SPQR.BUTTON_CANCEL) != 0:
-			slot = self.windows[index].addWidget(SWIDGET.CButton(self, x, y, "Cancel"))
+			slot = self.windows[index].addWidget(SWIDGET.CButton(x, y, "Cancel"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxCancel
 			self.windows[index].items[slot].active = True
 			x = x-(self.iWidth("button")+12)
 			self.keyboard.addKey(K_c, msgboxCancel)
 			total_buttons += 1
 		if (flags & SPQR.BUTTON_YES) != 0:
-			slot = self.windows[index].addWidget(SWIDGET.CButton(self, x, y, "Yes"))
+			slot = self.windows[index].addWidget(SWIDGET.CButton(x, y, "Yes"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxYes
 			self.windows[index].items[slot].active = True
 			x = x-(self.iWidth("button")+12)
 			self.keyboard.addKey(K_y, msgboxYes)
 			total_buttons += 1
 		if (flags & SPQR.BUTTON_NO) != 0 and total_buttons < 3:
-			slot = self.windows[index].addWidget(SWIDGET.CButton(self, x, y, "No"))
+			slot = self.windows[index].addWidget(SWIDGET.CButton(x, y, "No"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxNo
 			self.windows[index].items[slot].active = True
 			x = x-(self.iWidth("button") + 12)
 			self.keyboard.addKey(K_n, msgboxNo)
 			total_buttons += 1
 		if (flags & SPQR.BUTTON_QUIT) != 0 and total_buttons < 3:
-			slot = self.windows[index].addWidget(SWIDGET.CButton(self, x, y, "Quit"))
+			slot = self.windows[index].addWidget(SWIDGET.CButton(x, y, "Quit"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxQuit
 			self.windows[index].items[slot].active = True
 			x = x-(self.iWidth("button") + 12)
 			self.keyboard.addKey(K_q, msgboxQuit)
 			total_buttons += 1
 		if (flags & SPQR.BUTTON_IGNORE) != 0 and total_buttons < 3:
-			slot = self.windows[index].addWidget(SWIDGET.CButton(self, x, y, "Ignore"))
+			slot = self.windows[index].addWidget(SWIDGET.CButton(x, y, "Ignore"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxIgnore
 			self.windows[index].items[slot].active = True
 			self.keyboard.addKey(K_i, msgboxIgnore)
@@ -1063,33 +1059,36 @@ class CGFXEngine:
 		return True
 
 # callbacks for the messegebox routines (if needed)
-def msgboxOK(gui, handle, xpos, ypos): 
+def msgboxOK(handle, xpos, ypos): 
 	"""Callback for messagebox ok button"""
 	gui.callback_temp = SPQR.BUTTON_OK
 	return(SPQR.BUTTON_OK)
 
-def msgboxCancel(gui, handle, xpos, ypos):
+def msgboxCancel(handle, xpos, ypos):
 	"""Callback for messagebox cancel button"""
 	gui.callback_temp = SPQR.BUTTON_CANCEL
 	return(SPQR.BUTTON_CANCEL)
 
-def msgboxYes(gui, handle, xpos, ypos):
+def msgboxYes(handle, xpos, ypos):
 	"""Callback for messagebox yes button"""
 	gui.callback_temp = SPQR.BUTTON_YES
 	return(SPQR.BUTTON_YES)
 
-def msgboxNo(gui, handle, xpos, ypos):
+def msgboxNo(handle, xpos, ypos):
 	"""Callback for messagebox no button"""
 	gui.callback_temp = SPQR.BUTTON_NO
 	return(SPQR.BUTTON_NO)
 
-def msgboxQuit(gui, handle, xpos, ypos):
+def msgboxQuit(handle, xpos, ypos):
 	"""Callback for messagebox quit button"""
 	gui.callback_temp = SPQR.BUTTON_QUIT
 	return(SPQR.BUTTON_QUIT)
 
-def msgboxIgnore(gui, handle, xpos, ypos):
+def msgboxIgnore(handle, xpos, ypos):
 	"""Callback for messagebox ignore button"""
 	gui.callback_temp = SPQR.BUTTON_IGNORE
 	return(SPQR.BUTTON_IGNORE)
+
+# this module acts as the GUI singleton
+gui = CGFXEngine()
 

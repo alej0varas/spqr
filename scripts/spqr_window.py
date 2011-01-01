@@ -20,6 +20,7 @@ from pygame.locals import *
 
 import spqr_defines as SPQR
 import spqr_widgets as SWIDGET
+import spqr_gui as SGFX
 
 # at the moment, you have to allow for the borders when you create a new window
 # sorry about, it's definitly on the TODO list
@@ -40,8 +41,7 @@ class CWindow:
 	   Call with gui - pointer the gui, x,y - position
 	   width,height, title - text on top of window,
 	   draw - wether to place on screen or not"""
-	def __init__(self,gui,x,y,width,height,title,draw=True,describe="CWindow"):
-		self.lgui=gui
+	def __init__(self,x,y,width,height,title,draw=True,describe="CWindow"):
 		self.active=True
 		self.display=draw
 		self.modal=False
@@ -76,63 +76,63 @@ class CWindow:
 			# ok, we start with the sides, with some clever blitting
 			# basically blit 4*4 images until you can only do 4*1 ones
 			foo.x=0
-			foo.y=self.lgui.iHeight("win_tl")
+			foo.y=SGFX.gui.iHeight("win_tl")
 			lrg_draw=int((self.rect.h-foo.y)/4)
 			sml_draw=(self.rect.h-foo.y)-(lrg_draw*4)
-			offset=self.rect.w-self.lgui.iWidth("win_rgt")
+			offset=self.rect.w-SGFX.gui.iWidth("win_rgt")
 			for bar in range(lrg_draw):
 				# blit the large images
-				self.image.blit(self.lgui.image("win_lft_lg"),foo)
+				self.image.blit(SGFX.gui.image("win_lft_lg"),foo)
 				foo.x+=offset
-				self.image.blit(self.lgui.image("win_rgt_lg"),foo)
+				self.image.blit(SGFX.gui.image("win_rgt_lg"),foo)
 				foo.x-=offset	
 				foo.y+=4
 			# ok, now the final small ones
 			if(sml_draw!=0):
 				for bar in range(sml_draw):
-					self.image.blit(self.lgui.image("win_lft"),foo)
+					self.image.blit(SGFX.gui.image("win_lft"),foo)
 					foo.x+=offset
-					self.image.blit(self.lgui.image("win_rgt"),foo)
+					self.image.blit(SGFX.gui.image("win_rgt"),foo)
 					foo.x-=offset
 					foo.y+=1
 			# same sort of routine for the top and bottom
 			foo.y=0
-			foo.x=self.lgui.iWidth("win_tl")
+			foo.x=SGFX.gui.iWidth("win_tl")
 			lrg_draw=int((self.rect.w-foo.x)/4)
 			sml_draw=(self.rect.w-foo.x)-(lrg_draw*4)
-			offset=self.rect.h-self.lgui.iHeight("win_bot")
+			offset=self.rect.h-SGFX.gui.iHeight("win_bot")
 			for bar in range(lrg_draw):
 				# again, the large blits (as can be seen from their name)
-				self.image.blit(self.lgui.image("win_top_lg"),foo)
+				self.image.blit(SGFX.gui.image("win_top_lg"),foo)
 				foo.y+=offset
-				self.image.blit(self.lgui.image("win_bot_lg"),foo)
+				self.image.blit(SGFX.gui.image("win_bot_lg"),foo)
 				foo.y-=offset
 				foo.x+=4
 			# then the small top/bottom fillers
 			if sml_draw!=0:
 				for bar in range(sml_draw):
-					self.image.blit(self.lgui.image("win_top"),foo)
+					self.image.blit(SGFX.gui.image("win_top"),foo)
 					foo.y+=offset
-					self.image.blit(self.lgui.image("win_bot"),foo)
+					self.image.blit(SGFX.gui.image("win_bot"),foo)
 					foo.y-=offset
 					foo.x+=1
 			# now draw in all of the corners
 			foo=pygame.Rect((0,0,0,0))
-			self.image.blit(self.lgui.image("win_tl"),foo)
-			foo.y=self.rect.h-self.lgui.iHeight("win_bl")
-			self.image.blit(self.lgui.image("win_bl"),foo)
-			foo.x=self.rect.w-self.lgui.iWidth("win_br")
-			self.image.blit(self.lgui.image("win_br"),foo)
+			self.image.blit(SGFX.gui.image("win_tl"),foo)
+			foo.y=self.rect.h-SGFX.gui.iHeight("win_bl")
+			self.image.blit(SGFX.gui.image("win_bl"),foo)
+			foo.x=self.rect.w-SGFX.gui.iWidth("win_br")
+			self.image.blit(SGFX.gui.image("win_br"),foo)
 			foo.y=0
-			self.image.blit(self.lgui.image("win_tr"),foo)
+			self.image.blit(SGFX.gui.image("win_tr"),foo)
 			# right, all that's left to do is draw the text over the title bar
 			# firstly render the text in it's own little gfx area
-			self.lgui.fonts[SPQR.FONT_VERA].set_bold(True)
-			bar=self.lgui.fonts[SPQR.FONT_VERA].render(title,True,SPQR.COL_WINTITLE)
-			self.lgui.fonts[SPQR.FONT_VERA].set_bold(False)
+			SGFX.gui.fonts[SPQR.FONT_VERA].set_bold(True)
+			bar=SGFX.gui.fonts[SPQR.FONT_VERA].render(title,True,SPQR.COL_WINTITLE)
+			SGFX.gui.fonts[SPQR.FONT_VERA].set_bold(False)
 			# set it to centre of title bar
-			foo.x=((self.rect.w+(self.lgui.iWidth("win_tl")*2))-bar.get_width())/2
-			foo.y=((self.lgui.iHeight("win_tl")-bar.get_height())/2)+1
+			foo.x=((self.rect.w+(SGFX.gui.iWidth("win_tl")*2))-bar.get_width())/2
+			foo.y=((SGFX.gui.iHeight("win_tl")-bar.get_height())/2)+1
 			# render to image
 			self.image.blit(bar,foo)
 	
@@ -195,7 +195,7 @@ class CWindow:
 		# get the real width of the window minus it's sides
 		width=self.rect.w-(2*SPQR.WINSZ_SIDE)
 		# and the button size:
-		bwidth=self.lgui.iWidth("button")
+		bwidth=SGFX.gui.iWidth("button")
 
 		# the basic button layout is as follows:
 		# we add a sep bar immediatly below. This is always 2 pixels in height
@@ -216,7 +216,7 @@ class CWindow:
 		if(totb>=(len(button_list))):
 			# yes, all buttons go on the one line
 			# start by extending the size of the window and rebuilding the image
-			extend_height=(self.lgui.iHeight("button")*2)+2
+			extend_height=(SGFX.gui.iHeight("button")*2)+2
 			self.rect.h+=extend_height
 			new_image=pygame.Surface((self.rect.w,self.rect.h))
 			new_image.fill(SPQR.BGUI_COL)
@@ -242,14 +242,14 @@ class CWindow:
 			# you may question the maths here (how do we know the length is going to be
 			# big enough?), but all we are after is a width >(2*SPACER), ok (if SPACER is
 			# fairly small) because we already tested for button width earlier
-			self.addWidget(SWIDGET.CSeperator(self.lgui,
-				SPQR.SPACER,self.rect.h-(extend_height+SPQR.WINSZ_TOP),
+			self.addWidget(SWIDGET.CSeperator(SPQR.SPACER,
+				self.rect.h-(extend_height+SPQR.WINSZ_TOP),
 				(self.rect.w-(2*(SPQR.WINSZ_SIDE+SPQR.SPACER)))))
 				
 			# now we add the buttons
-			xpos=width-((2*SPQR.SPACER)+self.lgui.iWidth("button"))
+			xpos=width-((2*SPQR.SPACER)+SGFX.gui.iWidth("button"))
 			ypos=(self.rect.h-(extend_height+SPQR.WINSZ_TOP))
-			ypos+=(extend_height-self.lgui.iHeight("button")/2)
+			ypos+=(extend_height-SGFX.gui.iHeight("button")/2)
 			while(len(button_list)>0):	
 				# get the next button
 				button=button_list.pop(0)
@@ -258,7 +258,7 @@ class CWindow:
 					# amend xpos - real easy
 					xpos=SPQR.SPACER
 				# build the button
-				bwidget=SWIDGET.CButton(self.lgui,xpos,ypos,button.text)
+				bwidget=SWIDGET.CButton(xpos,ypos,button.text)
 				bwidget.active=True
 				# and then add it
 				bindex.append(self.addWidget(bwidget))
@@ -266,9 +266,9 @@ class CWindow:
 				bwidget.callbacks.mouse_lclk=button.event
 				# and the keystuff, if needed:
 				if(button.key!=None):
-					self.lgui.keyboard.addKey(button.key,button.event)
+					SGFX.gui.keyboard.addKey(button.key,button.event)
 				# reset x position
-				xpos-=(2*SPQR.SPACER)+self.lgui.iwidth("button")
+				xpos-=(2*SPQR.SPACER)+SGFX.gui.iwidth("button")
 		else:
 			# 2 lines of buttons not implemented
 			if(SPQR.DEBUG_MODE==True):

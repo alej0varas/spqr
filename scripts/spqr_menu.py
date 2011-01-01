@@ -19,6 +19,7 @@ from pygame.locals import *
 
 import spqr_defines as SPQR
 import spqr_widgets as SWIDGET
+import spqr_gui as SGFX
 
 # this is the definition of an item in a menu drop-down
 class CMenuChild:
@@ -85,8 +86,7 @@ class CMenuParent:
 class CMenu:
 	"""Class holds all of the parent menus - thus there is only ever one
 	   instance of this class in our code"""
-	def __init__(self,gui,children):
-		self.lgui=gui
+	def __init__(self,children):
 		self.active=True
 		self.visible=True
 		self.wtype=SPQR.WT_MENU
@@ -100,7 +100,7 @@ class CMenu:
 		# draw the top bar starting here
 		# now work out what size the rhs pixmap text is
 		rhs_txt="SPQR "+SPQR.VERSION
-		rhs_txt_width=(self.lgui.fonts[SPQR.FONT_VERA].size(rhs_txt)[0]+SPQR.SPACER)
+		rhs_txt_width=(SGFX.gui.fonts[SPQR.FONT_VERA].size(rhs_txt)[0]+SPQR.SPACER)
 		# blit the lhs
 		x_blits=int((SPQR.SCREEN_WIDTH-rhs_txt_width-51)/8)
 		self.image=pygame.Surface((SPQR.SCREEN_WIDTH,titlebar.get_height()))
@@ -115,7 +115,7 @@ class CMenu:
 			self.image.blit(titlebar,dest)
 			dest.x+=titlebar.get_width()
 		# ok, now we can add the text to the rhs:
-		foo=self.lgui.fonts[SPQR.FONT_VERA].render(rhs_txt,True,SPQR.COL_BLACK)
+		foo=SGFX.gui.fonts[SPQR.FONT_VERA].render(rhs_txt,True,SPQR.COL_BLACK)
 		dest.x=SPQR.SCREEN_WIDTH-(rhs_txt_width+SPQR.SPACER)
 		dest.y=4
 		self.image.blit(foo,dest)
@@ -125,9 +125,9 @@ class CMenu:
 		dest.x=SPQR.SPACER
 		for foo in self.menu:
 			text=foo.text
-			self.lgui.fonts[SPQR.FONT_VERA].set_bold(True)
-			itmp=self.lgui.fonts[SPQR.FONT_VERA].render(text,True,SPQR.COL_WHITE)
-			self.lgui.fonts[SPQR.FONT_VERA].set_bold(False)
+			SGFX.gui.fonts[SPQR.FONT_VERA].set_bold(True)
+			itmp=SGFX.gui.fonts[SPQR.FONT_VERA].render(text,True,SPQR.COL_WHITE)
+			SGFX.gui.fonts[SPQR.FONT_VERA].set_bold(False)
 			self.image.blit(itmp,dest)
 			# add rect area of this menu entry
 			self.offsets.append(pygame.Rect((dest.x,1,itmp.get_width()+12,titlebar.get_height()-1)))
@@ -164,7 +164,7 @@ class CMenu:
 				height+=(2*SPQR.MNU_HSPACE)+1
 			else:
 				# create the text seperatly at first
-				text_image=self.lgui.fonts[SPQR.FONT_VERA].render(text,True,SPQR.MENU_TXT_COL)
+				text_image=SGFX.gui.fonts[SPQR.FONT_VERA].render(text,True,SPQR.MENU_TXT_COL)
 				# expand the image horizontally and vertically by making a new image
 				# and then blitting over the top of it...
 				final_text=pygame.Surface(
@@ -173,14 +173,14 @@ class CMenu:
 				final_text.fill(SPQR.MENU_COL)
 				# blit the icon
 				if foo.icon != None:
-					final_text.blit(self.lgui.image(foo.icon),
+					final_text.blit(SGFX.gui.image(foo.icon),
 						(SPQR.MNU_LSPACE,(SPQR.ICON_SIZE-final_text.get_height())/2))
 				final_text.blit(text_image,((2*SPQR.MNU_LSPACE)+SPQR.ICON_SIZE,SPQR.MNU_HSPACE))
 				pics.append(final_text)
 				height+=final_text.get_height()
 			# longest section so far?
 			# get size of keytext to render
-			wk,hk=self.lgui.fonts[SPQR.FONT_VERA].size(foo.key_text)
+			wk,hk=SGFX.gui.fonts[SPQR.FONT_VERA].size(foo.key_text)
 			# add minimum gap
 			wk+=SPQR.MNU_KEY_GAP+final_text.get_width()
 			if(wk>width):
@@ -235,7 +235,7 @@ class CMenu:
 				dest.y+=dest.h
 			else:
 				# create the key text
-				ktxt=self.lgui.fonts[SPQR.FONT_VERA].render(
+				ktxt=SGFX.gui.fonts[SPQR.FONT_VERA].render(
 					menu.children[index].key_text,True,SPQR.MENU_TXT_COL)
 				# blit the text
 				dest.h=text.get_height()
@@ -257,7 +257,7 @@ class CMenu:
 		self.parents.append(parent)
 		return((len(self.parents))-1)
 
-	def getMenuOption(self,lgui,handle,xpos,ypos):
+	def getMenuOption(self,handle,xpos,ypos):
 		"""Routine called when the mouse has clicked over the parent menu area
 			 Should always return True"""
 		# first check if we are in the target areas
@@ -282,7 +282,7 @@ class CMenu:
 			screen_copy=pygame.Surface((dest.w,dest.h))
 			screen_copy.blit(pygame.display.get_surface(),(0,0),dest)
 			# copy the menu image across
-			lgui.screen.blit(handle.menu[index].image,dest)
+			SGFX.gui.screen.blit(handle.menu[index].image,dest)
 			# and update the screen
 			pygame.display.update(dest)
 		
@@ -302,7 +302,7 @@ class CMenu:
 				# was it a keypress:	
 				if(event.type==KEYDOWN):
 					# did it match?
-					key_function,bar,handle=lgui.keyboard.getKeyFunction(event.key,event.mod)
+					key_function,bar,handle=SGFX.gui.keyboard.getKeyFunction(event.key,event.mod)
 					if(key_function==True):
 						exit_menu=True
 						new_menu=True
@@ -325,10 +325,10 @@ class CMenu:
 							if hrect.collidepoint(x,y)==True:
 								# call the routine, clear up and then exit
 								# firstly erase the shown menu
-								lgui.screen.blit(screen_copy,dest)
+								SGFX.gui.screen.blit(screen_copy,dest)
 								pygame.display.update(dest)
 								# now do the call
-								foo.callbacks.mouse_lclk(lgui,foo,x,y)
+								foo.callbacks.mouse_lclk(foo,x,y)
 								code_called=True
 								exit_menu=True
 								new_menu=True
@@ -340,7 +340,7 @@ class CMenu:
 						last_highlight.x-=dest.x
 						last_highlight.y-=dest.y
 						# copy portion on menu to screen
-						lgui.screen.blit(handle.menu[index].image,dest)
+						SGFX.gui.screen.blit(handle.menu[index].image,dest)
 						# and update the screen
 						pygame.display.update(dest)
 						# test against all highlights
@@ -356,7 +356,7 @@ class CMenu:
 								# are we in this one?
 								if(hrect.collidepoint(x,y)==True):
 									# draw the highlight
-									lgui.screen.blit(handle.menu[index].highlight,hrect)
+									SGFX.gui.screen.blit(handle.menu[index].highlight,hrect)
 									pygame.display.update(dest)
 									highlight_on=True
 									last_highlight=hrect
@@ -373,17 +373,17 @@ class CMenu:
 							if(tindx!=index):
 								index=tindx
 								# force redraw etc...
-								lgui.screen.blit(screen_copy,dest)
+								SGFX.gui.screen.blit(screen_copy,dest)
 								pygame.display.update(dest)
 								exit_menu=True
 		# if no code called, tidy the screen back up again
 		if(code_called==False):
 		# tidy the screen back up again
-			lgui.screen.blit(screen_copy,dest)
+			SGFX.gui.screen.blit(screen_copy,dest)
 		# update the screen
 			pygame.display.update(dest)
 		# if there was a keypress valid, or a mouseover event, run the code
 		if(key_function==True):
-			bar(lgui,0,-1,-1)
+			bar(0,-1,-1)
 		return(True)
 
