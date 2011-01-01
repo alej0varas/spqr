@@ -28,16 +28,20 @@ from scripts import spqr_widgets as SWIDGET
 from scripts import spqr_menu as SMENU
 from scripts import spqr_events as SEVENT
 
-class CSPQR:
+class CSPQR(object):
 	def __init__(self):
+		self.fullscreen = SPQR.FULLSCREEN
+		self.intro = True
+		self.init_only = False
 		# init the data
 		self.data = SDATA.CInfo()
 		self.sortOptions()
+		SGFX.gui.mainInit(SPQR.SCREEN_WIDTH, SPQR.SCREEN_HEIGHT, self.fullscreen)
 		# actually go any furthur?
-		if self.data.INIT_ONLY == True:
+		if self.init_only == True:
 			# no, so exit here
+			print "SPQR: init() worked fine."
 			sys.exit(True)
-		SGFX.gui.mainInit(SPQR.SCREEN_WIDTH, SPQR.SCREEN_HEIGHT, self.data.SPQR_FULLSCR)
 
 	# TODO: use optparse, don't re-invent the wheel
 	def executeFlag(self, flag):
@@ -47,15 +51,15 @@ class CSPQR:
 		# big simple if statement:
 		if flag == 'f':
 			# set to fullscreen
-			self.data.SPQR_FULLSCR = True
+			self.fullscreen = True
 			return True
 		elif flag == 'n':
 			# don't show intro, just jump into a game
-			self.data.SPQR_INTRO = False
+			self.intro = False
 			return True
 		elif flag == 't':
 			# exit after initing data
-			self.data.INIT_ONLY = True
+			self.init_only = True
 			return True
 		elif flag == 'v':
 			# show version details and exit
@@ -199,7 +203,7 @@ class CSPQR:
 		# finally, the last thing we do is start the animation timer
 		pygame.time.set_timer(pygame.USEREVENT, SPQR.ANIM_TIME)
 		# display the welcome screen if needed
-		if self.data.SPQR_INTRO == True:
+		if self.intro == True:
 			# start with intro window displayed
 			SEVENT.welcomeScreen(0, 0, 0)
 

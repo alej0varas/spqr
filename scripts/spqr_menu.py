@@ -22,7 +22,7 @@ import spqr_widgets as SWIDGET
 import spqr_gui as SGFX
 
 # this is the definition of an item in a menu drop-down
-class CMenuChild:
+class CMenuChild(object):
 	"""Class defines an item in a drop-down menu"""
 	def __init__(self,text,icon,key,code):
 		self.active=True
@@ -57,7 +57,7 @@ def menuChildClick(handle,xpos,ypos):
 	messagebox(SPQR.BUTTON_OK,"You clicked a child menu",SPQR.FONT_VERA)
 	return True
 
-class CMenuParent:
+class CMenuParent(object):
 	"""Class defines a parent menu (something like the 'File' part of
 	   a normal drop-down menu)"""
 	def __init__(self,text):
@@ -83,7 +83,7 @@ class CMenuParent:
 
 # Here's a fairly complex one - the menu system, only ever one instance of in our code (?)
 # it always occupies the top of the screen
-class CMenu:
+class CMenu(object):
 	"""Class holds all of the parent menus - thus there is only ever one
 	   instance of this class in our code"""
 	def __init__(self,children):

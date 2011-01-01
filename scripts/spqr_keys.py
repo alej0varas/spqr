@@ -20,7 +20,7 @@ from pygame.locals import *
 import spqr_events as SEVENT
 
 # class to hold a key value
-class CKeypress:
+class CKeypress(object):
 	"""Class defines a simple keypress, as stores in the keyboard
 	   handling code"""
 	def __init__(self,press,mod,routine,parent=None):
@@ -29,7 +29,7 @@ class CKeypress:
 		self.function=routine
 		self.handle=parent
 
-class CKeyboard:
+class CKeyboard(object):
 	"""CKeyboard holds a list of keyboard events to respond to
 	   and the functions that they should call (defined in the normal SEVENT)
 	   Note: You can set one key to have more than one function

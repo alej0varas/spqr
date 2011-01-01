@@ -26,7 +26,7 @@ import spqr_console as SCONSOLE
 import spqr_sound as SSOUND
 
 # class that holds the dirty rectangle updates
-class CDirtyRect:
+class CDirtyRect(object):
 	def __init__(self, pic, rec):
 		self.image = pic
 		self.rect = rec
@@ -34,11 +34,11 @@ class CDirtyRect:
 # now of course we need a class to hold all of the windows, i.e. the basic GUI class
 # this class also inits the gfx display
 # call with the x and y resolution of the screen, and a pointer to the data
-class CGFXEngine:
+class CGFXEngine(object):
 	def __init__(self):
 		pass
 
-	def mainInit(self, width, height, fullscreen, game_setup = True):
+	def mainInit(self, width, height, fullscreen):
 		"""Long, boring routine that initiates the gui"""
 		pygame.init()
 		# ok, now init the basic screen
@@ -49,31 +49,20 @@ class CGFXEngine:
 		else:
 			self.screen = pygame.display.set_mode((width, height), HWSURFACE|DOUBLEBUF)
 		self.images = {}
-		if(game_setup == True):
-			self.displayLoadingScreen(width, height)
-			# next up is to load in some images into the gfx array
-			self.images["map"] = pygame.image.load("../gfx/map/map.jpg").convert()
-			# add a back buffer map render.. this will become the map that we render
-			foo = pygame.Surface((self.iWidth("map"), self.iHeight("map")))
-			self.images["buffer"] = foo
-			# we will need a copy of the board without the units rendered, for movement, flashing
-			# etc.. It is not stored with the other images, but I'll declare it here anyway. Start
-			# it with a dummy image:
-			self.map_render = pygame.Surface((self.iWidth("map"),  self.iHeight("map")))
+		self.displayLoadingScreen(width, height)
+		# next up is to load in some images into the gfx array
+		self.images["map"] = pygame.image.load("../gfx/map/map.jpg").convert()
+		# add a back buffer map render.. this will become the map that we render
+		foo = pygame.Surface((self.iWidth("map"), self.iHeight("map")))
+		self.images["buffer"] = foo
+		# we will need a copy of the board without the units rendered, for movement, flashing
+		# etc.. It is not stored with the other images, but I'll declare it here anyway. Start
+		# it with a dummy image:
+		self.map_render = pygame.Surface((self.iWidth("map"),  self.iHeight("map")))
 
 		self.windows = []
 		# the font that the messagebox will use:
 		self.msg_font = SPQR.FONT_VERA
-		# gui needs to remember some widgets to auto-update them
-		self.hex_widget = 0
-		self.unit_widget = 0
-		self.unit_txt_widget = 0
-		self.unit_graph_widget = 0
-		self.city_widget = 0
-		self.city_txt_widget = 0
-		self.turn_widget = 0
-		self.next_button = 0
-		self.display_units = []
 		# highlight over button at the moment?
 		self.over_button = False
 		# interrupt for timers?
@@ -81,7 +70,7 @@ class CGFXEngine:
 		# item to check double-click against
 		self.dclick_handle = None
 		# store a simple console class
-		self.cfuncs = SCONSOLE.CConsole(self)
+		self.cfuncs = SCONSOLE.CConsole()
 		# console currently being displayed?
 		self.console = False
 		

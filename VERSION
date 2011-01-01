@@ -1,6 +1,6 @@
 SPQR Game version history.
 
-Current version: 0.3.59
+Current version: 0.3.592
 
 Version History.
 
@@ -92,6 +92,8 @@ Version History.
 0.3.581	Added working battle screen.
 0.3.59	Added new map: ripped out old code data structure.
 		Start of proper code re-structure
+0.3.592	General code structure much improved. Old data system taken out.
+		Code is being moved much closer to PEP-8
 
 Notable milestones:
 

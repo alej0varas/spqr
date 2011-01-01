@@ -24,7 +24,7 @@ import spqr_gui as SGFX
 
 # what follows is the base class used for the callback functions of the widgets. Every
 # widget has one, and you can modify the widgets be pointing mouse_* to different functions
-class CCallbacks:
+class CCallbacks(object):
 	"""Simple class holding callbacks for widgets."""
 	def __init__(self,description):
 		self.mouse_over=SPQR.mouse_over_std
@@ -38,7 +38,7 @@ class CCallbacks:
 # now a class for the items contained within the window
 # this is the base class that you will only use to generate custom widgets
 # in almost all cases you'll use the widgets defined by the library
-class CWidget:
+class CWidget(object):
 	"""Base class for widgets: All other widgets should build on this one"""
 	def __init__(self,rect,htype,image,describe,
 				 parent=False,active=False,visible=True):

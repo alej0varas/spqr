@@ -22,7 +22,7 @@ import spqr_defines as SPQR
 # sound and music routines for SPQR
 # essentially stored as a single class
 
-class CSound:
+class CSound(object):
 	"""Class stores and sets music parameters"""
 	def __init__(self):
 		# define the sounds:

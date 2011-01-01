@@ -14,17 +14,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from __future__ import absolute_import
-from .. import spqr_defines as SPQR
-
-class CPlayer:
-	def __init__(self,name,city,ptype,own):
-		self.name=name
-		self.capitol=city
-		# computer controlled player?
-		if(ptype==SPQR.PTYPE_CPU):
-			self.computer=True
-		else:
-			self.computer=False
-		self.own_text=own
+class CPlayer(object):
+	def __init__(self, name_single, name_plural):
+		self.name_single = name_single
+		self.name_plural = name_plural
 

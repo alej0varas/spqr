@@ -27,7 +27,7 @@ import spqr_gui as SGFX
 
 # a simple class that defines button text, active key and event to run
 # when adding buttons to bottom of a window
-class CButtonDetails:
+class CButtonDetails(object):
 	def __init__(self,text,key,event):
 		"""Set key to None if you don't want a keypress to be
 		   added to the keyboard callbacks"""
@@ -36,7 +36,7 @@ class CButtonDetails:
 		self.event=event
 
 # define an CWindow
-class CWindow:
+class CWindow(object):
 	"""Base window class
 	   Call with gui - pointer the gui, x,y - position
 	   width,height, title - text on top of window,

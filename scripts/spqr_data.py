@@ -14,30 +14,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import sys,fileinput
 import spqr_defines as SPQR
+import cities.spqr_city as SCITY
+import maps.spqr_map as SMAP
+import player.spqr_player as SPLAYER
+import units.spqr_unit as SUNITS
 
 # definitions for the map, players and units
-# if any value holds an index number, then that is a bug,
-# since we should always store the id value when referring to data 
+# held as a singleton in a python module
 
-# roll both of those into one large data object
-class CInfo:
+class CInfo(object):
 	def __init__(self):
-		# following set to True if the last time a unit
-		# was flashed, the frame was drawn (i.e. so the unit
-		# is displayed on screen)
-		self.flash_on=True
-		self.year=-400
-		self.year=SPQR.START_YEAR
-		self.current_unit=0
-		# some defines that can be reset
-		self.SPQR_FULLSCR=False
-		# normal splash screen at start of game?
-		self.SPQR_INTRO=True
-		# exit after an init?
-		self.INIT_ONLY=False
-		self.end_turn=False
+		self.year = SPQR.START_YEAR
+		self.units = []
+		self.map = SMAP.CMap()
 
 	def initNewTurn(self):
 		"""Call routine at end of turn. Resets all data
@@ -48,8 +38,10 @@ class CInfo:
 		# consuls A and B', or by reckoning from the foundation of
 		# Rome itself. We should really use this method
 		# it's a new year
-		self.year+=1
+		self.year += 1
 		# there is of course no year zero
-		if(self.year==0):
-			self.year=1
+		if self.year == 0:
+			self.year = 1
+
+data = CInfo()
 

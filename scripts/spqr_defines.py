@@ -22,14 +22,15 @@ import pygame.locals as PYGAME
 # as they are, unless you really know what you are doing. Probably the
 # most useful when debugging is SPQR_FULLSCREEN
 
-VERSION				= "v0.3.59"
+VERSION				= "v0.3.592"
 AUTHOR				= "Chris Smith"
 EMAIL				= "maximinus@gmail.com"
 SYSTEM				= "GNU/Linux"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
 LAST_UPDATE			= "1st Jan 2011"
-CODELINES			= "5675"
+CODELINES			= "5326"
+FULLSCREEN			= False
 
 # before we go any further, this one is a must ;-)
 # currently adds debug menu bar , along with access to
