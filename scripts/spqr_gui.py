@@ -352,9 +352,9 @@ class CGFXEngine(object):
 			self.win_index = len(self.windows)-2
 			# now call the function
 			if handle == None:
-				bar(self, 0, -1, -1)
+				bar(0, -1, -1)
 			else:
-				bar(self, handle, -1, -1)
+				bar(handle, -1, -1)
 			return True
 		else:
 			return False
