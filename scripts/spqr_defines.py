@@ -58,7 +58,7 @@ HEX_YOFFSET			= 7
 HEX_OFF_XOFF		= 21
 
 # the rectangle of the map that actually contains hexes
-HEX_AREA			= PYGAME.Rect(5,6,2100,1380)
+HEX_AREA			= PYGAME.Rect(5, 6, 2100, 1380)
 
 # the actual full gfx width/height of a rendered hex
 # important - HEX_FULL_W must be (?) an even number
@@ -68,23 +68,17 @@ HEX_FULLH			= 47
 # top number of pixels of the hex image where the width of the
 # hex is not equal to the width of the rectangle
 HEX_TRIANGLE_H		= 11
-
-#HEX_ODD_Y_OFF		= 22
 HEX_TOP				= 24
 
 # offsets to guarantee a click on a selected hex
-CLICK_X				= HEX_FULLW/2
-CLICK_Y				= HEX_FULLH/2
-
-# co-ords for rectangle flashing
-#FLASH_GFX_OFF		= (-13,-8)
-#FLASH_RECT_SIZE		= (69,64)
+CLICK_X				= HEX_FULLW / 2
+CLICK_Y				= HEX_FULLH / 2
 
 # menu icons are always squares
 ICON_SIZE			= 24
 # size of console screen
 CONSOLE_WIDTH		= SCREEN_WIDTH
-CONSOLE_HEIGHT		= (SCREEN_HEIGHT/3)*2
+CONSOLE_HEIGHT		= (SCREEN_HEIGHT / 3) * 2
 # checkbox size goes here (always a square)
 CHKBOX_SIZE			= 13
 # size of unit gfx
@@ -100,21 +94,21 @@ MOVESZ_Y			= 64
 # offsets for units around a hex
 # first one tells you where to blit from with the other unit
 # next one (ends in D) is the destination z,y offset
-MOVE_OFF_LEFT		= PYGAME.Rect(HEX_FULLW-13,0,13,UNIT_HEIGHT)
-MOVE_OFF_LEFTD		= (0,8)
-MOVE_OFF_RIGHT		= PYGAME.Rect(0,0,14,41)
-MOVE_OFF_RIGHTD		= (HEX_FULLW+13,8)
-MOVE_OFF_TL			= PYGAME.Rect(8,28,34,19)
-MOVE_OFF_TLD		= (0,0)
-MOVE_OFF_TR			= PYGAME.Rect(0,28,45,20)
-MOVE_OFF_TRD		= (34,0)
-MOVE_OFF_BL			= PYGAME.Rect(8,0,37,41)
-MOVE_OFF_BLD		= (0,44)
-MOVE_OFF_BR			= PYGAME.Rect(0,0,45,41)
-MOVE_OFF_BRD		= (34,44)
+MOVE_OFF_LEFT		= PYGAME.Rect(HEX_FULLW - 13, 0, 13, UNIT_HEIGHT)
+MOVE_OFF_LEFTD		= (0, 8)
+MOVE_OFF_RIGHT		= PYGAME.Rect(0, 0, 14, 41)
+MOVE_OFF_RIGHTD		= (HEX_FULLW + 13, 8)
+MOVE_OFF_TL			= PYGAME.Rect(8, 28, 34, 19)
+MOVE_OFF_TLD		= (0, 0)
+MOVE_OFF_TR			= PYGAME.Rect(0, 28, 45, 20)
+MOVE_OFF_TRD		= (34, 0)
+MOVE_OFF_BL			= PYGAME.Rect(8, 0, 37, 41)
+MOVE_OFF_BLD		= (0, 44)
+MOVE_OFF_BR			= PYGAME.Rect(0, 0, 45, 41)
+MOVE_OFF_BRD		= (34, 44)
 
 # minimum size around move area
-MIN_MOVE_AREA		= (2*HEX_FULLH)
+MIN_MOVE_AREA		= 2 * HEX_FULLH)
 # size of graphs in unit area
 UNIT_GRAPHX			= 16
 UNIT_GRAPHY			= 36
@@ -122,9 +116,9 @@ UNIT_GRAPHY			= 36
 BATTLE_GRAPHX		= 100	
 BATTLE_GRAPHY		= 18
 # gradiant of slope on side of hex
-HEX_GRAD			= float((HEX_PIX_W-HEX_TOP)/float(HEX_PIX_H/2))
+HEX_GRAD			= float((HEX_PIX_W - HEX_TOP) / float(HEX_PIX_H / 2))
 # offset for gfx into hex display on info box
-HEX_BDR_OFF			= (6,2)
+HEX_BDR_OFF			= (6, 2)
 SCROLL_SPEED		= 8
 SCROLL_DIAG			= 6
 KSCROLL_SPD			= 80
@@ -145,8 +139,8 @@ ROME_YPOS			= 824
 MAX_STACKING		= 4
 
 # sizes of various gradiant bars used in ItemList widget
-GRADBAR_SIZES		= [64,96,128]
-GRADBAR_NAMES		= ["gradbar64","gradbar96","gradbar128"]
+GRADBAR_SIZES		= [64, 96, 128]
+GRADBAR_NAMES		= ["gradbar64", "gradbar96", "gradbar128"]
 GRADBAR_WIDTH		= 128
 
 # player types
@@ -238,29 +232,29 @@ LEFT				= 4
 TOP_LEFT			= 5
 
 # normal move offsets (x,y,x_if_odd_column)
-TOP_RIGHT_OFFSET	= (1,-1,0)
-RIGHT_OFFSET		= (1,0,1)
-BOTTOM_RIGHT_OFFSET	= (1,1,0)
-BOTTOM_LEFT_OFFSET	= (0,1,-1)
-LEFT_OFFSET			= (-1,0,-1)
-TOP_LEFT_OFFSET		= (0,-1,-1)
+TOP_RIGHT_OFFSET	= (1, -1, 0)
+RIGHT_OFFSET		= (1, 0, 1)
+BOTTOM_RIGHT_OFFSET	= (1, 1, 0)
+BOTTOM_LEFT_OFFSET	= (0, 1, -1)
+LEFT_OFFSET			= (-1, 0, -1)
+TOP_LEFT_OFFSET		= (0, -1, -1)
 
-MOVE_OFFSETS		= [TOP_RIGHT_OFFSET,RIGHT_OFFSET,BOTTOM_RIGHT_OFFSET,
-					   BOTTOM_LEFT_OFFSET,LEFT_OFFSET,TOP_LEFT_OFFSET]
+MOVE_OFFSETS		= [TOP_RIGHT_OFFSET, RIGHT_OFFSET, BOTTOM_RIGHT_OFFSET,
+					   BOTTOM_LEFT_OFFSET, LEFT_OFFSET, TOP_LEFT_OFFSET]
 
 # graphics offsets for animation, based on direction
-ANIM_TR_OFFSET		= (HEX_FULLW/2,-HEX_PIX_H)
-ANIM_RT_OFFSET		= (HEX_FULLW,0)
-ANIM_BR_OFFSET		= (HEX_FULLW/2,HEX_PIX_H)
-ANIM_BL_OFFSET		= (-HEX_FULLW/2,HEX_PIX_H)
-ANIM_LF_OFFSET		= (-HEX_FULLW,0)
-ANIM_TL_OFFSET		= (-HEX_FULLW/2,-HEX_PIX_H)
+ANIM_TR_OFFSET		= (HEX_FULLW / 2, -HEX_PIX_H)
+ANIM_RT_OFFSET		= (HEX_FULLW, 0)
+ANIM_BR_OFFSET		= (HEX_FULLW / 2, HEX_PIX_H)
+ANIM_BL_OFFSET		= (-HEX_FULLW / 2, HEX_PIX_H)
+ANIM_LF_OFFSET		= (-HEX_FULLW, 0)
+ANIM_TL_OFFSET		= (-HEX_FULLW / 2, -HEX_PIX_H)
 
-ANIM_UNIT_OFFSETS	= [ANIM_TR_OFFSET,ANIM_RT_OFFSET,ANIM_BR_OFFSET,
-					   ANIM_BL_OFFSET,ANIM_LF_OFFSET,ANIM_TL_OFFSET]
+ANIM_UNIT_OFFSETS	= [ANIM_TR_OFFSET, ANIM_RT_OFFSET, ANIM_BR_OFFSET,
+					   ANIM_BL_OFFSET, ANIM_LF_OFFSET, ANIM_TL_OFFSET]
 # area to blit to and number of frames
-ANIM_UNIT_RECTW		= HEX_FULLW*3
-ANIM_UNIT_RECTH		= HEX_FULLH*3
+ANIM_UNIT_RECTW		= HEX_FULLW * 3
+ANIM_UNIT_RECTH		= HEX_FULLH * 3
 ANIM_UNIT_FRAMES	= 7
 
 # text layout types
@@ -315,7 +309,7 @@ WINSZ_BOT			= 6
 # alpha is from 0 to 255, where 0 is transparent
 MENU_ALPHA			= 64
 # colour of the highlight
-MENU_HLCOL			= (170,83,83)
+MENU_HLCOL			= (170, 83, 83)
 MENU_HBORDER		= 6
 
 # game factor designs
@@ -324,42 +318,42 @@ MENU_HBORDER		= 6
 START_YEAR			= -201
 
 # define all the colours we use as well
-BGUI_COL			= (238,238,230)
-BGUI_HIGH			= (227,219,213)
-CITY_TXT_COL		= (255,255,255)
-MENU_COL			= (246,246,246)
-MENU_BDR_COL		= (220,220,220)
-MENU_CNR_COL		= (194,194,194)
-MENU_TXT_COL		= (0,0,0)
-GAME_TRN_TXT		= (0,0,0)
-COL_BLACK			= (0,0,0)
-COL_WHITE			= (255,255,255)
-COLG_BLUE			= (81,93,151)
-COLG_RED			= (171,84,84)
-COLG_GREEN			= (112,154,104)
-COLG_BHIGH			= (116,133,216)
-COLG_RHIGH			= (254,120,120)
-COLG_GHIGH			= (160,220,149)
-COL_BUTTON			= (0,0,0)
-COL_WINTITLE		= (0,0,0)
-SLIDER_LIGHT		= (116,133,216)
-SLIDER_MEDIUM		= (98,113,183)
-SLIDER_DARK			= (81,93,151)
-SLIDER_BDARK		= (70,91,110)
-SLIDER_BLIGHT		= (170,156,143)
-SLIDER_BMED1		= (192,181,169)
-SLIDER_BMED2		= (209,200,191)
-SCROLL_BORDER		= (170,156,143)
-SCROLL_MIDDLE		= (209,200,191)
-SEP_DARK			= (154,154,154)
-SEP_LIGHT			= (248,252,248)
-OPTM_BDARK			= (190,190,180)
+BGUI_COL			= (238, 238, 230)
+BGUI_HIGH			= (227, 219, 213)
+CITY_TXT_COL		= (255, 255, 255)
+MENU_COL			= (246, 246, 246)
+MENU_BDR_COL		= (220, 220, 220)
+MENU_CNR_COL		= (194, 194, 194)
+MENU_TXT_COL		= (0, 0, 0)
+GAME_TRN_TXT		= (0, 0, 0)
+COL_BLACK			= (0, 0, 0)
+COL_WHITE			= (255, 255, 255)
+COLG_BLUE			= (81, 93, 151)
+COLG_RED			= (171, 84, 84)
+COLG_GREEN			= (112, 154, 104)
+COLG_BHIGH			= (116, 133, 216)
+COLG_RHIGH			= (254, 120, 120)
+COLG_GHIGH			= (160, 220, 149)
+COL_BUTTON			= (0, 0, 0)
+COL_WINTITLE		= (0, 0, 0)
+SLIDER_LIGHT		= (116, 133, 216)
+SLIDER_MEDIUM		= (98, 113, 183)
+SLIDER_DARK			= (81, 93, 151)
+SLIDER_BDARK		= (70, 91, 110)
+SLIDER_BLIGHT		= (170, 156, 143)
+SLIDER_BMED1		= (192, 181, 169)
+SLIDER_BMED2		= (209, 200, 191)
+SCROLL_BORDER		= (170, 156, 143)
+SCROLL_MIDDLE		= (209, 200, 191)
+SEP_DARK			= (154, 154, 154)
+SEP_LIGHT			= (248, 252, 248)
+OPTM_BDARK			= (190, 190, 180)
 
 # some user events OTHER than that used by unit flash animation
 # (which is *always* = pygame.USEREVENT)
-EVENT_SONGEND		= PYGAME.USEREVENT+1
+EVENT_SONGEND		= PYGAME.USEREVENT + 1
 # stop looking for a double-click when we get this event
-EVENT_DC_END		= PYGAME.USEREVENT+2
+EVENT_DC_END		= PYGAME.USEREVENT + 2
 
 # some initial values for the sound system
 INIT_VOLUME			= 0
@@ -370,39 +364,39 @@ SFX_ON				= True
 # these are the standard callbacks, they should never be called
 # they are here to prevent an exception should an unregistered
 # event ever be called
-def mouse_over_std(lgui,handle,x,y):
-	if(DEBUG_MODE==True):
+def mouse_over_std(handle, x, y):
+	if DEBUG_MODE == True:
 		print "[SPQR]: Error: mouse_over_std called"
-	return(False)
+	return False
 
-def mouse_ldown_std(lgui,handle,x,y):
-	if(DEBUG_MODE==True):
+def mouse_ldown_std(handle, x, y):
+	if DEBUG_MODE == True:
 		print "[SPQR]: Error: mouse_ldown_std called"
-	return(False)
+	return False
 
-def mouse_rdown_std(lgui,handle,x,y):
-	if(DEBUG_MODE==True):
+def mouse_rdown_std(handle,x,y):
+	if DEBUG_MODE == True:
 		print "[SPQR]: Error: mouse_rdown_std called"
-	return(False)
+	return False
 
-def mouse_dclick_std(lgui,handle,x,y):
-	if(DEBUG_MODE==True):
+def mouse_dclick_std(handle, x, y):
+	if DEBUG_MODE == True:
 		print "[SPQR]: Error: mouse_dclick_std called"
-	return(False)
+	return False
 
-def mouse_lclk_std(lgui,handle,x,y):
-	if(DEBUG_MODE==True):
+def mouse_lclk_std(handle, x, y):
+	if DEBUG_MODE == True:
 		print "[SPQR]: Error: mouse_lclk_std called"
-	return(False)
+	return False
 
-def mouse_rclk_std(lgui,handle,x,y):
-	if(DEBUG_MODE==True):
+def mouse_rclk_std(handle, x, y):
+	if DEBUG_MODE == True:
 		print "[SPQR]: Error: mouse_rclk_std called"
-	return(False)
+	return False
 	
-def null_routine(lgui,handle,xpos,ypos):
+def null_routine(handle, x, y):
 	"""Another filler routine to handle blank callbacks"""
-	if(DEBUG_MODE==True):
+	if DEBUG_MODE == True:
 		print "[SPQR]: Null routine called"
-	return(False)
+	return False
 
