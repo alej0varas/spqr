@@ -38,7 +38,7 @@ class CGFXEngine(object):
 	def __init__(self):
 		pass
 
-	def mainInit(self, width, height, fullscreen):
+	def mainInit(self, width, height, fullscreen, load_screen= True):
 		"""Long, boring routine that initiates the gui"""
 		pygame.init()
 		# ok, now init the basic screen
@@ -49,7 +49,8 @@ class CGFXEngine(object):
 		else:
 			self.screen = pygame.display.set_mode((width, height), HWSURFACE|DOUBLEBUF)
 		self.images = {}
-		self.displayLoadingScreen(width, height)
+		if load_screen == True:
+			self.displayLoadingScreen(width, height)
 		# next up is to load in some images into the gfx array
 		self.images["map"] = pygame.image.load("../gfx/map/map.jpg").convert()
 		# add a back buffer map render.. this will become the map that we render
