@@ -14,7 +14,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import sys,pygame
+import sys, pygame
 from pygame.locals import *
 
 import spqr_defines as SPQR
@@ -26,127 +26,127 @@ import spqr_gui as SGFX
 # widget has one, and you can modify the widgets be pointing mouse_* to different functions
 class CCallbacks(object):
 	"""Simple class holding callbacks for widgets."""
-	def __init__(self,description):
-		self.mouse_over=SPQR.mouse_over_std
-		self.mouse_ldown=SPQR.mouse_ldown_std
-		self.mouse_rdown=SPQR.mouse_rdown_std
-		self.mouse_dclick=SPQR.mouse_dclick_std
-		self.mouse_lclk=SPQR.mouse_lclk_std
-		self.mouse_rclk=SPQR.mouse_rclk_std
-		self.describe=description
+	def __init__(self, description):
+		self.mouse_over = SPQR.mouse_over_std
+		self.mouse_ldown = SPQR.mouse_ldown_std
+		self.mouse_rdown = SPQR.mouse_rdown_std
+		self.mouse_dclick = SPQR.mouse_dclick_std
+		self.mouse_lclk = SPQR.mouse_lclk_std
+		self.mouse_rclk = SPQR.mouse_rclk_std
+		self.describe = description
 
 # now a class for the items contained within the window
 # this is the base class that you will only use to generate custom widgets
 # in almost all cases you'll use the widgets defined by the library
 class CWidget(object):
 	"""Base class for widgets: All other widgets should build on this one"""
-	def __init__(self,rect,htype,image,describe,
-				 parent=False,active=False,visible=True):
-		self.active=active
-		self.visible=visible
-		self.rect=rect
-		self.wtype=htype
+	def __init__(self, rect, htype, image, describe,
+				 parent=False, active=False, visible=True):
+		self.active = active
+		self.visible = visible
+		self.rect = rect
+		self.wtype = htype
 		# add callbacks
-		self.callbacks=CCallbacks(describe+"_Callback")
+		self.callbacks = CCallbacks(describe+"_Callback")
 		# set an image up for later
-		self.image=image
+		self.image = image
 		# following used to store the parent window of the
 		# widget... False if there is no valid parent
-		self.parent=False
-		self.describe=describe
+		self.parent = False
+		self.describe = describe
 
 # place the standard items here, starting with a label
 class CLabel(CWidget):
 	"""Label class stes and stores details for a simple label"""
-	def __init__(self,x,y,width,height,text,font=SPQR.FONT_VERA):
-		CWidget.__init__(self,pygame.Rect(x,y,width,height),SPQR.WT_LABEL,
-					     None,"CLabel") 
-		self.background_colour=SPQR.BGUI_COL
-		self.text_colour=SPQR.COL_BLACK
-		self.font=font
-		self.justification=SPQR.LEFT_JUSTIFY
-		self.text=text	
+	def __init__(self, x, y, width, height, text, font = SPQR.FONT_VERA):
+		CWidget.__init__(self, pygame.Rect(x,y,width,height), SPQR.WT_LABEL,
+					     None, "CLabel") 
+		self.background_colour = SPQR.BGUI_COL
+		self.text_colour = SPQR.COL_BLACK
+		self.font = font
+		self.justification = SPQR.LEFT_JUSTIFY
+		self.text = text	
 		# render the image text
-		if self.buildLabel()==False:
+		if self.buildLabel() == False:
 			# well, something went wrong, lets create an empty gfx
-			image=pygame.Surface((self.rect.w,self.rect.h))
+			image=pygame.Surface((self.rect. w,self.rect.h))
 			image.fill(self.background_colour)
 	
 	# code for the following routine taken from the Pygame code repository.
-	# written by David Clark, amended by Chris Smith
+	# written by David Clark, amended by Chris Handy
 	def buildLabel(self):
 		"""Called to redraw the text on the label
 		   Returns false (and displays message on console) if
 		   the new text will not fit the image. (possible on low res)"""
-		final_lines=[]
-		requested_lines=self.text.splitlines()
+		final_lines = []
+		requested_lines = self.text.splitlines()
 		# Create a series of lines that will fit on the provided rectangle
 		for requested_line in requested_lines:
-			if(SGFX.gui.fonts[self.font].size(requested_line)[0]>self.rect.w):
-				words=requested_line.split(' ')
+			if SGFX.gui.fonts[self.font].size(requested_line)[0] > self.rect.w:
+				words = requested_line.split(' ')
 				# if any of our words are too long to fit, return.
 				for word in words:
-					if(SGFX.gui.fonts[self.font].size(word)[0]>=self.rect.w):
-						print "Error: Word (",word,") was too long in label"
-						print "       Width was more than ",self.rect.w
+					if SGFX.gui.fonts[self.font].size(word)[0] >= self.rect.w:
+						print "Error: Word (", word, ") was too long in label"
+						print "       Width was more than ", self.rect.w
 						return(False)
 				# Start a new line
-				accumulated_line=""
+				accumulated_line = ""
 				for word in words:
-					test_line=accumulated_line+word+" "
+					test_line = accumulated_line + word + " "
 					# Build the line while the words fit.
-					if(SGFX.gui.fonts[self.font].size(test_line)[0]<self.rect.w):
-						accumulated_line=test_line
+					if SGFX.gui.fonts[self.font].size(test_line)[0] < self.rect.w:
+						accumulated_line = test_line
 					else:
 						final_lines.append(accumulated_line)
-						accumulated_line=word+" "
+						accumulated_line=word + " "
 				final_lines.append(accumulated_line)
 			else:
 				final_lines.append(requested_line)
 		# Let's try to write the text out on the surface.
-		self.image=pygame.Surface((self.rect.w,self.rect.h))
+		self.image=pygame.Surface((self.rect.w, self.rect.h))
 		self.image.fill(self.background_colour)
-		accumulated_height=0
+		accumulated_height = 0
 		for line in final_lines:
-			if(accumulated_height+SGFX.gui.fonts[self.font].size(line)[1]>=self.rect.h):
+			if accumulated_height + SGFX.gui.fonts[self.font].size(line)[1] >= self.rect.h:
 				print "Error: Text string too tall in label"
-				print "       ah=",accumulated_height," h=",self.rect.h
+				print "       ah=", accumulated_height, " h=", self.rect.h
 				return False
-			if(line!=""):
-				tempsurface=SGFX.gui.fonts[self.font].render(line,1,self.text_colour)
-				if self.justification==SPQR.LEFT_JUSTIFY:
-					self.image.blit(tempsurface,(0,accumulated_height))
-				elif(self.justification==SPQR.CENTRE_HORIZ):
-					self.image.blit(tempsurface,((self.rect.w-tempsurface.get_width())/2,accumulated_height))
-				elif(self.justification==SPQR.RIGHT_JUSTIFY):
-					self.image.blit(tempsurface,(self.rect.w-tempsurface.get_width(),accumulated_height))
+			if line != "":
+				tempsurface = SGFX.gui.fonts[self.font].render(line, 1, self.text_colour)
+				if self.justification == SPQR.LEFT_JUSTIFY:
+					self.image.blit(tempsurface, (0, accumulated_height))
+				elif self.justification == SPQR.CENTRE_HORIZ:
+					self.image.blit(tempsurface, ((self.rect.w-tempsurface.get_width())/2, accumulated_height))
+				elif self.justification == SPQR.RIGHT_JUSTIFY:
+					self.image.blit(tempsurface, (self.rect.w - tempsurface.get_width(), accumulated_height))
 				else:
 					print "Error: Invalid justification value in label"
-					return(False)
-			accumulated_height+=SGFX.gui.fonts[self.font].size(line)[1]
-		return(True)
+					return False
+			accumulated_height += SGFX.gui.fonts[self.font].size(line)[1]
+		return True
 
 # possibly something even SIMPLER than the label - an image
 class CImage(CWidget):
 	"""Image class states and stores details for a simple image"""	
-	def __init__(self,x,y,width,height,image):
-		tmp_image=pygame.Surface((width,height),pygame.SRCALPHA,32)
+	def __init__(self, x, y, width, height, image):
+		tmp_image = pygame.Surface((width, height), pygame.SRCALPHA, 32)
 		if image != None:
-			tmp_image.blit(SGFX.gui.image(image),(0,0))
-		CWidget.__init__(self,pygame.Rect(x,y,width,height),
-						 SPQR.WT_IMAGE,tmp_image.convert_alpha(),"CImage")
+			tmp_image.blit(SGFX.gui.image(image), (0, 0))
+		CWidget.__init__(self, pygame.Rect(x, y, width, height),
+						 SPQR.WT_IMAGE, tmp_image.convert_alpha(), "CImage")
 
 # and the simplest of all - a seperator bar
 # regardless of width, they all have a height of 2
 class CSeperator(CWidget):
 	"""Seperator class states and stores details for a seperator"""
-	def __init__(self,x,y,width):
-		image=pygame.Surface((width,2))
+	def __init__(self, x, y, width):
+		image = pygame.Surface((width, 2))
 		# now blit the 2 colours to the image
-		pygame.draw.line(image,SPQR.SEP_DARK,(0,0),(width,0),1)
-		pygame.draw.line(image,SPQR.SEP_LIGHT,(0,1),(width,1),1)
-		CWidget.__init__(self,pygame.Rect(x,y,width,2),SPQR.WT_SEP,
-						 image,"CSeperator")
+		pygame.draw.line(image, SPQR.SEP_DARK, (0, 0), (width, 0), 1)
+		pygame.draw.line(image, SPQR.SEP_LIGHT, (0, 1), (width, 1), 1)
+		CWidget.__init__(self, pygame.Rect(x, y, width, 2), SPQR.WT_SEP,
+						 image, "CSeperator")
 
 # and now a button
 class CButton(CWidget):
@@ -154,87 +154,87 @@ class CButton(CWidget):
 		 x and y positions, and the text on the button. Returns a
 		 button widget item for you to use.
 		 Buttons are automagically highlighted when the mouse is over them"""
-	def __init__(self,x,y,text):
-		width=SGFX.gui.iWidth("button")
-		height=SGFX.gui.iHeight("button")
-		CWidget.__init__(self,pygame.Rect(x,y,width,height),
-						 SPQR.WT_BUTTON,None,"CButton")
+	def __init__(self, x, y, text):
+		width = SGFX.gui.iWidth("button")
+		height = SGFX.gui.iHeight("button")
+		CWidget.__init__(self, pygame.Rect(x, y, width, height),
+						 SPQR.WT_BUTTON, None, "CButton")
 		# get the images
-		self.image,self.pressed=self.drawButton(text)
-		self.highlight=False
+		self.image, self.pressed = self.drawButton(text)
+		self.highlight = False
 		
 	# function to draw a standard button
-	def drawButton(self,text):
+	def drawButton(self, text):
 		"""Just call with the text you want displayed, the
 			 routine will draw the button for you. Returns
 			 the image that has been drawn AND the highlight button"""
 		# make a copy of the button bitmap and the highlight one
-		foo=pygame.Surface((SGFX.gui.iWidth("button"),SGFX.gui.iHeight("button")))
-		bar=pygame.Surface((SGFX.gui.iWidth("button"),SGFX.gui.iHeight("button")))
-		area=pygame.Rect((0,0,foo.get_width(),foo.get_height()))
-		foo.blit(SGFX.gui.image("button"),area)
+		foo = pygame.Surface((SGFX.gui.iWidth("button"), SGFX.gui.iHeight("button")))
+		bar = pygame.Surface((SGFX.gui.iWidth("button"), SGFX.gui.iHeight("button")))
+		area = pygame.Rect((0,0, foo.get_width(), foo.get_height()))
+		foo.blit(SGFX.gui.image("button"), area)
 		# render the text
-		bar.blit(SGFX.gui.image("button_high"),area)
-		txt=SGFX.gui.fonts[SPQR.FONT_VERA].render(text,True,SPQR.COL_BUTTON)
+		bar.blit(SGFX.gui.image("button_high"), area)
+		txt = SGFX.gui.fonts[SPQR.FONT_VERA].render(text, True, SPQR.COL_BUTTON)
 		# centre the text and overlay it
-		x=(SGFX.gui.iWidth("button")-txt.get_width())/2
-		y=(SGFX.gui.iHeight("button")-txt.get_height())/2
-		area=pygame.Rect((x,y,bar.get_width(),bar.get_height()))
-		foo.blit(txt,area)
-		bar.blit(txt,area)
-		return(foo,bar)
+		x = (SGFX.gui.iWidth("button") - txt.get_width()) / 2
+		y = (SGFX.gui.iHeight("button") - txt.get_height()) / 2
+		area = pygame.Rect((x, y, bar.get_width(), bar.get_height()))
+		foo.blit(txt, area)
+		bar.blit(txt, area)
+		return(foo, bar)
 
 class CCheckBox(CWidget):
 	"""Checkbox widget"""
-	def __init__(self,x,y,initial):
+	def __init__(self, x, y, initial):
 		"""You need to pass the following parameters to the init() routine:
 		   x,y - the offset into the window
 		   initial - a boolean describing the start status of the widget"""
-		if(initial==True):
-			image=SGFX.gui.image("check_yes")
+		if initial == True:
+			image = SGFX.gui.image("check_yes")
 		else:
-			image=SGFX.gui.image("check_no")
-		CWidget.__init__(self,pygame.Rect(x,y,SPQR.CHKBOX_SIZE,SPQR.CHKBOX_SIZE),
-						 SPQR.WT_CHECK,image,"CCheckBox")
+			image = SGFX.gui.image("check_no")
+		CWidget.__init__(self, pygame.Rect(x, y, SPQR.CHKBOX_SIZE, SPQR.CHKBOX_SIZE),
+						 SPQR.WT_CHECK, image, "CCheckBox")
 		# status is the inital boolean value
-		self.status=initial
+		self.status = initial
 		# automatically add it's own click callback
-		self.callbacks.mouse_lclk=self.clicked
+		self.callbacks.mouse_lclk = self.clicked
 		# sometimes you'll need to call another routine as well
 		# as updating the graphic. Let's set that here as blank
-		self.after_click=SPQR.null_routine
-		self.after_click_status=False
+		self.after_click = SPQR.null_routine
+		self.after_click_status = False
 	
-	def clicked(self,handle,x,y):
+	def clicked(self, handle, x, y):
 		"""Called by the gui routine when clicked. Just
 		   updates it's own gfx. In the parent window"""
-		if(self.status==True):
-			self.status=False
-			self.image=SGFX.gui.image("check_no")
+		if self.status == True:
+			self.status = False
+			self.image = SGFX.gui.image("check_no")
 		else:
-			self.status=True
-			self.image=SGFX.gui.image("check_yes")
+			self.status = True
+			self.image = SGFX.gui.image("check_yes")
 		# the image will have to be updated. Since we know that the widget
 		# must be active and on display (since we just got a click), we can
 		# just update the small bit of screen. Firstly, we get the window
 		# co-ords and add the offset:
-		xpos=self.parent.rect.x
-		ypos=self.parent.rect.y
-		xpos+=self.rect.x
-		ypos+=self.rect.y
+		xpos = self.parent.rect.x
+		ypos = self.parent.rect.y
+		xpos += self.rect.x
+		ypos += self.rect.y
 		# now we just have to blit that checkbox
-		SGFX.gui.blitCheckbox(self.status,xpos,ypos)
+		SGFX.gui.blitCheckbox(self.status, xpos, ypos)
 		# do we need to do anything else?
-		if(self.after_click_status==True):
+		if self.after_click_status == True:
 			# yes, do it
-			self.after_click(handle,xpos,ypos)
-		return(True)
+			self.after_click(handle, xpos, ypos)
+		return True
 		
-	def addAfterClick(self,routine):
+	def addAfterClick(self, routine):
 		"""Add routine to be called when left mouse clicked"""
-		self.after_click_status=True
-		self.after_click=routine
-		return(True)
+		self.after_click_status = True
+		self.after_click = routine
+		return True
 
 class CSlider(CWidget):
 	"""Slider class states and stores details for a slider
@@ -242,43 +242,43 @@ class CSlider(CWidget):
 	   x/y pos of widget in window
 	   width - width of entire widget, start - value on lhs of widget
 	   end - value on rhs of widget, initial - initial value"""
-	def __init__(self,x,y,width,start,end,initial):
+	def __init__(self, x, y, width, start, end, initial):
 		# width is at least what the gfx width is
-		if(width<SGFX.gui.iWidth("slider_knob")):
-			width=SGFX.gui.iWidth("slider_knob")
-		height=SGFX.gui.iHeight("slider_knob")
-		CWidget.__init__(self,pygame.Rect(x,y,width,height),
-						 SPQR.WT_SLIDER,pygame.Surface((width,height)),
+		if width < SGFX.gui.iWidth("slider_knob"):
+			width = SGFX.gui.iWidth("slider_knob")
+		height = SGFX.gui.iHeight("slider_knob")
+		CWidget.__init__(self, pygame.Rect(x, y, width, height),
+						 SPQR.WT_SLIDER,pygame.Surface((width, height)),
 						 "CSlider")
 		# we have to check wether the slider knob is being pressed
 		# or if it's some other part of the widget 
-		self.knob_rect=pygame.Rect(0,0,SGFX.gui.iWidth("slider_knob"),SGFX.gui.iHeight("slider_knob"))
-		# some more specific slider variables
+		self.knob_rect = pygame.Rect(0, 0, SGFX.gui.iWidth("slider_knob"), 
+									 SGFX.gui.iHeight("slider_knob"))
 		# just check the range is ok
-		if(start>end):
-			start=end
-		self.left_value=start
-		self.right_value=end
+		if start > end:
+			start = end
+		self.left_value = start
+		self.right_value = end
 		# also, check initial is ok, else we place it at one end
-		if(initial<start):
-			initial=start
-		elif(initial>end):
-			initial=end
-		self.current_value=initial
+		if initial < start:
+			initial = start
+		elif initial > end:
+			initial = end
+		self.current_value = initial
 		# remember that the width of the bar is width of widget -
 		# width of slider, since the slider 'overhangs' the bar at
 		# both ends of the bar (the left part on the left, and the same
 		# on the right, by half the slider width)
-		self.slide_bar_width=self.rect.w-SGFX.gui.iWidth("slider_knob")
-		self.pixel_increment=(float)(end-start)/(float)(width)
+		self.slide_bar_width = self.rect.w - SGFX.gui.iWidth("slider_knob")
+		self.pixel_increment = (float)(end-start) / (float)(width)
 		# mainly with a slider you'll let it do it's own thing
-		self.callbacks.mouse_ldown=self.sliderMouseLDown
+		self.callbacks.mouse_ldown = self.sliderMouseLDown
 		# build the image
 		self.drawSlider()
 		# sometimes you'll want to call a function every time the
 		# slider value is set... here are the data points
-		self.update_function_valid=False
-		self.update_function=SPQR.null_routine
+		self.update_function_valid = False
+		self.update_function = SPQR.null_routine
 
 	def drawSlider(self):
 		"""Helper routine, draws the slider knob. Called by both
@@ -287,317 +287,310 @@ class CSlider(CWidget):
 		# bars to the left (in blue) and to the right (in normal colors)
 		self.image.fill(SPQR.BGUI_COL)
 		# now draw the bars in
-		spoint=(float)(self.current_value)/(float)(self.right_value-self.left_value)
-		spoint=(int)(spoint*self.slide_bar_width)
+		spoint = (float)(self.current_value) / (float)(self.right_value - self.left_value)
+		spoint = (int)(spoint * self.slide_bar_width)
 		# make sure bars are in middle of slider
-		yoff=(SGFX.gui.iHeight("slider_knob")/2)-2
+		yoff = (SGFX.gui.iHeight("slider_knob") / 2) - 2
 		# also, allow for fact slide bar is not as long as the widget width
 		# because the slider knob 'overhangs'. To make things easier, we just
 		# adjust the middle point by half the slider knob width
-		spoint+=SGFX.gui.iWidth("slider_knob")/2
+		spoint += SGFX.gui.iWidth("slider_knob") / 2
 		# blue bar is from left hand side up to the spoint
-		pygame.draw.line(self.image,SPQR.SLIDER_BDARK,(0,yoff),
-			(spoint,yoff),1)
-		pygame.draw.line(self.image,SPQR.SLIDER_BDARK,(0,yoff),
-			(0,yoff+4),1)
-		pygame.draw.line(self.image,SPQR.SLIDER_BDARK,(0,yoff+4),
-			(spoint,yoff+4),1)
-		pygame.draw.line(self.image,SPQR.SLIDER_LIGHT,(1,yoff+1),
-			(spoint,yoff+1),1)
-		pygame.draw.line(self.image,SPQR.SLIDER_MEDIUM,(1,yoff+2),
-			(spoint,yoff+2),1)
-		pygame.draw.line(self.image,SPQR.SLIDER_DARK,(1,yoff+3),
-			(spoint,yoff+3),1)
+		pygame.draw.line(self.image, SPQR.SLIDER_BDARK, (0,yoff), (spoint, yoff), 1)
+		pygame.draw.line(self.image, SPQR.SLIDER_BDARK,(0,yoff),	(0, yoff + 4), 1)
+		pygame.draw.line(self.image, SPQR.SLIDER_BDARK,(0,yoff + 4), (spoint, yoff + 4), 1)
+		pygame.draw.line(self.image, SPQR.SLIDER_LIGHT,(1,yoff + 1), (spoint, yoff + 1), 1)
+		pygame.draw.line(self.image, SPQR.SLIDER_MEDIUM,(1,yoff + 2), (spoint, yoff + 2), 1)
+		pygame.draw.line(self.image, SPQR.SLIDER_DARK,(1,yoff + 3), (spoint, yoff + 3), 1)
 		# thats the left hand side taken care of, now the right...
-		pygame.draw.line(self.image,SPQR.SLIDER_BLIGHT,(spoint,yoff),
-			(self.rect.w-1,yoff),1)
-		pygame.draw.line(self.image,SPQR.SLIDER_BLIGHT,(self.rect.w-1,yoff),
-			(self.rect.w-1,yoff+4),1)
-		pygame.draw.line(self.image,SPQR.SLIDER_BLIGHT,(spoint,yoff+4),
-			(self.rect.w-1,yoff+4),1)
-		pygame.draw.line(self.image,SPQR.SLIDER_BMED1,(spoint,yoff+1),
-			(self.rect.w-1,self.rect.y+1),1)
-		pygame.draw.line(self.image,SPQR.SLIDER_BMED2,(spoint,yoff+2),
-			(self.rect.w-1,self.rect.y+2),1)
-		pygame.draw.line(self.image,SPQR.SLIDER_BMED2,(spoint,yoff+3),
-			(self.rect.w-1,self.rect.y+3),1)
+		pygame.draw.line(self.image, SPQR.SLIDER_BLIGHT, (spoint, yoff),
+			(self.rect.w - 1,yoff), 1)
+		pygame.draw.line(self.image, SPQR.SLIDER_BLIGHT, (self.rect.w - 1, yoff), 
+			(self.rect.w - 1,yoff + 4), 1)
+		pygame.draw.line(self.image, SPQR.SLIDER_BLIGHT, (spoint, yoff + 4),
+			(self.rect.w-1,yoff+4), 1)
+		pygame.draw.line(self.image, SPQR.SLIDER_BMED1, (spoint, yoff + 1),
+			(self.rect.w - 1, self.rect.y + 1), 1)
+		pygame.draw.line(self.image, SPQR.SLIDER_BMED2, (spoint, yoff + 2),
+			(self.rect.w - 1, self.rect.y + 2), 1)
+		pygame.draw.line(self.image,SPQR.SLIDER_BMED2, (spoint,yoff + 3),
+			(self.rect.w - 1, self.rect.y + 3), 1)
 		# that was a lot of line drawing... now we just have to blit the
 		# slider bar itself, in the right place
-		xpos=spoint-(SGFX.gui.iWidth("slider_knob")/2)
-		self.image.blit(SGFX.gui.image("slider_knob"),(xpos,0))
+		xpos = spoint - (SGFX.gui.iWidth("slider_knob") / 2)
+		self.image.blit(SGFX.gui.image("slider_knob"), (xpos, 0))
 		# set knob_rect so we can catch events as well
-		self.knob_rect.x=xpos
+		self.knob_rect.x = xpos
 		# and that's it! updating is all up to you...
-		return(True)
+		return True
 		
 	def getSliderValue(self):
-		"""Returns current setting of slider. Although internally value
-		   is sometimes a float, this always returns an int"""
+		"""Returns current setting of slider. Returns an int"""
 		return((int)(self.current_value))
 
-	def setUpdateFunction(self,code):
+	def setUpdateFunction(self, code):
 		"""Set callback function, called every time the value
 		   of the slider is called. Must be a usual callback function"""
-		self.update_function_valid=True
-		self.update_function=code
-		return(True)
+		self.update_function_valid = True
+		self.update_function = code
+		return True
 		
-	def killUpdateFunction(self,code):
+	def killUpdateFunction(self, code):
 		"""Call if you ever want to cancel the slider update function"""
-		self.update_function_valid=False
-		self.update_function=SPQR.null_routine
-		return(True)
+		self.update_function_valid = False
+		self.update_function = SPQR.null_routine
+		return True
 
-	def sliderMouseLDown(self,handle,xpos,ypos):
+	def sliderMouseLDown(self, handle, xpos, ypos):
 		"""Called when user clicks down with the mouse over a slider knob
 			 Captures all input until user releases mouse button"""
 		# first of all we check to see wether it was over the
 		# slider knob or not...
-		if((xpos>self.knob_rect.x)and(xpos<(self.knob_rect.x+self.knob_rect.w))):
+		if xpos > self.knob_rect.x and xpos < (self.knob_rect.x + self.knob_rect.w):
 			# ok, enter a loop where we catch all events until the left
 			# mouse button is depressed
 			# we only handle mouse moves though, everything else is ignored
-			while(True):
-				event=pygame.event.poll()
-				if((event.type==MOUSEBUTTONUP)and(event.button==1)):
+			while True:
+				event = pygame.event.poll()
+				if event.type == MOUSEBUTTONUP and event.button == 1:
 					# time to exit
-					return(True)
-				elif((event.type==MOUSEMOTION)):
+					return True
+				elif event.type == MOUSEMOTION:
 					# we only need to look at x movement:
-					xdiff=event.rel[0]	
+					xdiff = event.rel[0]	
 					# any movement?
-					if(xdiff!=0):
+					if xdiff != 0:
 						# extra bit of bling, as used by many wm's:
 						# only move the slider in a given direction as long as the
 						# mouse is past the middle of the slider knob in that
 						# direction. I.e. to drag left, the mouse must be to the
 						# left of the middle of the slider knob :-)
-						move=True
-						middle=self.parent.rect.x+self.rect.x+self.knob_rect.x
-						middle+=(self.knob_rect.w/2)
+						move = True
+						middle = self.parent.rect.x + self.rect.x + self.knob_rect.x
+						middle += self.knob_rect.w / 2
 						# work out what side we are moving and calculate:
-						if(xdiff<0):
+						if xdiff < 0:
 							# moving left?
-							if(event.pos[0]>middle):
+							if event.pos[0] > middle:
 								# don't do it
-								move=False
+								move = False
 						else:
 							# must be moving right...
-							if(event.pos[0]<middle):
-								move=False
-						if(move==True):
+							if event.pos[0] < middle:
+								move = False
+						if move == True:
 							# yes, so move the bar:
-							old=self.current_value
-							self.current_value+=(xdiff*self.pixel_increment)
+							old = self.current_value
+							self.current_value += xdiff * self.pixel_increment
 							# test for still in range:
-							if(self.current_value<self.left_value):
-								self.current_value=self.left_value
-							elif(self.current_value>self.right_value):
-								self.current_value=self.right_value
+							if self.current_value < self.left_value:
+								self.current_value = self.left_value
+							elif self.current_value > self.right_value:
+								self.current_value = self.right_value
 							# need to update?
-							if(old!=self.current_value):
+							if old != self.current_value:
 								# update the image
 								self.drawSlider()
-								x=self.parent.rect.x+self.rect.x
-								y=self.parent.rect.y+self.rect.y
-								SGFX.gui.blitSlider(x,y,self.rect.w,self.rect.h,self.image)
+								x = self.parent.rect.x + self.rect.x
+								y = self.parent.rect.y + self.rect.y
+								SGFX.gui.blitSlider(x, y, self.rect.w, self.rect.h, self.image)
 								# *finally*, we may have asked for an extra callback...
-								if(self.update_function_valid==True):
+								if self.update_function_valid == True:
 									# do the callback
-									self.update_function(handle,xpos,ypos)
+									self.update_function(handle, xpos, ypos)
 		# nothing might have happened, but be graceful about it anyway
-		return(True)
+		return True
 
 class CScrollArea(CWidget):
 	"""ScrollArea class holds details for a ScrollArea
 	   Contains a graphical area that has a scroll bar on it's RHS
-	   Call with gui pointer, x/y positon, width and height and image
+	   Call with x/y positon, width and height and image
 	   *NOTE*: in the x size, you must allow for the fact that this widget
 	   will add a scrollbar on the rhs of a given size!
 	   height of widget *MUST BE* >61 pixels or funny gfx effects will occur
 	   border area, if true, adds 1 pixel on the lhs and 2 on the y axis"""
-	def __init__(self,x,y,width,height,image,border=True):
-		CWidget.__init__(self,None,SPQR.WT_SCROLLAREA,None,"CScrollArea")
-		self.border=border
+	def __init__(self, x, y, width, height, image,border = True):
+		CWidget.__init__(self, None, SPQR.WT_SCROLLAREA, None, "CScrollArea")
+		self.border = border
 		# get size of the area to display:
-		vsize=image.get_height()
+		vsize = image.get_height()
 		# get offset size:
-		width+=SGFX.gui.iWidth("schan_mid")
-		if(self.border==True):
-			height+=2
-			width+=1
-		self.rect=pygame.Rect(x,y,width,height)
+		width += SGFX.gui.iWidth("schan_mid")
+		if self.border == True:
+			height += 2
+			width += 1
+		self.rect = pygame.Rect(x, y, width, height)
 		# next var holds where to blit the image from.
 		# a value of 0 means 'start at the top'
-		self.display_ypos=0
+		self.display_ypos = 0
 		# we need to know how big the 'handle' is:
-		w=SGFX.gui.iWidth("schan_mid")
-		y=SGFX.gui.iHeight("scrollbar_top")
+		w = SGFX.gui.iWidth("schan_mid")
+		y = SGFX.gui.iHeight("scrollbar_top")
 		# for the handle height, just make sure the math is ok:
-		if(vsize<height):
-			vsize=height
+		if vsize < height:
+			vsize = height
 		# now calculate the handle size. It will indicate how big
 		# the unseen area is by being realtive in size to it
 		# i.e. rect.h/height = height/vsize
 		# allow for height correction
-		height-=(y*2)
-		h=(int)(float((height*height)/(float)(vsize)))
-		self.handle_rect=pygame.Rect(0,y,w,h)
+		height -= y * 2
+		h = (int)(float((height * height) / (float)(vsize)))
+		self.handle_rect = pygame.Rect(0, y, w, h)
 		# add automatic callbacks
-		self.callbacks.mouse_ldown=self.scrollareaMouseLDown
-		self.callbacks.mouse_lclk=self.scrollareaMouseLClk
+		self.callbacks.mouse_ldown = self.scrollareaMouseLDown
+		self.callbacks.mouse_lclk = self.scrollareaMouseLClk
 		# set an image up for later
 		# this is the image that we want to actually show *inside*
 		# the scrollarea box
-		self.display_image=image
+		self.display_image = image
 		# area_image is what finally goes to the screen, and
 		# handle image is the handle gfx
-		self.area_image,self.handle_image=self.buildScrollImage()
-		self.image=pygame.Surface((self.rect.w,self.rect.h))
+		self.area_image, self.handle_image = self.buildScrollImage()
+		self.image = pygame.Surface((self.rect.w, self.rect.h))
 		self.updateScrollArea()
 		# final set of per-calcs for later routines:
-		self.lower_bound=self.handle_rect.y
-		self.upper_bound=self.handle_rect.y+(height-self.handle_rect.h)
+		self.lower_bound = self.handle_rect.y
+		self.upper_bound = self.handle_rect.y + (height - self.handle_rect.h)
 		# this is the number of pixels we move along for the handle
-		self.handle_pixel_range=self.upper_bound-self.lower_bound
+		self.handle_pixel_range = self.upper_bound - self.lower_bound
 		# and this is the same for the displayed image:
-		self.gfx_pixel_range=self.display_image.get_height()-self.rect.h
+		self.gfx_pixel_range = self.display_image.get_height() - self.rect.h
 		# possible border to allow for
-		if(self.border==True):
-			self.gfx_pixel_range-=2
-		self.hanpix_ratio=(float)((float)(self.gfx_pixel_range)/(float)(self.handle_pixel_range))
+		if self.border == True:
+			self.gfx_pixel_range -= 2
+		self.hanpix_ratio = (float)((float)(self.gfx_pixel_range) / (float)(self.handle_pixel_range))
 		# the amount we move the bar by on an arrow up/ arrow down click
-		self.arrow_click_move=1
+		self.arrow_click_move = 1
 		# following used to store the parent window of the
 		# widget... False if there is no valid parent
-		self.parent=False
-		self.describe="CScrollArea"
+		self.parent = False
+		self.describe = "CScrollArea"
 		
 	def buildScrollImage(self):
 		"""Helper routine to build the base image that
 		   is displayed on screen. update_image() should be
 		   called to normally, this just sets everything up"""
 		# the first thing to do is get a base surface
-		piccy=pygame.Surface((self.rect.w,self.rect.h))
+		piccy = pygame.Surface((self.rect.w, self.rect.h))
 		# really, this is quite simple but a lot of legwork
 		# start by filling in the base of the scrollbar:
 		piccy.fill(SPQR.SCROLL_MIDDLE)
-		pygame.draw.line(piccy,SPQR.SCROLL_BORDER,(0,0),(0,self.rect.h))
-		pygame.draw.line(piccy,SPQR.SCROLL_BORDER,(self.rect.w,0),
-			(self.rect.w,self.rect.h))
+		pygame.draw.line(piccy, SPQR.SCROLL_BORDER, (0, 0), (0, self.rect.h))
+		pygame.draw.line(piccy, SPQR.SCROLL_BORDER, (self.rect.w, 0),
+			(self.rect.w, self.rect.h))
 		# now blit in the arrows at the top and bottom:
-		xpos=self.rect.w-SGFX.gui.iWidth("scrollbar_top")
-		piccy.blit(SGFX.gui.image("scrollbar_top"),(xpos,0))
+		xpos = self.rect.w - SGFX.gui.iWidth("scrollbar_top")
+		piccy.blit(SGFX.gui.image("scrollbar_top"), (xpos, 0))
 		piccy.blit(SGFX.gui.image("scrollbar_bottom"),
-			(xpos,(self.rect.h-SGFX.gui.iHeight("scrollbar_bottom"))))
+			(xpos, (self.rect.h - SGFX.gui.iHeight("scrollbar_bottom"))))
 		# now draw the handlebar for the widget
 		# start by making a new surface
-		handle_gfx=pygame.Surface((self.handle_rect.w,self.handle_rect.h))
+		handle_gfx = pygame.Surface((self.handle_rect.w, self.handle_rect.h))
 		# fill the area in first
-		pixels=self.handle_rect.h
-		ypos=0
-		fill=SGFX.gui.iHeight("schand_bulk")
-		while(pixels>0):
-			if(pixels<SGFX.gui.iHeight("schand_bulk")):
-				handle_gfx.blit(SGFX.gui.image("schand_bulk"),(0,ypos))
-				pixels=0
+		pixels = self.handle_rect.h
+		ypos = 0
+		fill = SGFX.gui.iHeight("schand_bulk")
+		while pixels > 0:
+			if pixels < SGFX.gui.iHeight("schand_bulk"):
+				handle_gfx.blit(SGFX.gui.image("schand_bulk"), (0, ypos))
+				pixels = 0
 			else:
-				handle_gfx.blit(SGFX.gui.image("schand_bulk"),(0,ypos))
-				ypos+=fill
-				pixels-=fill
+				handle_gfx.blit(SGFX.gui.image("schand_bulk"), (0, ypos))
+				ypos += fill
+				pixels -= fill
 		# do the top and bottom:
-		handle_gfx.blit(SGFX.gui.image("schan_top"),(0,0))
-		handle_gfx.blit(SGFX.gui.image("schan_bot"),(0,(self.handle_rect.h)-2))
+		handle_gfx.blit(SGFX.gui.image("schan_top"), (0, 0))
+		handle_gfx.blit(SGFX.gui.image("schan_bot"), (0, self.handle_rect.h - 2))
 		# work out middle of area and blit that
-		middle=(self.handle_rect.h-SGFX.gui.iHeight("schan_mid"))/2
-		handle_gfx.blit(SGFX.gui.image("schan_mid"),(0,middle))
+		middle = (self.handle_rect.h-SGFX.gui.iHeight("schan_mid")) / 2
+		handle_gfx.blit(SGFX.gui.image("schan_mid"), (0, middle))
 		# draw the border here if we have to
-		if(self.border==True):
-			pygame.draw.line(piccy,SPQR.SCROLL_BORDER,
-				(0,0),(0,self.rect.h))
-			pygame.draw.line(piccy,SPQR.SCROLL_BORDER,
-				(0,0),(self.rect.w-self.handle_rect.w,0))
-			pygame.draw.line(piccy,SPQR.SCROLL_BORDER,
-				(0,self.rect.h-1),(self.rect.w-self.handle_rect.w,self.rect.h-1))
+		if self.border == True:
+			pygame.draw.line(piccy, SPQR.SCROLL_BORDER,
+				(0, 0),(0, self.rect.h))
+			pygame.draw.line(piccy, SPQR.SCROLL_BORDER,
+				(0, 0),(self.rect.w - self.handle_rect.w, 0))
+			pygame.draw.line(piccy, SPQR.SCROLL_BORDER,
+				(0, self.rect.h - 1), (self.rect.w - self.handle_rect.w, self.rect.h - 1))
 			# set handle rect position:
-			self.handle_rect.x=self.display_image.get_width()+1
+			self.handle_rect.x = self.display_image.get_width() + 1
 		else:
-			self.handle_rect.x=self.display_image.get_width()
-		self.handle_rect.y=SGFX.gui.iHeight("scrollbar_top")
-		return(piccy,handle_gfx)
+			self.handle_rect.x = self.display_image.get_width()
+		self.handle_rect.y = SGFX.gui.iHeight("scrollbar_top")
+		return(piccy, handle_gfx)
 
 	def updateScrollArea(self):
 		"""Routine to build final image that is displayed on screen"""
 		# blit the base image:
-		self.image.blit(self.area_image,(0,0))
+		self.image.blit(self.area_image, (0, 0))
 		# pre-calculate some stuff:
-		if(self.border==True):
-			x=1
-			y=1
-			h=self.rect.h-2
+		if self.border == True:
+			x = 1
+			y = 1
+			h = self.rect.h - 2
 		else:
-			x=0
-			y=0
-			h=self.rect.h
+			x = 0
+			y = 0
+			h = self.rect.h
 		# width is always width of the original gfx
-		w=self.display_image.get_width()
+		w = self.display_image.get_width()
 		# then the slider knob:
 		self.image.blit(self.handle_image,
-			(self.handle_rect.x,self.handle_rect.y))
+			(self.handle_rect.x, self.handle_rect.y))
 		# now blit it
 		self.image.blit(self.display_image,
-			(x,y),(0,self.display_ypos,w,h))
+			(x, y), (0, self.display_ypos, w, h))
 		# blitting to screen is left to you -
 		# mainly because the parent attributes (i.e. the window details)
 		# may not have actually been defined at this point in time
-		return(True)
+		return True
 
-	def scrollareaMouseLDown(self,handle,xpos,ypos):
+	def scrollareaMouseLDown(self, handle, xpos, ypos):
 		"""Called when user clicks down with the mouse over a scroll knob
 			 Captures all input until user releases mouse button"""
 		# first of all we check to see wether it was over the
 		# slider knob or not...
-		if(self.handle_rect.collidepoint(xpos,ypos)==True):
+		if self.handle_rect.collidepoint(xpos, ypos) == True:
 			# ok, enter a loop where we catch all events until the left
 			# mouse button is depressed
 			# we only handle mouse moves though, everything else is ignored
-			while(True):
-				event=pygame.event.poll()
-				if((event.type==MOUSEBUTTONUP)and(event.button==1)):
+			while True:
+				event = pygame.event.poll()
+				if event.type == MOUSEBUTTONUP and event.button == 1:
 					# time to exit
-					return(True)
-				elif((event.type==MOUSEMOTION)):
+					return True
+				elif event.type == MOUSEMOTION:
 					# now we actually move the bar
 					self.moveScrollHandle(event.rel[1])
 		# nothing happened, but be graceful about it anyway
-		return(True)
+		return True
 
 	def scrollareaMouseLClk(self,handle,xpos,ypos):
 		"""For when the user clicks on the thing itself. For the
 		   moment, just checks the arrows at the top and bottom"""
 		# firstly, check we are in the right area
-		if(xpos<self.handle_rect.x):
+		if xpos < self.handle_rect.x:
 			# nothing to do
-			return(True)
+			return True
 		# at top or bottom... or nowhere?
-		if(ypos<self.lower_bound):
+		if ypos < self.lower_bound:
 			# it was a click on the up arrow, so do it
 			self.moveScrollHandle(-self.arrow_click_move)
-			return(True)
+			return True
 		elif(ypos>(self.upper_bound+self.handle_rect.h)):
 			self.moveScrollHandle(self.arrow_click_move)
-			return(True)
+			return True
 		# could be a click on the blank area
 		# don't forget, it's not possible for xpos/ypos to be out
 		# of bounds on the widget in question (saves some work)
-		if(self.handle_rect.collidepoint(xpos,ypos)==True):
+		if self.handle_rect.collidepoint(xpos, ypos) == True:
 			# ignore it if we clicked the handle itself
-			return(True)
+			return True
 		# # TODO very simple, we try and move the middle of the handle
 		# widget to where we clicked, or as close as possible
-		return(True)
+		return True
 			
-	def moveScrollHandle(self,ydiff):
+	def moveScrollHandle(self, ydiff):
 		"""Move and update the handle graphic. Parameter
 		   passed tells us by how many pixels we should
 		   update move the widget by"""
@@ -605,29 +598,29 @@ class CScrollArea(CWidget):
 		# self.display_ypos and a new self.handle_rect.y
 		# luckily, we pre-calculated some stuff earlier
 		# firstly though, are we in bounds?
-		self.handle_rect.y+=ydiff
-		if((self.handle_rect.y>self.upper_bound)or(self.handle_rect.y<self.lower_bound)):
+		self.handle_rect.y += ydiff
+		if self.handle_rect.y > self.upper_bound or self.handle_rect.y < self.lower_bound:
 				# nothing to do, correct and return
-				self.handle_rect.y-=ydiff
-				return(True)
+				self.handle_rect.y -= ydiff
+				return True
 		# otherwise, do some easy stuff:
-		self.display_ypos=(int)((self.handle_rect.y-self.lower_bound)*self.hanpix_ratio)
+		self.display_ypos = (int)((self.handle_rect.y - self.lower_bound) * self.hanpix_ratio)
 		# make the new image and draw it to the screen
 		self.updateScrollArea()
-		x=self.parent.rect.x+self.rect.x
-		y=self.parent.rect.y+self.rect.y
-		SGFX.gui.blitScrollarea(x,y,self.rect.w,self.rect.h,self.image)
-		return(True)	   
+		x = self.parent.rect.x + self.rect.x
+		y = self.parent.rect.y + self.rect.y
+		SGFX.gui.blitScrollarea(x, y, self.rect.w, self.rect.h, self.image)
+		return True
 
-	def updateScrollImage(self,image):
+	def updateScrollImage(self, image):
 		"""Call when you wish to change the scroll image display,
 		   but change nothing else. Updates the screen for you"""
-		self.display_image=image
+		self.display_image = image
 		self.updateScrollArea()
-		x=self.parent.rect.x+self.rect.x
-		y=self.parent.rect.y+self.rect.y
-		SGFX.gui.blitScrollarea(x,y,self.rect.w,self.rect.h,self.image)
-		return(True)		
+		x = self.parent.rect.x + self.rect.x
+		y = self.parent.rect.y + self.rect.y
+		SGFX.gui.blitScrollarea(x, y, self.rect.w, self.rect.h, self.image)
+		return True
 
 class CItemList(CWidget):
 	"""Call the init routine with the following parameters:
