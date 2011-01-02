@@ -634,11 +634,11 @@ class CItemList(CWidget):
 	   Next comes a list of id numbers, used when sorting the data
 	   Finally, the last param tells you what height you would like
 	   the element to take up (including the header height)"""
-	def __init__(self,x,y,elements,sorts,id_values,total_height):
+	def __init__(self, x, y, elements, sorts, id_values, total_height):
 		# let's do the easy stuff first - this will be a long routine
-		CWidget.__init__(self,pygame.Rect(x,y,0,0),
-						 SPQR.WT_ITEMLIST,None,"CItemList")
-		self.data=[]
+		CWidget.__init__(self, pygame.Rect(x, y, 0, 0),
+						 SPQR.WT_ITEMLIST, None, "CItemList")
+		self.data = []
 
 		# ok, let's now do everything else
 		# the most important thing we need to do is figure out the
@@ -652,330 +652,326 @@ class CItemList(CWidget):
 		# HALFSPCR+text_size+(2*(SPACER))
 		
 		# firstly, let's grab the list that tells us what the types are
-		item_type=elements.pop(0)
+		item_type = elements.pop(0)
 		# and the text headers
-		text_headers=elements.pop(0)
+		text_headers = elements.pop(0)
 		# how many rows here? Needed later...
-		total_rows=len(elements[0])
+		total_rows = len(elements[0])
 		# now we need to go down every column and calculate the maximum size
-		column_size=[]
+		column_size = []
 		# index for counting item types
-		it=0
+		it = 0
 		for column in elements:
 			# now we have a list that contains each item for the column
-			csize=0
+			csize = 0
 			# what sort of thing is it?
-			ctype=item_type[it]
-			it+=1
-			if(ctype==False):
+			ctype = item_type[it]
+			it += 1
+			if ctype == False:
 				# easy, it's an image
 				for item in column:
-					if(item.get_width()>csize):
-						csize=item.get_width()
+					if item.get_width() > csize:
+						csize = item.get_width()
 			else:
 				# must be text
 				for item in column:
-					tsize=SGFX.gui.fonts[SPQR.FONT_VERA].size(item)
-					if(tsize[0]>csize):
-						csize=tsize[0]
+					tsize = SGFX.gui.fonts[SPQR.FONT_VERA].size(item)
+					if tsize[0] > csize:
+						csize = tsize[0]
 			# now we know the size, just expand it:
-			csize+=(2*SPQR.SPACER)
+			csize += 2 * SPQR.SPACER
 			column_size.append(csize)
 			
 		# now we have the right widths for all of the items
 		# let's do a similar thing for the widths of the text headers
-		tsize=[]
+		tsize = []
 		for text in text_headers:
-			width=SGFX.gui.fonts[SPQR.FONT_VERA_SM].size(text)[0]
+			width = SGFX.gui.fonts[SPQR.FONT_VERA_SM].size(text)[0]
 			# allow some spacing
-			width+=(SPQR.HALFSPCR+(2*SPQR.SPACER))
+			width += SPQR.HALFSPCR + (2 * SPQR.SPACER)
 			tsize.append(width)
 		# now construct a final width list
-		column_width=[]
+		column_width = []
 		for a in tsize:
-			b=column_size.pop(0)
-			if(a>b):
+			b = column_size.pop(0)
+			if a > b:
 				column_width.append(a)
 			else:
 				column_width.append(b)
 		# first xpos is always 0
-		column_width.insert(0,0)
+		column_width.insert(0, 0)
 		
 		# we also need to check out the heights of the rows
 		# since each row is the same size, then we only need to
 		# look at any one particular row - in this case the first one
-		row_height=0
-		it=0
-		theight=0
+		row_height = 0
+		it = 0
+		theight = 0
 		# we have (2*SPACER) as vertical spacing
-		spacing=(2*SPQR.SPACER)
+		spacing = 2 * SPQR.SPACER
 		for column in item_type:
-			if(column==False):
+			if column == False:
 				# image, easy:
-				h=elements[it][0].get_height()+spacing
-				if(h>theight):
-					theight=h
+				h = elements[it][0].get_height() + spacing
+				if h > theight:
+					theight = h
 			else:
 				# text, a bit more complex
-				h=SGFX.gui.fonts[SPQR.FONT_VERA].size("Aq")[1]+spacing
-				if(h>theight):
-					theight=h
-			it+=1
+				h = SGFX.gui.fonts[SPQR.FONT_VERA].size("Aq")[1] + spacing
+				if h > theight:
+					theight = h
+			it += 1
 
 		# now we can work out the height and width of the ScrollArea
-		height=(theight*(len(elements[0])))
-		width=0
+		height = theight * len(elements[0])
+		width = 0
 		# we should save the column size as the first thing in the window
 		# data storage area as well
-		l=[]
+		l = []
 		for i in column_width:
-			width+=i
+			width += i
 			l.append(width)
 		self.data.append(l)
 		
 		# now we know theight and the width, we can use it to work out what
 		# gradiant fill we use - generally the smallest one larger than theight
-		index=0
-		size=False
+		index = 0
+		size = False
 		# oh for a fast gradiant fill :-o
 		for i in SPQR.GRADBAR_SIZES:
-			if(theight<i):
+			if theight < i:
 				# found an image of the right size
-				size=True
+				size = True
 				break
 			else:
 				# try the next one
-				index+=1
+				index += 1
 		# create the base image
-		row_image=pygame.Surface((width,theight),SRCALPHA)
+		row_image = pygame.Surface((width,theight),SRCALPHA)
 		# did we find one small enough?
-		if(size==False):
+		if size == False:
 			# we'll have to create a false image
 			row_image.fill(SPQR.BGUI_COL)
 		else:
 			# we at least found the right size
-			yoffset=(SPQR.GRADBAR_SIZES[index]-theight)/2
+			yoffset = (SPQR.GRADBAR_SIZES[index] - theight) / 2
 			# blit across until complete
-			xsize_blit=width
-			xpos=0
-			while(xsize_blit>0):
+			xsize_blit = width
+			xpos = 0
+			while xsize_blit > 0:
 				row_image.blit(SGFX.gui.image(SPQR.GRADBAR_NAMES[index]),
-					(xpos,0),(0,yoffset,SPQR.GRADBAR_WIDTH,SPQR.GRADBAR_SIZES[index]))
-				xpos+=SPQR.GRADBAR_WIDTH
-				xsize_blit-=SPQR.GRADBAR_WIDTH
+					(xpos, 0), (0, yoffset, SPQR.GRADBAR_WIDTH, SPQR.GRADBAR_SIZES[index]))
+				xpos += SPQR.GRADBAR_WIDTH
+				xsize_blit -= SPQR.GRADBAR_WIDTH
 		# finally, draw in the bottom line
-		pygame.draw.line(row_image,SPQR.SEP_DARK,(0,theight-1),(width,theight-1),1)
+		pygame.draw.line(row_image, SPQR.SEP_DARK, (0, theight - 1), (width, theight - 1), 1)
 		
 		# Finally!! We can now build up the ScrollArea image
 		# we'll do this a column at a time, since that's the way the
 		# data is given to us in the lists
 		# firstly, get the basic image
-		sc_image=pygame.Surface((width,height),SRCALPHA)
+		sc_image = pygame.Surface((width, height), SRCALPHA)
 		sc_image.fill(SPQR.BGUI_COL)
 		# fill in the base row images
-		count=0
-		ypos=0
-		while(count<total_rows):
-			sc_image.blit(row_image,(0,ypos))
-			ypos+=row_image.get_height()
-			count+=1
+		count = 0
+		ypos = 0
+		while count < total_rows:
+			sc_image.blit(row_image, (0, ypos))
+			ypos += row_image.get_height()
+			count += 1
 
 		# set index for column width
-		it=0
+		it = 0
 		# all items are offset by SPACER. Since the arithmatic is
 		# acummulative, we set that offset here
-		base_x=SPQR.SPACER
+		base_x = SPQR.SPACER
 		# now go down each column
 		for column in elements:
 			# point to next column
-			base_x+=column_width[it]
-			it+=1
+			base_x += column_width[it]
+			it += 1
 			# get the base image:
-			ctype=item_type.pop(0)
-			if(ctype==False):
+			ctype = item_type.pop(0)
+			if ctype == False:
 				# it's already images, easy stuff...
-				base_y=0
+				base_y = 0
 				for i in column:
-					yoff=(theight-i.get_height())/2
+					yoff = (theight - i.get_height()) / 2
 					# blit the image
-					sc_image.blit(i,(base_x,base_y+yoff))
-					base_y+=theight
+					sc_image.blit(i,(base_x, base_y+yoff))
+					base_y += theight
 			else:
 				# it's text, so make the image first
-				base_y=0
+				base_y = 0
 				for i in column:
-					timg=SGFX.gui.fonts[SPQR.FONT_VERA].render(i,True,SPQR.COL_BLACK)
-					yoff=(theight-timg.get_height())/2
+					timg = SGFX.gui.fonts[SPQR.FONT_VERA].render(i, True, SPQR.COL_BLACK)
+					yoff = (theight - timg.get_height()) / 2
 					# blit the text
-					sc_image.blit(timg,(base_x,base_y+yoff))
-					base_y+=theight
+					sc_image.blit(timg, (base_x, base_y + yoff))
+					base_y += theight
 		
 		# because we may have to re-order the list, then we need
 		# to store some copy of it. We do this by saving each row
 		# as a seperate graphic:
-		rows=[]
-		ypos=0
-		while(ypos<sc_image.get_height()):
-			img=pygame.Surface((width,theight))
-			img.blit(sc_image,(0,0),(0,ypos,width,theight))
-			rows.append((id_values.pop(0),img))
-			ypos+=theight
+		rows = []
+		ypos = 0
+		while ypos < sc_image.get_height():
+			img = pygame.Surface((width, theight))
+			img.blit(sc_image, (0, 0), (0, ypos, width, theight))
+			rows.append((id_values.pop(0), img))
+			ypos += theight
 		# save that info for another time...
-		self.row_height=theight
-		self.display_width=width
+		self.row_height = theight
+		self.display_width = width
 		
-		# thank buggery for that. Now *all* that's left is to
-		# draw the main header, fully define the ScrollArea, and then
-		# tidy up a few loose ends
+		# Now *all* that's left is to fraw the main header, fully define
+		# the ScrollArea, and then tidy up a few loose ends
 		# Let's draw the main header first
 		# start by getting the tallest text item and then adding
 		# SPACER to it:
-		hheight=0
+		hheight = 0
 		for i in text_headers:
-			t=SGFX.gui.fonts[SPQR.FONT_VERA_SM].size(i)
-			if(t[1]>hheight):
-				hheight=t[1]
-		hheight+=SPQR.SPACER
+			t = SGFX.gui.fonts[SPQR.FONT_VERA_SM].size(i)
+			if t[1] > hheight:
+				hheight = t[1]
+		hheight += SPQR.SPACER
 		# create the base image
-		header_img=pygame.Surface((width,hheight),SRCALPHA)
+		header_img = pygame.Surface((width, hheight), SRCALPHA)
 		header_img.fill(SPQR.BGUI_COL)
 		# draw in some of the funky lines
-		pygame.draw.line(header_img,SPQR.SEP_DARK,(0,0),(width-1,0),1)
-		pygame.draw.line(header_img,SPQR.SEP_DARK,(0,hheight-1),(width-1,hheight-1),1)
-		pygame.draw.line(header_img,SPQR.SEP_LIGHT,(0,1),(width-1,1),1)
-		pygame.draw.line(header_img,SPQR.SEP_LIGHT,(0,1),(0,hheight-1),1)
+		pygame.draw.line(header_img, SPQR.SEP_DARK, (0, 0), (width - 1, 0), 1)
+		pygame.draw.line(header_img, SPQR.SEP_DARK, (0, hheight-1), (width - 1, hheight - 1), 1)
+		pygame.draw.line(header_img, SPQR.SEP_LIGHT, (0, 1), (width - 1, 1), 1)
+		pygame.draw.line(header_img, SPQR.SEP_LIGHT, (0, 1), (0,hheight - 1), 1)
 		# now we can go along each text header item
 		# all the items are offset by HALFSPCR
-		base_x=SPQR.HALFSPCR
-		hxsize=0
+		base_x = SPQR.HALFSPCR
+		hxsize = 0
 		
 		for txt in text_headers:
 			# point to next column
-			new_x=column_width.pop(0)
-			base_x+=new_x
-			timg=SGFX.gui.fonts[SPQR.FONT_VERA_SM].render(txt,True,SPQR.COL_BLACK)
-			base_y=(hheight-timg.get_height())/2
-			header_img.blit(timg,(base_x,base_y))
+			new_x = column_width.pop(0)
+			base_x += new_x
+			timg = SGFX.gui.fonts[SPQR.FONT_VERA_SM].render(txt, True, SPQR.COL_BLACK)
+			base_y = (hheight - timg.get_height()) / 2
+			header_img.blit(timg, (base_x, base_y))
 			# we also need to draw those funky lines
-			hxsize+=new_x
-			if(hxsize!=0):
+			hxsize += new_x
+			if hxsize != 0:
 				# i.e. not the first time we meet...
-				pygame.draw.line(header_img,SPQR.SEP_LIGHT,
-					(hxsize-1,SPQR.HALFSPCR),(hxsize-1,hheight-SPQR.HALFSPCR),1)
-				pygame.draw.line(header_img,SPQR.SEP_DARK,
-					(hxsize-2,SPQR.HALFSPCR),(hxsize-2,hheight-SPQR.HALFSPCR),1)
+				pygame.draw.line(header_img, SPQR.SEP_LIGHT,
+					(hxsize - 1, SPQR.HALFSPCR), (hxsize - 1, hheight - SPQR.HALFSPCR), 1)
+				pygame.draw.line(header_img, SPQR.SEP_DARK,
+					(hxsize - 2, SPQR.HALFSPCR), (hxsize - 2, hheight - SPQR.HALFSPCR), 1)
 		# there will be one more set of lines to draw
-		hxsize+=column_width.pop(0)
-		pygame.draw.line(header_img,SPQR.SEP_LIGHT,
-			(hxsize-1,SPQR.HALFSPCR),(hxsize-1,hheight-SPQR.HALFSPCR),1)
-		pygame.draw.line(header_img,SPQR.SEP_DARK,
-			(hxsize-2,SPQR.HALFSPCR),(hxsize-2,hheight-SPQR.HALFSPCR),1)
+		hxsize += column_width.pop(0)
+		pygame.draw.line(header_img, SPQR.SEP_LIGHT,
+			(hxsize - 1, SPQR.HALFSPCR), (hxsize - 1, hheight - SPQR.HALFSPCR), 1)
+		pygame.draw.line(header_img, SPQR.SEP_DARK,
+			(hxsize - 2, SPQR.HALFSPCR), (hxsize - 2, hheight - SPQR.HALFSPCR), 1)
 		# the actual rectangle size for the ItemList is merely the
 		# size of the image we have just drawn
-		self.rect.w=width
-		self.rect.h=hheight
-		self.image=header_img
+		self.rect.w = width
+		self.rect.h = hheight
+		self.image = header_img
 		# now we generate the ScrollArea
-		sc_h=total_height-hheight
+		sc_h = total_height - hheight
 		# was there an error there?
-		if(sc_h<SPQR.SCAREA_MINH):
+		if sc_h < SPQR.SCAREA_MINH:
 			print "Error: Size for ItemList too small"
 			# do it, but nasty things may happen
 			# probably the widget display will look nasty
-			sc_h=sc_image.get_height()/2
+			sc_h = sc_image.get_height()/2
 		# we always have a border on these scroll areas
-		y+=hheight
-		self.listarea=CScrollArea(SGFX.gui,x,y,width,sc_h,sc_image,True)
+		y += hheight
+		self.listarea = CScrollArea(x, y, width, sc_h, sc_image, True)
 		
 		# we need to put in the callbacks.
-		# Yes this is flippin' complex for a widget!
-		self.callbacks.mouse_lclk=self.itemsHeaderClick
+		self.callbacks.mouse_lclk = self.itemsHeaderClick
 		# define the status of the colum headers, i.e what direction
 		# the arrows start out at
 		# False is pointing UP, True is pointing DOWN
-		head=[]
+		head = []
 		for i in self.data[0]:
 			head.append(True)
 		self.data.append(head)
 		# then add the list of id/image collections
 		self.data.append(rows)
-		# and then save the sort routines
+		# save the sort routines and then we are done
 		self.data.append(sorts)
-		# blimey!!! That's it
-		# of course we can't return anything yet :-(
 
 	def itemsHeaderClick(self,handle,xpos,ypos):
 		"""Routine called when ItemList top header amount is clicked"""
 		# which column of data?	
 		# column will actually be off by 1 (since it's *always* >0)
 		# so let's make this easy by lowering the start value
-		column=-1
+		column =- 1
 		for i in self.data[0]:
-			if(xpos<i):
+			if xpos < i:
 				break
-			column+=1
+			column += 1
 
 		# just a test for now
 		# now we know that we can draw in the arrow
 		# we also have to delete the other arrows
 		# what arrow graphic do we use?
-		if(self.data[1][column]==True):
-			arrow=SGFX.gui.image("arrown_down")
+		if self.data[1][column] == True:
+			arrow = SGFX.gui.image("arrown_down")
 			# invert for next time
-			self.data[1][column]=False
+			self.data[1][column] = False
 		else:
 			# similar code
-			arrow=SGFX.gui.image("arrow_up")
-			self.data[1][column]=True
+			arrow = SGFX.gui.image("arrow_up")
+			self.data[1][column] = True
 		
 		# create another image to blit over the other arrows
-		erase=pygame.Surface((arrow.get_width(),arrow.get_height()))
+		erase = pygame.Surface((arrow.get_width(), arrow.get_height()))
 		erase.fill(SPQR.BGUI_COL)
 		# erase every image
-		xoff=(self.parent.rect.x+self.rect.x)-(SPQR.SPACER+SPQR.HALFSPCR)	
-		yoff=self.parent.rect.y+self.rect.y
+		xoff = (self.parent.rect.x + self.rect.x) - (SPQR.SPACER + SPQR.HALFSPCR)	
+		yoff = self.parent.rect.y + self.rect.y
 		# centre the arrow
-		yoff+=(self.rect.h-arrow.get_height())/2
+		yoff += (self.rect.h - arrow.get_height()) / 2
 		# erase any previous ones (just delete all)
 		for i in self.data[0]:
 			# don't do the first one
-			if(i!=0):
-				SGFX.gui.screen.blit(erase,(xoff+i,yoff))
+			if i != 0:
+				SGFX.gui.screen.blit(erase, (xoff + i, yoff))
 		# now draw the arrow
 		# since the offset is negative, we need to blit to the next
 		# column along
-		SGFX.gui.screen.blit(arrow,(xoff+self.data[0][column+1],yoff))
+		SGFX.gui.screen.blit(arrow, (xoff + self.data[0][column+1], yoff))
 		
 		# now we can re-build the scrollarea image:
-		img=pygame.Surface((self.display_width,
-			self.row_height*len(self.data[2])))
+		img = pygame.Surface((self.display_width,
+			self.row_height * len(self.data[2])))
 
 		# now sort the list
 		# we can actually only sort the id numbers, so get that list:
-		nums=[]
+		nums = []
 		for i in self.data[2]:
 			nums.append(i[0])		
 		# sort *that* list:
 		nums.sort(self.data[3][column])
 		# if column data is True, reverse the list	
-		if(self.data[1][column]==True):
+		if self.data[1][column] == True:
 			nums.reverse()
 		
 		# now build up the new image
-		ypos=0
+		ypos = 0
 		for foo in nums:
 			# get the referrring id value:
 			for bar in self.data[2]:
-				if(foo==bar[0]):
-					img.blit(bar[1],(0,ypos))
-					ypos+=self.row_height
+				if foo == bar[0]:
+					img.blit(bar[1], (0, ypos))
+					ypos += self.row_height
 					break
 		# update the screen (don't forget to reset xpos accuratly -
 		# thus all that spacer stuff)
-		pygame.display.update((xoff+SPQR.SPACER+SPQR.HALFSPCR,yoff,self.rect.w,self.rect.h))
+		pygame.display.update((xoff + SPQR.SPACER + SPQR.HALFSPCR, yoff, self.rect.w, self.rect.h))
 		# and the new scrollist image		
 		self.listarea.updateScrollImage(img)
-		return(True)
+		return True
 
 # an optionmenu is a widget that let's you choose an item from a drop-down
 # menu. The current option is shown in the box.
@@ -989,245 +985,243 @@ class COptionMenu(CWidget):
 	   # TODO: If you move the optmenu, you must manually set the
 	   # drop_rect co-ords as well
 	def __init__(self,x,y,options):
-		CWidget.__init__(self,None,SPQR.WT_OPTMENU,None,"COptionMenu")
+		CWidget.__init__(self, None, SPQR.WT_OPTMENU, None, "COptionMenu")
 		# just a simple check - there has to be at least 1 option!
-		if(len(options)<1):
-			if(SPQR.DEBUG_MODE==True):
+		if len(options) < 1:
+			if SPQR.DEBUG_MODE == True:
 				print "Error: Asked for OptionMenu with no options"
 				# enter the error options
-				options=["Error","No","Options","Given"]
+				options = ["Error", "No","Options", "Given"]
 
 		# first we must build the image as seen when the widget is unused
 		# calculate width
-		width=0
+		width = 0
 		for i in options:
-			tlen=SGFX.gui.fonts[SPQR.FONT_VERA].size(i)[0]
-			if(tlen>width):
-				width=tlen
+			tlen = SGFX.gui.fonts[SPQR.FONT_VERA].size(i)[0]
+			if tlen > width:
+				width = tlen
 		# add a spacer either side
-		width+=(2*SPQR.SPACER)
+		width += 2 * SPQR.SPACER
 		# then allow for the graphics on either side
-		width+=SGFX.gui.iWidth("optionmenu_rhand")
+		width += SGFX.gui.iWidth("optionmenu_rhand")
 		# save info for later
-		xpos=width
-		width+=SGFX.gui.iWidth("optionmenu_rhand")
+		xpos = width
+		width += SGFX.gui.iWidth("optionmenu_rhand")
 		# we can now work out the rect size
-		height=SGFX.gui.iHeight("optionmenu_rhand")
-		self.rect=pygame.Rect(x,y,width,height)
+		height = SGFX.gui.iHeight("optionmenu_rhand")
+		self.rect = pygame.Rect(x, y, width, height)
 		# we can now start to build the base image
-		self.image=pygame.Surface((width,height),SRCALPHA)
+		self.image = pygame.Surface((width, height), SRCALPHA)
 		# build up the base image
 		self.image.fill(SPQR.COL_WHITE)
-		self.image.blit(SGFX.gui.image("optionmenu_lhand"),(0,0))
-		self.image.blit(SGFX.gui.image("optionmenu_rhand"),(xpos,0))
+		self.image.blit(SGFX.gui.image("optionmenu_lhand"), (0, 0))
+		self.image.blit(SGFX.gui.image("optionmenu_rhand"), (xpos, 0))
 		# now we draw the lines at the top and bottom
-		xstart=SGFX.gui.iWidth("optionmenu_lhand")
-		pygame.draw.line(self.image,SPQR.BGUI_HIGH,(xstart,0),(xpos,0),1)
-		pygame.draw.line(self.image,SPQR.COLG_RED,(xstart,1),(xpos,1),1)
-		pygame.draw.line(self.image,SPQR.COLG_RHIGH,(xstart,2),(xpos,2),1)
-		height-=1
-		pygame.draw.line(self.image,SPQR.BGUI_HIGH,(xstart,height),(xpos,height),1)
-		height-=1
-		pygame.draw.line(self.image,SPQR.COLG_RED,(xstart,height),(xpos,height),1)
-		height-=1
-		pygame.draw.line(self.image,SPQR.COLG_RHIGH,(xstart,height),(xpos,height),1)
+		xstart = SGFX.gui.iWidth("optionmenu_lhand")
+		pygame.draw.line(self.image, SPQR.BGUI_HIGH, (xstart, 0), (xpos, 0), 1)
+		pygame.draw.line(self.image,SPQR.COLG_RED, (xstart, 1), (xpos, 1), 1)
+		pygame.draw.line(self.image,SPQR.COLG_RHIGH, (xstart, 2), (xpos, 2), 1)
+		height -= 1
+		pygame.draw.line(self.image, SPQR.BGUI_HIGH, (xstart, height), (xpos, height), 1)
+		height -= 1
+		pygame.draw.line(self.image, SPQR.COLG_RED, (xstart, height), (xpos, height), 1)
+		height -= 1
+		pygame.draw.line(self.image, SPQR.COLG_RHIGH, (xstart, height), (xpos, height), 1)
 		# finally, we need to blit the text
-		txtx=xstart+SPQR.SPACER
-		txtg=SGFX.gui.fonts[SPQR.FONT_VERA].render(options[0],True,SPQR.COL_BLACK)
-		txty=(self.image.get_height()-txtg.get_height())/2
-		self.image.blit(txtg,(txtx,txty))
+		txtx = xstart + SPQR.SPACER
+		txtg = SGFX.gui.fonts[SPQR.FONT_VERA].render(options[0], True, SPQR.COL_BLACK)
+		txty = (self.image.get_height() - txtg.get_height()) / 2
+		self.image.blit(txtg, (txtx, txty))
 		
 		# well, thats it for *that* image, but we still need to get an image
 		# set up for when we drop the menu down
 		# the image size should be widget_height-HALFSPCR for each row,
 		# and then length should be the same as the widget minus the arrow
-		row_height=self.image.get_height()-SPQR.HALFSPCR
-		ysize=len(options)*row_height
-		ysize+=SPQR.HALFSPCR+SPQR.QTRSPCR
-		xsize=self.image.get_width()
-		self.drop_image=pygame.Surface((xsize,ysize))
+		row_height = self.image.get_height() - SPQR.HALFSPCR
+		ysize = len(options) * row_height
+		ysize += SPQR.HALFSPCR + SPQR.QTRSPCR
+		xsize = self.image.get_width()
+		self.drop_image = pygame.Surface((xsize, ysize))
 		self.drop_image.fill(SPQR.OPTM_BDARK)
 		# draw nice borders
-		pygame.draw.rect(self.drop_image,SPQR.BGUI_COL,(1,1,xsize-2,ysize-2),0)
-		pygame.draw.rect(self.drop_image,SPQR.OPTM_BDARK,(2,2,xsize-4,ysize-4),0)
-		pygame.draw.rect(self.drop_image,SPQR.COL_WHITE,(3,3,xsize-6,ysize-6),0)
+		pygame.draw.rect(self.drop_image, SPQR.BGUI_COL, (1, 1, xsize - 2, ysize - 2), 0)
+		pygame.draw.rect(self.drop_image, SPQR.OPTM_BDARK, (2, 2, xsize - 4, ysize - 4), 0)
+		pygame.draw.rect(self.drop_image, SPQR.COL_WHITE, (3, 3, xsize - 6, ysize - 6), 0)
 		# now we need to render the text names:
-		ypos=SPQR.HALFSPCR+SPQR.QTRSPCR+1
-		xpos=SPQR.SPACER+SGFX.gui.iWidth("optionmenu_lhand")
+		ypos = SPQR.HALFSPCR+SPQR.QTRSPCR + 1
+		xpos = SPQR.SPACER+SGFX.gui.iWidth("optionmenu_lhand")
 		# we'll build the rects for menu checks as well
-		self.menu_highlights=[]
-		ymstart=self.rect.y+self.image.get_height()+SPQR.QTRSPCR+3
+		self.menu_highlights = []
+		ymstart = self.rect.y + self.image.get_height() + SPQR.QTRSPCR + 3
 		for txt in options:
-			rend=SGFX.gui.fonts[SPQR.FONT_VERA].render(txt,True,SPQR.COL_BLACK)
-			self.drop_image.blit(rend,(xpos,ypos))
-			ypos+=row_height
-			self.menu_highlights.append([(pygame.Rect(self.rect.x+3,
-				ymstart,xsize-6,row_height)),txt])
-			ymstart+=row_height
+			rend = SGFX.gui.fonts[SPQR.FONT_VERA].render(txt, True, SPQR.COL_BLACK)
+			self.drop_image.blit(rend, (xpos, ypos))
+			ypos += row_height
+			self.menu_highlights.append([(pygame.Rect(self.rect.x + 3,
+				ymstart, xsize - 6, row_height)), txt])
+			ymstart += row_height
 
-		self.drop_rect=pygame.Rect(self.rect.x,
-			self.rect.y+self.image.get_height()+SPQR.QTRSPCR,xsize,ysize)
+		self.drop_rect = pygame.Rect(self.rect.x,
+			self.rect.y + self.image.get_height() + SPQR.QTRSPCR, xsize, ysize)
 		# we'll need to update it on the first loop:
-		self.drop_rect_update=False
+		self.drop_rect_update = False
 		# we'll just set up a rect which we use to check the mouse against
-		self.mouse_check=pygame.Rect(xpos+xstart,0,width-xpos,height)
+		self.mouse_check = pygame.Rect(xpos + xstart, 0, width - xpos, height)
 		# and also a menu highlight image
 		# the 32 is to force a 32 bit surface for alpha blitting
-		self.himage=pygame.Surface((xsize-6,row_height),0,32)
+		self.himage = pygame.Surface((xsize - 6, row_height), 0, 32)
 		# then set the alpha value
 		self.himage.set_alpha(SPQR.MENU_ALPHA)
 		# flood fill it
 		self.himage.fill(SPQR.MENU_HLCOL)
 		
 		# and then the basic callback
-		self.callbacks.mouse_lclk=self.optionsSelect
+		self.callbacks.mouse_lclk = self.optionsSelect
 		# before we finish off, we need somewhere to store the current option
-		self.option=options[0]
+		self.option = options[0]
 
-	def setPositionX(self,x):
+	def setPositionX(self, x):
 		"""Used when you change the position of the optmenu"""
-		self.rect.x=x
-		self.drop_rect.x=x
+		self.rect.x = x
+		self.drop_rect.x = x
 		for i in self.menu_highlights:
-			i[0].x=x+3
+			i[0].x = x + 3
 
-	def setPositionY(self,y):
+	def setPositionY(self, y):
 		"""Used when you change the position of the optmenu"""
-		self.drop_rect.y=y+self.image.get_height()+SPQR.QTRSPCR
+		self.drop_rect.y = y + self.image.get_height() + SPQR.QTRSPCR
 		for i in self.menu_highlights:
-			# tricky shit, programming computers :-)
-			i[0].y+=(y-self.rect.y)
-		self.rect.y=y
+			i[0].y += y - self.rect.y
+		self.rect.y = y
 
 	def optionsSelect(self,handle,xpos,ypos):
 		"""Called when the OptionMenu is clicked
 			 Returns False if option did not change"""
-		if(self.mouse_check.collidepoint(xpos,ypos)==False):
+		if self.mouse_check.collidepoint(xpos, ypos) == False:
 			# nothing to do, since arrow was not clicked
-			return(False)		
+			return False
 		# first time we do this, update the rectangles:
-		if(self.drop_rect_update==False):
-			self.drop_rect.x+=self.parent.rect.x
-			self.drop_rect.y+=self.parent.rect.y
+		if self.drop_rect_update == False:
+			self.drop_rect.x += self.parent.rect.x
+			self.drop_rect.y += self.parent.rect.y
 			# annoying but true: it also won't have updated the x/y postions
 			# to account for the window borders....!
-			if(self.parent.border_offset==True):
-				self.drop_rect.x+=SPQR.WINSZ_SIDE
-				self.drop_rect.y+=SPQR.WINSZ_TOP
+			if self.parent.border_offset == True:
+				self.drop_rect.x += SPQR.WINSZ_SIDE
+				self.drop_rect.y += SPQR.WINSZ_TOP
 			# now the highlight rects:
 			for item in self.menu_highlights:
-				item[0].x+=self.parent.rect.x
-				item[0].y+=self.parent.rect.y
-				if(self.parent.border_offset==True):
-					item[0].x+=SPQR.WINSZ_SIDE
-					item[0].y+=SPQR.WINSZ_TOP
-			self.drop_rect_update=True
+				item[0].x += self.parent.rect.x
+				item[0].y += self.parent.rect.y
+				if self.parent.border_offset == True:
+					item[0].x += SPQR.WINSZ_SIDE
+					item[0].y += SPQR.WINSZ_TOP
+			self.drop_rect_update = True
 		
 		# got the click: firstly, update the screen with a new dirty
 		# rect (the previously drawn drop-down graphic)
-		SGFX.gui.addDirtyRect(self.drop_image,self.drop_rect)
-		opt_highlight=None
+		SGFX.gui.addDirtyRect(self.drop_image, self.drop_rect)
+		opt_highlight = None
 		# loop through events until user clicks inside the new rect
-		img_old=pygame.Surface((self.himage.get_width(),self.himage.get_height()))
-		while(True):
-			event=pygame.event.poll()
-			if(event.type==MOUSEMOTION):
-				over=False
+		img_old = pygame.Surface((self.himage.get_width(), self.himage.get_height()))
+		while True:
+			event = pygame.event.poll()
+			if event.type == MOUSEMOTION:
+				over = False
 				# over a highlight rect?
 				for items in self.menu_highlights:
-					rect=items[0]
-					if(rect.collidepoint(event.pos[0],event.pos[1])):
+					rect = items[0]
+					if rect.collidepoint(event.pos[0], event.pos[1]):
 						# yes
-						over=True
-						if(opt_highlight!=rect):
+						over = True
+						if opt_highlight != rect:
 							# last given highlight was not this one,
 							# so it is at least unique
-							if(opt_highlight!=None):
+							if opt_highlight != None:
 								# *something* was highlighted last time,
 								# so put back the original
-								SGFX.gui.screen.blit(img_old,opt_highlight)
+								SGFX.gui.screen.blit(img_old, opt_highlight)
 								pygame.display.update(opt_highlight)
 							# save the old screen part
-							img_old.blit(pygame.display.get_surface(),(0,0),rect)
+							img_old.blit(pygame.display.get_surface(), (0, 0), rect)
 							# draw in the new highlight
-							SGFX.gui.screen.blit(self.himage,rect)
+							SGFX.gui.screen.blit(self.himage, rect)
 							pygame.display.update(rect)
 							# save position for next time
-							opt_highlight=rect
+							opt_highlight = rect
 						break
-				if((over==False)and(opt_highlight!=None)):
+				if over == False and opt_highlight != None:
 					# left highlight area
-					SGFX.gui.screen.blit(img_old,opt_highlight)
+					SGFX.gui.screen.blit(img_old, opt_highlight)
 					pygame.display.update(opt_highlight)
-					opt_highlight=None
-			elif((event.type==MOUSEBUTTONUP)and(event.button==1)):
+					opt_highlight = None
+			elif event.type == MOUSEBUTTONUP and event.button == 1:
 				# click, but inside the rect?
 				# go through all the options:
 				for items in self.menu_highlights:
-					if(items[0].collidepoint(event.pos[0],event.pos[1])):
+					if items[0].collidepoint(event.pos[0], event.pos[1]):
 						# time to exit - but store the new option
-						self.option=items[1]
+						self.option = items[1]
 						
 						# hey! *all* we have to do is update the original gfx now!
 						# firstly render some text
-						newtxt=SGFX.gui.fonts[SPQR.FONT_VERA].render(self.option,True,SPQR.COL_BLACK)
+						newtxt = SGFX.gui.fonts[SPQR.FONT_VERA].render(self.option, True, SPQR.COL_BLACK)
 						# now erase old text
-						oldtxt=pygame.Rect(0,3,0,self.image.get_height()-6)
-						oldtxt.x=SGFX.gui.iWidth("optionmenu_lhand")+SPQR.SPACER
-						oldtxt.w=self.rect.w-SGFX.gui.iWidth("optionmenu_lhand")
-						oldtxt.w-=(SGFX.gui.iWidth("optionmenu_rhand")+SPQR.SPACER)
-						pygame.draw.rect(self.image,SPQR.COL_WHITE,oldtxt)
+						oldtxt = pygame.Rect(0, 3, 0, self.image.get_height() - 6)
+						oldtxt.x = SGFX.gui.iWidth("optionmenu_lhand") + SPQR.SPACER
+						oldtxt.w = self.rect.w - SGFX.gui.iWidth("optionmenu_lhand")
+						oldtxt.w -= SGFX.gui.iWidth("optionmenu_rhand") + SPQR.SPACER
+						pygame.draw.rect(self.image, SPQR.COL_WHITE, oldtxt)
 						# blit text into image
-						xpos=SGFX.gui.iWidth("optionmenu_lhand")+SPQR.SPACER
-						ypos=(self.rect.h-newtxt.get_height())/2
-						self.image.blit(newtxt,(xpos,ypos))
+						xpos = SGFX.gui.iWidth("optionmenu_lhand") + SPQR.SPACER
+						ypos = (self.rect.h-newtxt.get_height()) / 2
+						self.image.blit(newtxt, (xpos, ypos))
 						# erase menu drop
 						SGFX.gui.deleteTopDirty()
 						# force update of window portion
-						xpos=self.parent.rect.x+self.rect.x
-						ypos=self.parent.rect.y+self.rect.y
-						SGFX.gui.screen.blit(self.image,(xpos,ypos))
-						new_update=pygame.Rect(xpos,ypos,self.rect.w,self.rect.h)
+						xpos = self.parent.rect.x + self.rect.x
+						ypos = self.parent.rect.y + self.rect.y
+						SGFX.gui.screen.blit(self.image, (xpos, ypos))
+						new_update = pygame.Rect(xpos, ypos, self.rect.w, self.rect.h)
 						pygame.display.update(new_update)
-						
 						# you can now return safely - it's been updated!
-						return(True)
+						return True
 				# no click on an option, we assume nothing was wanted
 				SGFX.gui.deleteTopDirty()
 				# but no option change
-				return(False)
+				return False
 		# shouldn't ever get here, really
 		SGFX.gui.deleteTopDirty()
-		return(False)
+		return False
 
 # helper routines to build stuff follow
-def buildLabel(text,font=SPQR.FONT_VERA):
+def buildLabel(text, font = SPQR.FONT_VERA):
 	"""Helper function to build a label given just the text.
 	   Uses standard font, which is FONT_VERA. Returns the new label"""
 	# get the size
-	w,h=SGFX.gui.fonts[font].size(text)
+	w, h = SGFX.gui.fonts[font].size(text)
 	# TODO: annoyingly enough, despite asking what size the font is, if
 	# I render to an image of that size, it doesn't work. So we have to add 1
 	# any answers to this one, or have I missed something?
-	return(CLabel(0,0,w,h+1,text,font))
+	return(CLabel(0, 0, w, h+1, text, font))
 
 def buildImage(image):
 	"""Helper function to build a image given just the image
 	   title. Pass index of image. Returns the new widget"""
-	w=SGFX.gui.iWidth(image)
-	h=SGFX.gui.iHeight(image)
+	w = SGFX.gui.iWidth(image)
+	h = SGFX.gui.iHeight(image)
 	# create and return
-	return(CImage(0,0,w,h,image))
+	return(CImage(0, 0, w, h, image))
 
 def buildImageAlpha(image):
 	"""As buildImage, but blits alpha image over gui color"""
-	w=SGFX.gui.iWidth(image)
-	h=SGFX.gui.iHeight(image)
+	w = SGFX.gui.iWidth(image)
+	h = SGFX.gui.iHeight(image)
 	# create out initial image and make it the right color
-	piccy=pygame.Surface((w,h))
+	piccy = pygame.Surface((w, h))
 	piccy.fill(SPQR.BGUI_COL)
 	# now blit over the real image
-	piccy.blit(SGFX.gui.image(image),(0,0))
+	piccy.blit(SGFX.gui.image(image), (0, 0))
 	# and thats almost it
 	return(buildUniqueImage(piccy))
 
@@ -1235,8 +1229,8 @@ def buildUniqueImage(picture):
 	"""As buildImage, but this time you pass your own image"""
 	new=CImage(0, 0, 0, 0, None)
 	# now amend that image
-	new.rect.w=picture.get_width()
-	new.rect.h=picture.get_height()
-	new.image=picture
-	return(new)
+	new.rect.w = picture.get_width()
+	new.rect.h = picture.get_height()
+	new.image = picture
+	return new
 
