@@ -108,7 +108,7 @@ MOVE_OFF_BR			= PYGAME.Rect(0, 0, 45, 41)
 MOVE_OFF_BRD		= (34, 44)
 
 # minimum size around move area
-MIN_MOVE_AREA		= 2 * HEX_FULLH)
+MIN_MOVE_AREA		= 2 * HEX_FULLH
 # size of graphs in unit area
 UNIT_GRAPHX			= 16
 UNIT_GRAPHY			= 36
@@ -173,7 +173,7 @@ FILE_HEXMASK		= "../gfx/masks/hex_mask.png"
 
 # the images to load
 # just list the folders inside gfx: the game will pull all of the png files
-GRAPHICS_F			= ["gui", "icons", "units", "cities"]
+GRAPHICS_F			= ["gui", "icons", "units", "cities" ,"map/regions"]
 
 # milliseconds between unit flash
 # (all animation times are in milliseconds)

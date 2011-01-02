@@ -17,12 +17,25 @@
 from __future__ import absolute_import
 from .. import spqr_defines as SPQR
 
+regions = [["lucania_et_bruttiun", 1339, 1147],
+		   ["apulia_et_calabria", 1309, 1076],
+		   ["latium_et_campania", 1201, 1038],
+		   ["aemilia", 1157, 969],
+		   ["etruria", 1081, 970]]
+
 class CMap(object):
 	def __init__(self):
-		self.regions = {}
+		self.regions = []
+		for i in regions:
+			self.regions.append(CRegion(i[0], i[1], i[2]))
+	
+	def iterRegions(self):
+		"""A custom iterator so we can change how regions are held"""
+		for i in self.regions:
+			yield i
 
-	def addRegion(self, name, info):
-		self.regions[name] = info
+	def addRegion(self, region):
+		self.regions.append(region)
 
 class CRegion(object):
 	def __init__(self, image, x, y):
@@ -30,3 +43,4 @@ class CRegion(object):
 		self.x = x
 		self.y = y
 		self.city = None
+

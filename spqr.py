@@ -192,8 +192,6 @@ class CSPQR(object):
 		bwindow.addWidget(centre_button)
 		SGFX.gui.addWindow(bwindow)
 
-		# blit offscreen map
-		SGFX.gui.renderPixelMap()
 		# draw the screen
 		SGFX.gui.updateGUI()
 		SGFX.gui.updateMap()

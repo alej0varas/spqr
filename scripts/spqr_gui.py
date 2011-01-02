@@ -24,6 +24,7 @@ import spqr_keys as SKEY
 import spqr_events as SEVENT
 import spqr_console as SCONSOLE
 import spqr_sound as SSFX
+import spqr_data as SDATA
 
 # class that holds the dirty rectangle updates
 class CDirtyRect(object):
@@ -74,7 +75,6 @@ class CGFXEngine(object):
 		self.cfuncs = SCONSOLE.CConsole()
 		# console currently being displayed?
 		self.console = False
-		
 		pygame.display.set_caption("SPQR "+SPQR.VERSION)
 		
 		# get all filenames:
@@ -85,6 +85,9 @@ class CGFXEngine(object):
 		for i in files:
 			if i[-4:] == ".png":
 				self.images[i.split("/")[-1][:-4]] = pygame.image.load(i).convert_alpha()
+		
+		# update buffer images
+		self.renderPixelMap()
 
 		# we have 2 blit areas for the flashing unit:
 		self.flash_draw = pygame.Surface((0, 0))
@@ -104,8 +107,6 @@ class CGFXEngine(object):
 		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf", SPQR.FONT_LARGE))
 		# enable keyboard reponses
 		self.keyboard = SKEY.CKeyboard()
-		# render the city texts
-		self.renderCityNames()
 		# start the first song here, as well
 		SSFX.sound.startNextSong()
 		# some basic variables that SPQR uses regularly
@@ -169,11 +170,11 @@ class CGFXEngine(object):
 	def image(self, name):
 		return(self.images[name])
 
-	def renderCityNames(self):
-		"""Routine renders all the images for the city names,
-		   and places them in the city instances. Must be done
-		   in main init routine before any map rendering is performed"""
-		return True
+	def renderRegions(self):
+		"""Draw all regions to the back buffer"""
+		for i in SDATA.data.map.iterRegions():
+			# render the map
+			self.image("buffer").blit(self.image(i.image), (i.x, i.y))
 		
 	# now a function to add a window
 	# it has it's own function because it has to return the index number
@@ -390,7 +391,7 @@ class CGFXEngine(object):
 			return True
 		# worst of all, could be an instant quit!
 		if event.type == pygame.QUIT:
-			SEVENT.quitSpqr(self, None, -1, -1)
+			SEVENT.quitSpqr(None, -1, -1)
 			return True
 		# cancel current menu if we got mouse button down
 		if event.type == MOUSEBUTTONDOWN and self.menu_active == True:
@@ -717,10 +718,11 @@ class CGFXEngine(object):
 		"""Routine generates map we actually display to the screen,
 		   having rendered cities, units, roads etc.
 		   The current ordering of the blits, from first to last, is:
-		   Back map, Cities, City names, Units""" 
+		   Back map, Regions""" 
 		# blit the original map across first
 		self.image("buffer").blit(self.image("map"), (0, 0))
-		# start by blitting the cities
+		# start by blitting the regions
+		self.renderRegions()
 		# save this image as it is for now without the images for using
 		# as the backdrop for all unit animations
 		self.map_render.blit(self.image("buffer"), (0, 0))
