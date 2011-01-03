@@ -63,7 +63,7 @@ def centreMap(handle, xpos, ypos):
 	# this also updates the screen for us
 	x = SGFX.gui.map_screen.w/2
 	y = (SGFX.gui.map_screen.h/2)+SPQR.WINSZ_TOP
-	SGFX.gui.updateInfoBox(x, y)
+	SGFX.gui.mapClick(x, y)
 	return True
 
 # left click on mini map gives us this

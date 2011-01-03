@@ -87,8 +87,8 @@ class CGFXEngine(object):
 				self.images[i.split("/")[-1][:-4]] = pygame.image.load(i).convert_alpha()
 		
 		# update buffer images
+		self.updateMapData()
 		self.renderPixelMap()
-
 		# we have 2 blit areas for the flashing unit:
 		self.flash_draw = pygame.Surface((0, 0))
 		self.flash_erase = pygame.Surface((0, 0))
@@ -170,15 +170,29 @@ class CGFXEngine(object):
 	def image(self, name):
 		return(self.images[name])
 
+	def updateMapData(self):
+		"""The size of the regions is known by the size of the images
+		   This function updates the game data after the images have
+		   been loaded. Also we give the masks as well"""
+		for i in SDATA.iterRegions():
+			image = self.image(i.image)
+			i.rect.width = image.get_width()
+			i.rect.height = image.get_height()
+		i = []
+		for key in self.images.iterkeys():
+			if key[-5:] == "_mask":
+				i.append([key, self.image(key)])
+		SDATA.updateRegionMasks(i)
+
 	def renderRegions(self):
 		"""Draw all regions to the back buffer"""
-		for i in SDATA.data.map.iterRegions():
+		for i in SDATA.iterRegions():
 			# render the map
 			region = pygame.Surface(self.image(i.image).get_size()).convert()
 			region.fill(i.colour)
 			mask = self.image(i.image).copy()
 			mask.blit(region, (0, 0), None, pygame.BLEND_ADD)
-			self.image("buffer").blit(mask, (i.x, i.y))
+			self.image("buffer").blit(mask, (i.rect.x, i.rect.y))
 
 	# now a function to add a window
 	# it has it's own function because it has to return the index number
@@ -600,15 +614,24 @@ class CGFXEngine(object):
 		# a click on the main map
 		if action == SPQR.MOUSE_LCLK:
 			if self.map_area.collidepoint(x, y) == True:
-				# yes, update the info area
-				self.updateInfoBox(x, y)
+				# handle it elsewhere
+				self.mapClick(x, y)
 				return True
 		return False
-		
-	def updateInfoBox(self, x, y):
+
+	def screenToMapCoords(self, x, y):
+		"""Convert screen click co-ords to map co-ords"""
+		x += self.map_screen.x
+		y -= self.iHeight("titlebar")
+		y += self.map_screen.y
+		return x, y
+
+	def mapClick(self, x, y):
 		"""Updates information in bottom box, dependant on users click
 		   over the map. Call with x and y, being the click on the map
 		   in screen co-ords"""
+		x, y = self.screenToMapCoords(x, y)
+		print SDATA.regionClicked(x, y)
 		return True
 
 	# this is the main game loop. There are 2 varients of it, one which keeps

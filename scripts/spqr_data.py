@@ -14,6 +14,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+import pygame
 import spqr_defines as SPQR
 import cities.spqr_city as SCITY
 import maps.spqr_map as SMAP
@@ -42,6 +43,28 @@ class CInfo(object):
 		# there is of course no year zero
 		if self.year == 0:
 			self.year = 1
+
+def updateRegionMasks(masks):
+	for i in masks:
+		# make the mask name same as the region name here
+		name = i[0][:-5]
+		data.map.masks[name] = i[1]
+
+def iterRegions():
+	"""A custom iterator so we can change how regions are held"""
+	for i in data.map.regions:
+		yield i
+
+def regionClicked(x, y):
+	"""Return name of region if clicked, or False"""
+	for i in iterRegions():
+		if i.rect.collidepoint(x, y):
+			# now just check against the mask
+			nx = x - i.rect.x
+			ny = y - i.rect.y
+			if data.map.masks[i.image].get_at((nx, ny))[3] != 0:
+				return i.image
+	return False
 
 data = CInfo()
 

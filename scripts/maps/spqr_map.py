@@ -15,6 +15,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 from __future__ import absolute_import
+import pygame
 from .. import spqr_defines as SPQR
 
 regions = [["lucania_et_bruttiun", 1339, 1147, (184, 37, 37)],
@@ -26,13 +27,9 @@ regions = [["lucania_et_bruttiun", 1339, 1147, (184, 37, 37)],
 class CMap(object):
 	def __init__(self):
 		self.regions = []
+		self.masks = {}
 		for i in regions:
 			self.regions.append(CRegion(i[0], i[1], i[2], i[3]))
-	
-	def iterRegions(self):
-		"""A custom iterator so we can change how regions are held"""
-		for i in self.regions:
-			yield i
 
 	def addRegion(self, region):
 		self.regions.append(region)
@@ -40,8 +37,6 @@ class CMap(object):
 class CRegion(object):
 	def __init__(self, image, x, y, colour):
 		self.image = image
-		self.x = x
-		self.y = y
+		self.rect = pygame.Rect(x, y, 0, 0)
 		self.colour = colour
-		self.city = None
 
