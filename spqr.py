@@ -186,6 +186,7 @@ class CSPQR(object):
 		info.rect.x = SPQR.SPACER
 		info.rect.y = y
 		info.describe = ("info-box")
+		info.visible = False
 		bwindow.addWidget(info)
 		# we need to store it as well
 		SGFX.gui.info_widget = info

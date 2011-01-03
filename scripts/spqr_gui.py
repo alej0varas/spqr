@@ -265,10 +265,10 @@ class CGFXEngine(object):
 		# we have to do the window testing in reverse to the way we blit, as the first
 		# object blitted is on the 'bottom' of the screen, and we have to test from the top
 		for foo in self.windows:
-			if foo.display  ==  True:
+			if foo.display == True:
 				self.screen.blit(foo.image, (foo.rect.x, foo.rect.y))
 			for bar in foo.items:
-				if bar.visible  ==  True:
+				if bar.visible == True:
 					# is this the mini-map?
 					if bar.describe  ==  "mini-map":
 						# just update it
@@ -289,7 +289,8 @@ class CGFXEngine(object):
 		# TODO: a better way of finding the window
 		offset = self.windows[-1].rect
 		for i in self.windows[-1].items:
-			self.screen.blit(i.image, (i.rect.x+offset.x, i.rect.y+offset.y))
+			if i.visible == True:
+				self.screen.blit(i.image, (i.rect.x+offset.x, i.rect.y+offset.y))
 	
 	# this one merely updates the map, rather than blit all those
 	# gui things as well
@@ -635,6 +636,11 @@ class CGFXEngine(object):
 		name = SDATA.regionClicked(x, y)
 		if name != False:
 			self.renderRegionInfoBox(name)
+		else:
+			# clear box if no info
+			if self.info_widget.visible == True:
+				self.info_widget.visible = False
+				self.updateGUI()
 		return True
 
 	# this is the main game loop. There are 2 varients of it, one which keeps
@@ -954,15 +960,21 @@ class CGFXEngine(object):
 		icon_name = region + "_icon"
 		# draw the right region icon
 		if self.iWidth(icon_name) == SPQR.REGION_ICON_SIZE:
-			xpos = info.get_width() - (2 + SPQR.REGION_ICON_SIZE)
+			xpos = info.get_width() - (SPQR.REGION_ICON_SIZE + 2)
 			ypos = int((SPQR.REGION_ICON_SIZE - self.iHeight(icon_name)) / 2) + 2
 		else:
-			xpos = info.get_width() - \
-				   int((SPQR.REGION_ICON_SIZE - self.iWidth(icon_name)) / 2) + 2
+			xpos = info.get_width() - (SPQR.REGION_ICON_SIZE + 2) + \
+				   int((SPQR.REGION_ICON_SIZE - self.iWidth(icon_name)) / 2)
 			ypos = 2
-		#print xpos, ypos
-		info.blit(self.image(icon_name), (20, 20))
+		info.blit(self.image(icon_name), (xpos, ypos))
+		# render the region name, as well
+		# TODO: replace all _ with spaces and capitalise the first letter
+		text = self.fonts[SPQR.FONT_VERA].render(region, True, SPQR.COL_BLACK)
+		info.blit(text, (int((info.get_width() - text.get_width()) / 2),
+						(info.get_height() - (text.get_height() + 2))))
+		
 		self.info_widget.image = info
+		self.info_widget.visible = True
 		self.updateGUI()
 
 	# there are always some standard routines in any gui...here is a messagebox
