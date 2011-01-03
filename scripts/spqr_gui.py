@@ -174,8 +174,12 @@ class CGFXEngine(object):
 		"""Draw all regions to the back buffer"""
 		for i in SDATA.data.map.iterRegions():
 			# render the map
-			self.image("buffer").blit(self.image(i.image), (i.x, i.y))
-		
+			region = pygame.Surface(self.image(i.image).get_size()).convert()
+			region.fill(i.colour)
+			mask = self.image(i.image).copy()
+			mask.blit(region, (0, 0), None, pygame.BLEND_ADD)
+			self.image("buffer").blit(mask, (i.x, i.y))
+
 	# now a function to add a window
 	# it has it's own function because it has to return the index number
 	# of the created window
