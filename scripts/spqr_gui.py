@@ -151,6 +151,7 @@ class CGFXEngine(object):
 		# load other data required by mapboard
 		self.updateMiniMap()
 		self.flash_on = False
+		self.info_widget = None
 
 	def displayLoadingScreen(self, width, height):
 		"""Displays the loading screen"""
@@ -631,7 +632,9 @@ class CGFXEngine(object):
 		   over the map. Call with x and y, being the click on the map
 		   in screen co-ords"""
 		x, y = self.screenToMapCoords(x, y)
-		print SDATA.regionClicked(x, y)
+		name = SDATA.regionClicked(x, y)
+		if name != False:
+			self.renderRegionInfoBox(name)
 		return True
 
 	# this is the main game loop. There are 2 varients of it, one which keeps
@@ -943,6 +946,24 @@ class CGFXEngine(object):
 		   area used in the flash animation"""
 		self.flash_old.blit(self.image("buffer"), (0, 0), self.flash_rect)
 		return True
+
+	def renderRegionInfoBox(self, region):
+		"""Render the image for the widget that shows the region info"""
+		info = pygame.Surface(self.image("small_map").get_size()).convert_alpha()
+		info.fill(SPQR.BGUI_COL)
+		icon_name = region + "_icon"
+		# draw the right region icon
+		if self.iWidth(icon_name) == SPQR.REGION_ICON_SIZE:
+			xpos = info.get_width() - (2 + SPQR.REGION_ICON_SIZE)
+			ypos = int((SPQR.REGION_ICON_SIZE - self.iHeight(icon_name)) / 2) + 2
+		else:
+			xpos = info.get_width() - \
+				   int((SPQR.REGION_ICON_SIZE - self.iWidth(icon_name)) / 2) + 2
+			ypos = 2
+		#print xpos, ypos
+		info.blit(self.image(icon_name), (20, 20))
+		self.info_widget.image = info
+		self.updateGUI()
 
 	# there are always some standard routines in any gui...here is a messagebox
 	def messagebox(self, flags, text, win_title):

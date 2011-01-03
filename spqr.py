@@ -180,6 +180,16 @@ class CSPQR(object):
 		mini_map.describe = "mini-map"
 		bwindow.addWidget(mini_map)
 
+		image = pygame.Surface(SGFX.gui.image("small_map").get_size()).convert_alpha()
+		image.fill(SPQR.BGUI_COL)
+		info = SWIDGET.buildUniqueImage(image)
+		info.rect.x = SPQR.SPACER
+		info.rect.y = y
+		info.describe = ("info-box")
+		bwindow.addWidget(info)
+		# we need to store it as well
+		SGFX.gui.info_widget = info
+
 		# complete with centre on rome button
 		w = SGFX.gui.iWidth("rome_button")
 		h = SGFX.gui.iHeight("rome_button")

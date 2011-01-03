@@ -107,6 +107,8 @@ MOVE_OFF_BLD		= (0, 44)
 MOVE_OFF_BR			= PYGAME.Rect(0, 0, 45, 41)
 MOVE_OFF_BRD		= (34, 44)
 
+# box size for region icons
+REGION_ICON_SIZE	= 95
 # minimum size around move area
 MIN_MOVE_AREA		= 2 * HEX_FULLH
 # size of graphs in unit area
