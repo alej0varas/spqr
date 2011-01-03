@@ -16,7 +16,7 @@
 
 # pyconsole - a simple console for pygame based applications
 # Copyright (C) 2006  John Schanck
-# some (very minor) adjustments by maximinus (font type etc...)
+# some (very minor) adjustments by Chris Handy (font type etc...)
 
 import pygame, os, sys 
 from pygame.locals import *

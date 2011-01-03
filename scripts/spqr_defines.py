@@ -22,14 +22,14 @@ import pygame.locals as PYGAME
 # as they are, unless you really know what you are doing. Probably the
 # most useful when debugging is SPQR_FULLSCREEN
 
-VERSION				= "v0.3.592"
+VERSION				= "v0.3.6"
 AUTHOR				= "Chris Smith"
 EMAIL				= "maximinus@gmail.com"
 SYSTEM				= "GNU/Linux"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
-LAST_UPDATE			= "1st Jan 2011"
-CODELINES			= "5326"
+LAST_UPDATE			= "3rd Jan 2011"
+CODELINES			= "5387"
 FULLSCREEN			= False
 
 # before we go any further, this one is a must ;-)
@@ -134,8 +134,8 @@ TXT_MIN_LG			= 20
 PAN_RATIO			= 1
 GOLDEN_RATIO		= 1.618
 # location of Rome on main (graphical) map
-ROME_XPOS			= 1096
-ROME_YPOS			= 824
+ROME_XPOS			= 1250
+ROME_YPOS			= 1150
 # maximum number of units on any hex
 # despite this value, making it MORE than 4 will break the game
 MAX_STACKING		= 4

@@ -37,7 +37,8 @@ class CDirtyRect(object):
 # call with the x and y resolution of the screen, and a pointer to the data
 class CGFXEngine(object):
 	def __init__(self):
-		pass
+		self.info_widget = None
+		self.map_widget = None
 
 	def mainInit(self, width, height, fullscreen, load_screen= True):
 		"""Long, boring routine that initiates the gui"""
@@ -151,7 +152,6 @@ class CGFXEngine(object):
 		# load other data required by mapboard
 		self.updateMiniMap()
 		self.flash_on = False
-		self.info_widget = None
 
 	def displayLoadingScreen(self, width, height):
 		"""Displays the loading screen"""
@@ -163,13 +163,13 @@ class CGFXEngine(object):
 		pygame.display.update()
 
 	def iWidth(self, name):
-		return(self.images[name].get_width())
+		return self.images[name].get_width()
 	
 	def iHeight(self, name):
-		return(self.images[name].get_height())
+		return self.images[name].get_height()
 	
 	def image(self, name):
-		return(self.images[name])
+		return self.images[name]
 
 	def updateMapData(self):
 		"""The size of the regions is known by the size of the images
@@ -207,7 +207,7 @@ class CGFXEngine(object):
 		# since we always append to the list, the index is always
 		# the size of the array minus 1 (since we start the array at 0)
 		index = len(self.windows) - 1
-		return(index)
+		return index
 	
 	def addDirtyRect(self, new, rectangle):
 		"""Routine adds dirty rectangle and details to the current list"""
@@ -272,7 +272,7 @@ class CGFXEngine(object):
 					# is this the mini-map?
 					if bar.describe  ==  "mini-map":
 						# just update it
-						#self.updateMiniMap()
+						self.updateMiniMap()
 						x1 = foo.rect.x+bar.rect.x
 						y1 = foo.rect.y+bar.rect.y
 						self.screen.blit(bar.image, (x1, y1))
@@ -297,28 +297,25 @@ class CGFXEngine(object):
 	def updateMap(self):
 		"""Updates (i.e. redraws) map to main screen"""
 		self.screen.blit(self.image("buffer"), self.map_rect, self.map_screen)
-		# before blitting the mini map rect, we need to update the mini map itself
-		#self.screen.blit(self.image("small_map"), self.mini_dest, self.mini_source)
-		#pygame.draw.rect(self.screen, (0, 0, 0), self.blit_rect, 1)
-		# now redraw all the items in the top map window:
 		self.updateOverlayWindow()
 		pygame.display.flip()
 		# doing this *always* redraws the units as well, so make sure that
 		# the next flash unit action will be to erase the unit
 		self.unitFlashOn()
-		
+
 	# and this one merely blits the cursor in the mini map
 	def updateMiniMap(self):
 		"""Redraws mini-map, usually called after any changes to
 		   the map on the main screen"""
 		# work out what the corrent co-ords are for the mini-map cursor
-		#xpos = self.map_screen.x/self.width_ratio
-		#ypos = self.map_screen.y/self.height_ratio
-		#self.blit_rect.x = xpos+self.mini_x_offset
-		#self.blit_rect.y = ypos+self.mini_y_offset
-		#self.screen.blit(self.image["small_map"], self.mini_dest, self.mini_source)
-		#pygame.draw.rect(self.screen, (0, 0, 0), self.blit_rect, 1)
-		#pygame.display.flip()
+		xpos = self.map_screen.x / self.width_ratio
+		ypos = self.map_screen.y / self.height_ratio
+		self.blit_rect.x = xpos #+ self.mini_x_offset
+		self.blit_rect.y = ypos #+ self.mini_y_offset
+		if self.map_widget != None:
+			self.map_widget.image = self.images["small_map"].copy()
+			self.screen.blit(self.images["small_map"], self.mini_dest, self.mini_source)
+			pygame.draw.rect(self.map_widget.image, (0, 0, 0), self.blit_rect, 1)
 		return True
 	
 	def updateUnits(self):
@@ -391,7 +388,7 @@ class CGFXEngine(object):
 		event = pygame.event.poll()
 		# lets start with the simple case: handling keypress values
 		if event.type == KEYDOWN:
-			return(self.handleKeypress(event))
+			return self.handleKeypress(event)
 		# now handle animation requests from the timer
 		if event.type == pygame.USEREVENT and self.timer == True:
 			self.flashUnit()
@@ -957,22 +954,26 @@ class CGFXEngine(object):
 		"""Render the image for the widget that shows the region info"""
 		info = pygame.Surface(self.image("small_map").get_size()).convert_alpha()
 		info.fill(SPQR.BGUI_COL)
+		pygame.draw.rect(info, SPQR.COL_BLACK,
+						 pygame.Rect(0, 0, info.get_width(), info.get_height()), 1)
+		info.blit(self.image("mapicon_back"), 
+				  (info.get_width() - (self.iWidth("mapicon_back") + 4), 4))
 		icon_name = region + "_icon"
 		# draw the right region icon
 		if self.iWidth(icon_name) == SPQR.REGION_ICON_SIZE:
-			xpos = info.get_width() - (SPQR.REGION_ICON_SIZE + 2)
-			ypos = int((SPQR.REGION_ICON_SIZE - self.iHeight(icon_name)) / 2) + 2
+			xpos = info.get_width() - (SPQR.REGION_ICON_SIZE + 6)
+			ypos = int((SPQR.REGION_ICON_SIZE - self.iHeight(icon_name)) / 2) + 4
 		else:
-			xpos = info.get_width() - (SPQR.REGION_ICON_SIZE + 2) + \
+			xpos = info.get_width() - (SPQR.REGION_ICON_SIZE + 6) + \
 				   int((SPQR.REGION_ICON_SIZE - self.iWidth(icon_name)) / 2)
-			ypos = 2
+			ypos = 4
 		info.blit(self.image(icon_name), (xpos, ypos))
 		# render the region name, as well
 		# TODO: replace all _ with spaces and capitalise the first letter
-		text = self.fonts[SPQR.FONT_VERA].render(region, True, SPQR.COL_BLACK)
+		region = region.replace("_", " ").title()
+		text = self.fonts[SPQR.FONT_VERA_SM].render(region, True, SPQR.COL_BLACK)
 		info.blit(text, (int((info.get_width() - text.get_width()) / 2),
 						(info.get_height() - (text.get_height() + 2))))
-		
 		self.info_widget.image = info
 		self.info_widget.visible = True
 		self.updateGUI()
@@ -985,7 +986,7 @@ class CGFXEngine(object):
 		   I apologise for the length of this function"""
 		# just quickly, did we have any buttons?
 		if flags == 0:
-			return(SPQR.BUTTON_FAIL)
+			return SPQR.BUTTON_FAIL
 		# start by calculating the MINIMUM size for this messagebox and txt label
 		txt_width = ((self.iWidth("button")+8)*3)+4
 		width = txt_width+(SPQR.SPACER*2)
@@ -1100,7 +1101,7 @@ class CGFXEngine(object):
 		if self.windows[-1].modal == False:
 			self.unitFlashOn()
 		# return the value we got
-		return(self.callback_temp)
+		return self.callback_temp
 
 	def exitConsole(self):
 		"""Here's an easy one: kill the current console
@@ -1112,32 +1113,32 @@ class CGFXEngine(object):
 def msgboxOK(handle, xpos, ypos): 
 	"""Callback for messagebox ok button"""
 	gui.callback_temp = SPQR.BUTTON_OK
-	return(SPQR.BUTTON_OK)
+	return SPQR.BUTTON_OK
 
 def msgboxCancel(handle, xpos, ypos):
 	"""Callback for messagebox cancel button"""
 	gui.callback_temp = SPQR.BUTTON_CANCEL
-	return(SPQR.BUTTON_CANCEL)
+	return SPQR.BUTTON_CANCEL
 
 def msgboxYes(handle, xpos, ypos):
 	"""Callback for messagebox yes button"""
 	gui.callback_temp = SPQR.BUTTON_YES
-	return(SPQR.BUTTON_YES)
+	return SPQR.BUTTON_YES
 
 def msgboxNo(handle, xpos, ypos):
 	"""Callback for messagebox no button"""
 	gui.callback_temp = SPQR.BUTTON_NO
-	return(SPQR.BUTTON_NO)
+	return SPQR.BUTTON_NO
 
 def msgboxQuit(handle, xpos, ypos):
 	"""Callback for messagebox quit button"""
 	gui.callback_temp = SPQR.BUTTON_QUIT
-	return(SPQR.BUTTON_QUIT)
+	return SPQR.BUTTON_QUIT
 
 def msgboxIgnore(handle, xpos, ypos):
 	"""Callback for messagebox ignore button"""
 	gui.callback_temp = SPQR.BUTTON_IGNORE
-	return(SPQR.BUTTON_IGNORE)
+	return SPQR.BUTTON_IGNORE
 
 # this module acts as the GUI singleton
 gui = CGFXEngine()

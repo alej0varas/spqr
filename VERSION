@@ -1,6 +1,6 @@
 SPQR Game version history.
 
-Current version: 0.3.592
+Current version: 0.3.6
 
 Version History.
 
@@ -94,15 +94,18 @@ Version History.
 		Start of proper code re-structure
 0.3.592	General code structure much improved. Old data system taken out.
 		Code is being moved much closer to PEP-8
+0.3.6   Code is almost 100% at new code standard
+        Regions added. Code structure much improved.
 
 Notable milestones:
 
-0.0.65:	Looks like a gui, speeded up gfx a lot
-0.0.8:	Menus work, though they could look a bit better
-0.0.9:	Splitting code into modules: I learnt a lot about python
-0.2.0:	First technology demo (i.e. everything works, in it's own limited way)
+0.0.65	Looks like a gui, speeded up gfx a lot
+0.0.8	Menus work, though they could look a bit better
+0.0.9	Splitting code into modules: I learnt a lot about python
+0.2.0	First technology demo (i.e. everything works, in it's own limited way)
 			It actually feels like a game now, even if there is nothing to play
-0.2.8:	The movement phase has been implemented, you can almost feel the game now
-0.3.3:	GUI much improved, looks and feels very GNOME-like
-0.3.52:	Move to region-based game. GUI had many bugs removed: code looks better.
+0.2.8	The movement phase has been implemented, you can almost feel the game now
+0.3.3	GUI much improved, looks and feels very GNOME-like
+0.3.52	Move to region-based game. GUI had many bugs removed: code looks better.
+0.3.6	With new map and new region code, game looks a lot different.
 

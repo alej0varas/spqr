@@ -1,10 +1,7 @@
 Current TODO:
 
 Make widgets active by default.
-Clean-up the code style.
 Remove un-needed code.
-Build a setup program.
-Put regions into code.
 Add units.
 Let units move beteen regions.
 Put a simple game turn in.
@@ -55,4 +52,7 @@ This is list of TODO's (earliest first) that I have on record.
 *DONE*	Make flash animation pixel perfect
 *DONE*	Make animated move work properly again
 *DONE*	Add battle screen and code
+*DONE*  Clean-up the code style.
+*DONE*  Build a setup program.
+*DONE*  Put regions into code.
 

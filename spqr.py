@@ -190,6 +190,7 @@ class CSPQR(object):
 		bwindow.addWidget(info)
 		# we need to store it as well
 		SGFX.gui.info_widget = info
+		SGFX.gui.map_widget = mini_map
 
 		# complete with centre on rome button
 		w = SGFX.gui.iWidth("rome_button")
