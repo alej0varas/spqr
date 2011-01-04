@@ -34,7 +34,7 @@ class CSPQR(object):
 		self.intro = True
 		self.init_only = False
 		# init the data
-		self.data = SDATA.CInfo()
+		SDATA.addUnits()
 		self.sortOptions()
 		SGFX.gui.mainInit(SPQR.SCREEN_WIDTH, SPQR.SCREEN_HEIGHT, self.fullscreen)
 		# actually go any furthur?

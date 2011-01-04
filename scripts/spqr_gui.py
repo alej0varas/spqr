@@ -195,6 +195,10 @@ class CGFXEngine(object):
 			mask.blit(region, (0, 0), None, pygame.BLEND_ADD)
 			self.image("buffer").blit(mask, (i.rect.x, i.rect.y))
 
+	def renderUnits(self):
+		for i in SDATA.iterUnits():
+			print SDATA.getUnitPosition(i.name)
+
 	# now a function to add a window
 	# it has it's own function because it has to return the index number
 	# of the created window
@@ -754,8 +758,9 @@ class CGFXEngine(object):
 		   Back map, Regions""" 
 		# blit the original map across first
 		self.image("buffer").blit(self.image("map"), (0, 0))
-		# start by blitting the regions
+		# start by blitting the regions and units
 		self.renderRegions()
+		self.renderUnits()
 		# save this image as it is for now without the images for using
 		# as the backdrop for all unit animations
 		self.map_render.blit(self.image("buffer"), (0, 0))

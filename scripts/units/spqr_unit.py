@@ -30,6 +30,6 @@ class CUnit(object):
 		self.location = location
 		self.image = image
 		self.stats = stats
-		self.turn_done=False
-		self.owner=otext
+		self.turn_done = False
+
 

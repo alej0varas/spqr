@@ -24,10 +24,14 @@ import units.spqr_unit as SUNITS
 # definitions for the map, players and units
 # held as a singleton in a python module
 
+# set as name, location and image
+units = [["Legio_III", "etruria", "rome_legion"],
+		 ["Legio_X", "lucania_et_bruttiun", "praetorians"]]
+
 class CInfo(object):
 	def __init__(self):
 		self.year = SPQR.START_YEAR
-		self.units = []
+		self.units = {}
 		self.map = SMAP.CMap()
 
 	def initNewTurn(self):
@@ -52,8 +56,12 @@ def updateRegionMasks(masks):
 
 def iterRegions():
 	"""A custom iterator so we can change how regions are held"""
-	for i in data.map.regions:
-		yield i
+	for key in data.map.regions.iterkeys():
+		yield data.map.regions[key]
+
+def iterUnits():
+	for key in data.units.iterkeys():
+		yield data.units[key]
 
 def regionClicked(x, y):
 	"""Return name of region if clicked, or False"""
@@ -65,6 +73,15 @@ def regionClicked(x, y):
 			if data.map.masks[i.image].get_at((nx, ny))[3] != 0:
 				return i.image
 	return False
+
+def addUnits():
+	for i in units:
+		data.units[i[0]] = SUNITS.CUnit(i[0], 0, i[1], i[2], 0)
+
+def getUnitPosition(name):
+	unit = data.units[name]
+	position = data.map.regions[unit.location].unit_position
+	return position[0], position[1]
 
 data = CInfo()
 

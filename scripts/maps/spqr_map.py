@@ -18,25 +18,24 @@ from __future__ import absolute_import
 import pygame
 from .. import spqr_defines as SPQR
 
-regions = [["lucania_et_bruttiun", 1339, 1147, (184, 37, 37)],
-		   ["apulia_et_calabria", 1309, 1076, (184, 37, 37)],
-		   ["latium_et_campania", 1201, 1038, (184, 37, 37)],
-		   ["aemilia", 1157, 969, (55, 55, 230)],
-		   ["etruria", 1081, 970, (184, 37, 37)]]
+# set as: name, xpos, ypos, colour, (unit_x, unit_y)
+regions = [["lucania_et_bruttiun", 1339, 1147, (184, 37, 37), (1439, 1247)],
+		   ["apulia_et_calabria", 1309, 1076, (184, 37, 37), (1309, 1176)],
+		   ["latium_et_campania", 1201, 1038, (184, 37, 37), (1301, 1138)],
+		   ["aemilia", 1157, 969, (55, 55, 230), (1257, 1069)],
+		   ["etruria", 1081, 970, (184, 37, 37),(1181, 1070)]]
 
 class CMap(object):
 	def __init__(self):
-		self.regions = []
+		self.regions = {}
 		self.masks = {}
 		for i in regions:
-			self.regions.append(CRegion(i[0], i[1], i[2], i[3]))
-
-	def addRegion(self, region):
-		self.regions.append(region)
+			self.regions[i[0]] = CRegion(i[0], i[1], i[2], i[3], i[4])
 
 class CRegion(object):
-	def __init__(self, image, x, y, colour):
+	def __init__(self, image, x, y, colour, unit_pos):
 		self.image = image
 		self.rect = pygame.Rect(x, y, 0, 0)
 		self.colour = colour
+		self.unit_position = unit_pos
 
