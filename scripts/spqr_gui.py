@@ -97,7 +97,8 @@ class CGFXEngine(object):
 		# and the destination rect:
 		self.flash_rect = pygame.Rect(0, 0, 0, 0)
 		# index of troop we are flashing
-		self.flash_highlight=-1
+		self.flash_highlight = -1
+		self.current_highlight = -1
 		# modal windows use a dirty rect list to update, here it is
 		self.dirty = []
 		# set up the fonts
@@ -197,7 +198,7 @@ class CGFXEngine(object):
 
 	def renderUnits(self):
 		for i in SDATA.iterUnits():
-			print SDATA.getUnitPosition(i.name)
+			self.image("buffer").blit(self.image(i.image), SDATA.getUnitPosition(i.name))
 
 	# now a function to add a window
 	# it has it's own function because it has to return the index number
@@ -634,6 +635,11 @@ class CGFXEngine(object):
 		   over the map. Call with x and y, being the click on the map
 		   in screen co-ords"""
 		x, y = self.screenToMapCoords(x, y)
+		# first we check units, then cities, then regions
+		unit = SDATA.unitClicked(x, y)
+		if unit != False:
+			self.current_highlight = unit.name
+			self.unitFlashOn()
 		name = SDATA.regionClicked(x, y)
 		if name != False:
 			self.renderRegionInfoBox(name)
@@ -810,28 +816,20 @@ class CGFXEngine(object):
 		# we create here 3 images. One is the sprite ON, and the other OFF, for
 		# animation purposes. To do this, we grab the square area that we are
 		# going to animate from map_render, which doesn't contain any units:
-		# so we blit in all the parts of the the potential 6 units around the
-		# other hexes. Then we blit in the arrows as well. This is the erase render
+		# This is the erase render
 		# then we copy that image and add our focus unit: this is the other frame.
-		# This way the unit will flash but the arrows won't
-		# Finally though, when the user pans/updates the map, the arrows dissapear.
-		# So our final part is to update the back map with these arrows: and our
 		# third image is used to store the original status of the back map in this
 		# area so that we can restore the original state later
-		# and I don't really like long routines either, but this is pretty boring
-		# so I've let it ride
-
+		# TODO: split this huge routine up
 		# do we need to flash at all?
-		if self.data.troops.current_highlight == -1:
+		if self.flash_highlight == -1:
 			return False
-		# ok, here we go, second attempt, here's the logic to this:
-		# we need 2 images: the first has the area WITH the unit gfx and
-		# the movement arrows, the second has just the area from with the
-		# movement arrows. We just blit between the 2. Firstly we need
+		# Here's the logic to this: we need 2 images: the first has the area WITH 
+		# the unit gfx and, the second has just the area
+		# We just blit between the 2. Firstly we need
 		# to see if the unit highlight has changed at all
-		if self.flash_highlight != self.data.troops.current_highlight:
-			# we now have an new flashing unit. Firstly, remove the
-			# old blit area:
+		if self.flash_highlight != self.current_highlight:
+			# we now have an new flashing unit. Firstly, remove the old blit area
 			self.image("buffer").blit(self.flash_old, self.flash_rect)
 			# ok, let's store this new highlight
 			self.flash_highlight = self.data.troops.current_highlight			
@@ -839,35 +837,23 @@ class CGFXEngine(object):
 			self.flash_erase = pygame.Surface((SPQR.MOVESZ_X, SPQR.MOVESZ_Y), SRCALPHA)
 			# ok, we can blit the rendered map over
 			# get the x,y co-ords we need
-			x, y = self.data.board.getMapPixel(
-				self.data.troops.chx(), self.data.troops.chy())
-			# offset to correct pixel
-			x -= SPQR.MOVE_OFFX
-			y -= SPQR.MOVE_OFFY
+			x, y = SDATA.getUnitPosition(self.current_highlight)
 			# so we can calculate the blit rectangle
-			self.flash_rect = pygame.Rect(x, y, SPQR.MOVESZ_X, SPQR.MOVESZ_Y)
+			self.flash_rect = pygame.Rect(x, y, SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT)
 			# use this to copy are from map_render:
 			self.flash_erase.blit(self.map_render, (0, 0), self.flash_rect)
 			# also make a copy of the area to blit back to the back map:
-			self.flash_old = pygame.Surface((SPQR.MOVESZ_X, SPQR.MOVESZ_Y))
+			self.flash_old = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.HEIGHT))
 			self.flash_old.blit(self.image("buffer"), (0, 0), self.flash_rect)
-			# create another copy, this time for the arrows
-			arrow_img = pygame.Surface((SPQR.MOVESZ_X, SPQR.MOVESZ_Y), SRCALPHA)
-			arrow_img.blit(self.image("buffer"), (0, 0), self.flash_rect)
-			
 			# now we can construct the draw image. Get a copy of the last image
-			self.flash_draw = pygame.Surface((SPQR.MOVESZ_X, SPQR.MOVESZ_Y), SRCALPHA)
+			self.flash_draw = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT), SRCALPHA)
 			self.flash_draw.blit(self.flash_erase, (0, 0))
 			# then draw the unit over it
-			index = "rome_legion"
-			self.flash_draw.blit(self.image(index), (SPQR.MOVE_OFFX, SPQR.MOVE_OFFY))
+			index = SDATA.getUnitImage(self.current_highlight)
+			self.flash_draw.blit(self.image(index), (0, 0))
 			
-				
 			# make sure that we draw the erase part of the image first
 			self.flash_on = True
-			# finally (!) we can update the back map. We've already rendered back
-			# the original image from last time, so let's just blit our new part:
-			self.image("buffer").blit(arrow_img, self.flash_rect)
 			# screen map probably needs updating, do it here
 			self.updateMap()
 		
@@ -878,16 +864,16 @@ class CGFXEngine(object):
 			self.flash_rect.w, self.flash_rect.h)
 		# correct for on-screen co-ords
 		dest.x -= self.map_screen.x
-		dest.y -= (self.map_screen.y-SPQR.WINSZ_TOP+1)
+		dest.y -= self.map_screen.y - SPQR.WINSZ_TOP + 1
 		dest = dest.clip(self.map_rect)
 		if dest.h != 0:
 			# yes, we still have work to do
 			area = pygame.Rect(0, 0, dest.w, dest.h)
 			# correct for top and left of screen
 			if dest.x == 0:
-				area.x = SPQR.MOVESZ_X-dest.w
-			if dest.y == SPQR.WINSZ_TOP-1:
-				area.y = SPQR.MOVESZ_Y-dest.h
+				area.x = SPQR.UNIT_WIDTH - dest.w
+			if dest.y == SPQR.WINSZ_TOP - 1:
+				area.y = SPQR.UNIT_HEIGHT - dest.h
 			# now blit the right rectangle:
 			if self.flash_on == True:
 				self.screen.blit(self.flash_erase, dest, area)
@@ -935,24 +921,12 @@ class CGFXEngine(object):
 	def unitFlashOn(self):
 		"""Call to turn unit flashing back on. Returns False if this
 		   didn't happen for some reason"""
-		# if the end turn flag is on, then don't highlight, whatever
-		# else is happening
-		#if(self.data.info.end_turn == True):
-		#	return False
 		# already on?
-		#if(self.timer == True):
-		#	return True
+		if self.timer == True:
+			return True
 		# make sure first call is show the erase frame
-		#self.flash_on = True
-		# only flash if current unit is roman
-		#if(self.data.troops.getUnitFromHighlight().owner == SPQR.ROME_SIDE):
-		#	self.timer = True
-		return True
-
-	def updateArrowBackimage(self):
-		"""Called to update the image that overwrites the whole
-		   area used in the flash animation"""
-		self.flash_old.blit(self.image("buffer"), (0, 0), self.flash_rect)
+		self.flash_on = True
+		self.timer = True
 		return True
 
 	def renderRegionInfoBox(self, region):

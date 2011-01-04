@@ -19,11 +19,16 @@ import pygame
 from .. import spqr_defines as SPQR
 
 # set as: name, xpos, ypos, colour, (unit_x, unit_y)
-regions = [["lucania_et_bruttiun", 1339, 1147, (184, 37, 37), (1439, 1247)],
-		   ["apulia_et_calabria", 1309, 1076, (184, 37, 37), (1309, 1176)],
-		   ["latium_et_campania", 1201, 1038, (184, 37, 37), (1301, 1138)],
-		   ["aemilia", 1157, 969, (55, 55, 230), (1257, 1069)],
-		   ["etruria", 1081, 970, (184, 37, 37),(1181, 1070)]]
+regions = [["lucania_et_bruttiun", 1339, 1147, (184, 37, 37), (1368, 1160)],
+		   ["apulia_et_calabria", 1309, 1076, (184, 37, 37), (1333, 1100)],
+		   ["latium_et_campania", 1201, 1038, (184, 37, 37), (1241, 1094)],
+		   ["aemilia", 1157, 969, (55, 55, 230), (1209, 991)],
+		   ["etruria", 1081, 970, (184, 37, 37),(1133, 1014)]]
+
+class Position(object):
+	def __init__(self, position):
+		self.x = position[0]
+		self.y = position[1]
 
 class CMap(object):
 	def __init__(self):
@@ -37,5 +42,5 @@ class CRegion(object):
 		self.image = image
 		self.rect = pygame.Rect(x, y, 0, 0)
 		self.colour = colour
-		self.unit_position = unit_pos
+		self.unit_position = Position(unit_pos)
 

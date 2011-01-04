@@ -74,6 +74,15 @@ def regionClicked(x, y):
 				return i.image
 	return False
 
+def unitClicked(x, y):
+	"""Return name of unit clicked, or False"""
+	for i in iterUnits():
+		xpos = data.map.regions[i.location].unit_position.x
+		ypos = data.map.regions[i.location].unit_position.y
+		if x >= xpos and x <= (xpos + SPQR.UNIT_WIDTH) and y >= ypos and y <= (ypos + SPQR.UNIT_HEIGHT):
+			return i
+	return False
+
 def addUnits():
 	for i in units:
 		data.units[i[0]] = SUNITS.CUnit(i[0], 0, i[1], i[2], 0)
@@ -81,7 +90,11 @@ def addUnits():
 def getUnitPosition(name):
 	unit = data.units[name]
 	position = data.map.regions[unit.location].unit_position
-	return position[0], position[1]
+	return position.x, position.y
+
+def getUnitImage(name):
+	unit = data.units[name]
+	return unit.image
 
 data = CInfo()
 
