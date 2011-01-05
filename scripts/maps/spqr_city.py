@@ -16,10 +16,8 @@
 
 class CCity(object):
 	"""Defines a city in SPQR"""
-	def __init__(self, name, location, image):
-		self.name = text
-		self.location = location
+	def __init__(self, name, image):
+		self.name = name
 		self.image = image
-
 
 

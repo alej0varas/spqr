@@ -15,15 +15,16 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 from __future__ import absolute_import
-import pygame
 from .. import spqr_defines as SPQR
+import pygame
+from . import spqr_city as SCITY
 
-# set as: name, xpos, ypos, colour, (unit_x, unit_y)
-regions = [["lucania_et_bruttiun", 1339, 1147, (184, 37, 37), (1368, 1160)],
-		   ["apulia_et_calabria", 1309, 1076, (184, 37, 37), (1333, 1100)],
-		   ["latium_et_campania", 1201, 1038, (184, 37, 37), (1241, 1094)],
-		   ["aemilia", 1157, 969, (55, 55, 230), (1209, 991)],
-		   ["etruria", 1081, 970, (184, 37, 37),(1133, 1014)]]
+# set as: name, xpos, ypos, colour, (unit_x, unit_y), city_name
+regions = [["lucania_et_bruttiun", 1339, 1147, (184, 37, 37), (1380, 1184), "Brundisium"],
+		   ["apulia_et_calabria", 1309, 1076, (184, 37, 37), (1429, 1120), "Sybaris"],
+		   ["latium_et_campania", 1201, 1038, (184, 37, 37), (1233, 1103), "Roma"],
+		   ["aemilia", 1157, 969, (55, 55, 230), (1225, 979), "Arretium"],
+		   ["etruria", 1081, 970, (184, 37, 37),(1147, 1007), "Ariminum"]]
 
 class Position(object):
 	def __init__(self, position):
@@ -35,12 +36,13 @@ class CMap(object):
 		self.regions = {}
 		self.masks = {}
 		for i in regions:
-			self.regions[i[0]] = CRegion(i[0], i[1], i[2], i[3], i[4])
+			self.regions[i[0]] = CRegion(i[0], i[1], i[2], i[3], i[4], i[5])
 
 class CRegion(object):
-	def __init__(self, image, x, y, colour, unit_pos):
+	def __init__(self, image, x, y, colour, city_pos, city_name):
 		self.image = image
 		self.rect = pygame.Rect(x, y, 0, 0)
 		self.colour = colour
-		self.unit_position = Position(unit_pos)
+		self.city_position = Position(city_pos)
+		self.city = SCITY.CCity(city_name, "roman_medium")
 

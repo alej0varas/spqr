@@ -16,7 +16,6 @@
 
 import pygame
 import spqr_defines as SPQR
-import cities.spqr_city as SCITY
 import maps.spqr_map as SMAP
 import player.spqr_player as SPLAYER
 import units.spqr_unit as SUNITS
@@ -77,8 +76,8 @@ def regionClicked(x, y):
 def unitClicked(x, y):
 	"""Return name of unit clicked, or False"""
 	for i in iterUnits():
-		xpos = data.map.regions[i.location].unit_position.x
-		ypos = data.map.regions[i.location].unit_position.y
+		xpos = data.map.regions[i.location].city_position.x
+		ypos = data.map.regions[i.location].city_position.y
 		if x >= xpos and x <= (xpos + SPQR.UNIT_WIDTH) and y >= ypos and y <= (ypos + SPQR.UNIT_HEIGHT):
 			return i
 	return False
@@ -89,7 +88,11 @@ def addUnits():
 
 def getUnitPosition(name):
 	unit = data.units[name]
-	position = data.map.regions[unit.location].unit_position
+	position = data.map.regions[unit.location].city_position
+	return position.x, position.y
+
+def getCityPosition(region):
+	position = region.city_position
 	return position.x, position.y
 
 def getUnitImage(name):

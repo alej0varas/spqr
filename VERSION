@@ -59,22 +59,22 @@ Version History.
 0.3.32	Added individuals to scenario file, parser and dataset
 0.3.33	Unit list box and city list box complete except for callbacks
 0.3.34	Actually adding a pretty complex ItemList to handle all list displays
-			Code for this version *does not run*!!
+		Code for this version *does not run*!!
 0.3.35  Unit list box is broken but runs
 0.3.36	Made console work, with some simple commands
 0.3.37	Begads! The fancy complex ItemList builds all the gfx's fine.It just
-			needs the callbacks to be implemented
+		needs the callbacks to be implemented
 0.3.38	Because the ItemList was pretty complex, it has made me clean up a
-			whole bunch of window code, so that's what I'm ploughing through now
-			The end result is a smaller code base as the cruft gets taken out
+		whole bunch of window code, so that's what I'm ploughing through now
+		The end result is a smaller code base as the cruft gets taken out
 0.3.39	Arrow graphics added to ItemList (it's getting there!)
 0.3.391	SLOWLY the ItemList is coming together. The arrows work fine.
 0.3.4	Everything for the itemlist works ok!! Quite a fancy widget,
-			*definitly* the most complex one so far
+		*definitly* the most complex one so far
 0.3.41	Now I'm going slowly through all the annoying TODO bits, before
-			starting the battle screens again.
+		starting the battle screens again.
 0.3.42	Rewrote gui dirty rects code (was buggy): added double-click callback.
-			Fixed horrible bug that erased welcome screen at start
+		Fixed horrible bug that erased welcome screen at start
 0.3.43	Added MenuOption widget ready for battle screen
 0.3.431	Excuse to flag new start after a month off: also fixed dirty rect bug
 0.3.432	Removed 500 lines of code whilst tidying unit animation code :-)
@@ -96,6 +96,7 @@ Version History.
 		Code is being moved much closer to PEP-8
 0.3.6   Code is almost 100% at new code standard
         Regions added. Code structure much improved.
+0.3.61	Units, cities and flashing are back in the game.
 
 Notable milestones:
 

@@ -86,7 +86,14 @@ class CGFXEngine(object):
 		for i in files:
 			if i[-4:] == ".png":
 				self.images[i.split("/")[-1][:-4]] = pygame.image.load(i).convert_alpha()
-		
+
+		# set up the fonts
+		pygame.font.init()
+		self.fonts = []
+		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf", SPQR.FONT_STD))
+		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf", SPQR.FONT_SMALL))
+		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf", SPQR.FONT_LARGE))
+
 		# update buffer images
 		self.updateMapData()
 		self.renderPixelMap()
@@ -101,12 +108,6 @@ class CGFXEngine(object):
 		self.current_highlight = None
 		# modal windows use a dirty rect list to update, here it is
 		self.dirty = []
-		# set up the fonts
-		pygame.font.init()
-		self.fonts = []
-		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf", SPQR.FONT_STD))
-		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf", SPQR.FONT_SMALL))
-		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf", SPQR.FONT_LARGE))
 		# enable keyboard reponses
 		self.keyboard = SKEY.CKeyboard()
 		# start the first song here, as well
@@ -195,6 +196,25 @@ class CGFXEngine(object):
 			mask = self.image(i.image).copy()
 			mask.blit(region, (0, 0), None, pygame.BLEND_ADD)
 			self.image("buffer").blit(mask, (i.rect.x, i.rect.y))
+
+	def renderCities(self):
+		"""Draw all cities, and their names, on the board"""
+		self.fonts[SPQR.FONT_VERA].set_bold(True)
+		for i in SDATA.iterRegions():
+			name = i.city.name
+			location = i.city_position
+			x, y = SDATA.getCityPosition(i)
+			# draw the city
+			self.image("buffer").blit(self.image(i.city.image), (x,y))
+			# draw the text	
+			text = self.fonts[SPQR.FONT_VERA].render(name, True, SPQR.COL_WHITE)
+			shadow = self.fonts[SPQR.FONT_VERA].render(name, True, SPQR.COL_BLACK)
+			x -= int((text.get_width() - SPQR.UNIT_WIDTH) / 2)
+			y += SPQR.UNIT_HEIGHT - 2
+			self.image("buffer").blit(shadow, (x + 1, y + 1))
+			self.image("buffer").blit(text, (x, y))
+		self.fonts[SPQR.FONT_VERA].set_bold(False)
+
 
 	def renderUnits(self):
 		for i in SDATA.iterUnits():
@@ -768,6 +788,7 @@ class CGFXEngine(object):
 		self.image("buffer").blit(self.image("map"), (0, 0))
 		# start by blitting the regions and units
 		self.renderRegions()
+		self.renderCities()
 		# save this image as it is for now without the images for using
 		# as the backdrop for all unit animations
 		self.map_render.blit(self.image("buffer"), (0, 0))
