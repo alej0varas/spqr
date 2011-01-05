@@ -313,10 +313,10 @@ class CGFXEngine(object):
 		"""Redraws mini-map, usually called after any changes to
 		   the map on the main screen"""
 		# work out what the corrent co-ords are for the mini-map cursor
-		xpos = self.map_screen.x / self.width_ratio
-		ypos = self.map_screen.y / self.height_ratio
-		self.blit_rect.x = xpos #+ self.mini_x_offset
-		self.blit_rect.y = ypos #+ self.mini_y_offset
+		xpos = int(self.map_screen.x / self.width_ratio)
+		ypos = int(self.map_screen.y / self.height_ratio)
+		self.blit_rect.x = xpos + 1
+		self.blit_rect.y = ypos + 1
 		if self.map_widget != None:
 			self.map_widget.image = self.images["small_map"].copy()
 			self.screen.blit(self.images["small_map"], self.mini_dest, self.mini_source)
@@ -638,7 +638,7 @@ class CGFXEngine(object):
 		# first we check units, then cities, then regions
 		unit = SDATA.unitClicked(x, y)
 		if unit != False:
-			self.current_highlight = unit.name
+			self.flash_highlight = unit.name
 			self.unitFlashOn()
 		name = SDATA.regionClicked(x, y)
 		if name != False:
@@ -811,7 +811,6 @@ class CGFXEngine(object):
 	def flashUnit(self):
 		"""Flashes current highlighted unit. Returns True if the screen
 		   was updated, false otherwise"""
-		   
 		# this is quite a long, boring, routine so I'll explain all here:
 		# we create here 3 images. One is the sprite ON, and the other OFF, for
 		# animation purposes. To do this, we grab the square area that we are
@@ -832,7 +831,7 @@ class CGFXEngine(object):
 			# we now have an new flashing unit. Firstly, remove the old blit area
 			self.image("buffer").blit(self.flash_old, self.flash_rect)
 			# ok, let's store this new highlight
-			self.flash_highlight = self.data.troops.current_highlight			
+			self.current_highlight = self.flash_highlight			
 			# now we generate the part we use to erase the area.
 			self.flash_erase = pygame.Surface((SPQR.MOVESZ_X, SPQR.MOVESZ_Y), SRCALPHA)
 			# ok, we can blit the rendered map over
@@ -843,7 +842,7 @@ class CGFXEngine(object):
 			# use this to copy are from map_render:
 			self.flash_erase.blit(self.map_render, (0, 0), self.flash_rect)
 			# also make a copy of the area to blit back to the back map:
-			self.flash_old = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.HEIGHT))
+			self.flash_old = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT))
 			self.flash_old.blit(self.image("buffer"), (0, 0), self.flash_rect)
 			# now we can construct the draw image. Get a copy of the last image
 			self.flash_draw = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT), SRCALPHA)
