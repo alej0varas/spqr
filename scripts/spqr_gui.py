@@ -97,8 +97,8 @@ class CGFXEngine(object):
 		# and the destination rect:
 		self.flash_rect = pygame.Rect(0, 0, 0, 0)
 		# index of troop we are flashing
-		self.flash_highlight = -1
-		self.current_highlight = -1
+		self.flash_highlight = None
+		self.current_highlight = None
 		# modal windows use a dirty rect list to update, here it is
 		self.dirty = []
 		# set up the fonts
@@ -640,6 +640,8 @@ class CGFXEngine(object):
 		if unit != False:
 			self.flash_highlight = unit.name
 			self.unitFlashOn()
+		else:
+			self.unitFlashAndOff()
 		name = SDATA.regionClicked(x, y)
 		if name != False:
 			self.renderRegionInfoBox(name)
@@ -766,10 +768,10 @@ class CGFXEngine(object):
 		self.image("buffer").blit(self.image("map"), (0, 0))
 		# start by blitting the regions and units
 		self.renderRegions()
-		self.renderUnits()
 		# save this image as it is for now without the images for using
 		# as the backdrop for all unit animations
 		self.map_render.blit(self.image("buffer"), (0, 0))
+		self.renderUnits()
 		return True
 
 	def renderGameTurn(self):
@@ -821,7 +823,7 @@ class CGFXEngine(object):
 		# area so that we can restore the original state later
 		# TODO: split this huge routine up
 		# do we need to flash at all?
-		if self.flash_highlight == -1:
+		if self.flash_highlight == None:
 			return False
 		# Here's the logic to this: we need 2 images: the first has the area WITH 
 		# the unit gfx and, the second has just the area
