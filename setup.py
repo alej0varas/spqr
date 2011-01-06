@@ -26,6 +26,7 @@ from scripts import spqr_defines as SPQR
 from scripts import spqr_gui as SGFX
 from scripts import spqr_window as SWINDOW
 from scripts import spqr_widgets as SWIDGET
+from scripts import spqr_ybuild as SYAML
 
 SCREEN_WIDTH = 285
 SCREEN_HEIGHT = 192
@@ -40,7 +41,10 @@ def cancelClick(handle, x, y):
 	"""quit utility and don't change anything"""
 	sys.exit(True)
 
-def setupWindow():
+def setupWindow():   
+   SYAML.createWindow("../yaml/setup_window.yaml")
+
+def setupWindow2():
 	# get a fullsize window, and add the options to it
 	window = SWINDOW.CWindow(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
 							 "", False, "main-window")
