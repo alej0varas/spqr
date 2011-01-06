@@ -209,8 +209,12 @@ class CGFXEngine(object):
 			# draw the text	
 			text = self.fonts[SPQR.FONT_VERA].render(name, True, SPQR.COL_WHITE)
 			shadow = self.fonts[SPQR.FONT_VERA].render(name, True, SPQR.COL_BLACK)
+			border = pygame.Surface((text.get_width() + 2, text.get_height() + 2))
+			border.fill(SPQR.COL_BLACK)
+			border.set_alpha(127)
 			x -= int((text.get_width() - SPQR.UNIT_WIDTH) / 2)
 			y += SPQR.UNIT_HEIGHT - 2
+			self.image("buffer").blit(border,(x -1, y -1))
 			self.image("buffer").blit(shadow, (x + 1, y + 1))
 			self.image("buffer").blit(text, (x, y))
 		self.fonts[SPQR.FONT_VERA].set_bold(False)
@@ -410,7 +414,7 @@ class CGFXEngine(object):
 		   for user input (i.e. most of the time). It doens't actually do
 		   anything with the input except pass the event along to somewhere
 		   else, so think of it more like a sorting office"""
-		event = pygame.event.poll()
+		event = pygame.event.wait()
 		# lets start with the simple case: handling keypress values
 		if event.type == KEYDOWN:
 			return self.handleKeypress(event)
@@ -675,19 +679,16 @@ class CGFXEngine(object):
 	# this is the main game loop. There are 2 varients of it, one which keeps
 	# looping forever, and a solo version which runs only once
 	def mainLoop(self):
-		"""CGFXEngine.mainLoop() - call with nothing
-		   Main loop for game"""
-		exit = False
-		while(exit == False):
+		"""CGFXEngine.mainLoop() - call with nothing"""
+		while True:
 			pygame.event.pump()
 			# ok main loop: after setting everything up, just keep calling self.checkInputs()
-			# we ignore any map scrolls if the top level window is model
-			x, y = pygame.mouse.get_pos()
-			if self.windows[-1].modal == False:
-				if self.checkScrollArea(x, y) == True:
-					continue
-			# now check normal events
 			self.checkInputs()
+
+	def mainLoopSolo(self):
+		"""As mainLoop, but only for 1 event"""
+		pygame.event.pump()
+		self.checkInputs()
 
 	# this is the function that allows you to pan the the map with the 
 	# middle mouse button
@@ -721,19 +722,6 @@ class CGFXEngine(object):
 				self.updateMiniMap()
 				self.updateMap()
 
-	# this is the 'run once only' version of mainLoop
-	def mainLoopSolo(self):
-		"""CGFXEngine.mainLoopSolo() - call with nothing
-		   Returns True if map moved, false otherwise"""
-		pygame.event.pump()
-		x, y = pygame.mouse.get_pos()
-		if self.windows[len(self.windows)-1].modal == False:
-			if self.checkScrollArea(x, y) == True:
-				return True
-		# now check normal events
-		self.checkInputs()
-		return False
-	
 	# tries to fit text onto a surface
 	# returns False if area is too small, otherwise returns
 	# True and renders it in the gui spare image	
