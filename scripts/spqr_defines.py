@@ -28,8 +28,8 @@ EMAIL				= "maximinus@gmail.com"
 SYSTEM				= "GNU/Linux"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
-LAST_UPDATE			= "5th Jan 2011"
-CODELINES			= "5523"
+LAST_UPDATE			= "6th Jan 2011"
+CODELINES			= "5454"
 FULLSCREEN			= False
 
 # before we go any further, this one is a must ;-)

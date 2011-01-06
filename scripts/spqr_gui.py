@@ -511,63 +511,6 @@ class CGFXEngine(object):
 					return True
 		return False
 
-	# simple: do we have to scroll the map? If so, do it now!
-	def checkScrollArea(self, x, y):
-		"""If the map is scrolled by mouse on the outside, then call
-		   this routine with the x and y mouse co-ords. Returns True
-		   if the screen (and thus the map) were updated"""
-		update = False
-		if x == 0:
-			if y == 0:
-				# scroll down right
-				self.map_screen.x -= SPQR.SCROLL_DIAG
-				self.map_screen.y -= SPQR.SCROLL_DIAG
-				update=True
-			elif y == (SPQR.SCREEN_HEIGHT - 1):
-				# scroll up right
-				self.map_screen.x -= SPQR.SCROLL_DIAG
-				self.map_screen.y += SPQR.SCROLL_DIAG
-				update = True
-			else:
-				# scroll the map right
-				self.map_screen.x -= SPQR.SCROLL_SPEED
-				update = True
-		elif x == (SPQR.SCREEN_WIDTH - 1):
-			if y == 0:
-				# scroll down left
-				self.map_screen.x += SPQR.SCROLL_DIAG
-				self.map_screen.y -= SPQR.SCROLL_DIAG
-				update = True
-			elif y == (SPQR.SCREEN_HEIGHT-1):
-				# scroll up left
-				self.map_screen.x += SPQR.SCROLL_DIAG
-				self.map_screen.y += SPQR.SCROLL_DIAG
-				update = True
-			else:
-				# scroll map left
-				self.map_screen.x += SPQR.SCROLL_SPEED
-				update = True
-		elif y == 0:
-			# scroll map down
-			self.map_screen.y -= SPQR.SCROLL_SPEED
-			update = True
-		elif y == (SPQR.SCREEN_HEIGHT-1):
-			# scroll map up
-			self.map_screen.y += SPQR.SCROLL_SPEED
-			update = True
-		# so, if something, then we need to re-draw the screen display
-		if update == True:
-			# clear any menu flags we have
-			self.mouse_active = False
-			# check the scroll areas...
-			self.normalizeScrollArea()
-			# and then finally draw it!
-			self.updateMiniMap()
-			self.updateMap()				
-			return True
-		# return false if no update done
-		return False
-	
 	# use this function to test the mouse against all objects
 	def testMouse(self, x, y, action):
 		"""testMouse returns False if nothing got called
