@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# SPQR source code, Copyright 2005-2010 Chris Smith
+# SPQR source code, Copyright 2005-2011 The SPQR Team
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

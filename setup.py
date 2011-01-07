@@ -1,7 +1,5 @@
 #!/usr/bin/python
 
-# SPQR source code, Copyright 2005-2010 Chris Smith
-
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
@@ -42,7 +40,7 @@ def cancelClick(handle, x, y):
 	sys.exit(True)
 
 def setupWindow():   
-   SYAML.createWindow("../yaml/setup_window.yaml")
+   SYAML.createWindow("../layouts/setup_window.yml")
 
 def setupWindow2():
 	# get a fullsize window, and add the options to it

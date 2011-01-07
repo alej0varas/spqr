@@ -1,7 +1,5 @@
 #!/usr/bin/python
 
-# SPQR source code, Copyright 2005-2010 The SPQR Team
-
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
@@ -59,17 +57,20 @@ def createWidget(wlist):
 	elif wlist['widget'] == "CButton":
 		button = SWIDGET.CButton(wlist['x'], wlist['y'], wlist['text'])
 		for c in range(len(wlist['callbacks'])):
-			if wlist['callbacks'][c].keys()[0]=="lclk" :
+		
+			print c
+		
+			if wlist['callbacks'][c].keys()[0] == "lclk":
 				button.callbacks.mouse_lclk = globals()[wlist['callbacks'][c]["lclk"]]
-			elif wlist['callbacks'][c].keys()[0]=="over" :
+			elif wlist['callbacks'][c].keys()[0] == "over" :
 				button.callbacks.mouse_over = globals()[wlist['callbacks'][c]["over"]]
-			elif wlist['callbacks'][c].keys()[0]=="rclk" :
+			elif wlist['callbacks'][c].keys()[0] == "rclk" :
 				button.callbacks.mouse_rclk = globals()[wlist['callbacks'][c]["rclk"]]
-			elif wlist['callbacks'][c].keys()[0]=="ldown" :
+			elif wlist['callbacks'][c].keys()[0] == "ldown" :
 				button.callbacks.mouse_ldown = globals()[wlist['callbacks'][c]["ldown"]]
-			elif wlist['callbacks'][c].keys()[0]=="rdown" :
+			elif wlist['callbacks'][c].keys()[0] == "rdown" :
 				button.callbacks.mouse_rdown = globals()[wlist['callbacks'][c]["rdown"]]
-			elif wlist['callbacks'][c].keys()[0]=="dclick" :
+			elif wlist['callbacks'][c].keys()[0] == "dclick" :
 				button.callbacks.mouse_dclick = globals()[wlist['callbacks'][c]["dclick"]]
 	return button
 
