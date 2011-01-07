@@ -25,7 +25,7 @@ class CUnit(object):
 		 hence the odd maths when it calculates morale and quality"""
 	def __init__(self, name, move, location, image, stats):
 		self.name = name
-		self.move = move
+		self.moves = move
 		self.moves_left = move
 		self.location = location
 		self.image = image

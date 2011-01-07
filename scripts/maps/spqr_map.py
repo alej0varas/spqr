@@ -17,6 +17,7 @@
 from __future__ import absolute_import
 from .. import spqr_defines as SPQR
 import pygame
+import networkx as nx
 from . import spqr_city as SCITY
 
 # set as: name, xpos, ypos, colour, (unit_x, unit_y), city_name
@@ -35,8 +36,10 @@ class CMap(object):
 	def __init__(self):
 		self.regions = {}
 		self.masks = {}
+		self.graph = nx.Graph()
 		for i in regions:
 			self.regions[i[0]] = CRegion(i[0], i[1], i[2], i[3], i[4], i[5])
+			self.graph.add_node(self.regions[i[0]])
 
 class CRegion(object):
 	def __init__(self, image, x, y, colour, city_pos, city_name):

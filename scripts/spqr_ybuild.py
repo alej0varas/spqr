@@ -57,9 +57,6 @@ def createWidget(wlist):
 	elif wlist['widget'] == "CButton":
 		button = SWIDGET.CButton(wlist['x'], wlist['y'], wlist['text'])
 		for c in range(len(wlist['callbacks'])):
-		
-			print c
-		
 			if wlist['callbacks'][c].keys()[0] == "lclk":
 				button.callbacks.mouse_lclk = globals()[wlist['callbacks'][c]["lclk"]]
 			elif wlist['callbacks'][c].keys()[0] == "over" :

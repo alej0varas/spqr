@@ -19,5 +19,9 @@ class CCity(object):
 	def __init__(self, name, image):
 		self.name = name
 		self.image = image
-
+		self.population = 40000
+		self.happiness = 5
+		self.food_consumption = 2000
+		self.direct_tax = 1
+		self.indirect_tax = 3
 

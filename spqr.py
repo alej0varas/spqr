@@ -150,7 +150,7 @@ class CSPQR(object):
 			menu[3].addChild(SMENU.CMenuChild("Show unit names", "debug", "", SEVENT.consoleUnitNames))
 			menu[3].addChild(SMENU.CMenuChild("Show unit IDs", "debug", "", SEVENT.consoleUnitNumbers))
 			menu[3].addChild(SMENU.CMenuChild("Show unit owners", "debug", "", SEVENT.consoleUnitOwners))
-			menu[3].addChild(SMENU.CMenuChild("Show city names", "debug", "", SEVENT.consoleCityNames))
+			menu[3].addChild(SMENU.CMenuChild("Show example city", "debug", "", SEVENT.showCity))
 			menu[3].addChild(SMENU.CMenuChild("sep", "debug", "", SEVENT.notYetCoded))
 			menu[3].addChild(SMENU.CMenuChild("Window test", "debug", "", SEVENT.windowTest))
 			menu[3].addChild(SMENU.CMenuChild("Widget test", "debug", "", SEVENT.widgetTest))

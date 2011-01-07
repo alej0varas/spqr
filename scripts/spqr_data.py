@@ -91,6 +91,10 @@ def getUnitPosition(name):
 	position = data.map.regions[unit.location].city_position
 	return position.x, position.y
 
+def getUnitMoves(name):
+	unit = data.units[name]
+	return unit.moves_left
+
 def getCityPosition(region):
 	position = region.city_position
 	return position.x, position.y

@@ -244,12 +244,45 @@ def menuSave(handle, xpos, ypos):
 		"Save Game")
 	return True
 
+def showCity(handle, xpos, ypos):
+	"""Display city information screen"""
+	city = SDATA.data.map.regions["latium_et_campania"].city
+
+	window = SWINDOW.CWindow(-1, -1, 300, 200, "City Info", True)
+	window.modal = True
+	# we need a label for the name
+	lbl_name = SWIDGET.buildLabel(city.name, SPQR.FONT_VERA_LG)
+	lbl_name.rect.x = 20
+	lbl_name.rect.y = 20
+	# a picture of city and surrounding area
+	picture = pygame.Surface((80, 80))
+	picture.blit(SGFX.gui.image("buffer"), (0, 0))
+	city_image = SWIDGET.buildUniqueImage(picture)
+	city_image.rect.x = 20
+	city_image.rect.y = 60
+	# labels for data:
+	lbl_population = SWIDGET.buildLabel("Population", SPQR.FONT_VERA)
+	lbl_happiness = SWIDGET.buildLabel("Happiness", SPQR.FONT_VERA)
+	lbl_food = SWIDGET.buildLabel("Food consumption", SPQR.FONT_VERA)
+	
+	btn_ok = SWIDGET.CButton(50, 150, "OK")
+	btn_ok.callbacks.mouse_lclk = killModalWindow
+	btn_ok.active = True
+	window.addWidget(lbl_name)
+	window.addWidget(city_image)
+	window.addWidget(btn_ok)
+	SGFX.gui.addWindow(window)
+	SGFX.gui.unitFlashAndOff()
+	# setup dirty rect stuff
+	SGFX.gui.addDirtyRect(window.drawWindow(), window.rect)
+	return True
+
 def menuEmpireSenate(handle, xpos, ypos):
 	"""Temp routine, just displays a messagebox for now"""
 	string = "It is not possible to visit the senate at this moment in time."
 	SGFX.gui.messagebox(SPQR.BUTTON_OK, string, "Visit Senate")
 	return True
-	
+
 def menuEmpireMilitary(handle, xpos, ypos):
 	"""Routine sets up and displays the unit display box
 	   Always returns True"""

@@ -38,7 +38,7 @@ class CButtonDetails(object):
 # define an CWindow
 class CWindow(object):
 	"""Base window class
-	   Call with gui - pointer the gui, x,y - position
+	   Call with x,y - position
 	   width,height, title - text on top of window,
 	   draw - wether to place on screen or not"""
 	def __init__(self, x, y, width, height, title, draw = True, describe = "CWindow"):
