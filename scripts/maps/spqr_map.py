@@ -20,12 +20,17 @@ import pygame
 import networkx as nx
 from . import spqr_city as SCITY
 
-# set as: name, xpos, ypos, colour, (unit_x, unit_y), city_name
-regions = [["lucania_et_bruttiun", 1339, 1147, (184, 37, 37), (1380, 1184), "Brundisium"],
-		   ["apulia_et_calabria", 1309, 1076, (184, 37, 37), (1429, 1120), "Sybaris"],
-		   ["latium_et_campania", 1201, 1038, (184, 37, 37), (1233, 1103), "Roma"],
-		   ["aemilia", 1157, 969, (55, 55, 230), (1225, 979), "Arretium"],
-		   ["etruria", 1081, 970, (184, 37, 37),(1147, 1007), "Ariminum"]]
+# set as: name, xpos, ypos, colour, (unit_x, unit_y), city_name, conecting regions
+regions = [["lucania_et_bruttiun", 1339, 1147, (184, 37, 37), (1380, 1184),
+			"Brundisium", ["apulia_et_calabria", "latium_et_campania"]],
+		   ["apulia_et_calabria", 1309, 1076, (184, 37, 37), (1429, 1120),
+		    "Sybaris", ["latium_et_campania", "lucania_et_bruttiun"]],
+		   ["latium_et_campania", 1201, 1038, (184, 37, 37), (1233, 1103),
+		    "Roma", ["lucania_et_bruttiun", "apulia_et_calabria", "aemilia", "etruria"]],
+		   ["aemilia", 1157, 969, (55, 55, 230), (1225, 979),
+		    "Arretium", ["latium_et_campania", "etruria"]],
+		   ["etruria", 1081, 970, (184, 37, 37),(1147, 1007),
+		    "Ariminum", ["latium_et_campania", "aemilia"]]]
 
 class Position(object):
 	def __init__(self, position):
@@ -39,7 +44,14 @@ class CMap(object):
 		self.graph = nx.Graph()
 		for i in regions:
 			self.regions[i[0]] = CRegion(i[0], i[1], i[2], i[3], i[4], i[5])
+		# repeat again for graph connections
+		for i in regions:
 			self.graph.add_node(self.regions[i[0]])
+			for connect in i[6]:
+				self.graph.add_edge(self.regions[i[0]], self.regions[connect])
+	
+	def getNeighbors(self, region):
+		return [i.image for i in self.graph.neighbors(self.regions[region])]
 
 class CRegion(object):
 	def __init__(self, image, x, y, colour, city_pos, city_name):

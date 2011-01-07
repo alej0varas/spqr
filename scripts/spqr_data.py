@@ -84,7 +84,7 @@ def unitClicked(x, y):
 
 def addUnits():
 	for i in units:
-		data.units[i[0]] = SUNITS.CUnit(i[0], 0, i[1], i[2], 0)
+		data.units[i[0]] = SUNITS.CUnit(i[0], 1, i[1], i[2], 1)
 
 def getUnitPosition(name):
 	unit = data.units[name]
@@ -95,6 +95,10 @@ def getUnitMoves(name):
 	unit = data.units[name]
 	return unit.moves_left
 
+def getUnitRegion(name):
+	unit = data.units[name]
+	return unit.location
+
 def getCityPosition(region):
 	position = region.city_position
 	return position.x, position.y
@@ -102,6 +106,9 @@ def getCityPosition(region):
 def getUnitImage(name):
 	unit = data.units[name]
 	return unit.image
+
+def getNeighbors(region):
+	return data.map.getNeighbors(region)
 
 data = CInfo()
 

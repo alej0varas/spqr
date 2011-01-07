@@ -605,8 +605,8 @@ class CGFXEngine(object):
 		# first we check units, then cities, then regions
 		unit = SDATA.unitClicked(x, y)
 		if unit != False:
-			if SDATA.getUnitMoves(unit) > 0:
-				self.highlightMoves(unit)
+			if unit.moves_left > 0:
+				self.highlightMoves(unit.name)
 		else:
 			self.unitFlashAndOff()
 		name = SDATA.regionClicked(x, y)
@@ -621,8 +621,14 @@ class CGFXEngine(object):
 
 	def highlightMoves(self, unit):
 		"""Redraw buffer with highlighted areas and animate the given unit"""
+		# get possible 1 move locations
+		region = SDATA.getUnitRegion(unit)
+		print "Unit is in ", region
+		moves = SDATA.getNeighbors(region)
+		print "It can go to:"
+		print moves
 		# animate the unit
-		self.flash_highlight = unit.name
+		self.flash_highlight = unit
 		self.unitFlashOn()
 
 	# this is the main game loop. There are 2 varients of it, one which keeps
