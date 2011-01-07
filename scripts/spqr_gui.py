@@ -154,6 +154,8 @@ class CGFXEngine(object):
 		# load other data required by mapboard
 		self.updateMiniMap()
 		self.flash_on = False
+		# list to hold possible moves being shown
+		self.map_click_moves = []
 
 	def displayLoadingScreen(self, width, height):
 		"""Displays the loading screen"""
@@ -602,6 +604,10 @@ class CGFXEngine(object):
 		   over the map. Call with x and y, being the click on the map
 		   in screen co-ords"""
 		x, y = self.screenToMapCoords(x, y)
+		# waiting for move input? then deal with it
+		if self.map_click_moves != []:
+			self.moveUnit(SDATA.regionClicked(x, y))
+			return True
 		# first we check units, then cities, then regions
 		unit = SDATA.unitClicked(x, y)
 		if unit != False:
@@ -619,17 +625,48 @@ class CGFXEngine(object):
 				self.updateGUI()
 		return True
 
+	def moveUnit(self, region):
+		"""Move the unit (or not)"""
+		# there are 3 choices: player clicked no region,
+		# or region not on list: ignore
+		# player clicked unit region / unit: reset map and move on
+		# played clicked region on list: move unit
+		# get current unit
+		unit = self.flash_highlight
+		if region == SDATA.getUnitRegion(unit):
+			# cancel everything
+			self.map_click_moves = []
+			self.unitFlashAndOff()
+			self.renderPixelMap()
+			self.updateMap()
+			return False
+		if region in self.map_click_moves:
+			print "Move the unit", unit, "to", region
+			self.map_click_moves = []
+			self.unitFlashAndOff()
+			self.renderPixelMap()
+			self.updateMap()
+			return True
+		# must have clicked outside
+		return False
+
 	def highlightMoves(self, unit):
 		"""Redraw buffer with highlighted areas and animate the given unit"""
 		# get possible 1 move locations
-		region = SDATA.getUnitRegion(unit)
-		print "Unit is in ", region
-		moves = SDATA.getNeighbors(region)
-		print "It can go to:"
-		print moves
+		moves = SDATA.getNeighbors(SDATA.getUnitRegion(unit))
+		# now highlight all of those regions
+		for i in moves:
+			name = SDATA.getRegion(i)
+			region = pygame.Surface(self.image(name.image + "_mask").get_size())
+			region.fill(SPQR.COL_WHITE)
+			mask = self.image(name.image + "_mask").copy()
+			mask.blit(region, (0, 0), None, pygame.BLEND_ADD)
+			self.image("buffer").blit(mask, (name.rect.x, name.rect.y))
+		self.updateMap()
 		# animate the unit
 		self.flash_highlight = unit
 		self.unitFlashOn()
+		self.map_click_moves = moves
 
 	# this is the main game loop. There are 2 varients of it, one which keeps
 	# looping forever, and a solo version which runs only once

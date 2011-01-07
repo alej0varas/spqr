@@ -107,6 +107,9 @@ def getUnitImage(name):
 	unit = data.units[name]
 	return unit.image
 
+def getRegion(region):
+	return data.map.regions[region]
+
 def getNeighbors(region):
 	return data.map.getNeighbors(region)
 
