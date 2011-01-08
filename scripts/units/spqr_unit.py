@@ -32,4 +32,3 @@ class CUnit(object):
 		self.stats = stats
 		self.turn_done = False
 
-

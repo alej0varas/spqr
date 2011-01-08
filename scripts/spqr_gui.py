@@ -627,27 +627,23 @@ class CGFXEngine(object):
 
 	def moveUnit(self, region):
 		"""Move the unit (or not)"""
-		# there are 3 choices: player clicked no region,
-		# or region not on list: ignore
-		# player clicked unit region / unit: reset map and move on
+		def cancelMoves(): 
+			self.map_click_moves = []
+			self.renderPixelMap()
+			self.updateMap()
+		# there are 2 choices: player clicked no region,
+		# or region not on list: reset map and move on
 		# played clicked region on list: move unit
-		# get current unit
-		unit = self.flash_highlight
-		if region == SDATA.getUnitRegion(unit):
-			# cancel everything
-			self.map_click_moves = []
-			self.unitFlashAndOff()
-			self.renderPixelMap()
-			self.updateMap()
-			return False
 		if region in self.map_click_moves:
+		# get current unit
+			unit = self.flash_highlight
 			print "Move the unit", unit, "to", region
-			self.map_click_moves = []
+			cancelMoves()
 			self.unitFlashAndOff()
-			self.renderPixelMap()
-			self.updateMap()
 			return True
-		# must have clicked outside
+		# cancel everything
+		cancelMoves()
+		self.unitFlashAndOff()
 		return False
 
 	def highlightMoves(self, unit):

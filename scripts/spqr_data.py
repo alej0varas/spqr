@@ -14,7 +14,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import pygame
+import pygame, sys
 import spqr_defines as SPQR
 import maps.spqr_map as SMAP
 import player.spqr_player as SPLAYER
@@ -83,8 +83,12 @@ def unitClicked(x, y):
 	return False
 
 def addUnits():
+	"""Used at start of game to add all units"""
 	for i in units:
 		data.units[i[0]] = SUNITS.CUnit(i[0], 1, i[1], i[2], 1)
+		if data.map.addUnit(i[0], i[1]) == False:
+			print "Error: Too many units in ", i[0]
+			sys.exit(False)
 
 def getUnitPosition(name):
 	unit = data.units[name]

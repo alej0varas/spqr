@@ -52,6 +52,12 @@ class CMap(object):
 	
 	def getNeighbors(self, region):
 		return [i.image for i in self.graph.neighbors(self.regions[region])]
+		
+	def addUnit(self, name, region):
+		if len(self.regions[region].units) == SPQR.MAX_STACKING:
+			return False
+		self.regions[region].units.append(name)
+		return True
 
 class CRegion(object):
 	def __init__(self, image, x, y, colour, city_pos, city_name):
@@ -60,4 +66,6 @@ class CRegion(object):
 		self.colour = colour
 		self.city_position = Position(city_pos)
 		self.city = SCITY.CCity(city_name, "roman_medium")
+		self.units = []
+
 

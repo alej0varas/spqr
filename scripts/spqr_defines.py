@@ -22,14 +22,14 @@ import pygame.locals as PYGAME
 # as they are, unless you really know what you are doing. Probably the
 # most useful when debugging is SPQR_FULLSCREEN
 
-VERSION				= "v0.3.61"
+VERSION				= "v0.3.612"
 AUTHOR				= "Chris Smith"
 EMAIL				= "maximinus@gmail.com"
 SYSTEM				= "GNU/Linux"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
-LAST_UPDATE			= "6th Jan 2011"
-CODELINES			= "5454"
+LAST_UPDATE			= "8th Jan 2011"
+CODELINES			= "5589"
 FULLSCREEN			= False
 
 # before we go any further, this one is a must ;-)
@@ -91,36 +91,9 @@ MOVE_OFFY			= 8
 MOVESZ_X			= 69
 MOVESZ_Y			= 64
 
-# offsets for units around a hex
-# first one tells you where to blit from with the other unit
-# next one (ends in D) is the destination z,y offset
-MOVE_OFF_LEFT		= PYGAME.Rect(HEX_FULLW - 13, 0, 13, UNIT_HEIGHT)
-MOVE_OFF_LEFTD		= (0, 8)
-MOVE_OFF_RIGHT		= PYGAME.Rect(0, 0, 14, 41)
-MOVE_OFF_RIGHTD		= (HEX_FULLW + 13, 8)
-MOVE_OFF_TL			= PYGAME.Rect(8, 28, 34, 19)
-MOVE_OFF_TLD		= (0, 0)
-MOVE_OFF_TR			= PYGAME.Rect(0, 28, 45, 20)
-MOVE_OFF_TRD		= (34, 0)
-MOVE_OFF_BL			= PYGAME.Rect(8, 0, 37, 41)
-MOVE_OFF_BLD		= (0, 44)
-MOVE_OFF_BR			= PYGAME.Rect(0, 0, 45, 41)
-MOVE_OFF_BRD		= (34, 44)
-
 # box size for region icons
 REGION_ICON_SIZE	= 95
-# minimum size around move area
-MIN_MOVE_AREA		= 2 * HEX_FULLH
-# size of graphs in unit area
-UNIT_GRAPHX			= 16
-UNIT_GRAPHY			= 36
-# and for battle area
-BATTLE_GRAPHX		= 100	
-BATTLE_GRAPHY		= 18
-# gradiant of slope on side of hex
-HEX_GRAD			= float((HEX_PIX_W - HEX_TOP) / float(HEX_PIX_H / 2))
-# offset for gfx into hex display on info box
-HEX_BDR_OFF			= (6, 2)
+
 SCROLL_SPEED		= 8
 SCROLL_DIAG			= 6
 KSCROLL_SPD			= 80
@@ -136,21 +109,13 @@ GOLDEN_RATIO		= 1.618
 # location of Rome on main (graphical) map
 ROME_XPOS			= 1250
 ROME_YPOS			= 1150
-# maximum number of units on any hex
-# despite this value, making it MORE than 4 will break the game
+# maximum number of units in any region
 MAX_STACKING		= 4
 
 # sizes of various gradiant bars used in ItemList widget
 GRADBAR_SIZES		= [64, 96, 128]
 GRADBAR_NAMES		= ["gradbar64", "gradbar96", "gradbar128"]
 GRADBAR_WIDTH		= 128
-
-# player types
-PTYPE_HUM			= 0
-PTYPE_CPU			= 1
-# this is why the roman player has to be defined first in the
-# scenario file
-ROME_SIDE			= 0
 
 # locations of various files
 MAP_FILE			= "../data/mapfile.txt"
@@ -222,42 +187,6 @@ WT_SLIDER			= 7
 WT_SCROLLAREA		= 8
 WT_ITEMLIST			= 9
 WT_OPTMENU			= 10
-
-# move directions
-# you may choose any start point you like, but the values
-# *must* increment by 1 each time, and go clockwise from the top
-TOP_RIGHT			= 0
-RIGHT				= 1
-BOTTOM_RIGHT		= 2
-BOTTOM_LEFT			= 3
-LEFT				= 4
-TOP_LEFT			= 5
-
-# normal move offsets (x,y,x_if_odd_column)
-TOP_RIGHT_OFFSET	= (1, -1, 0)
-RIGHT_OFFSET		= (1, 0, 1)
-BOTTOM_RIGHT_OFFSET	= (1, 1, 0)
-BOTTOM_LEFT_OFFSET	= (0, 1, -1)
-LEFT_OFFSET			= (-1, 0, -1)
-TOP_LEFT_OFFSET		= (0, -1, -1)
-
-MOVE_OFFSETS		= [TOP_RIGHT_OFFSET, RIGHT_OFFSET, BOTTOM_RIGHT_OFFSET,
-					   BOTTOM_LEFT_OFFSET, LEFT_OFFSET, TOP_LEFT_OFFSET]
-
-# graphics offsets for animation, based on direction
-ANIM_TR_OFFSET		= (HEX_FULLW / 2, -HEX_PIX_H)
-ANIM_RT_OFFSET		= (HEX_FULLW, 0)
-ANIM_BR_OFFSET		= (HEX_FULLW / 2, HEX_PIX_H)
-ANIM_BL_OFFSET		= (-HEX_FULLW / 2, HEX_PIX_H)
-ANIM_LF_OFFSET		= (-HEX_FULLW, 0)
-ANIM_TL_OFFSET		= (-HEX_FULLW / 2, -HEX_PIX_H)
-
-ANIM_UNIT_OFFSETS	= [ANIM_TR_OFFSET, ANIM_RT_OFFSET, ANIM_BR_OFFSET,
-					   ANIM_BL_OFFSET, ANIM_LF_OFFSET, ANIM_TL_OFFSET]
-# area to blit to and number of frames
-ANIM_UNIT_RECTW		= HEX_FULLW * 3
-ANIM_UNIT_RECTH		= HEX_FULLH * 3
-ANIM_UNIT_FRAMES	= 7
 
 # text layout types
 LEFT_JUSTIFY		= 0

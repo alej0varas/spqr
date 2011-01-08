@@ -202,6 +202,15 @@ class CSPQR(object):
 		centre_button.active = True
 		centre_button.describe = "centre button"
 		bwindow.addWidget(centre_button)
+		
+		# areas for MAX_STACKING units to be displayed
+		#for i in range(SPQR.MAX_STACKING):
+		#	w = SWIDGET.BuildUniqueImage(pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT)))
+		#	# set params
+		#	w.describe = "mapunit+" + str(i + 1)
+		#	w.xpos = 20 + (i * 60)
+		#	w.ypos = 20	
+		
 		SGFX.gui.addWindow(bwindow)
 
 		# draw the screen
