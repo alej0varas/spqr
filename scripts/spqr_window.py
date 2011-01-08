@@ -72,73 +72,73 @@ class CWindow(object):
 		if draw == True:
 			# flood fill it with grey and get a standard rectangle
 			self.image.fill(SPQR.BGUI_COL)
-			foo = pygame.Rect((0, 0, 0, 0))
+			rect = pygame.Rect((0, 0, 0, 0))
 			# ok, we start with the sides, with some clever blitting
 			# basically blit 4*4 images until you can only do 4*1 ones
-			foo.x = 0
-			foo.y = SGFX.gui.iHeight("win_tl")
-			lrg_draw = int((self.rect.h - foo.y) / 4)
-			sml_draw = (self.rect.h - foo.y) - (lrg_draw * 4)
+			rect.x = 0
+			rect.y = SGFX.gui.iHeight("win_tl")
+			lrg_draw = int((self.rect.h - rect.y) / 4)
+			sml_draw = (self.rect.h - rect.y) - (lrg_draw * 4)
 			offset = self.rect.w - SGFX.gui.iWidth("win_rgt")
-			for bar in range(lrg_draw):
+			for i in range(lrg_draw):
 				# blit the large images
-				self.image.blit(SGFX.gui.image("win_lft_lg"), foo)
-				foo.x += offset
-				self.image.blit(SGFX.gui.image("win_rgt_lg"), foo)
-				foo.x -= offset	
-				foo.y += 4
+				self.image.blit(SGFX.gui.image("win_lft_lg"), rect)
+				rect.x += offset
+				self.image.blit(SGFX.gui.image("win_rgt_lg"), rect)
+				rect.x -= offset	
+				rect.y += 4
 			# ok, now the final small ones
 			if sml_draw != 0:
-				for bar in range(sml_draw):
-					self.image.blit(SGFX.gui.image("win_lft"), foo)
-					foo.x += offset
-					self.image.blit(SGFX.gui.image("win_rgt"), foo)
-					foo.x -= offset
-					foo.y += 1
+				for i in range(sml_draw):
+					self.image.blit(SGFX.gui.image("win_lft"), rect)
+					rect.x += offset
+					self.image.blit(SGFX.gui.image("win_rgt"), rect)
+					rect.x -= offset
+					rect.y += 1
 			# same sort of routine for the top and bottom
-			foo.y = 0
-			foo.x = SGFX.gui.iWidth("win_tl")
-			lrg_draw = int((self.rect.w - foo.x) / 4)
-			sml_draw = (self.rect.w - foo.x)-(lrg_draw * 4)
+			rect.y = 0
+			rect.x = SGFX.gui.iWidth("win_tl")
+			lrg_draw = int((self.rect.w - rect.x) / 4)
+			sml_draw = (self.rect.w - rect.x)-(lrg_draw * 4)
 			offset = self.rect.h - SGFX.gui.iHeight("win_bot")
-			for bar in range(lrg_draw):
+			for i in range(lrg_draw):
 				# again, the large blits (as can be seen from their name)
-				self.image.blit(SGFX.gui.image("win_top_lg"), foo)
-				foo.y+=offset
-				self.image.blit(SGFX.gui.image("win_bot_lg"), foo)
-				foo.y -= offset
-				foo.x += 4
+				self.image.blit(SGFX.gui.image("win_top_lg"), rect)
+				rect.y += offset
+				self.image.blit(SGFX.gui.image("win_bot_lg"), rect)
+				rect.y -= offset
+				rect.x += 4
 			# then the small top/bottom fillers
 			if sml_draw != 0:
-				for bar in range(sml_draw):
-					self.image.blit(SGFX.gui.image("win_top"), foo)
-					foo.y += offset
-					self.image.blit(SGFX.gui.image("win_bot"), foo)
-					foo.y-=offset
-					foo.x += 1
+				for i in range(sml_draw):
+					self.image.blit(SGFX.gui.image("win_top"), rect)
+					rect.y += offset
+					self.image.blit(SGFX.gui.image("win_bot"), rect)
+					rect.y -= offset
+					rect.x += 1
 			# now draw in all of the corners
-			foo=pygame.Rect((0, 0, 0, 0))
-			self.image.blit(SGFX.gui.image("win_tl"), foo)
-			foo.y = self.rect.h - SGFX.gui.iHeight("win_bl")
-			self.image.blit(SGFX.gui.image("win_bl"), foo)
-			foo.x = self.rect.w - SGFX.gui.iWidth("win_br")
-			self.image.blit(SGFX.gui.image("win_br"), foo)
-			foo.y = 0
-			self.image.blit(SGFX.gui.image("win_tr"), foo)
+			rect = pygame.Rect((0, 0, 0, 0))
+			self.image.blit(SGFX.gui.image("win_tl"), rect)
+			rect.y = self.rect.h - SGFX.gui.iHeight("win_bl")
+			self.image.blit(SGFX.gui.image("win_bl"), rect)
+			rect.x = self.rect.w - SGFX.gui.iWidth("win_br")
+			self.image.blit(SGFX.gui.image("win_br"), rect)
+			rect.y = 0
+			self.image.blit(SGFX.gui.image("win_tr"), rect)
 			# right, all that's left to do is draw the text over the title bar
 			# firstly render the text in it's own little gfx area
 			SGFX.gui.fonts[SPQR.FONT_VERA].set_bold(True)
-			bar = SGFX.gui.fonts[SPQR.FONT_VERA].render(title, True, SPQR.COL_WINTITLE)
+			title = SGFX.gui.fonts[SPQR.FONT_VERA].render(title, True, SPQR.COL_WINTITLE)
 			SGFX.gui.fonts[SPQR.FONT_VERA].set_bold(False)
 			# set it to centre of title bar
-			foo.x = ((self.rect.w + (SGFX.gui.iWidth("win_tl") * 2)) - bar.get_width()) / 2
-			foo.y = ((SGFX.gui.iHeight("win_tl") - bar.get_height()) / 2) + 1
+			rect.x = ((self.rect.w + (SGFX.gui.iWidth("win_tl") * 2)) - title.get_width()) / 2
+			rect.y = ((SGFX.gui.iHeight("win_tl") - title.get_height()) / 2) + 1
 			# render to image
-			self.image.blit(bar,foo)
+			self.image.blit(title, rect)
 	
 	def fillWindowImage(self):
 		"""Sometimes you need a simple window with a background"""
-		self.image=pygame.Surface((self.rect.width,self.rect.height)).convert()
+		self.image=pygame.Surface((self.rect.width, self.rect.height)).convert()
 		self.image.fill(SPQR.BGUI_COL)
 		self.display = True
 	
@@ -148,7 +148,7 @@ class CWindow(object):
 		self.rect.y = (SPQR.SCREEN_HEIGHT - self.rect.h) / 2
 		return True
 	
-	def addWidget(self,new_item):
+	def addWidget(self, new_item):
 		"""Function to add a widget to the window. Call with widget to add""" 	
 		self.items.append(new_item)
 		# we add to the last item, index is thus len()-1
@@ -169,11 +169,9 @@ class CWindow(object):
 		# blit the current window border across
 		win_img.blit(self.image, (0, 0))
 		# now draw all the items
-		for foo in self.items:
-			if foo.visible == True:
-				x1 = foo.rect.x
-				y1 = foo.rect.y
-				win_img.blit(foo.image, (foo.rect.x, foo.rect.y))		
+		for item in self.items:
+			if item.visible == True:
+				win_img.blit(item.image, (item.rect.x, item.rect.y))		
 		# thats it! pretty simple really.
 		return win_img
 

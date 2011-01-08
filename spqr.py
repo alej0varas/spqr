@@ -204,16 +204,21 @@ class CSPQR(object):
 		bwindow.addWidget(centre_button)
 		
 		# areas for MAX_STACKING units to be displayed
-		#for i in range(SPQR.MAX_STACKING):
-		#	w = SWIDGET.BuildUniqueImage(pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT)))
-		#	# set params
-		#	w.describe = "mapunit+" + str(i + 1)
-		#	w.xpos = 20 + (i * 60)
-		#	w.ypos = 20	
-		
+		units = []
+		for i in range(SPQR.MAX_STACKING):
+			w = SWIDGET.buildUniqueImage(pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT)))
+			w.image.blit(SGFX.gui.image("rome_legion"), (0, 0))
+			# set params
+			w.describe = "mapunit+" + str(i + 1)
+			w.rect.x = 20 + (i * 60)
+			w.rect.y = 20
+			w.visible = True
+			units.append(w)
+			bwindow.addWidget(w)
+		SGFX.gui.unit_widgets = units
 		SGFX.gui.addWindow(bwindow)
 
-		# draw the screen
+		# draw the whole screen
 		SGFX.gui.updateGUI()
 		SGFX.gui.updateMap()
 		self.addKeys()	
@@ -258,6 +263,7 @@ class CSPQR(object):
 		SGFX.gui.keyboard.addKey(K_k, SEVENT.keyShowKeys)
 
 def main():
+	"""Setup everything and then run it"""
 	game = CSPQR()
 	game.setupStart()
 	# call the gui main loop

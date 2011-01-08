@@ -14,7 +14,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import sys, pygame
+import pygame
 from pygame.locals import *
 
 import spqr_defines as SPQR
