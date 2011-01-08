@@ -661,9 +661,8 @@ class CGFXEngine(object):
 			mask = self.image(name.image + "_mask").copy()
 			mask.blit(region, (0, 0), None, pygame.BLEND_ADD)
 			self.image("buffer").blit(mask, (name.rect.x, name.rect.y))
-			self.renderSingleCity(name)
 			# blit the city, if it exists
-			
+			self.renderSingleCity(name)
 		self.updateMap()
 		# animate the unit
 		self.flash_highlight = unit
