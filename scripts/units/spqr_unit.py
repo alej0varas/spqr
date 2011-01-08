@@ -23,12 +23,12 @@ class unitStats(object):
 class CUnit(object):
 	"""Normally the calling functions read q and m from a file,
 		 hence the odd maths when it calculates morale and quality"""
-	def __init__(self, name, move, location, image, stats):
+	def __init__(self, name, image, move = 1, stats = None):
 		self.name = name
 		self.moves = move
 		self.moves_left = move
-		self.location = location
 		self.image = image
 		self.stats = stats
+		self.region = None
 		self.turn_done = False
 

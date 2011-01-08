@@ -30,7 +30,6 @@ units = [["Legio_III", "etruria", "rome_legion"],
 class CInfo(object):
 	def __init__(self):
 		self.year = SPQR.START_YEAR
-		self.units = {}
 		self.map = SMAP.CMap()
 
 	def initNewTurn(self):
@@ -59,8 +58,9 @@ def iterRegions():
 		yield data.map.regions[key]
 
 def iterUnits():
-	for key in data.units.iterkeys():
-		yield data.units[key]
+	for region in data.map.regions.itervalues():
+		for i in region.units:
+			yield i
 
 def regionClicked(x, y):
 	"""Return name of region if clicked, or False"""
@@ -76,8 +76,8 @@ def regionClicked(x, y):
 def unitClicked(x, y):
 	"""Return name of unit clicked, or False"""
 	for i in iterUnits():
-		xpos = data.map.regions[i.location].city_position.x
-		ypos = data.map.regions[i.location].city_position.y
+		xpos = data.map.regions[i.region].city_position.x
+		ypos = data.map.regions[i.region].city_position.y
 		if x >= xpos and x <= (xpos + SPQR.UNIT_WIDTH) and y >= ypos and y <= (ypos + SPQR.UNIT_HEIGHT):
 			return i
 	return False
@@ -85,30 +85,36 @@ def unitClicked(x, y):
 def addUnits():
 	"""Used at start of game to add all units"""
 	for i in units:
-		data.units[i[0]] = SUNITS.CUnit(i[0], 1, i[1], i[2], 1)
-		if data.map.addUnit(i[0], i[1]) == False:
+		if data.map.addUnit(i[1], SUNITS.CUnit(i[0], i[2])) == False:
 			print "Error: Too many units in ", i[0]
 			sys.exit(False)
 
+def getUnit(name):
+	for i in iterUnits():
+		if name == i.name:
+			return i
+
 def getUnitPosition(name):
-	unit = data.units[name]
-	position = data.map.regions[unit.location].city_position
+	region = getUnitRegion(name)
+	position = data.map.regions[region].city_position
 	return position.x, position.y
 
 def getUnitMoves(name):
-	unit = data.units[name]
+	unit = getUnit(name)
 	return unit.moves_left
 
 def getUnitRegion(name):
-	unit = data.units[name]
-	return unit.location
+	for i in iterRegions():
+		for unit in i.units:
+			if unit.name == name:
+				return unit.region
 
 def getCityPosition(region):
 	position = region.city_position
 	return position.x, position.y
 
 def getUnitImage(name):
-	unit = data.units[name]
+	unit = getUnit(name)
 	return unit.image
 
 def getRegion(region):

@@ -201,26 +201,29 @@ class CGFXEngine(object):
 
 	def renderCities(self):
 		"""Draw all cities, and their names, on the board"""
-		self.fonts[SPQR.FONT_VERA].set_bold(True)
 		for i in SDATA.iterRegions():
-			name = i.city.name
-			location = i.city_position
-			x, y = SDATA.getCityPosition(i)
-			# draw the city
-			self.image("buffer").blit(self.image(i.city.image), (x,y))
-			# draw the text	
-			text = self.fonts[SPQR.FONT_VERA].render(name, True, SPQR.COL_WHITE)
-			shadow = self.fonts[SPQR.FONT_VERA].render(name, True, SPQR.COL_BLACK)
-			border = pygame.Surface((text.get_width() + 2, text.get_height() + 2))
-			border.fill(SPQR.COL_BLACK)
-			border.set_alpha(127)
-			x -= int((text.get_width() - SPQR.UNIT_WIDTH) / 2)
-			y += SPQR.UNIT_HEIGHT - 2
-			self.image("buffer").blit(border,(x -1, y -1))
-			self.image("buffer").blit(shadow, (x + 1, y + 1))
-			self.image("buffer").blit(text, (x, y))
-		self.fonts[SPQR.FONT_VERA].set_bold(False)
+			if i.city != None:
+				self.renderSingleCity(i)
 
+	def renderSingleCity(self, region):
+		self.fonts[SPQR.FONT_VERA].set_bold(True)
+		name = region.city.name
+		location = region.city_position
+		x, y = SDATA.getCityPosition(region)
+		# draw the city
+		self.image("buffer").blit(self.image(region.city.image), (x, y))
+		# draw the text	
+		text = self.fonts[SPQR.FONT_VERA].render(name, True, SPQR.COL_WHITE)
+		shadow = self.fonts[SPQR.FONT_VERA].render(name, True, SPQR.COL_BLACK)
+		border = pygame.Surface((text.get_width() + 2, text.get_height() + 2))
+		border.fill(SPQR.COL_BLACK)
+		border.set_alpha(127)
+		x -= int((text.get_width() - SPQR.UNIT_WIDTH) / 2)
+		y += SPQR.UNIT_HEIGHT - 2
+		self.image("buffer").blit(border,(x -1, y -1))
+		self.image("buffer").blit(shadow, (x + 1, y + 1))
+		self.image("buffer").blit(text, (x, y))
+		self.fonts[SPQR.FONT_VERA].set_bold(False)
 
 	def renderUnits(self):
 		for i in SDATA.iterUnits():
@@ -658,6 +661,9 @@ class CGFXEngine(object):
 			mask = self.image(name.image + "_mask").copy()
 			mask.blit(region, (0, 0), None, pygame.BLEND_ADD)
 			self.image("buffer").blit(mask, (name.rect.x, name.rect.y))
+			self.renderSingleCity(name)
+			# blit the city, if it exists
+			
 		self.updateMap()
 		# animate the unit
 		self.flash_highlight = unit
