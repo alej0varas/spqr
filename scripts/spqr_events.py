@@ -57,8 +57,8 @@ def quitSpqr(handle, xpos, ypos):
 def centreMap(handle, xpos, ypos):
 	"""Routine centres the map on the city of Rome"""
 	# centre map on rome
-	SGFX.gui.map_screen.x = SPQR.ROME_XPOS-(SGFX.gui.map_rect.w/2)
-	SGFX.gui.map_screen.y = SPQR.ROME_YPOS-(SGFX.gui.map_rect.h/2)
+	SGFX.gui.map_screen.x = SPQR.ROME_XPOS - (SGFX.gui.map_rect.w/2)
+	SGFX.gui.map_screen.y = SPQR.ROME_YPOS - (SGFX.gui.map_rect.h/2)
 	# make sure hex is selected as well
 	# this also updates the screen for us
 	x = SGFX.gui.map_screen.w/2
@@ -138,7 +138,7 @@ def menuPreferences(handle, xpos, ypos):
 	# connect to some code
 	sld_Volume.setUpdateFunction(setVolume)
 	# a seperator
-	sep = SWIDGET.CSeperator(10, 90, 274-SPQR.WINSZ_SIDE)
+	sep = SWIDGET.CSeperator(10, 90, 274 - SPQR.WINSZ_SIDE)
 	# and an ok button
 	btn_ok = SWIDGET.CButton(190, 106, "OK")
 	btn_ok.callbacks.mouse_lclk = killModalWindow
@@ -194,7 +194,7 @@ def killCurrentWindow(handle, xpos, ypos):
 	# as we have a copy of the window to work with. This means our index is 1
 	# out. Since the routine counts down and not up, we are 1 less than we
 	# should be, hence the +1 :-)
-	SGFX.gui.killIndexedWindow(SGFX.gui.win_index+1)
+	SGFX.gui.killIndexedWindow(SGFX.gui.win_index + 1)
 	return True
 	
 def killModalWindow(handle, xpos, ypos):
@@ -353,7 +353,7 @@ def menuEmpireMilitary(handle, xpos, ypos):
 	# now we can actually build up our window. Let's make this as easy
 	# as possible. First off, get the size of the area we need:
 	wxsize = unitlist.rect.w
-	wysize = unitlist.rect.h+sclist.rect.h
+	wysize = unitlist.rect.h + sclist.rect.h
 
 	# activate stuff
 	unitlist.active = True
@@ -361,8 +361,8 @@ def menuEmpireMilitary(handle, xpos, ypos):
 	# build the window, and locate stuff
 	# let's have SPACER around the window as filler, except at the bottom,
 	# where we have SPACER - checkbox+label - SPACER:
-	height = wysize+(SPQR.SPACER*3)
-	width = wxsize+((SPQR.SPACER*2)+SGFX.gui.images[SPQR.SCROLL_TOP].get_width())	
+	height = wysize + (SPQR.SPACER*3)
+	width = wxsize + ((SPQR.SPACER*2) + SGFX.gui.images[SPQR.SCROLL_TOP].get_width())	
 	# now start to build the window
 	uwin = (SWINDOW.CWindow(-1, -1, width, height, "Unit List", True))	
 	uwin.addWidget(unitlist)
@@ -393,10 +393,10 @@ def menuEmpireStatistics(handle, xpos, ypos):
 
 def menuHelpAbout(handle, xpos, ypos):
 	"""Simple messagebox with game info. Returns True"""
-	message = "SPQR "+SPQR.VERSION+"\n\n"
-	message += "Written and designed by "+SPQR.AUTHOR+"\n"
+	message = "SPQR " + SPQR.VERSION + "\n\n"
+	message += "Written and designed by " + SPQR.AUTHOR + "\n"
 	message += "(maximinus@gmail.com)\n"
-	message += "Last Update "+SPQR.LAST_UPDATE
+	message += "Last Update " + SPQR.LAST_UPDATE
 	message += "\n\nThanks to Freeciv for the unit gfx, Pygame for the library"
 	message += " and Gnome for various GUI graphics."
 	SGFX.gui.messagebox(SPQR.BUTTON_OK, message, "About SPQR")
@@ -509,7 +509,7 @@ def welcomeScreen(handle, xpos, ypos):
 	w = SGFX.gui.iWidth("startup")
 	h = SGFX.gui.iHeight("startup")
 	# build the window
-	welcome = SWINDOW.CWindow(-1, -1, w, h, "SPQR "+SPQR.VERSION, True)
+	welcome = SWINDOW.CWindow(-1, -1, w, h, "SPQR " + SPQR.VERSION, True)
 	# add the image that pretty much takes up the whole area:
 	main_img = SWIDGET.buildImage("startup")
 	welcome.addWidget(main_img)
@@ -679,7 +679,7 @@ def displayConsole(handle, xpos, ypos):
 	while(True):
 		console.process_input()
 		console.draw()
-		SGFX.gui.screen.blit(console_surface, (0, SPQR.WINSZ_TOP-2))
+		SGFX.gui.screen.blit(console_surface, (0, SPQR.WINSZ_TOP - 2))
 		pygame.display.flip()
 		# are we still drawing the console?
 		if SGFX.gui.console == False:

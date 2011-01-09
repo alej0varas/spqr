@@ -98,7 +98,6 @@ def moveUnit(unit, region):
 		return False
 	# check that the unit exists somewhere
 	for i in iterUnits():
-		print i.name
 		if i.name == unit:
 			# ok, we have the unit, now just change things
 			data.map.regions[region].units.append(i)

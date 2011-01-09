@@ -199,6 +199,25 @@ class CGFXEngine(object):
 			mask.blit(region, (0, 0), None, pygame.BLEND_ADD)
 			self.image("buffer").blit(mask, (i.rect.x, i.rect.y))
 
+	def renderSingleRegion(self, region):
+		"""Update the regions cities and unit gfx to the back buffer"""
+		# first we erase the old unit + city gfx
+		i = SDATA.getRegion(region)
+		pos = SDATA.getCityPosition(i)
+		self.image("buffer").blit(self.image("map"), pos,
+								  pygame.Rect(pos[0], pos[1], SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT))
+		self.image("buffer").blit(self.image("map"), i.text_rect, i.text_rect)
+		# then we repair the border
+		area = pygame.Surface(self.image(i.image).get_size()).convert()
+		area.fill(i.colour)
+		mask = self.image(i.image).copy()
+		mask.blit(area, (0, 0), None, pygame.BLEND_ADD)
+		self.image("buffer").blit(mask, (i.rect.x, i.rect.y))
+		# either a city is there or not: if it is, then the text has already
+		# been blitted and we just need to blit the city, otherwise do nothing
+		if i.city != None:
+			self.renderSingleCity(i)
+
 	def renderCities(self):
 		"""Draw all cities, and their names, on the board"""
 		for i in SDATA.iterRegions():
@@ -208,7 +227,6 @@ class CGFXEngine(object):
 	def renderSingleCity(self, region):
 		self.fonts[SPQR.FONT_VERA].set_bold(True)
 		name = region.city.name
-		location = region.city_position
 		x, y = SDATA.getCityPosition(region)
 		# draw the city
 		self.image("buffer").blit(self.image(region.city.image), (x, y))
@@ -219,20 +237,17 @@ class CGFXEngine(object):
 		border.fill(SPQR.COL_BLACK)
 		border.set_alpha(127)
 		x -= int((text.get_width() - SPQR.UNIT_WIDTH) / 2)
-		y += SPQR.UNIT_HEIGHT - 2
+		y += SPQR.UNIT_HEIGHT + 1
 		self.image("buffer").blit(border,(x -1, y -1))
 		self.image("buffer").blit(shadow, (x + 1, y + 1))
 		self.image("buffer").blit(text, (x, y))
+		# save the text area rect for later
+		region.text_rect = pygame.Rect(x - 1, y - 1, text.get_width() + 2, text.get_height() + 2)
 		self.fonts[SPQR.FONT_VERA].set_bold(False)
 
 	def renderUnits(self):
 		for i in SDATA.iterUnits():
 			self.image("buffer").blit(self.image(i.image), SDATA.getUnitPosition(i.name))
-
-	def redrawRegionData(self, region):
-		"""Update the regions cities and unit gfx to the back buffer"""
-		# only need to update over the city location, so lets get that
-		pass
 
 	# now a function to add a window
 	# it has it's own function because it has to return the index number
@@ -273,13 +288,11 @@ class CGFXEngine(object):
 		return True
 	
 	# TODO: Sort out wether we need to really update the gui here
-	# this one deletes the current indexed window, and then redraws the gui
-	# used to kill the active window generally
+	# generally used to kill the active window
 	def killIndexedWindow(self, index):
 		"""Remove window. Call with index number of window. Redraws
 		   gui as well"""
 		del self.windows[index]
-		#self.updateGUI()
 		return True
 	
 	def killTopWindow(self):
@@ -645,12 +658,16 @@ class CGFXEngine(object):
 		# or region not on list: reset map and move on
 		# played clicked region on list: move unit
 		if region in self.map_click_moves:
-		# get current unit
+			# get current unit
 			unit = self.flash_highlight
+			# delete image from current map
+			old_region = SDATA.getUnitRegion(unit)
 			SDATA.moveUnit(unit, region)
 			cancelMoves()
 			self.unitFlashAndOff()
 			self.flushFlash()
+			self.renderSingleRegion(old_region)
+			self.updateGUI()
 			return True
 		# cancel everything
 		cancelMoves()
@@ -695,12 +712,11 @@ class CGFXEngine(object):
 	# middle mouse button
 	def panMap(self):
 		"""CGFXEngine.panMap() - call with nothing
-			 Returns nothing, allows user to pan map with middle click
-			 Not be called if the map is not scrollable"""
+			 Returns nothing, allows user to pan map with middle click"""
 		# before doing anything else, turn off unit flashing
 		self.unitFlashAndOff()
 		xpos, ypos = pygame.mouse.get_rel()
-		while(True):
+		while True:
 			event = pygame.event.poll()
 			if event.type == MOUSEMOTION:
 				# cancel current action if we got mouse button up
@@ -722,50 +738,6 @@ class CGFXEngine(object):
 				# and then finally draw it!
 				self.updateMiniMap()
 				self.updateMap()
-
-	# tries to fit text onto a surface
-	# returns False if area is too small, otherwise returns
-	# True and renders it in the gui spare image	
-	def fitText(self, text, x, y, fnt):
-		"""Call with the text, the x and y size of the area
-		   to test against, and the font. Returns false if
-		   it couldn't be done, otherwise returns true and
-		   the image is in the gui spare image"""
-		final_lines = []
-		requested_lines = text.splitlines()
-		# Create a series of lines that will fit on the provided rectangle
-		for requested_line in requested_lines:
-			if self.fonts[fnt].size(requested_line)[0] > x:
-				words = requested_line.split(' ')
-				# if any of our words are too long to fit, return.
-				for word in words:
-					if self.fonts[fnt].size(word)[0] >= x:
-						# TODO: should actually handle long words, since a web address
-						# has been found to be too long for this code!
-						# Possible answer: don't use long web addresses, or break them
-						# up first.
-						print "Error: Word was too long in label"
-						return False
-				# Start a new line
-				accumulated_line = ""
-				for word in words:
-					test_line = accumulated_line+word+" "
-					# Build the line while the words fit.
-					if self.fonts[fnt].size(test_line)[0] < x:
-						accumulated_line = test_line
-					else:
-						final_lines.append(accumulated_line)
-						accumulated_line = word+" "
-				final_lines.append(accumulated_line)
-			else:
-				final_lines.append(requested_line)
-		# everything seemed to work ok.. so far!
-		accumulated_height = 0
-		for line in final_lines:
-			if accumulated_height + self.fonts[fnt].size(line)[1] >= y:
-				return False
-			accumulated_height += self.fonts[fnt].size(line)[1]
-		return True
 
 	# routine draws the map we actually render
 	def renderPixelMap(self):
@@ -968,13 +940,55 @@ class CGFXEngine(object):
 			ypos = 4
 		info.blit(self.image(icon_name), (xpos, ypos))
 		# render the region name, as well
-		# TODO: replace all _ with spaces and capitalise the first letter
 		region = region.replace("_", " ").title()
 		text = self.fonts[SPQR.FONT_VERA_SM].render(region, True, SPQR.COL_BLACK)
 		info.blit(text, (int((info.get_width() - text.get_width()) / 2),
 						(info.get_height() - (text.get_height() + 2))))
 		self.info_widget.image = info
 		self.info_widget.visible = True
+
+# TODO: Below code should be moved into spqr_widgets.py, and messageboc made into a class
+
+	def fitText(self, text, x, y, fnt):
+		"""Call with the text, the x and y size of the area
+		   to test against, and the font. Returns false if
+		   it couldn't be done, otherwise returns true and
+		   the image is in the gui spare image"""
+		final_lines = []
+		requested_lines = text.splitlines()
+		# Create a series of lines that will fit on the provided rectangle
+		for requested_line in requested_lines:
+			if self.fonts[fnt].size(requested_line)[0] > x:
+				words = requested_line.split(' ')
+				# if any of our words are too long to fit, return.
+				for word in words:
+					if self.fonts[fnt].size(word)[0] >= x:
+						# TODO: should actually handle long words, since a web address
+						# has been found to be too long for this code!
+						# Possible answer: don't use long web addresses, or break them
+						# up first.
+						print "Error: Word was too long in label"
+						return False
+				# Start a new line
+				accumulated_line = ""
+				for word in words:
+					test_line = accumulated_line+word+" "
+					# Build the line while the words fit.
+					if self.fonts[fnt].size(test_line)[0] < x:
+						accumulated_line = test_line
+					else:
+						final_lines.append(accumulated_line)
+						accumulated_line = word+" "
+				final_lines.append(accumulated_line)
+			else:
+				final_lines.append(requested_line)
+		# everything seemed to work ok.. so far!
+		accumulated_height = 0
+		for line in final_lines:
+			if accumulated_height + self.fonts[fnt].size(line)[1] >= y:
+				return False
+			accumulated_height += self.fonts[fnt].size(line)[1]
+		return True
 
 	# there are always some standard routines in any gui...here is a messagebox
 	def messagebox(self, flags, text, win_title):

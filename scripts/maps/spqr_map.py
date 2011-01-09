@@ -68,4 +68,7 @@ class CRegion(object):
 		self.city_position = Position(city_pos)
 		self.city = SCITY.CCity(city_name, "roman_medium")
 		self.units = []
+		# sometimes the area that the city text appears in is outside the area of the region
+		# we need to save this area to make re-drawing the region not need a whole map redraw
+		self.text_rect = None
 
