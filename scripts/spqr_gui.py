@@ -809,7 +809,8 @@ class CGFXEngine(object):
 		if self.flash_highlight != self.current_highlight:
 			self.current_highlight = self.flash_highlight
 			# we now have an new flashing unit. Firstly, remove the old blit area
-			self.image("buffer").blit(self.flash_old, self.flash_rect)		
+			if self.flash_old != None:
+				self.image("buffer").blit(self.flash_old, self.flash_rect)		
 			# now we generate the part we use to erase the area.
 			self.flash_erase = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT), SRCALPHA)
 			# ok, we can blit the rendered map over
@@ -891,7 +892,8 @@ class CGFXEngine(object):
 		self.timer = False
 
 	def flushFlash(self):
-		"""Forces a redraw next time we flash"""
+		"""Forces a redraw next time we flash, but DON'T draw old map image onto buffer"""
+		self.flash_old = None
 		self.current_highlight = None
 		self.flash_highlight = None
 

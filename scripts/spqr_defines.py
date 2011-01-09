@@ -22,14 +22,13 @@ import pygame.locals as PYGAME
 # as they are, unless you really know what you are doing. Probably the
 # most useful when debugging is SPQR_FULLSCREEN
 
-VERSION				= "v0.3.612"
+VERSION				= "v0.3.615"
 AUTHOR				= "Chris Smith"
 EMAIL				= "maximinus@gmail.com"
-SYSTEM				= "GNU/Linux"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
 LAST_UPDATE			= "9th Jan 2011"
-CODELINES			= "5606"
+CODELINES			= "5599"
 FULLSCREEN			= False
 
 # before we go any further, this one is a must ;-)
@@ -80,15 +79,10 @@ GRADBAR_SIZES		= [64, 96, 128]
 GRADBAR_NAMES		= ["gradbar64", "gradbar96", "gradbar128"]
 GRADBAR_WIDTH		= 128
 
-# locations of various files
-MAP_FILE			= "../data/mapfile.txt"
-STD_SCENARIO		= "../scenarios/main_game.txt"
-
 # fonts used by the game
 FONT_VERA			= 0
 FONT_VERA_SM		= 1
 FONT_VERA_LG		= 2
-
 # and their sizes
 FONT_SMALL			= 12
 FONT_STD			= 14
@@ -96,10 +90,6 @@ FONT_LARGE			= 16
 
 # index numbers of windows that are always present
 WIN_MENU			= 0
-WIN_INFO			= 1
-
-# mask images
-FILE_HEXMASK		= "../gfx/masks/hex_mask.png"
 
 # the images to load
 # just list the folders inside gfx: the game will pull all of the png files
@@ -110,15 +100,8 @@ GRAPHICS_F			= ["gui", "icons", "units", "cities" ,"map/regions"]
 ANIM_TIME			= 400
 # number of milliseconds in-between move animation frames
 MOVE_FRAME			= 24
-# number of milliseconds between clicks in a double-click
-# (400 is the Gnome standard)
+# number of milliseconds between clicks in a double-click (400 is the Gnome standard)
 DCLICK_SPEED		= 400
-
-# most times, when animating a unit, you'll use the
-# current highlighted unit. When a function needs a value for
-# a unit, you can use this value instead
-# check spqr_gui->animate_unit_move()
-USE_HIGHLIGHT		= -1
 
 # mouse events as seen by the gui
 MOUSE_NONE			= 0
@@ -175,25 +158,11 @@ MNU_KEY_GAP			= 12
 SPACER				= 8
 HALFSPCR			= 4
 QTRSPCR				= 2
-# offsets when displaying city gfx in city details window
-CTY_DISPX			= 9
-CTY_DISPY			= 13
 # offsets when overlaying a move value over a unit
 MV_OVER_X			= 6
 MV_OVER_Y			= 10
-# offset for 'extra units here' unit graphic
-MV_OVER_EXX			= 10
-MV_OVER_EXY			= 14
-# offset when blitting to back map
-MV_OBCK_X			= 3
-MV_OBCK_Y			= 1
 # minimum height of scroll area handle
 SCAREA_MINH			= 32
-# size of piechart images when cut out
-PIE_XSIZE			= 44
-PIE_YSIZE			= 44
-# ysizeof unit info chart
-UNITLIST_Y			= 60
 
 # sizes of the window borders
 WINSZ_SIDE			= 6
@@ -250,7 +219,7 @@ EVENT_SONGEND		= PYGAME.USEREVENT + 1
 EVENT_DC_END		= PYGAME.USEREVENT + 2
 
 # some initial values for the sound system
-INIT_VOLUME			= 0
+INIT_VOLUME			= 40
 MUSIC_BUFFER		= 8192
 MUSIC_ON			= True
 SFX_ON				= True

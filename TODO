@@ -2,9 +2,9 @@ Current TODO:
 
 Make widgets active by default.
 Remove un-needed code.
-Add units.
-Let units move beteen regions.
+Add naval units.
 Put a simple game turn in.
+Make all window setups use yaml files.
 
 This is list of TODO's (earliest first) that I have on record.
 
@@ -55,4 +55,6 @@ This is list of TODO's (earliest first) that I have on record.
 *DONE*  Clean-up the code style.
 *DONE*  Build a setup program.
 *DONE*  Put regions into code.
+*DONE*	Add units.
+*DONE*	Let units move between regions.
 

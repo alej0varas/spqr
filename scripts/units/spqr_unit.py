@@ -31,4 +31,10 @@ class CUnit(object):
 		self.stats = stats
 		self.region = None
 		self.turn_done = False
+		
+	def __str__(self):
+		"""Return a string of the unit details"""
+		text = "  Name: " + self.name
+		text += "\nRegion: " + self.region + "\n"
+		return text
 
