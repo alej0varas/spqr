@@ -44,8 +44,7 @@ SCREEN_HEIGHT 		= 600
 # set this next one to true if you want a rh mouse click to exit
 RMOUSE_END			= True
 
-HEXES_WIDE			= 51
-HEXES_TALL			= 38
+FORCE_NEW_FLASH		= "NewFlash"
 
 # these are the sizes to mulitply by when finding the
 # gfx top left of a hex on the main map

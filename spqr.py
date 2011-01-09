@@ -210,8 +210,8 @@ class CSPQR(object):
 			w.image.blit(SGFX.gui.image("rome_legion"), (0, 0))
 			# set params
 			w.describe = "mapunit+" + str(i + 1)
-			w.rect.x = 20 + (i * 60)
-			w.rect.y = 20
+			w.rect.x = 10 + (i * 55)
+			w.rect.y = 10
 			w.visible = True
 			units.append(w)
 			bwindow.addWidget(w)

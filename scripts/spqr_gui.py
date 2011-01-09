@@ -229,6 +229,11 @@ class CGFXEngine(object):
 		for i in SDATA.iterUnits():
 			self.image("buffer").blit(self.image(i.image), SDATA.getUnitPosition(i.name))
 
+	def redrawRegionData(self, region):
+		"""Update the regions cities and unit gfx to the back buffer"""
+		# only need to update over the city location, so lets get that
+		pass
+
 	# now a function to add a window
 	# it has it's own function because it has to return the index number
 	# of the created window
@@ -621,6 +626,8 @@ class CGFXEngine(object):
 		name = SDATA.regionClicked(x, y)
 		if name != False:
 			self.renderRegionInfoBox(name)
+			self.renderImageUnits(name)
+			self.updateGUI()
 		else:
 			# clear box if no info
 			if self.info_widget.visible == True:
@@ -641,8 +648,10 @@ class CGFXEngine(object):
 		# get current unit
 			unit = self.flash_highlight
 			print "Move the unit", unit, "to", region
+			SDATA.moveUnit(unit, region)
 			cancelMoves()
 			self.unitFlashAndOff()
+			self.flushFlash()
 			return True
 		# cancel everything
 		cancelMoves()
@@ -832,10 +841,13 @@ class CGFXEngine(object):
 		# We just blit between the 2. Firstly we need
 		# to see if the unit highlight has changed at all
 		if self.flash_highlight != self.current_highlight:
+			if self.flash_highlight != SPQR.FORCE_NEW_FLASH:
+				# ok, let's store this new highlight
+				self.current_highlight = self.flash_highlight
+			else:
+				self.flash_highlight = self.current_highlight
 			# we now have an new flashing unit. Firstly, remove the old blit area
-			self.image("buffer").blit(self.flash_old, self.flash_rect)
-			# ok, let's store this new highlight
-			self.current_highlight = self.flash_highlight			
+			self.image("buffer").blit(self.flash_old, self.flash_rect)		
 			# now we generate the part we use to erase the area.
 			self.flash_erase = pygame.Surface((SPQR.MOVESZ_X, SPQR.MOVESZ_Y), SRCALPHA)
 			# ok, we can blit the rendered map over
@@ -916,6 +928,11 @@ class CGFXEngine(object):
 		# turn flashing off
 		self.timer = False
 
+	def flushFlash(self):
+		"""Forces a redraw next time we flash"""
+		self.current_highlight = None
+		self.flash_highlight = None
+
 	def unitFlashAndClear(self):
 		"""As above, but also updates the screen to the old image"""
 		self.clearFlash()
@@ -930,6 +947,22 @@ class CGFXEngine(object):
 		# make sure first call is show the erase frame
 		self.flash_on = True
 		self.timer = True
+		return True
+
+	def renderImageUnits(self, region):
+		"""Update the unit info boxes with their data"""
+		# are their any units at all?
+		# trash current data
+		for i in self.unit_widgets:
+			i.visible = False
+		units = SDATA.getRegionUnits(region)
+		if units == []:
+			print "no units"
+			return False
+		# have units, so let's do this:
+		for i in range(len(units)):
+			self.unit_widgets[i].image.blit(self.image(units[i].image), (0, 0))
+			self.unit_widgets[i].visible = True
 		return True
 
 	def renderRegionInfoBox(self, region):
@@ -958,7 +991,6 @@ class CGFXEngine(object):
 						(info.get_height() - (text.get_height() + 2))))
 		self.info_widget.image = info
 		self.info_widget.visible = True
-		self.updateGUI()
 
 	# there are always some standard routines in any gui...here is a messagebox
 	def messagebox(self, flags, text, win_title):

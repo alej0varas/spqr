@@ -89,6 +89,26 @@ def addUnits():
 			print "Error: Too many units in ", i[0]
 			sys.exit(False)
 
+def moveUnit(unit, region):
+	"""Move the unit given to the new region
+	   Data is passed as strings"""
+	# current location big enough?
+	if data.map.regions[region].units == SPQR.MAX_STACKING:
+		print "Error: Exceeded max stacking for", unit, "to", region
+		return False
+	# check that the unit exists somewhere
+	for i in iterUnits():
+		print i.name
+		if i.name == unit:
+			# ok, we have the unit, now just change things
+			data.map.regions[region].units.append(i)
+			# remove old unit from location
+			data.map.regions[i.region].units.remove(i)
+			i.region = region
+			return True
+	print "Error: Couldn't find unit", unit, "to move"
+	return False
+
 def getUnit(name):
 	for i in iterUnits():
 		if name == i.name:
@@ -108,6 +128,9 @@ def getUnitRegion(name):
 		for unit in i.units:
 			if unit.name == name:
 				return unit.region
+
+def getRegionUnits(name):
+	return data.map.regions[name].units
 
 def getCityPosition(region):
 	position = region.city_position
