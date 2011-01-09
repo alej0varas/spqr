@@ -647,7 +647,6 @@ class CGFXEngine(object):
 		if region in self.map_click_moves:
 		# get current unit
 			unit = self.flash_highlight
-			print "Move the unit", unit, "to", region
 			SDATA.moveUnit(unit, region)
 			cancelMoves()
 			self.unitFlashAndOff()
@@ -713,8 +712,8 @@ class CGFXEngine(object):
 					return
 				# grab relative grabs
 				xpos, ypos = pygame.mouse.get_rel()
-				xpos = xpos*SPQR.PAN_RATIO
-				ypos = ypos*SPQR.PAN_RATIO
+				xpos = xpos * SPQR.PAN_RATIO
+				ypos = ypos * SPQR.PAN_RATIO
 				# update the map thus
 				self.map_screen.x -= xpos
 				self.map_screen.y -= ypos
@@ -785,11 +784,6 @@ class CGFXEngine(object):
 		self.renderUnits()
 		return True
 
-	def renderGameTurn(self):
-		"""Routine draws image for the game turn counter. Call at the
-		   start of every turn, just before updating the screen"""
-		return
-
 	def blitCheckbox(self, status, xpos, ypos):
 		"""Renders a checkbox at the given location
 		   Very simple, just used to isolate gfx drawing out
@@ -841,15 +835,11 @@ class CGFXEngine(object):
 		# We just blit between the 2. Firstly we need
 		# to see if the unit highlight has changed at all
 		if self.flash_highlight != self.current_highlight:
-			if self.flash_highlight != SPQR.FORCE_NEW_FLASH:
-				# ok, let's store this new highlight
-				self.current_highlight = self.flash_highlight
-			else:
-				self.flash_highlight = self.current_highlight
+			self.current_highlight = self.flash_highlight
 			# we now have an new flashing unit. Firstly, remove the old blit area
 			self.image("buffer").blit(self.flash_old, self.flash_rect)		
 			# now we generate the part we use to erase the area.
-			self.flash_erase = pygame.Surface((SPQR.MOVESZ_X, SPQR.MOVESZ_Y), SRCALPHA)
+			self.flash_erase = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT), SRCALPHA)
 			# ok, we can blit the rendered map over
 			# get the x,y co-ords we need
 			x, y = SDATA.getUnitPosition(self.current_highlight)
@@ -933,11 +923,6 @@ class CGFXEngine(object):
 		self.current_highlight = None
 		self.flash_highlight = None
 
-	def unitFlashAndClear(self):
-		"""As above, but also updates the screen to the old image"""
-		self.clearFlash()
-		self.timer = False
-
 	def unitFlashOn(self):
 		"""Call to turn unit flashing back on. Returns False if this
 		   didn't happen for some reason"""
@@ -957,7 +942,6 @@ class CGFXEngine(object):
 			i.visible = False
 		units = SDATA.getRegionUnits(region)
 		if units == []:
-			print "no units"
 			return False
 		# have units, so let's do this:
 		for i in range(len(units)):

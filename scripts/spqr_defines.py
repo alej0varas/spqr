@@ -28,8 +28,8 @@ EMAIL				= "maximinus@gmail.com"
 SYSTEM				= "GNU/Linux"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
-LAST_UPDATE			= "8th Jan 2011"
-CODELINES			= "5589"
+LAST_UPDATE			= "9th Jan 2011"
+CODELINES			= "5606"
 FULLSCREEN			= False
 
 # before we go any further, this one is a must ;-)
@@ -44,35 +44,6 @@ SCREEN_HEIGHT 		= 600
 # set this next one to true if you want a rh mouse click to exit
 RMOUSE_END			= True
 
-FORCE_NEW_FLASH		= "NewFlash"
-
-# these are the sizes to mulitply by when finding the
-# gfx top left of a hex on the main map
-HEX_PIX_W			= 42
-HEX_PIX_H			= 36
-
-# offsets from 0,0 of map where hexes start
-HEX_XOFFSET			= 26
-HEX_YOFFSET			= 7
-HEX_OFF_XOFF		= 21
-
-# the rectangle of the map that actually contains hexes
-HEX_AREA			= PYGAME.Rect(5, 6, 2100, 1380)
-
-# the actual full gfx width/height of a rendered hex
-# important - HEX_FULL_W must be (?) an even number
-HEX_FULLW			= 42
-HEX_FULLH			= 47
-
-# top number of pixels of the hex image where the width of the
-# hex is not equal to the width of the rectangle
-HEX_TRIANGLE_H		= 11
-HEX_TOP				= 24
-
-# offsets to guarantee a click on a selected hex
-CLICK_X				= HEX_FULLW / 2
-CLICK_Y				= HEX_FULLH / 2
-
 # menu icons are always squares
 ICON_SIZE			= 24
 # size of console screen
@@ -83,12 +54,6 @@ CHKBOX_SIZE			= 13
 # size of unit gfx
 UNIT_WIDTH			= 45
 UNIT_HEIGHT			= 41
-# offsets for move icons from hex corner
-MOVE_OFFX			= 13
-MOVE_OFFY			= 8
-# and their sizes
-MOVESZ_X			= 69
-MOVESZ_Y			= 64
 
 # box size for region icons
 REGION_ICON_SIZE	= 95
@@ -104,7 +69,6 @@ TXT_MIN_SM			= 16
 TXT_MIN_LG			= 20
 # next is the speed of a map pan compared to the actual mouse movement
 PAN_RATIO			= 1
-GOLDEN_RATIO		= 1.618
 # location of Rome on main (graphical) map
 ROME_XPOS			= 1250
 ROME_YPOS			= 1150
