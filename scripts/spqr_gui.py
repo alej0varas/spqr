@@ -343,7 +343,10 @@ class CGFXEngine(object):
 		for i in self.windows[-1].items:
 			if i.visible == True:
 				self.screen.blit(i.image, (i.rect.x+offset.x, i.rect.y+offset.y))
-	
+
+	def updateUnitWidget(self):
+		print "update me"
+
 	# this one merely updates the map, rather than blit all those
 	# gui things as well
 	def updateMap(self):
@@ -667,6 +670,11 @@ class CGFXEngine(object):
 			self.unitFlashAndOff()
 			self.flushFlash()
 			self.renderSingleRegion(old_region)
+			# finally, we should click the map on the new region city
+			cx, cy = SDATA.getCityPosition(SDATA.getRegion(region))
+			cx += 5
+			cy += 5
+			self.mapClick(cx, cy)
 			self.updateGUI()
 			return True
 		# cancel everything
@@ -754,19 +762,12 @@ class CGFXEngine(object):
 		self.renderUnits()
 		return True
 
-	def blitCheckbox(self, status, xpos, ypos):
+	def blitCheckbox(self, widget, xpos, ypos):
 		"""Renders a checkbox at the given location
 		   Very simple, just used to isolate gfx drawing out
 		   of the checkbox widget code"""
-		# which gfx to draw?
-		if status == True:
-			chkbox = "check_yes"
-		else:
-			chkbox = "check_no"
-		# now just blit the image and update
-		# we have the xpos and ypos, this should be easy:
-		self.screen.blit(self.image(chkbox), (xpos, ypos, 0, 0))
-		pygame.display.update((xpos, ypos, SPQR.CHKBOX_SIZE, SPQR.CHKBOX_SIZE))
+		self.screen.blit(widget.image, (xpos, ypos, 0, 0))		
+		pygame.display.update((xpos, ypos, widget.rect.w, widget.rect.h))
 		return True
 		
 	def blitSlider(self, xpos, ypos, width, height, image):
@@ -912,6 +913,7 @@ class CGFXEngine(object):
 		# trash current data
 		for i in self.unit_widgets:
 			i.visible = False
+			i.active = False
 		units = SDATA.getRegionUnits(region)
 		if units == []:
 			return False
@@ -920,12 +922,19 @@ class CGFXEngine(object):
 		xpos = int((SPQR.SCREEN_WIDTH - xpos) / 2)
 		ypos = SPQR.BBOX_HEIGHT - (SPQR.UNIT_HEIGHT + (SPQR.SPACER * 2))
 		for i in range(len(units)):
-			image = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT),
-									pygame.SRCALPHA, 32).convert_alpha()
-			image.blit(self.image("unit_background"), (0, 0))
-			image.blit(self.image(units[i].image), (0, 0))
-			self.unit_widgets[i].image = image
+			image_on = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT),
+									  pygame.SRCALPHA, 32).convert_alpha()
+			image_on.blit(self.image("unit_background"), (0, 0))
+			image_on.blit(self.image(units[i].image), (0, 0))
+			image_off = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT),
+									   pygame.SRCALPHA, 32).convert_alpha()
+			image_off.blit(self.image("unit_highlight"), (0, 0))
+			image_off.blit(self.image(units[i].image), (0, 0))
+			self.unit_widgets[i].image = image_on
+			self.unit_widgets[i].on_image = image_on
+			self.unit_widgets[i].off_image = image_off
 			self.unit_widgets[i].visible = True
+			self.unit_widgets[i].active = True
 			self.unit_widgets[i].rect.x = xpos
 			xpos += SPQR.UNIT_WIDTH + SPQR.SPACER
 			self.unit_widgets[i].rect.y = ypos

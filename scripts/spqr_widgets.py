@@ -186,15 +186,17 @@ class CButton(CWidget):
 
 class CCheckBox(CWidget):
 	"""Checkbox widget"""
-	def __init__(self, x, y, initial):
+	def __init__(self, x, y, initial, on = "check_yes", off = "check_no"):
 		"""You need to pass the following parameters to the init() routine:
 		   x,y - the offset into the window
 		   initial - a boolean describing the start status of the widget"""
+		self.on_image = SGFX.gui.image(on)
+		self.off_image = SGFX.gui.image(off)
 		if initial == True:
-			image = SGFX.gui.image("check_yes")
+			image = self.on_image
 		else:
-			image = SGFX.gui.image("check_no")
-		CWidget.__init__(self, pygame.Rect(x, y, SPQR.CHKBOX_SIZE, SPQR.CHKBOX_SIZE),
+			image = self.off_image
+		CWidget.__init__(self, pygame.Rect(x, y, SGFX.gui.iWidth(on), SGFX.gui.iWidth(on)),
 						 SPQR.WT_CHECK, image, "CCheckBox")
 		# status is the inital boolean value
 		self.status = initial
@@ -210,10 +212,10 @@ class CCheckBox(CWidget):
 		   updates it's own gfx. In the parent window"""
 		if self.status == True:
 			self.status = False
-			self.image = SGFX.gui.image("check_no")
+			self.image = self.off_image
 		else:
 			self.status = True
-			self.image = SGFX.gui.image("check_yes")
+			self.image = self.on_image
 		# the image will have to be updated. Since we know that the widget
 		# must be active and on display (since we just got a click), we can
 		# just update the small bit of screen. Firstly, we get the window
@@ -223,7 +225,7 @@ class CCheckBox(CWidget):
 		xpos += self.rect.x
 		ypos += self.rect.y
 		# now we just have to blit that checkbox
-		SGFX.gui.blitCheckbox(self.status, xpos, ypos)
+		SGFX.gui.blitCheckbox(self, xpos, ypos)
 		# do we need to do anything else?
 		if self.after_click_status == True:
 			# yes, do it
