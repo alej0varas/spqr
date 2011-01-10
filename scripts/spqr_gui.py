@@ -728,8 +728,6 @@ class CGFXEngine(object):
 					return
 				# grab relative grabs
 				xpos, ypos = pygame.mouse.get_rel()
-				xpos = xpos * SPQR.PAN_RATIO
-				ypos = ypos * SPQR.PAN_RATIO
 				# update the map thus
 				self.map_screen.x -= xpos
 				self.map_screen.y -= ypos
@@ -910,17 +908,27 @@ class CGFXEngine(object):
 
 	def renderImageUnits(self, region):
 		"""Update the unit info boxes with their data"""
-		# are their any units at all?
+		# are there any units at all?
 		# trash current data
 		for i in self.unit_widgets:
 			i.visible = False
 		units = SDATA.getRegionUnits(region)
 		if units == []:
 			return False
-		# have units, so let's do this:
+		# start by putting the widgets in the right place
+		xpos = (len(units) * (SPQR.UNIT_WIDTH + SPQR.SPACER)) - SPQR.SPACER
+		xpos = int((SPQR.SCREEN_WIDTH - xpos) / 2)
+		ypos = SPQR.BBOX_HEIGHT - (SPQR.UNIT_HEIGHT + (SPQR.SPACER * 2))
 		for i in range(len(units)):
-			self.unit_widgets[i].image.blit(self.image(units[i].image), (0, 0))
+			image = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT),
+									pygame.SRCALPHA, 32).convert_alpha()
+			image.blit(self.image("unit_background"), (0, 0))
+			image.blit(self.image(units[i].image), (0, 0))
+			self.unit_widgets[i].image = image
 			self.unit_widgets[i].visible = True
+			self.unit_widgets[i].rect.x = xpos
+			xpos += SPQR.UNIT_WIDTH + SPQR.SPACER
+			self.unit_widgets[i].rect.y = ypos
 		return True
 
 	def renderRegionInfoBox(self, region):

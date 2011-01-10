@@ -212,7 +212,7 @@ class CSPQR(object):
 			w.describe = "mapunit+" + str(i + 1)
 			w.rect.x = 10 + (i * 55)
 			w.rect.y = 10
-			w.visible = True
+			w.visible = False
 			units.append(w)
 			bwindow.addWidget(w)
 		SGFX.gui.unit_widgets = units

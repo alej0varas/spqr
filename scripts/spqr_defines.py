@@ -27,8 +27,8 @@ AUTHOR				= "Chris Smith"
 EMAIL				= "maximinus@gmail.com"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
-LAST_UPDATE			= "9th Jan 2011"
-CODELINES			= "5599"
+LAST_UPDATE			= "10th Jan 2011"
+CODELINES			= "5571"
 FULLSCREEN			= False
 
 # before we go any further, this one is a must ;-)
@@ -53,21 +53,10 @@ CHKBOX_SIZE			= 13
 # size of unit gfx
 UNIT_WIDTH			= 45
 UNIT_HEIGHT			= 41
-
 # box size for region icons
 REGION_ICON_SIZE	= 95
 
-SCROLL_SPEED		= 8
-SCROLL_DIAG			= 6
 KSCROLL_SPD			= 80
-# smallest text height guarenteed to work for all strings
-# taken from experimentation
-TXT_MIN_H			= 18
-# and for small and large:
-TXT_MIN_SM			= 16
-TXT_MIN_LG			= 20
-# next is the speed of a map pan compared to the actual mouse movement
-PAN_RATIO			= 1
 # location of Rome on main (graphical) map
 ROME_XPOS			= 1250
 ROME_YPOS			= 1150
@@ -173,7 +162,6 @@ WINSZ_BOT			= 6
 MENU_ALPHA			= 64
 # colour of the highlight
 MENU_HLCOL			= (170, 83, 83)
-MENU_HBORDER		= 6
 
 # game factor designs
 # start year is always 1 year before you want the game to start, as
@@ -183,20 +171,14 @@ START_YEAR			= -201
 # define all the colours we use as well
 BGUI_COL			= (238, 238, 230)
 BGUI_HIGH			= (227, 219, 213)
-CITY_TXT_COL		= (255, 255, 255)
 MENU_COL			= (246, 246, 246)
 MENU_BDR_COL		= (220, 220, 220)
 MENU_CNR_COL		= (194, 194, 194)
 MENU_TXT_COL		= (0, 0, 0)
-GAME_TRN_TXT		= (0, 0, 0)
 COL_BLACK			= (0, 0, 0)
 COL_WHITE			= (255, 255, 255)
-COLG_BLUE			= (81, 93, 151)
 COLG_RED			= (171, 84, 84)
-COLG_GREEN			= (112, 154, 104)
-COLG_BHIGH			= (116, 133, 216)
 COLG_RHIGH			= (254, 120, 120)
-COLG_GHIGH			= (160, 220, 149)
 COL_BUTTON			= (0, 0, 0)
 COL_WINTITLE		= (0, 0, 0)
 SLIDER_LIGHT		= (116, 133, 216)
@@ -228,38 +210,30 @@ SFX_ON				= True
 # they are here to prevent an exception should an unregistered
 # event ever be called
 def mouse_over_std(handle, x, y):
-	if DEBUG_MODE == True:
-		print "[SPQR]: Error: mouse_over_std called"
+	print "SPQR Error: mouse_over_std called"
 	return False
 
 def mouse_ldown_std(handle, x, y):
-	if DEBUG_MODE == True:
-		print "[SPQR]: Error: mouse_ldown_std called"
+	print "SPQR Error: mouse_ldown_std called"
 	return False
 
 def mouse_rdown_std(handle,x,y):
-	if DEBUG_MODE == True:
-		print "[SPQR]: Error: mouse_rdown_std called"
+	print "SPQR Error: mouse_rdown_std called"
 	return False
 
 def mouse_dclick_std(handle, x, y):
-	if DEBUG_MODE == True:
-		print "[SPQR]: Error: mouse_dclick_std called"
+	print "SPQR Error: mouse_dclick_std called"
 	return False
 
 def mouse_lclk_std(handle, x, y):
-	if DEBUG_MODE == True:
-		print "[SPQR]: Error: mouse_lclk_std called"
+	print "SPQR Error: mouse_lclk_std called"
 	return False
 
 def mouse_rclk_std(handle, x, y):
-	if DEBUG_MODE == True:
-		print "[SPQR]: Error: mouse_rclk_std called"
+	print "SPQR Error: mouse_rclk_std called"
 	return False
 	
 def null_routine(handle, x, y):
-	"""Another filler routine to handle blank callbacks"""
-	if DEBUG_MODE == True:
-		print "[SPQR]: Null routine called"
+	print "SPQR Error: Null routine called"
 	return False
 
