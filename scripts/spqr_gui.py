@@ -766,6 +766,11 @@ class CGFXEngine(object):
 		"""Renders a checkbox at the given location
 		   Very simple, just used to isolate gfx drawing out
 		   of the checkbox widget code"""
+		# we need to blit the buffer copy first
+		self.screen.blit(self.image("buffer"),
+						 (xpos + self.map_screen.x,
+						  ypos + self.map_screen.y + self.iHeight("win_tl"),
+						  widget.rect.w, widget.rect.h))
 		self.screen.blit(widget.image, (xpos, ypos, 0, 0))		
 		pygame.display.update((xpos, ypos, widget.rect.w, widget.rect.h))
 		return True
