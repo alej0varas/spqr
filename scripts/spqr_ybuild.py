@@ -61,14 +61,14 @@ def createWidget(wlist):
 			if wlist['callbacks'][c].keys()[0] == "lclk":
 				button.callbacks.mouse_lclk = getattr(SEVENTS, wlist['callbacks'][c]["lclk"])
 			elif wlist['callbacks'][c].keys()[0] == "over" :
-				button.callbacks.mouse_over = globals()[wlist['callbacks'][c]["over"]]
+				button.callbacks.mouse_over = getattr(SEVENTS, wlist['callbacks'][c]["over"])
 			elif wlist['callbacks'][c].keys()[0] == "rclk" :
-				button.callbacks.mouse_rclk = globals()[wlist['callbacks'][c]["rclk"]]
+				button.callbacks.mouse_rclk = getattr(SEVENTS, wlist['callbacks'][c]["rclk"])
 			elif wlist['callbacks'][c].keys()[0] == "ldown" :
-				button.callbacks.mouse_ldown = globals()[wlist['callbacks'][c]["ldown"]]
+				button.callbacks.mouse_ldown = getattr(SEVENTS, wlist['callbacks'][c]["ldown"])
 			elif wlist['callbacks'][c].keys()[0] == "rdown" :
-				button.callbacks.mouse_rdown = globals()[wlist['callbacks'][c]["rdown"]]
+				button.callbacks.mouse_rdown = getattr(SEVENTS, wlist['callbacks'][c]["rdown"])
 			elif wlist['callbacks'][c].keys()[0] == "dclick" :
-				button.callbacks.mouse_dclick = globals()[wlist['callbacks'][c]["dclick"]]
+				button.callbacks.mouse_dclick = getattr(SEVENTS, wlist['callbacks'][c]["dclick"])
 	return button
 
