@@ -29,16 +29,6 @@ from scripts import spqr_ybuild as SYAML
 SCREEN_WIDTH = 285
 SCREEN_HEIGHT = 192
 
-def okClick(handle, x, y):
-	for i in lgui.windows[0].items:
-		if i.describe == "opt-Resolution":
-			print "You selected a resolution of", i.option
-			sys.exit(True)
-
-def cancelClick(handle, x, y):
-	"""quit utility and don't change anything"""
-	sys.exit(True)
-
 def setupWindow():   
    SYAML.createWindow("../layouts/setup_window.yml")
 

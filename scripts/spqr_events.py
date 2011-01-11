@@ -700,3 +700,14 @@ def displaySliderContents(handle, xpos, ypos):
 		print "Slider value:", handle.getSliderValue()
 	return True
 
+# functions for the setup.py
+
+def okClick(handle, x, y):
+	for i in SGFX.gui.windows[0].items:
+		if i.describe == "opt-Resolution":
+			print "You selected a resolution of", i.option
+			sys.exit(True)
+
+def cancelClick(handle, x, y):
+	"""quit utility and don't change anything"""
+	sys.exit(True)

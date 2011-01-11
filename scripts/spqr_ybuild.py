@@ -21,6 +21,7 @@ import yaml
 from scripts import spqr_gui as SGFX
 from scripts import spqr_window as SWINDOW
 from scripts import spqr_widgets as SWIDGET
+from scripts import spqr_events as SEVENTS
 
 def createWindow(filename):
 	var = yaml.load(open(filename))
@@ -58,7 +59,7 @@ def createWidget(wlist):
 		button = SWIDGET.CButton(wlist['x'], wlist['y'], wlist['text'])
 		for c in range(len(wlist['callbacks'])):
 			if wlist['callbacks'][c].keys()[0] == "lclk":
-				button.callbacks.mouse_lclk = globals()[wlist['callbacks'][c]["lclk"]]
+				button.callbacks.mouse_lclk = getattr(SEVENTS, wlist['callbacks'][c]["lclk"])
 			elif wlist['callbacks'][c].keys()[0] == "over" :
 				button.callbacks.mouse_over = globals()[wlist['callbacks'][c]["over"]]
 			elif wlist['callbacks'][c].keys()[0] == "rclk" :
