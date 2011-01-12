@@ -16,21 +16,24 @@
 
 from __future__ import absolute_import
 from .. import spqr_defines as SPQR
+from .. import spqr_ybuild as SYAML
 import pygame
 import networkx as nx
 from . import spqr_city as SCITY
 
 # set as: name, xpos, ypos, colour, (unit_x, unit_y), city_name, conecting regions
-regions = [["lucania_et_bruttiun", 1339, 1147, (184, 37, 37), (1380, 1184),
-			"Brundisium", ["apulia_et_calabria", "latium_et_campania"]],
-		   ["apulia_et_calabria", 1309, 1076, (184, 37, 37), (1429, 1120),
-		    "Sybaris", ["latium_et_campania", "lucania_et_bruttiun"]],
-		   ["latium_et_campania", 1201, 1038, (184, 37, 37), (1233, 1103),
-		    "Roma", ["lucania_et_bruttiun", "apulia_et_calabria", "aemilia", "etruria"]],
-		   ["aemilia", 1157, 969, (55, 55, 230), (1225, 979),
-		    "Arretium", ["latium_et_campania", "etruria"]],
-		   ["etruria", 1081, 970, (184, 37, 37),(1147, 1007),
-		    "Ariminum", ["latium_et_campania", "aemilia"]]]
+#regions = [["lucania_et_bruttiun", 1339, 1147, (184, 37, 37), (1380, 1184),
+#			"Brundisium", ["apulia_et_calabria", "latium_et_campania"]],
+#		   ["apulia_et_calabria", 1309, 1076, (184, 37, 37), (1429, 1120),
+#		    "Sybaris", ["latium_et_campania", "lucania_et_bruttiun"]],
+#		   ["latium_et_campania", 1201, 1038, (184, 37, 37), (1233, 1103),
+#		    "Roma", ["lucania_et_bruttiun", "apulia_et_calabria", "aemilia", "etruria"]],
+#		   ["aemilia", 1157, 969, (55, 55, 230), (1225, 979),
+#		    "Arretium", ["latium_et_campania", "etruria"]],
+#		   ["etruria", 1081, 970, (184, 37, 37),(1147, 1007),
+#		    "Ariminum", ["latium_et_campania", "aemilia"]]]
+
+regions = SYAML.setRegions("../data/map.yml")
 
 class Position(object):
 	def __init__(self, position):

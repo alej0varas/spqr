@@ -29,8 +29,8 @@ from scripts import spqr_ybuild as SYAML
 SCREEN_WIDTH = 285
 SCREEN_HEIGHT = 192
 
-def setupWindow():   
-   SYAML.createWindow("../layouts/setup_window.yml")
+def setupWindow():
+	SYAML.createWindow("../layouts/setup_window.yml")
 
 def setupWindow2():
 	# get a fullsize window, and add the options to it
