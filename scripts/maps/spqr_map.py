@@ -16,8 +16,7 @@
 
 from __future__ import absolute_import
 from .. import spqr_defines as SPQR
-from .. import spqr_ybuild as SYAML
-import pygame
+import pygame, yaml
 import networkx as nx
 from . import spqr_city as SCITY
 
@@ -33,7 +32,7 @@ from . import spqr_city as SCITY
 #		   ["etruria", 1081, 970, (184, 37, 37),(1147, 1007),
 #		    "Ariminum", ["latium_et_campania", "aemilia"]]]
 
-regions = SYAML.setRegions("../data/map.yml")
+#regions = SYAML.setRegions("../data/map.yml")
 
 class Position(object):
 	def __init__(self, position):
@@ -45,13 +44,27 @@ class CMap(object):
 		self.regions = {}
 		self.masks = {}
 		self.graph = nx.Graph()
-		for i in regions:
-			self.regions[i[0]] = CRegion(i[0], i[1], i[2], i[3], i[4], i[5])
+		# Load the map's regions from a file
+		var = yaml.load(open("./data/map.yml"))
+		# Make a temp list with the borders
+		wlist=[]
+		# for every region we will import the spesific data
+		for j in range(len(var)):
+			# we will add now a list with the connecting regions
+			ilist = []
+			for i in range(len(var[j]['borders'])):
+				ilist.append(var[j]['borders'][i]['name'])
+			wlist.append(ilist)
+			# Append the temp list to our data
+			self.regions[var[j]['name']] = CRegion(var[j]['name'],
+				var[j]['xpos'], var[j]['ypos'], (var[j]['colour_r'],
+				var[j]['colour_g'],var[j]['colour_b']),
+				(var[j]['unit_x'],var[j]['unit_y']), var[j]['city'])
 		# repeat again for graph connections
-		for i in regions:
-			self.graph.add_node(self.regions[i[0]])
-			for connect in i[6]:
-				self.graph.add_edge(self.regions[i[0]], self.regions[connect])
+		for j in range(len(var)):
+			self.graph.add_node(self.regions[var[j]['name']])
+			for connect in wlist[j]:
+				self.graph.add_edge(self.regions[var[j]['name']], self.regions[connect])
 	
 	def getNeighbors(self, region):
 		return [i.image for i in self.graph.neighbors(self.regions[region])]
@@ -62,6 +75,11 @@ class CMap(object):
 		unit.region = region
 		self.regions[region].units.append(unit)
 		return True
+
+		
+		# uncomment for debug purpose
+		# print jlist,"\n ---------------------------------"
+		return jlist
 
 class CRegion(object):
 	def __init__(self, image, x, y, colour, city_pos, city_name):

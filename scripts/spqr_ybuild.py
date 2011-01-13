@@ -23,34 +23,7 @@ import spqr_window as SWINDOW
 import spqr_widgets as SWIDGET
 import spqr_events as SEVENTS
 
-def setRegions(filename):
-	""" Function which loads the map regions from a file """
-	# we load the file
-	var = yaml.load(open(filename))
-	# we define a list that holds the regions
-	jlist = []
-	# for every region we will import the spesific data
-	for j in range(len(var)):
-		# make a temporary list to collect the regions data
-		wlist = []
-		wlist.append(var[j]['name'])
-		wlist.append(var[j]['xpos'])
-		wlist.append(var[j]['ypos'])
-		wlist.append((var[j]['colour_r'],var[j]['colour_g'],var[j]['colour_b']))
-		wlist.append((var[j]['unit_x'],var[j]['unit_y']))
-		wlist.append(var[j]['city'])
-		# we will add now a list with the connecting regions
-		ilist = []
-		for i in range(len(var[j]['borders'])):
-			ilist.append(var[j]['borders'][i]['name'])
-		wlist.append(ilist)
-		# Append the temp list to our data
-		jlist.append(wlist)
-	# uncomment for debug purpose
-	# print jlist,"\n ---------------------------------"
-	return jlist
-	
-def create_window(filename):
+def createWindow(filename):
 	""" Function that opens a file in YAML format and creates the
 		described window with all the given widget's"""
 	# open then file
@@ -61,13 +34,8 @@ def create_window(filename):
 	for j in range(len(var)):
 		# first create the window and it's properties. each property
 		# has a spesific key in the file's dictonary
-		jlist.append(SWINDOW.CWindow(var[j]['x'],
-			var[j]['y'],
-			var[j]['w'],
-            var[j]['h'],
-            var[j]['title'],
-            False,
-            "main-window"))
+		jlist.append(SWINDOW.CWindow(var[j]['x'],var[j]['y'],
+			var[j]['w'],var[j]['h'],var[j]['title'],False,"main-window"))
 		# IMPORTANT I don't know why we call this function but I am
 		# guessing to empty the main image from the gui
 		jlist[j].fillWindowImage()
@@ -75,7 +43,7 @@ def create_window(filename):
 		# each window has it's own
 		for i in range(len(var[j]['items'])) :
 			# Create the widget
-			wid = create_widget(var[j]['items'][i])
+			wid = createWidget(var[j]['items'][i])
 			# make it active
 			wid.active = True
 			# add widget to the window
@@ -86,7 +54,7 @@ def create_window(filename):
 		# finally I add the window to the gui
 		SGFX.gui.addWindow(jlist[j])
 
-def create_widget(wlist):
+def createWidget(wlist):
 	""" Function that creates a widget and returns it based on the
 		passed list of properties """
 	# First we check the key that will always be in our widget's
