@@ -24,6 +24,7 @@ import spqr_window as SWINDOW
 import spqr_widgets as SWIDGET
 import spqr_gui as SGFX
 import spqr_sound as SSFX
+import spqr_ybuild as SYAML
 
 # thanks go to John Schanck for the following module
 import pyconsole
@@ -592,7 +593,7 @@ def consoleCityNames(handle, xpos, ypos):
 	print "No cities"
 	return True
 
-def windowTest(handle, xpos, ypos):
+def windowTest2(handle, xpos, ypos):
 	"""Routine to test whatever the latest version of the window
 	   code is. Does nothing clever really"""
 	# get a window
@@ -709,6 +710,22 @@ def displaySliderContents(handle, xpos, ypos):
 	# only if debugging is turned on, of course...
 	if SPQR.DEBUG_MODE == True:
 		print "Slider value:", handle.getSliderValue()
+	return True
+	
+def windowTest(handle, xpos, ypos):
+	"""Routine to test whatever the latest version of the window
+	   code is. Does nothing clever really"""
+	# get the window from a yaml file and this returns a list of indexes
+	# incase we import more than 1 window we get their indexes
+	# here we have 1 window so we get the first index
+	index = SYAML.createWindow("../data/layouts/window_test.yml")[0]
+	# we have to add modal keypresses ourselves
+	SGFX.gui.keyboard.setModalKeys(1)
+	# turn off unit animations
+	SGFX.gui.unitFlashAndOff()
+	# add the window as a dirty image
+	win_img = SGFX.gui.windows[index].drawWindow()
+	SGFX.gui.addDirtyRect(win_img, SGFX.gui.windows[index].rect)
 	return True
 
 # functions for the setup.py

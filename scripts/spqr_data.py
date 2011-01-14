@@ -14,7 +14,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import pygame, sys
+import pygame, sys, yaml
 import spqr_defines as SPQR
 import maps.spqr_map as SMAP
 import player.spqr_player as SPLAYER
@@ -24,10 +24,17 @@ import units.spqr_unit as SUNITS
 # held as a singleton in a python module
 
 # set as name, location and image
+<<<<<<< .mine
+#units = [["Legio_III", "etruria", "rome_legion"],
+#		 ["Legio_IX", "latium_et_campania", "fedorati"],
+#		 ["Legio_XII", "latium_et_campania", "rome_general"],
+#		 ["Legio_X", "lucania_et_bruttiun", "praetorians"]]
+=======
 units = [["Legio_III", "etruria", "rome_legion"],
 		 ["Legio_IX", "latium_et_campania", "fedorati"],
 		 ["Legio_XII", "latium_et_campania", "rome_general"],
 		 ["Legio_X", "lucania_et_bruttiun", "praetorians"]]
+>>>>>>> .r121
 
 class CInfo(object):
 	def __init__(self):
@@ -111,8 +118,12 @@ def unitClicked(x, y):
 
 def addUnits():
 	"""Used at start of game to add all units"""
-	for i in units:
-		if data.map.addUnit(i[1], SUNITS.CUnit(i[0], i[2])) == False:
+	units=[]
+	# Load the map's units from a file
+	var = yaml.load(open("../data/units/unit.yml"))
+	# For every unit we load their data to a list
+	for j in range(len(var)):
+		if data.map.addUnit(var[j]['location'], SUNITS.CUnit(var[j]['name'], var[j]['image'])) == False:
 			print "Error: Too many units in ", i[0]
 			sys.exit(False)
 

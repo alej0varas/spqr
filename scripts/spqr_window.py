@@ -34,6 +34,7 @@ class CButtonDetails(object):
 		self.text = text
 		self.key = key
 		self.event = event
+		self.describe="CButtonDetails"
 
 # define an CWindow
 class CWindow(object):

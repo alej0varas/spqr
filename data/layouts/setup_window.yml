@@ -4,6 +4,7 @@
   y: 0
   w: 640
   h: 480
+  draw: 0
   items:
     - widget: CLabel
       text: Resolution
