@@ -103,6 +103,11 @@ def miniMapDrag(handle, xpos, ypos):
 			ypos += event.rel[1]
 			miniMapClick(handle, xpos, ypos)
 
+def unitClicked(handle, xpos, ypos):
+	"""Called when a unit image is clicked"""
+	print handle
+	return True
+
 # here come the defines for the menu system, but let's start with a general
 # one to say that that part still needs to be coded
 def notYetCoded(handle, xpos, ypos):

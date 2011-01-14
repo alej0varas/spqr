@@ -931,7 +931,7 @@ class CGFXEngine(object):
 								   pygame.SRCALPHA, 32).convert_alpha()
 			image.blit(self.image("unit_background"), (0, 0))
 			image.blit(self.image(units[i].image), (0, 0))
-			self.unit_widgets[i].image = image_on
+			self.unit_widgets[i].image = image
 			self.unit_widgets[i].visible = True
 			self.unit_widgets[i].active = True
 			self.unit_widgets[i].rect.x = xpos
