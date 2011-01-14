@@ -24,17 +24,11 @@ import units.spqr_unit as SUNITS
 # held as a singleton in a python module
 
 # set as name, location and image
-<<<<<<< .mine
+
 #units = [["Legio_III", "etruria", "rome_legion"],
 #		 ["Legio_IX", "latium_et_campania", "fedorati"],
 #		 ["Legio_XII", "latium_et_campania", "rome_general"],
 #		 ["Legio_X", "lucania_et_bruttiun", "praetorians"]]
-=======
-units = [["Legio_III", "etruria", "rome_legion"],
-		 ["Legio_IX", "latium_et_campania", "fedorati"],
-		 ["Legio_XII", "latium_et_campania", "rome_general"],
-		 ["Legio_X", "lucania_et_bruttiun", "praetorians"]]
->>>>>>> .r121
 
 class CInfo(object):
 	def __init__(self):
