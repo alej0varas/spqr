@@ -236,9 +236,8 @@ class CSPQR(object):
 		"""Adds keys needed at the start of the game"""
 		# n for next unit, r for rome, i.e. centre the map
 		# CTRL-Q for exit, F1 for help; alt-f, alt-e and alt-h for menus
-		# n - next unit turn, f7 - show city info, f6 - show unit info
-		# f - finish this units turn, m - next unit on stack
-		# k - display standard keys list;  c - centre map on current unit
+		# n - next unit turn, r - centre map on rome
+		# f - finish this units turn, k - display standard keys list;  
 		SGFX.gui.keyboard.addKey(K_r, SEVENT.centreMap)
 		SGFX.gui.keyboard.addKey(K_f, SEVENT.keyMenuFile, KMOD_LALT)
 		SGFX.gui.keyboard.addKey(K_e, SEVENT.keyMenuEmpire, KMOD_LALT)
@@ -262,6 +261,7 @@ class CSPQR(object):
 		SGFX.gui.keyboard.addKey(K_a, SEVENT.menuHelpAbout, KMOD_LCTRL)
 		SGFX.gui.keyboard.addKey(K_F1, SEVENT.menuHelpHelp)
 		SGFX.gui.keyboard.addKey(K_k, SEVENT.keyShowKeys)
+		SGFX.gui.keyboard.addKey(K_n, SEVENT.highlightNextUnit)
 
 def main():
 	"""Setup everything and then run it"""

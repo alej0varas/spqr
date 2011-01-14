@@ -935,6 +935,7 @@ class CGFXEngine(object):
 			self.unit_widgets[i].visible = True
 			self.unit_widgets[i].active = True
 			self.unit_widgets[i].rect.x = xpos
+			self.unit_widgets[i].data = units[i].name
 			xpos += SPQR.UNIT_WIDTH + SPQR.SPACER
 			self.unit_widgets[i].rect.y = ypos
 		return True

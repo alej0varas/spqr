@@ -105,7 +105,11 @@ def miniMapDrag(handle, xpos, ypos):
 
 def unitClicked(handle, xpos, ypos):
 	"""Called when a unit image is clicked"""
-	print handle
+	print "Name of unit:", handle.data
+	return True
+
+def highlightNextUnit(handle, xpos, ypos):
+	print "Next unit highlighted"
 	return True
 
 # here come the defines for the menu system, but let's start with a general
@@ -422,9 +426,10 @@ def keyShowKeys(handle, xpos, ypos):
 	# just a very simple messagebox
 	message = "SPQR Keys:\n\n"
 	message += "f - Finish unit turn\n"
+	message += "k - Show this keylist\n"
+	message += "n - highlight next unit\n"
 	message += "r - Centre map on Rome\n"
 	message += "F1 - Help\n"
-	message += "k - Show this keylist\n"
 	message += "CTRL+Q - Exit the game\n\n"
 	SGFX.gui.messagebox(SPQR.BUTTON_OK, message, "SPQR Help")
 	return True

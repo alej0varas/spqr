@@ -25,6 +25,8 @@ import units.spqr_unit as SUNITS
 
 # set as name, location and image
 units = [["Legio_III", "etruria", "rome_legion"],
+		 ["Legio_IX", "latium_et_campania", "fedorati"],
+		 ["Legio_XII", "latium_et_campania", "rome_general"],
 		 ["Legio_X", "lucania_et_bruttiun", "praetorians"]]
 
 class CInfo(object):
@@ -61,6 +63,18 @@ def iterUnits():
 	for region in data.map.regions.itervalues():
 		for i in region.units:
 			yield i
+
+def nextUnitToMove(unit):
+	"""Call this function to get the next unit we need to move.
+	   We can't use iterUnits because it may be that some unit
+	   is destroyed or added. Instead, we sort all moveable units
+	   into alpabetical order and then send back the one after
+	   the given one"""
+	# so first, get a list of all moveable units
+	units = []
+	for region in data.map.regions.itervalues():
+		units.extend(region.units)
+	print units
 
 def regionClicked(x, y):
 	"""Return name of region if clicked, or False"""

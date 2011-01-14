@@ -53,6 +53,8 @@ class CWidget(object):
 		# following used to store the parent window of the
 		# widget... False if there is no valid parent
 		self.parent = False
+		# if a widget needs to store state information, it goes here
+		self.data = None
 		self.describe = describe
 
 # place the standard items here, starting with a label
