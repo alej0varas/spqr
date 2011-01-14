@@ -23,12 +23,12 @@ import pygame.locals as PYGAME
 # most useful when debugging is SPQR_FULLSCREEN
 
 VERSION				= "v0.3.615"
-AUTHOR				= "Chris Smith"
+AUTHOR				= "Chris Handy"
 EMAIL				= "maximinus@gmail.com"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
-LAST_UPDATE			= "10th Jan 2011"
-CODELINES			= "5571"
+LAST_UPDATE			= "14th Jan 2011"
+CODELINES			= "5646"
 FULLSCREEN			= False
 
 # before we go any further, this one is a must ;-)
