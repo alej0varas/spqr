@@ -71,7 +71,6 @@ def nextUnitToMove(unit = None):
 	   into alpabetical order and then send back the one after
 	   the given one"""
 	# so first, get a list of all moveable units
-	print unit
 	units = []
 	for region in data.map.regions.itervalues():
 		for i in region.units:

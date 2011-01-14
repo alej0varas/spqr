@@ -105,7 +105,7 @@ def miniMapDrag(handle, xpos, ypos):
 
 def unitClicked(handle, xpos, ypos):
 	"""Called when a unit image is clicked"""
-	print "Name of unit:", handle.data
+	SGFX.gui.focusOnUnit(handle.data)
 	return True
 
 def highlightNextUnit(handle, xpos, ypos):

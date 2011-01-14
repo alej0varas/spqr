@@ -671,11 +671,15 @@ class CGFXEngine(object):
 			self.flushFlash()
 			self.renderSingleRegion(old_region)
 			# finally, we should click the map on the new region city
-			cx, cy = SDATA.getCityPosition(SDATA.getRegion(region))
-			cx += 5
-			cy += 5
-			self.mapClick(cx, cy)
-			self.updateGUI()
+			# now highlight the new unit if it has moves left, or focus on the city
+			if SDATA.getUnitMoves(unit) != 0:
+				self.focusOnUnit(unit)
+			else:
+				cx, cy = SDATA.getCityPosition(SDATA.getRegion(region))
+				cx += 5
+				cy += 5
+				self.mapClick(cx, cy)
+				self.updateGUI()
 			return True
 		# cancel everything
 		cancelMoves()
@@ -696,11 +700,11 @@ class CGFXEngine(object):
 			self.image("buffer").blit(mask, (name.rect.x, name.rect.y))
 			# blit the city, if it exists
 			self.renderSingleCity(name)
-		self.updateMap()
 		# animate the unit
 		self.flash_highlight = unit
 		self.unitFlashOn()
 		self.map_click_moves = moves
+		self.updateMap()
 
 	def focusOnUnit(self, unit):
 		"""Given a units name, centre the map on this unit and activate it"""
@@ -711,6 +715,7 @@ class CGFXEngine(object):
 		self.map_click_moves = []
 		self.renderPixelMap()
 		self.centreMap(x, y)
+		self.flash_old = None
 		self.highlightMoves(unit)
 
 	# this is the main game loop. There are 2 varients of it, one which keeps
@@ -903,6 +908,7 @@ class CGFXEngine(object):
 			self.image("buffer").blit(self.flash_draw, self.flash_rect)
 			self.updateMap()
 			self.flash_on = True
+			self.flash_old = None
 		# turn flashing off
 		self.timer = False
 
