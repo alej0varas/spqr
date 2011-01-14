@@ -14,9 +14,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-# setup code for game
-# for now, you can only set the game resolution
-
 import yaml
 import spqr_gui as SGFX
 import spqr_window as SWINDOW
@@ -25,8 +22,8 @@ import spqr_events as SEVENTS
 import spqr_defines as SPQR
 
 def createWindow(filename):
-	""" Function that opens a file in YAML format and creates the
-		described window with all the given widget's"""
+	"""Function that opens a file in YAML format and creates the
+	   described window with all the given widgets"""
 	# open then file
 	var = yaml.load(open(filename))
 	# Two lists where we going to store all the windows and indexes
@@ -37,7 +34,7 @@ def createWindow(filename):
 	# loop for each window found in the file
 	for j in range(len(var)):
 		# first create the window and it's properties. each property
-		# has a spesific key in the file's dictonary
+		# has a specific key in the file's dictonary
 		jlist.append(SWINDOW.CWindow(var[j]['x'],var[j]['y'],
 			var[j]['w'],var[j]['h'],var[j]['title'],var[j]['draw']))
 		# We call this when we don't use drawWindow() function
@@ -55,9 +52,6 @@ def createWindow(filename):
 				wid.active = True
 				# add widget to the window
 				jlist[j].addWidget(wid)
-		# After we have added all the widget's we must make some windows
-		# modal. I don't know which shouldn't be modal so I make them all
-		jlist[j].modal = True
 		# finally I add the window to the gui
 		index.append(SGFX.gui.addWindow(jlist[j]))
 		# build the button area if exist

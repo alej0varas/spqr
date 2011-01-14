@@ -719,6 +719,7 @@ def windowTest(handle, xpos, ypos):
 	# incase we import more than 1 window we get their indexes
 	# here we have 1 window so we get the first index
 	index = SYAML.createWindow("../data/layouts/window_test.yml")[0]
+	SGFX.gui.windows[index].modal = True
 	# we have to add modal keypresses ourselves
 	SGFX.gui.keyboard.setModalKeys(1)
 	# turn off unit animations
