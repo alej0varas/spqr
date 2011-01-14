@@ -28,6 +28,7 @@ class Position(object):
 class CMap(object):
 	def __init__(self):
 		self.regions = {}
+		self.naval_regions = {}
 		self.masks = {}
 		self.graph = nx.Graph()
 		# Load the map's regions from a file
@@ -51,6 +52,20 @@ class CMap(object):
 			self.graph.add_node(self.regions[var[j]['name']])
 			for connect in wlist[j]:
 				self.graph.add_edge(self.regions[var[j]['name']], self.regions[connect])
+		# sort the naval connections
+		self.computeNavalAreas(var)
+		
+	def computeNavalAreas(self, data):
+		"""A port has access to ports in the same area. Here we store all
+		   the naval regions in a hash list"""
+		for region in data:
+			if region["naval"] != "none":
+				# check if we have met this region, if not, add it
+				if self.naval_regions.has_key(region["naval"]):
+					self.naval_regions[region["naval"]].append(region["name"])
+				else:
+					self.naval_regions[region["naval"]] = []
+					self.naval_regions[region["naval"]].append(region["name"])
 	
 	def getNeighbors(self, region):
 		return [i.image for i in self.graph.neighbors(self.regions[region])]
