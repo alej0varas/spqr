@@ -206,13 +206,14 @@ class CSPQR(object):
 		# areas for MAX_STACKING units to be displayed
 		units = []
 		for i in range(SPQR.MAX_STACKING):
-			w = SWIDGET.CCheckBox(0, 0, True, "rome_legion")
+			w = SWIDGET.buildImage("rome_legion"):
 			# set params
 			w.describe = "mapunit+" + str(i + 1)
 			w.rect.x = 10 + (i * 55)
 			w.rect.y = 10
 			w.visible = False
 			w.active = False
+			w.callbacks.mouse_lclk = SEVENT.unitClicked
 			units.append(w)
 			bwindow.addWidget(w)
 		SGFX.gui.unit_widgets = units

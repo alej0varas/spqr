@@ -20,20 +20,6 @@ import pygame, yaml
 import networkx as nx
 from . import spqr_city as SCITY
 
-# set as: name, xpos, ypos, colour, (unit_x, unit_y), city_name, conecting regions
-#regions = [["lucania_et_bruttiun", 1339, 1147, (184, 37, 37), (1380, 1184),
-#			"Brundisium", ["apulia_et_calabria", "latium_et_campania"]],
-#		   ["apulia_et_calabria", 1309, 1076, (184, 37, 37), (1429, 1120),
-#		    "Sybaris", ["latium_et_campania", "lucania_et_bruttiun"]],
-#		   ["latium_et_campania", 1201, 1038, (184, 37, 37), (1233, 1103),
-#		    "Roma", ["lucania_et_bruttiun", "apulia_et_calabria", "aemilia", "etruria"]],
-#		   ["aemilia", 1157, 969, (55, 55, 230), (1225, 979),
-#		    "Arretium", ["latium_et_campania", "etruria"]],
-#		   ["etruria", 1081, 970, (184, 37, 37),(1147, 1007),
-#		    "Ariminum", ["latium_et_campania", "aemilia"]]]
-
-#regions = SYAML.setRegions("../data/map.yml")
-
 class Position(object):
 	def __init__(self, position):
 		self.x = position[0]
@@ -48,7 +34,7 @@ class CMap(object):
 		var = yaml.load(open("./data/map.yml"))
 		# Make a temp list with the borders
 		wlist=[]
-		# for every region we will import the spesific data
+		# for every region we will import the specific data
 		for j in range(len(var)):
 			# we will add now a list with the connecting regions
 			ilist = []
@@ -75,11 +61,6 @@ class CMap(object):
 		unit.region = region
 		self.regions[region].units.append(unit)
 		return True
-
-		
-		# uncomment for debug purpose
-		# print jlist,"\n ---------------------------------"
-		return jlist
 
 class CRegion(object):
 	def __init__(self, image, x, y, colour, city_pos, city_name):

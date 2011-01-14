@@ -927,17 +927,11 @@ class CGFXEngine(object):
 		xpos = int((SPQR.SCREEN_WIDTH - xpos) / 2)
 		ypos = SPQR.BBOX_HEIGHT - (SPQR.UNIT_HEIGHT + (SPQR.SPACER * 2))
 		for i in range(len(units)):
-			image_on = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT),
-									  pygame.SRCALPHA, 32).convert_alpha()
-			image_on.blit(self.image("unit_background"), (0, 0))
-			image_on.blit(self.image(units[i].image), (0, 0))
-			image_off = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT),
-									   pygame.SRCALPHA, 32).convert_alpha()
-			image_off.blit(self.image("unit_highlight"), (0, 0))
-			image_off.blit(self.image(units[i].image), (0, 0))
+			image = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT),
+								   pygame.SRCALPHA, 32).convert_alpha()
+			image.blit(self.image("unit_background"), (0, 0))
+			image.blit(self.image(units[i].image), (0, 0))
 			self.unit_widgets[i].image = image_on
-			self.unit_widgets[i].on_image = image_on
-			self.unit_widgets[i].off_image = image_off
 			self.unit_widgets[i].visible = True
 			self.unit_widgets[i].active = True
 			self.unit_widgets[i].rect.x = xpos
