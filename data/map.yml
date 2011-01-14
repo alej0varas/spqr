@@ -1,4 +1,5 @@
-# spqr_map.py YAML data
+# YAML data for all regions
+
 - name: "lucania_et_bruttiun"
   xpos: 1339
   ypos: 1147
@@ -65,3 +66,16 @@
   borders:
     - name: "latium_et_campania"
     - name: "aemilia"
+
+- name: "sicily"
+  xpos: 1245
+  ypos: 1300
+  colour_r: 184
+  colour_g: 37
+  colour_b: 37
+  unit_x: 1340
+  unit_y: 1326
+  city: "Syracuse"
+  borders:
+    - name: "lucania_et_bruttiun"
+
