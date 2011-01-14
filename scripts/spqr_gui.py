@@ -702,6 +702,17 @@ class CGFXEngine(object):
 		self.unitFlashOn()
 		self.map_click_moves = moves
 
+	def focusOnUnit(self, unit):
+		"""Given a units name, centre the map on this unit and activate it"""
+		x, y = SDATA.getUnitPosition(unit)
+		x += int(SPQR.UNIT_WIDTH / 2)
+		y += int(SPQR.UNIT_HEIGHT / 2)
+		# we need to clean the map up
+		self.map_click_moves = []
+		self.renderPixelMap()
+		self.centreMap(x, y)
+		self.highlightMoves(unit)
+
 	# this is the main game loop. There are 2 varients of it, one which keeps
 	# looping forever, and a solo version which runs only once
 	def mainLoop(self):

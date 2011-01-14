@@ -109,7 +109,8 @@ def unitClicked(handle, xpos, ypos):
 	return True
 
 def highlightNextUnit(handle, xpos, ypos):
-	print "Next unit highlighted"
+	unit = SDATA.nextUnitToMove(SGFX.gui.current_highlight)
+	SGFX.gui.focusOnUnit(unit)
 	return True
 
 # here come the defines for the menu system, but let's start with a general

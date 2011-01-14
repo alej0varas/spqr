@@ -64,17 +64,31 @@ def iterUnits():
 		for i in region.units:
 			yield i
 
-def nextUnitToMove(unit):
+def nextUnitToMove(unit = None):
 	"""Call this function to get the next unit we need to move.
 	   We can't use iterUnits because it may be that some unit
 	   is destroyed or added. Instead, we sort all moveable units
 	   into alpabetical order and then send back the one after
 	   the given one"""
 	# so first, get a list of all moveable units
+	print unit
 	units = []
 	for region in data.map.regions.itervalues():
-		units.extend(region.units)
-	print units
+		for i in region.units:
+			units.append(i.name)
+	# sort the units
+	units.sort()
+	if unit in units:
+		# find the location
+		index = units.index(unit)
+		if index == len(units) - 1:
+			# last one, use the first
+			return units[0]
+		else:
+			return units[index + 1]
+	else:
+		# no match, just return the first one then
+		return units[0]
 
 def regionClicked(x, y):
 	"""Return name of region if clicked, or False"""
