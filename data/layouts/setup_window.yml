@@ -21,6 +21,10 @@
       initial: 1
       x: 140
       y: 100
+    - widget: CCheckBox
+      initial: 1
+      x: 140
+      y: 64
     - widget: COptionMenu
       x: 124
       y: 20

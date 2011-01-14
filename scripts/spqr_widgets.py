@@ -217,6 +217,7 @@ class CCheckBox(CWidget):
 			self.image = self.off_image
 		else:
 			self.status = True
+			self.image = self.on_image
 		# the image will have to be updated. Since we know that the widget
 		# must be active and on display (since we just got a click), we can
 		# just update the small bit of screen. Firstly, we get the window
