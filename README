@@ -1,12 +1,22 @@
-SPQR
+SPQR v0.3.7
+
+Dependencies: You need the following installed on your computer to work:
+
+Python 2.6.x   -> http://www.python.org/
+Pygame         -> http://www.pygame.org/news.html
+NetworkX       -> http://networkx.lanl.gov/
+PyYaml         -> http://pyyaml.org/
 
 Open a terminal and run the program spqr.py. You can run spqr.py -? to see the
 command line options.
 
 Currently the game is not playable, but you can scroll the map and check out the GUI so far.
 It's easiest to drag the map with the middle mouse down for now.
+You can move units by clicking them; the game will highlight what regions you can move to.
+You can also move the naval unit in the same way.
+Pressing the n key will cycle around all possible units.
 
-Please leave any comments etc at the website forum: 
+Please leave any comments at the website forum: 
 
 http://nostragame.forumfreez.com/forum.htm
 

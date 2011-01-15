@@ -73,6 +73,9 @@ def nextUnitToMove(unit = None):
 	for region in data.map.regions.itervalues():
 		for i in region.units:
 			units.append(i.name)
+	# no units?
+	if len(units) == 0:
+		return None
 	# sort the units
 	units.sort()
 	if unit in units:

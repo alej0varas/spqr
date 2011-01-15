@@ -1,6 +1,6 @@
 SPQR Game version history.
 
-Current version: 0.3.6
+Current version: 0.3.7
 
 Version History.
 
@@ -99,6 +99,7 @@ Version History.
 0.3.61	Units, cities and flashing are back in the game.
 0.3.612	Region selection and movement highlights put into game.
 0.3.615 Movement graphic effect seems to work fine, this means movement is 80% complete.
+0.3.7	Movement of units and naval units is complete.
 
 Notable milestones:
 

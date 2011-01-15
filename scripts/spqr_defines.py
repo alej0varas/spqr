@@ -28,7 +28,7 @@ EMAIL				= "maximinus@gmail.com"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
 LAST_UPDATE			= "15th Jan 2011"
-CODELINES			= "5749"
+CODELINES			= "5757"
 FULLSCREEN			= False
 
 # before we go any further, this one is a must ;-)
