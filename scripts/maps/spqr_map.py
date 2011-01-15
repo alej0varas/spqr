@@ -28,7 +28,6 @@ class Position(object):
 class CMap(object):
 	def __init__(self):
 		self.regions = {}
-		self.naval_regions = {}
 		self.masks = {}
 		self.graph = nx.Graph()
 		# Load the map's regions from a file
@@ -61,7 +60,7 @@ class CMap(object):
 		for region in data:
 			if region.has_key("naval"):
 				for nregion in region["naval"]:
-					self.regions[region["name"]].navel_regions = nregion["name"]
+					self.regions[region["name"]].naval_regions.append(nregion["name"])
 	
 	def getNeighbors(self, region):
 		return [i.image for i in self.graph.neighbors(self.regions[region])]
@@ -76,6 +75,7 @@ class CMap(object):
 class CRegion(object):
 	def __init__(self, image, x, y, colour, city_pos, city_name):
 		self.image = image
+		self.naval_regions = []
 		self.rect = pygame.Rect(x, y, 0, 0)
 		self.colour = colour
 		self.city_position = Position(city_pos)

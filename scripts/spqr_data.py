@@ -58,6 +58,10 @@ def iterUnits():
 		for i in region.units:
 			yield i
 
+def unitNaval(unit):
+	unit = getUnit(unit)
+	return unit.naval
+
 def nextUnitToMove(unit = None):
 	"""Call this function to get the next unit we need to move.
 	   We can't use iterUnits because it may be that some unit
@@ -110,7 +114,13 @@ def addUnits():
 	var = yaml.load(open("../data/units/unit.yml"))
 	# For every unit we load their data to a list
 	for i in var:
-		if data.map.addUnit(i['location'], SUNITS.CUnit(i['name'], i['image'])) == False:
+		if i.has_key('naval'):
+			result = data.map.addUnit(i['location'], 
+									  SUNITS.CUnit(i['name'],
+									  i['image'], naval = i['naval']))
+		else:
+			result = data.map.addUnit(i['location'], SUNITS.CUnit(i['name'], i['image']))
+		if result == False:
 			print "Error: Too many units in ", i[0]
 			sys.exit(False)
 
@@ -169,6 +179,9 @@ def getRegion(region):
 
 def getNeighbors(region):
 	return data.map.getNeighbors(region)
+
+def getNavalMoves(region):
+	return data.map.regions[region].naval_regions
 
 data = CInfo()
 

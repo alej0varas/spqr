@@ -688,8 +688,12 @@ class CGFXEngine(object):
 
 	def highlightMoves(self, unit):
 		"""Redraw buffer with highlighted areas and animate the given unit"""
-		# get possible 1 move locations
-		moves = SDATA.getNeighbors(SDATA.getUnitRegion(unit))
+		# is it navy or army?
+		if SDATA.unitNaval(unit):
+			moves = SDATA.getNavalMoves(SDATA.getUnitRegion(unit))
+		else:
+			# get possible 1 move locations
+			moves = SDATA.getNeighbors(SDATA.getUnitRegion(unit))
 		# now highlight all of those regions
 		for i in moves:
 			name = SDATA.getRegion(i)
