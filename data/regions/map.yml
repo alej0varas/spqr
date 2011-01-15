@@ -59,6 +59,7 @@
   borders:
     - name: "latium_et_campania"
     - name: "etruria"
+    - name: "venetia_et_histria"
 
 - name: "etruria"
   xpos: 1081
@@ -72,6 +73,8 @@
   borders:
     - name: "latium_et_campania"
     - name: "aemilia"
+    - name: "transpadana"
+    - name: "venetia_et_histria"
 
 - name: "sicily"
   xpos: 1245
@@ -87,4 +90,31 @@
     - name: "latium_et_campania"
   borders:
     - name: "lucania_et_bruttiun"
+
+- name: "transpadana"
+  xpos: 924
+  ypos: 826
+  colour_r: 184
+  colour_g: 37
+  colour_b: 37
+  unit_x: 978
+  unit_y: 970
+  city: "Nicaea"
+  borders:
+    - name: "etruria"
+    - name: "venetia_et_histria"
+
+- name: "venetia_et_histria"
+  xpos: 1050
+  ypos: 802
+  colour_r: 184
+  colour_g: 37
+  colour_b: 37
+  unit_x: 1186
+  unit_y: 831
+  city: "Aquileia"
+  borders:
+    - name: "transpadana"
+    - name: "etruria"
+    - name: "aemilia"
 
