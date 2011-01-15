@@ -139,6 +139,7 @@ def moveUnit(unit, region):
 			# remove old unit from location
 			data.map.regions[i.region].units.remove(i)
 			i.region = region
+			i.moves_left -= 1
 			return True
 	print "Error: Couldn't find unit", unit, "to move"
 	return False

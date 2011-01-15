@@ -82,7 +82,7 @@ WIN_MENU			= 0
 
 # the images to load
 # just list the folders inside gfx: the game will pull all of the png files
-GRAPHICS_F			= ["gui", "icons", "units", "cities" ,"map/regions"]
+GRAPHICS_F			= ["gui", "icons", "units", "cities" ,"map/regions", "units/overlays"]
 
 # milliseconds between unit flash
 # (all animation times are in milliseconds)
