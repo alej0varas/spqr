@@ -106,6 +106,7 @@ def miniMapDrag(handle, xpos, ypos):
 
 def unitClicked(handle, xpos, ypos):
 	"""Called when a unit image is clicked"""
+	# only highlight if there is a move left
 	SGFX.gui.focusOnUnit(handle.data)
 	return True
 

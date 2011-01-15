@@ -23,7 +23,7 @@ class unitStats(object):
 class CUnit(object):
 	"""Normally the calling functions read q and m from a file,
 		 hence the odd maths when it calculates morale and quality"""
-	def __init__(self, name, image, move = 1, stats = None, naval = False):
+	def __init__(self, name, image, move = 4, stats = None, naval = False):
 		self.name = name
 		self.moves = move
 		self.moves_left = move

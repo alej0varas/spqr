@@ -719,8 +719,10 @@ class CGFXEngine(object):
 		self.map_click_moves = []
 		self.renderPixelMap()
 		self.centreMap(x, y)
-		self.flash_old = None
-		self.highlightMoves(unit)
+		# only highlight if we have some moves
+		if SDATA.getUnitMoves(unit) > 0:
+			self.flash_old = None
+			self.highlightMoves(unit)
 
 	# this is the main game loop. There are 2 varients of it, one which keeps
 	# looping forever, and a solo version which runs only once
@@ -834,7 +836,7 @@ class CGFXEngine(object):
 			self.current_highlight = self.flash_highlight
 			# we now have an new flashing unit. Firstly, remove the old blit area
 			if self.flash_old != None:
-				self.image("buffer").blit(self.flash_old, self.flash_rect)		
+				self.image("buffer").blit(self.flash_old, self.flash_rect)	
 			# now we generate the part we use to erase the area.
 			self.flash_erase = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT), SRCALPHA)
 			# ok, we can blit the rendered map over
@@ -853,6 +855,10 @@ class CGFXEngine(object):
 			# then draw the unit over it
 			index = SDATA.getUnitImage(self.current_highlight)
 			self.flash_draw.blit(self.image(index), (0, 0))
+			# add to both images the moves left
+			moves = "moves" + str(SDATA.getUnitMoves(self.current_highlight))
+			self.flash_erase.blit(self.image(moves), (0, 0))
+			self.flash_draw.blit(self.image(moves), (0, 0))
 			
 			# make sure that we draw the erase part of the image first
 			self.flash_on = True
