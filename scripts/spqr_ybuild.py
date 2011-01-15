@@ -120,3 +120,4 @@ def checkCallbacks(wid,clist):
 		elif clist[c].keys()[0] == "dclick" and wid.callbacks.mouse_lclk == SPQR.mouse_dclick_std :
 			wid.callbacks.mouse_dclick = getattr(SEVENTS, clist[c]["dclick"])
 	return wid
+
