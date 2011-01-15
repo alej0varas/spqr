@@ -9,7 +9,9 @@
   unit_x: 1380
   unit_y: 1184
   city: "Brundisium"
-  naval: "mediterranean"
+  naval:
+    - name: "latium_et_campania"
+    - name: "sicily"
   borders:
     - name: "apulia_et_calabria"
     - name: "latium_et_campania"
@@ -23,7 +25,6 @@
   unit_x: 1429
   unit_y: 1120
   city: "Sybaris"
-  naval: "mediterranean"
   borders:
     - name: "latium_et_campania"
     - name: "lucania_et_bruttiun"
@@ -37,7 +38,9 @@
   unit_x: 1233
   unit_y: 1103
   city: "Roma"
-  naval: "mediterranean"
+  naval:
+    - name: "sicily"
+    - name: "lucania_et_bruttiun"
   borders:
     - name: "lucania_et_bruttiun"
     - name: "apulia_et_calabria"
@@ -53,7 +56,6 @@
   unit_x: 1225
   unit_y: 979
   city: "Arretium"
-  naval: "mediterranean"
   borders:
     - name: "latium_et_campania"
     - name: "etruria"
@@ -67,7 +69,6 @@
   unit_x: 1147
   unit_y: 1007
   city: "Ariminum"
-  naval: "mediterranean"
   borders:
     - name: "latium_et_campania"
     - name: "aemilia"
@@ -81,7 +82,9 @@
   unit_x: 1340
   unit_y: 1326
   city: "Syracuse"
-  naval: "mediterranean"
+  naval:
+    - name: "lucania_et_bruttiun"
+    - name: "latium_et_campania"
   borders:
     - name: "lucania_et_bruttiun"
 

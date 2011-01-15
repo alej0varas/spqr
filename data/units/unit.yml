@@ -15,3 +15,8 @@
 - name: "Legio_X"
   location: "lucania_et_bruttiun"
   image: "praetorians"
+
+- name: "Sicilian_Fleet"
+  location: "sicily"
+  image: "boat"
+

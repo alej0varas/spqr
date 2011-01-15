@@ -59,13 +59,9 @@ class CMap(object):
 		"""A port has access to ports in the same area. Here we store all
 		   the naval regions in a hash list"""
 		for region in data:
-			if region["naval"] != "none":
-				# check if we have met this region, if not, add it
-				if self.naval_regions.has_key(region["naval"]):
-					self.naval_regions[region["naval"]].append(region["name"])
-				else:
-					self.naval_regions[region["naval"]] = []
-					self.naval_regions[region["naval"]].append(region["name"])
+			if region.has_key("naval"):
+				for nregion in region["naval"]:
+					self.regions[region["name"]].navel_regions = nregion["name"]
 	
 	def getNeighbors(self, region):
 		return [i.image for i in self.graph.neighbors(self.regions[region])]
