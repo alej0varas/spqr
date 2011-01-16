@@ -78,7 +78,7 @@ FONT_STD			= 14
 FONT_LARGE			= 16
 
 # index numbers of windows that are always present
-WIN_MENU			= 0
+WIN_MENU			= 1
 
 # the images to load
 # just list the folders inside gfx: the game will pull all of the png files
@@ -112,6 +112,7 @@ BUTTON_IGNORE		= 32
 
 # standard widget types
 WT_ROOT				= 0
+WT_MAP				= WT_ROOT
 WT_BUTTON			= 1
 WT_LABEL			= 2
 WT_IMAGE			= 3

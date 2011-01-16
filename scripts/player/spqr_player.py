@@ -19,5 +19,5 @@ class CPlayer(object):
 		self.name_single = name_single
 		self.name_plural = name_plural
 		self.colour = None
-		self.owned_regions = None
+		self.owned_regions = []
 

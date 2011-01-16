@@ -585,7 +585,7 @@ class CGFXEngine(object):
 								return False
 							elif action == SPQR.MOUSE_LCLK and \
 									bar.callbacks.mouse_dclick != SPQR.mouse_dclick_std and \
-									self.dclick_handle == bar:	 
+									self.dclick_handle == bar:
 								# it's a real bona-fida double-click
 								# firstly clear all double-click data, then run the code
 								pygame.time.set_timer(SPQR.EVENT_DC_END, 0)
@@ -593,7 +593,7 @@ class CGFXEngine(object):
 								bar.callbacks.mouse_dclick(bar, x_widget, y_widget)
 								return True
 							elif action == SPQR.MOUSE_DCLICK:
-								# obviously we got a double-click where it wasn't needed
+								# unwanted double-click
 								pygame.time.set_timer(SPQR.EVENT_DC_END, 0)
 								self.dclick_handle = None
 								return False
@@ -614,6 +614,13 @@ class CGFXEngine(object):
 				# handle it elsewhere
 				self.mapClick(x, y)
 				return True
+		elif action == SPQR.MOUSE_DCLICK:
+			# maybe we double clicked the map
+			if self.map_area.collidepoint(x, y) == True:
+				print "double map click"
+			pygame.time.set_timer(SPQR.EVENT_DC_END, 0)
+			self.dclick_handle = None
+			return True
 		return False
 
 	def screenToMapCoords(self, x, y):
@@ -641,6 +648,7 @@ class CGFXEngine(object):
 			self.unitFlashAndOff()
 		name = SDATA.regionClicked(x, y)
 		if name != False:
+			print "Region:", name, "owned by the", SDATA.regionOwnerPlural(name)
 			self.renderRegionInfoBox(name)
 			self.renderImageUnits(name)
 			self.updateGUI()

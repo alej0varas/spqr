@@ -39,11 +39,13 @@ class CMap(object):
 			# we will add now a list with the connecting regions
 			for region in i["borders"]:
 				wlist.append((i["name"], region["name"]))
+			# make the player know it's the owner
+			players[i["owner"]].owned_regions.append(i["name"])
 			# Append the temp list to our data
 			colour = players[i["owner"]].colour
-			self.regions[i["name"]] = CRegion(i['name'], i["xpos"], i["ypos"], i["owner"],
+			self.regions[i["name"]] = CRegion(i["name"], i["xpos"], i["ypos"], i["owner"],
 											  colour, (i["unit_x"], i["unit_y"]), i["city"])
-			self.graph.add_node(self.regions[i['name']])
+			self.graph.add_node(self.regions[i["name"]])
 		# repeat again for graph connections
 		for node in wlist:
 			self.graph.add_edge(self.regions[node[0]], self.regions[node[1]])
@@ -73,6 +75,7 @@ class CRegion(object):
 		self.image = image
 		self.naval_regions = []
 		self.rect = pygame.Rect(x, y, 0, 0)
+		self.owner = owner
 		self.colour = colour
 		self.city_position = Position(city_pos)
 		self.city = SCITY.CCity(city_name, "roman_medium")
@@ -80,6 +83,4 @@ class CRegion(object):
 		# sometimes the area that the city text appears in is outside the area of the region
 		# we need to save this area to make re-drawing the region not need a whole map redraw
 		self.text_rect = None
-
-
 

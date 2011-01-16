@@ -41,13 +41,13 @@ class CCallbacks(object):
 class CWidget(object):
 	"""Base class for widgets: All other widgets should build on this one"""
 	def __init__(self, rect, htype, image, describe,
-				 parent=False, active=False, visible=True):
+				 parent = False, active = False, visible = True):
 		self.active = active
 		self.visible = visible
 		self.rect = rect
 		self.wtype = htype
 		# add callbacks
-		self.callbacks = CCallbacks(describe+"_Callback")
+		self.callbacks = CCallbacks(describe + "_Callback")
 		# set an image up for later
 		self.image = image
 		# following used to store the parent window of the
@@ -59,7 +59,7 @@ class CWidget(object):
 
 # place the standard items here, starting with a label
 class CLabel(CWidget):
-	"""Label class stes and stores details for a simple label"""
+	"""Label class stores details for a simple label"""
 	def __init__(self, x, y, width, height, text, font = SPQR.FONT_VERA):
 		CWidget.__init__(self, pygame.Rect(x,y,width,height), SPQR.WT_LABEL,
 					     None, "CLabel") 

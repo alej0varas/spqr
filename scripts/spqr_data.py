@@ -98,6 +98,9 @@ def nextUnitToMove(unit = None):
 		# no match, just return the first one then
 		return units[0]
 
+def regionOwnerPlural(region):
+	return data.players[getRegion(region).owner].name_plural
+
 def regionClicked(x, y):
 	"""Return name of region if clicked, or False"""
 	for i in iterRegions():
