@@ -26,7 +26,15 @@ import units.spqr_unit as SUNITS
 class CInfo(object):
 	def __init__(self):
 		self.year = SPQR.START_YEAR
-		self.map = SMAP.CMap()
+		self.players = {}
+		self.addPlayers()
+		self.map = SMAP.CMap(self.players)
+
+	def addPlayers(self):
+		self.players["romans"] = SPLAYER.CPlayer("Roman", "Romans")
+		self.players["romans"].colour = (184, 37, 37)
+		self.players["celts"] = SPLAYER.CPlayer("Celtic", "Celts")
+		self.players["celts"].colour = (55, 55, 230)
 
 	def initNewTurn(self):
 		"""Call routine at end of turn. Resets all data

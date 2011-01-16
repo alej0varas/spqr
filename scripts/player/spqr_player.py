@@ -18,4 +18,6 @@ class CPlayer(object):
 	def __init__(self, name_single, name_plural):
 		self.name_single = name_single
 		self.name_plural = name_plural
+		self.colour = None
+		self.owned_regions = None
 

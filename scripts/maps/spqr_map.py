@@ -26,7 +26,7 @@ class Position(object):
 		self.y = position[1]
 
 class CMap(object):
-	def __init__(self):
+	def __init__(self, players):
 		self.regions = {}
 		self.masks = {}
 		self.graph = nx.Graph()
@@ -35,22 +35,18 @@ class CMap(object):
 		# Make a temp list with the borders
 		wlist=[]
 		# for every region we will import the specific data
-		for j in range(len(var)):
+		for i in var:
 			# we will add now a list with the connecting regions
-			ilist = []
-			for i in range(len(var[j]['borders'])):
-				ilist.append(var[j]['borders'][i]['name'])
-			wlist.append(ilist)
+			for region in i["borders"]:
+				wlist.append((i["name"], region["name"]))
 			# Append the temp list to our data
-			self.regions[var[j]['name']] = CRegion(var[j]['name'],
-				var[j]['xpos'], var[j]['ypos'], (var[j]['colour_r'],
-				var[j]['colour_g'],var[j]['colour_b']),
-				(var[j]['unit_x'],var[j]['unit_y']), var[j]['city'])
+			colour = players[i["owner"]].colour
+			self.regions[i["name"]] = CRegion(i['name'], i["xpos"], i["ypos"], i["owner"],
+											  colour, (i["unit_x"], i["unit_y"]), i["city"])
+			self.graph.add_node(self.regions[i['name']])
 		# repeat again for graph connections
-		for j in range(len(var)):
-			self.graph.add_node(self.regions[var[j]['name']])
-			for connect in wlist[j]:
-				self.graph.add_edge(self.regions[var[j]['name']], self.regions[connect])
+		for node in wlist:
+			self.graph.add_edge(self.regions[node[0]], self.regions[node[1]])
 		# sort the naval connections
 		self.computeNavalAreas(var)
 		
@@ -73,7 +69,7 @@ class CMap(object):
 		return True
 
 class CRegion(object):
-	def __init__(self, image, x, y, colour, city_pos, city_name):
+	def __init__(self, image, x, y, owner, colour, city_pos, city_name):
 		self.image = image
 		self.naval_regions = []
 		self.rect = pygame.Rect(x, y, 0, 0)
@@ -84,4 +80,6 @@ class CRegion(object):
 		# sometimes the area that the city text appears in is outside the area of the region
 		# we need to save this area to make re-drawing the region not need a whole map redraw
 		self.text_rect = None
+
+
 
