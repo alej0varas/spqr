@@ -70,11 +70,8 @@ def createWidget(wlist):
 		# and add the cords to the rect
 		label.rect.x = wlist['x']
 		label.rect.y = wlist['y']
-		# Check if there is any widgets
-		try:
-			checkCallbacks(label,wlist['callbacks'])
-		except:
-			pass
+		# Check if there is any widgets callback
+		if wlist.has_key('callbacks'): checkCallbacks(label,wlist['callbacks'])
 		return label
 	elif wlist['widget'] == "CCheckBox" :
 		intro = SWIDGET.CCheckBox(wlist['x'], wlist['y'], wlist['initial'])

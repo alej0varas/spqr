@@ -126,7 +126,7 @@ def addUnits():
 	units=[]
 	# Load the map's units from a file
 	var = yaml.load(open("../data/units/unit.yml"))
-	# For every unit we load their data to a list
+	# For every unit we load their data and add the unit
 	for i in var:
 		if i.has_key('naval'):
 			result = data.map.addUnit(i['location'], 
@@ -135,7 +135,7 @@ def addUnits():
 		else:
 			result = data.map.addUnit(i['location'], SUNITS.CUnit(i['name'], i['image']))
 		if result == False:
-			print "Error: Too many units in ", i[0]
+			print "Error: Too many units in ", var[j]['location']
 			sys.exit(False)
 
 def moveUnit(unit, region):
