@@ -128,12 +128,13 @@ def addUnits():
 	var = yaml.load(open("../data/units/unit.yml"))
 	# For every unit we load their data and add the unit
 	for i in var:
+		st = SUNITS.UnitStats(i["stats"][0], i["stats"][0], i["stats"][0])
 		if i.has_key('naval'):
 			result = data.map.addUnit(i['location'], 
-									  SUNITS.CUnit(i['name'],
-									  i['image'], naval = i['naval']))
+									  SUNITS.CUnit(i['name'], i['image'], 
+									  			   naval = i['naval'], stats = st))
 		else:
-			result = data.map.addUnit(i['location'], SUNITS.CUnit(i['name'], i['image']))
+			result = data.map.addUnit(i['location'], SUNITS.CUnit(i['name'], i['image'], stats = st))
 		if result == False:
 			print "Error: Too many units in ", var[j]['location']
 			sys.exit(False)
@@ -162,6 +163,13 @@ def getUnit(name):
 	for i in iterUnits():
 		if name == i.name:
 			return i
+
+def getAllPlayerUnits(owner):
+	units = []
+	for region in data.map.regions.itervalues():
+		if region.owner == owner:
+			units.extend(region.units)
+	return units
 
 def getUnitPosition(name):
 	region = getUnitRegion(name)

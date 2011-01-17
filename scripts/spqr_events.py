@@ -24,6 +24,7 @@ import spqr_window as SWINDOW
 import spqr_widgets as SWIDGET
 import spqr_gui as SGFX
 import spqr_sound as SSFX
+import units.spqr_unit as SUNITS
 import spqr_ybuild as SYAML
 
 # thanks go to John Schanck for the following module
@@ -297,74 +298,30 @@ def menuEmpireSenate(handle, xpos, ypos):
 	return True
 
 def menuEmpireUnits(handle, xpos, ypos):
-	print "Show military"
-	return True
-
-def menuEmpireMilitary(handle, xpos, ypos):
-	"""Routine sets up and displays the unit display box
-	   Always returns True"""
-	   
-	# OLD CODE TO DISPLAY EXAMPLE OF AN ITEMLIST
-	# TODO: Replace as soon as possible!
-	   
-	# we need to create the following data to creata an ItemList:
-	# lgui,x,y - gui pointer and x/y position (as per normal)
-	# a list to say what the column types are (where True is text)
-	# a list to give the column titles
-	# then a list of lists, each list giving the attributes for
-	# each column. Followed by the height of the total widget
-	# the column layout should be: Unit gfx, unit name, status, commander
-	# create the item list:
-	ilist = [False, True, True, False, True]
-	# and the column name list:
-	clist = ["Image", "Unit Name", "Moves", "Status", "Commander"]
-	# that was easy. Now create each list item. Firstly we need
-	# every unit that is Roman:
-	units = []
-	for i in SGFX.gui.data.troops.units:
-		if i.owner == SPQR.ROME_SIDE:
-			units.append(i.id_number)
+	# name, image, strength, quality, morale
+	columns = [True, False, True, True, True]
+	names = ["Name", "Type", "Strength", "Quality", "Morale"]
+	units = SDATA.getAllPlayerUnits("romans")
 	# did we actually get any units?
 	if units == []:
 		SGFX.gui.messagebox(SPQR.BUTTON_OK, "There are no Roman units!", "Unit List")
 		return True
-
-	# now build up the column data that we need:
-	uid = []
-	ugfx = []
-	uname = []
-	umoves = []
-	ustatus = []
-	ucommander = []
-	for foo in units:
-		uid.append(foo)
-		i=SGFX.gui.data.troops.getIndexFromID(foo)
-		tunit=SGFX.gui.data.troops.units[i]
-		ugfx.append(SGFX.gui.images[tunit.image])
-		uname.append(tunit.name)
-		umoves.append(str(tunit.moves_left))
-		ustatus.append(SGFX.gui.returnGraphImage(i))
-		i2=SGFX.gui.data.getPeopleIndex(tunit.commander)
-		cname=SGFX.gui.data.people[i2].getShortName()
-		ucommander.append(cname)
-
+	# build up column data
+	uimage = []; uname = []
+	ustrength = [];	uquality = []
+	umorale = []
+	for i in units:
+		uimage.append(SGFX.gui.image(i.image))
+		uname.append(i.name)
+		ustrength.append(str(i.stats.strength))
+		uquality.append(str(i.stats.quality))
+		umorale.append(str(i.stats.morale))
 	# store the sort routines:
-	sort = [SGFX.gui.data.sortUnitImage,
-		 	SGFX.gui.data.sortUnitName,
-		 	SGFX.gui.data.sortUnitMoves,
-		 	SGFX.gui.data.sortUnitStatus,
-		 	SGFX.gui.data.sortUnitCommander]
+	elements = [columns, names, uname, uimage, ustrength, uquality, umorale]
+	sort = [SUNITS.sortImage, SUNITS.sortName, SUNITS.sortStrength,
+		 	SUNITS.sortQuality,	SUNITS.sortMorale]
 
-	# tie all of that up together and get the ItemList:
-	elements = []
-	elements.append(ilist)
-	elements.append(clist)
-	elements.append(ugfx)
-	elements.append(uname)
-	elements.append(umoves)
-	elements.append(ustatus)
-	elements.append(ucommander)
-	unitlist = SWIDGET.CItemList(SGFX.gui, SPQR.SPACER, SPQR.SPACER, elements, sort, uid, 300)
+	unitlist = SWIDGET.CItemList(SPQR.SPACER, SPQR.SPACER, elements, sort, [], 300)
 	sclist = unitlist.listarea
 
 	# now we can actually build up our window. Let's make this as easy
@@ -379,7 +336,7 @@ def menuEmpireMilitary(handle, xpos, ypos):
 	# let's have SPACER around the window as filler, except at the bottom,
 	# where we have SPACER - checkbox+label - SPACER:
 	height = wysize + (SPQR.SPACER*3)
-	width = wxsize + ((SPQR.SPACER*2) + SGFX.gui.images[SPQR.SCROLL_TOP].get_width())	
+	width = wxsize + ((SPQR.SPACER*2) + SGFX.gui.image("scrollbar_top").get_width())	
 	# now start to build the window
 	uwin = (SWINDOW.CWindow(-1, -1, width, height, "Unit List", True))	
 	uwin.addWidget(unitlist)

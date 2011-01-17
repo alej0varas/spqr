@@ -1,43 +1,54 @@
 # YAML data for all units
+# stats are strength, quality and morale, all from 0 - 100
 
 - name: "Legio_I"
   location: "transpadana"
   image: "rome_legion"
+  stats: [77, 80, 80]
 
 - name: "Legio_II"
   location: "transpadana"
   image: "rome_legion"
+  stats: [60, 80, 80]
 
 - name: "Legio_III"
   location: "etruria"
   image: "rome_legion"
+  stats: [45, 80, 75]
   
 - name: "Legio_IV"
   location: "venetia_et_histria"
   image: "rome_legion"
+  stats: [80, 80, 65]
   
 - name: "Legio_V"
   location: "venetia_et_histria"
   image: "rome_legion"
+  stats: [71, 80, 82]
 
 - name: "Legio_VI"
   location: "venetia_et_histria"
   image: "rome_legion"
+  stats: [55, 80, 80]
 
 - name: "Legio_IX"
   location: "latium_et_campania"
   image: "rome_legion"
+  stats: [76, 80, 80]
 
 - name: "Legio_XII"
   location: "latium_et_campania"
   image: "rome_general"
+  stats: [90, 60, 85]
 
 - name: "Legio_X"
   location: "lucania_et_bruttiun"
   image: "rome_legion"
+  stats: [65, 80, 76]
 
 - name: "Sicilian_Fleet"
   location: "sicily"
   image: "boat"
+  stats: [40, 70, 90]
   naval: yes
 

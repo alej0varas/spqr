@@ -248,7 +248,7 @@ class CWindow(object):
 			# now we add the buttons
 			xpos = width - ((2 * SPQR.SPACER) + SGFX.gui.iWidth("button"))
 			ypos = (self.rect.h - (extend_height + SPQR.WINSZ_TOP))
-			ypos += (extend_height-SGFX.gui.iHeight("button")/2)
+			ypos += int((extend_height - SGFX.gui.iHeight("button")) / 2)
 			while len(button_list) > 0:	
 				# get the next button
 				button = button_list.pop(0)

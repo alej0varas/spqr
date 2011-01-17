@@ -14,7 +14,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-class unitStats(object):
+class UnitStats(object):
 	def __init__(self, strength, quality, morale):
 		self.strength = strength
 		self.quality = quality
@@ -38,4 +38,20 @@ class CUnit(object):
 		text = "  Name: " + self.name
 		text += "\nRegion: " + self.region + "\n"
 		return text
+
+# sort routines
+def sortImage(a, b):
+	return cmp(a,b)
+
+def sortName(a, b):
+	return cmp(a,b)
+
+def sortStrength(a, b):
+	return cmp(a,b)
+
+def sortQuality(a, b):
+	return cmp(a,b)
+
+def sortMorale(a, b):
+	return cmp(a,b)
 
