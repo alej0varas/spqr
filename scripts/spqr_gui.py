@@ -684,11 +684,14 @@ class CGFXEngine(object):
 	def highlightMoves(self, unit):
 		"""Redraw buffer with highlighted areas and animate the given unit"""
 		# is it navy or army?
+		region = SDATA.getUnitRegion(unit)
 		if SDATA.unitNaval(unit):
-			moves = SDATA.getNavalMoves(SDATA.getUnitRegion(unit))
+			moves = SDATA.getNavalMoves(region)
 		else:
 			# get possible 1 move locations
-			moves = SDATA.getNeighbors(SDATA.getUnitRegion(unit))
+			moves = SDATA.getNeighbors(region)
+		# remove all regions which already have a maximum unit stack
+		moves = [x for x in moves if len(SDATA.getRegionUnits(x)) < (SPQR.MAX_STACKING - 1)]
 		# now highlight all of those regions
 		for i in moves:
 			name = SDATA.getRegion(i)
