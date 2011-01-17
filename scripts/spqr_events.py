@@ -309,19 +309,20 @@ def menuEmpireUnits(handle, xpos, ypos):
 	# build up column data
 	uimage = []; uname = []
 	ustrength = [];	uquality = []
-	umorale = []
+	umorale = []; uid = []
 	for i in units:
 		uimage.append(SGFX.gui.image(i.image))
 		uname.append(i.name)
 		ustrength.append(str(i.stats.strength))
 		uquality.append(str(i.stats.quality))
 		umorale.append(str(i.stats.morale))
+		uid.append(i.name)
 	# store the sort routines:
 	elements = [columns, names, uname, uimage, ustrength, uquality, umorale]
 	sort = [SUNITS.sortImage, SUNITS.sortName, SUNITS.sortStrength,
 		 	SUNITS.sortQuality,	SUNITS.sortMorale]
 
-	unitlist = SWIDGET.CItemList(SPQR.SPACER, SPQR.SPACER, elements, sort, [], 300)
+	unitlist = SWIDGET.CItemList(SPQR.SPACER, SPQR.SPACER, elements, sort, uid, 300)
 	sclist = unitlist.listarea
 
 	# now we can actually build up our window. Let's make this as easy

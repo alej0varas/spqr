@@ -738,7 +738,7 @@ class CItemList(CWidget):
 		self.data.append(l)
 		
 		# now we know theight and the width, we can use it to work out what
-		# gradiant fill we use - generally the smallest one larger than theight
+		# gradiant fill we use - generally the smallest one larger than the height
 		index = 0
 		size = False
 		# oh for a fast gradiant fill :-o
@@ -822,7 +822,7 @@ class CItemList(CWidget):
 		while ypos < sc_image.get_height():
 			img = pygame.Surface((width, theight))
 			img.blit(sc_image, (0, 0), (0, ypos, width, theight))
-			#rows.append((id_values.pop(0), img))
+			rows.append((id_values.pop(0), img))
 			ypos += theight
 		# save that info for another time...
 		self.row_height = theight
@@ -915,16 +915,13 @@ class CItemList(CWidget):
 				break
 			column += 1
 
-		# just a test for now
-		# now we know that we can draw in the arrow
-		# we also have to delete the other arrows
+		# now we know that we can draw in the arrow, we also have to delete the other arrows
 		# what arrow graphic do we use?
 		if self.data[1][column] == True:
 			arrow = SGFX.gui.image("arrow_down")
 			# invert for next time
 			self.data[1][column] = False
 		else:
-			# similar code
 			arrow = SGFX.gui.image("arrow_up")
 			self.data[1][column] = True
 		
