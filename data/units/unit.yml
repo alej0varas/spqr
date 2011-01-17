@@ -1,12 +1,32 @@
 # YAML data for all units
 
+- name: "Legio_I"
+  location: "transpadana"
+  image: "rome_legion"
+
+- name: "Legio_II"
+  location: "transpadana"
+  image: "rome_legion"
+
 - name: "Legio_III"
   location: "etruria"
+  image: "rome_legion"
+  
+- name: "Legio_IV"
+  location: "venetia_et_histria"
+  image: "rome_legion"
+  
+- name: "Legio_V"
+  location: "venetia_et_histria"
+  image: "rome_legion"
+
+- name: "Legio_VI"
+  location: "venetia_et_histria"
   image: "rome_legion"
 
 - name: "Legio_IX"
   location: "latium_et_campania"
-  image: "fedorati"
+  image: "rome_legion"
 
 - name: "Legio_XII"
   location: "latium_et_campania"
@@ -14,7 +34,7 @@
 
 - name: "Legio_X"
   location: "lucania_et_bruttiun"
-  image: "praetorians"
+  image: "rome_legion"
 
 - name: "Sicilian_Fleet"
   location: "sicily"

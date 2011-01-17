@@ -557,8 +557,8 @@ class CGFXEngine(object):
 				# check all of the points inside the window
 				for bar in foo.items:
 					if bar.active == True:
-						x_off = x-foo.rect.x
-						y_off = y-foo.rect.y
+						x_off = x - foo.rect.x
+						y_off = y - foo.rect.y
 						if bar.rect.collidepoint(x_off, y_off) == True:
 							# get offset into widget
 							x_widget = x_off-bar.rect.x
@@ -600,25 +600,10 @@ class CGFXEngine(object):
 								bar.callbacks.mouse_ldown(bar, x_widget, y_widget)
 								return True
 							elif action == SPQR.MOUSE_RCLK and bar.callbacks.mouse_rclk != mouse_rclk_std:
-								# whilst still debugging, I've left this one out
-								print "Do a mouse right click on ", bar.describe
+								bar.callbacks.mouse_rclk(bar, x_widget, y_widget)
 								return True
 							# and then exit
 							return False
-		# finally, if NO message was met, then check to see if the event was
-		# a click on the main map
-		if action == SPQR.MOUSE_LCLK:
-			if self.map_area.collidepoint(x, y) == True:
-				# handle it elsewhere
-				self.mapClick(x, y)
-				return True
-		elif action == SPQR.MOUSE_DCLICK:
-			# maybe we double clicked the map
-			if self.map_area.collidepoint(x, y) == True:
-				print "double map click"
-			pygame.time.set_timer(SPQR.EVENT_DC_END, 0)
-			self.dclick_handle = None
-			return True
 		return False
 
 	def screenToMapCoords(self, x, y):
@@ -628,10 +613,13 @@ class CGFXEngine(object):
 		y += self.map_screen.y
 		return x, y
 
-	def mapClick(self, x, y):
+	def mapClick(self, handle, x, y):
 		"""Updates information in bottom box, dependant on users click
 		   over the map. Call with x and y, being the click on the map
 		   in screen co-ords"""
+		# we are inside the main widget, so offset the y position
+		# TODO: why is this 2? should only be 1. widget offset problems?
+		y += 2 * self.iHeight("titlebar")
 		x, y = self.screenToMapCoords(x, y)
 		# waiting for move input? then deal with it
 		if self.map_click_moves != []:

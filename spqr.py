@@ -140,6 +140,7 @@ class CSPQR(object):
 		menu[0].addChild(SMENU.CMenuChild("sep", None, "", SEVENT.notYetCoded))
 		menu[0].addChild(SMENU.CMenuChild("Exit SPQR", "exit", "Ctrl+Q", SEVENT.quitSpqr))
 		menu[1].addChild(SMENU.CMenuChild("Visit Senate", "senate", "F2", SEVENT.menuEmpireSenate))
+		menu[1].addChild(SMENU.CMenuChild("Show Units", "military", "Ctrl+U", SEVENT.menuEmpireUnits))
 		menu[1].addChild(SMENU.CMenuChild("Statistics", "statistics", "", SEVENT.menuEmpireStatistics))
 		menu[2].addChild(SMENU.CMenuChild("About", "about", "Ctrl+A", SEVENT.menuHelpAbout))
 		menu[2].addChild(SMENU.CMenuChild("sep", None, "", SEVENT.notYetCoded))
@@ -216,9 +217,16 @@ class CSPQR(object):
 			w.callbacks.mouse_lclk = SEVENT.unitClicked
 			units.append(w)
 			bwindow.addWidget(w)
+	
+		# add a blank simple widget that catches all the calls for the map
+		map_widget = SWIDGET.CWidget(bwindow.rect, SPQR.WT_MAP, None, "map_widget", 
+									 active = True, visible = False)
+		map_widget.callbacks.mouse_lclk = SGFX.gui.mapClick
+		bwindow.addWidget(map_widget)
+			
 		SGFX.gui.unit_widgets = units
 		SGFX.gui.addWindow(bwindow)
-
+		
 		# draw the whole screen
 		SGFX.gui.updateGUI()
 		SGFX.gui.updateMap()
@@ -258,6 +266,7 @@ class CSPQR(object):
 		SGFX.gui.keyboard.addKey(K_p, SEVENT.menuPreferences, KMOD_LCTRL)
 		SGFX.gui.keyboard.addKey(K_q, SEVENT.quitSpqr, KMOD_LCTRL)
 		SGFX.gui.keyboard.addKey(K_F5, SEVENT.menuEmpireStatistics)
+		SGFX.gui.keyboard.addKey(K_u, SEVENT.menuEmpireUnits, KMOD_LCTRL)
 		SGFX.gui.keyboard.addKey(K_a, SEVENT.menuHelpAbout, KMOD_LCTRL)
 		SGFX.gui.keyboard.addKey(K_F1, SEVENT.menuHelpHelp)
 		SGFX.gui.keyboard.addKey(K_k, SEVENT.keyShowKeys)

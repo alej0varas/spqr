@@ -64,7 +64,7 @@ def centreMap(handle, xpos, ypos):
 	# this also updates the screen for us
 	x = SGFX.gui.map_screen.w/2
 	y = (SGFX.gui.map_screen.h/2)+SPQR.WINSZ_TOP
-	SGFX.gui.mapClick(x, y)
+	SGFX.gui.mapClick(None, x, y)
 	return True
 
 # left click on mini map gives us this
@@ -73,11 +73,11 @@ def miniMapClick(handle, xpos, ypos):
 	   Resets map display area and update the screen"""
 	# make the click point to the centre:
 	# convert to map co-ords
-	xpos = xpos*SGFX.gui.width_ratio
-	ypos = ypos*SGFX.gui.height_ratio
+	xpos = xpos * SGFX.gui.width_ratio
+	ypos = ypos * SGFX.gui.height_ratio
 	# correct to centre of screen
-	xpos -= SGFX.gui.map_rect.h/2
-	ypos -= SGFX.gui.map_rect.w/2
+	xpos -= SGFX.gui.map_rect.h / 2
+	ypos -= SGFX.gui.map_rect.w / 2
 	SGFX.gui.map_screen.x = xpos
 	SGFX.gui.map_screen.y = ypos
 	# correct if out of range
@@ -294,6 +294,10 @@ def menuEmpireSenate(handle, xpos, ypos):
 	"""Temp routine, just displays a messagebox for now"""
 	string = "It is not possible to visit the senate at this moment in time."
 	SGFX.gui.messagebox(SPQR.BUTTON_OK, string, "Visit Senate")
+	return True
+
+def menuEmpireUnits(handle, xpos, ypos):
+	print "Show military"
 	return True
 
 def menuEmpireMilitary(handle, xpos, ypos):
