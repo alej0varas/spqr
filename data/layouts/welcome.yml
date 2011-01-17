@@ -1,0 +1,58 @@
+# Welcome screen Window
+- title: "SPQR 0.3.7"
+  x: "-1"
+  y: "-1"
+  w: "SGFX.gui.iWidth('startup')"
+  h: "SGFX.gui.iHeight('startup')"
+  draw: 1
+  modal: 1
+  items:
+    - widget: CImage
+      x: "0"
+      y: "0"
+      image: "startup"
+      alpha: 0
+
+    - widget: CButton
+      text: New
+      x: "460"
+      y: "12"
+      callbacks:
+        - lclk: startGame
+
+    - widget: CButton
+      text: Load
+      x: "460"
+      y: "52"
+      callbacks:
+        - lclk: menuLoad
+
+    - widget: CButton
+      text: Options
+      x: "460"
+      y: "92"
+      callbacks:
+        - lclk: menuPreferences
+
+    - widget: CButton
+      text: About
+      x: "460"
+      y: "132"
+      callbacks:
+        - lclk: menuHelpAbout
+
+    - widget: CButton
+      text: Quit
+      x: "460"
+      y: "192"
+      callbacks:
+        - lclk: quitSpqr
+
+    - widget: CBlankImage
+      x: "420"
+      y: "332"
+      w: "127"
+      h: "45"
+      visible: 0
+      callbacks:
+        - lclk: displayPygameInfo

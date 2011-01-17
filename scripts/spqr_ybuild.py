@@ -20,6 +20,7 @@ import spqr_window as SWINDOW
 import spqr_widgets as SWIDGET
 import spqr_events as SEVENTS
 import spqr_defines as SPQR
+import spqr_sound as SSFX
 
 def createWindow(filename):
 	"""Function that opens a file in YAML format and creates the
@@ -35,8 +36,8 @@ def createWindow(filename):
 	for j in range(len(var)):
 		# first create the window and it's properties. each property
 		# has a specific key in the file's dictonary
-		jlist.append(SWINDOW.CWindow(var[j]['x'],var[j]['y'],
-			var[j]['w'],var[j]['h'],var[j]['title'],var[j]['draw']))
+		jlist.append(SWINDOW.CWindow(eval(var[j]['x']),eval(var[j]['y']),
+			eval(var[j]['w']),eval(var[j]['h']),var[j]['title'],var[j]['draw']))
 		# We call this when we don't use drawWindow() function
 		if var[j]['draw'] == 0 : jlist[j].fillWindowImage()
 		# loop for the widget's list for the current window
@@ -54,6 +55,8 @@ def createWindow(filename):
 				jlist[j].addWidget(wid)
 		# finally I add the window to the gui
 		index.append(SGFX.gui.addWindow(jlist[j]))
+		# and check if it is modal
+		if var[j].has_key('modal') : SGFX.gui.windows[index[j]].modal = var[j]['modal']
 		# build the button area if exist
 		if buttondetails != [] :
 			SGFX.gui.windows[index[j]].buildButtonArea(buttondetails, False)
@@ -66,55 +69,80 @@ def createWidget(wlist):
 	# and defines the widget's purpose
 	if wlist['widget'] == "CLabel" :
 		# if this is a label make it with a text
-		label = SWIDGET.buildLabel(wlist['text'])
+		widget = SWIDGET.buildLabel(wlist['text'])
 		# and add the cords to the rect
-		label.rect.x = wlist['x']
-		label.rect.y = wlist['y']
+		widget.rect.x = eval(wlist['x'])
+		widget.rect.y = eval(wlist['y'])
 		# Check if there is any widgets callback
-		if wlist.has_key('callbacks'): checkCallbacks(label,wlist['callbacks'])
-		return label
+		if wlist.has_key('callbacks'): checkCallbacks(widget,wlist['callbacks'])
+		if wlist.has_key('visible') and wlist.has_key('visible') == 0 : widget.visible= False
+		return widget
 	elif wlist['widget'] == "CCheckBox" :
-		intro = SWIDGET.CCheckBox(wlist['x'], wlist['y'], wlist['initial'])
-		return intro
+		widget = SWIDGET.CCheckBox(eval(wlist['x']) , eval(wlist['y']) , eval(wlist['initial']))
+		if wlist.has_key('after') : widget.addAfterClick(getattr(SEVENTS, wlist['after']))
+		if wlist.has_key('visible') and wlist.has_key('visible') == 0 : widget.visible= False
+		return widget
 	elif wlist['widget'] == "COptionMenu" :
-		options = SWIDGET.COptionMenu(wlist['x'], wlist['y'], wlist['options'])
-		options.describe = wlist['describe']
-		return options
+		widget = SWIDGET.COptionMenu(eval(wlist['x']), eval(wlist['y']) , wlist['options'])
+		widget.describe = wlist['describe']
+		if wlist.has_key('visible') and wlist.has_key('visible') == 0 : widget.visible= False
+		return widget
 	elif wlist['widget'] == "CSeperator" :
-		sepbar = SWIDGET.CSeperator(wlist['x'] , wlist['y'], wlist['w'])
-		return sepbar
+		widget = SWIDGET.CSeperator(eval(wlist['x']) , eval(wlist['y']) , eval(wlist['w']))
+		if wlist.has_key('visible') and wlist.has_key('visible') == 0 : widget.visible= False
+		return widget
 	elif wlist['widget'] == "CSlider" :
-		sepbar = SWIDGET.CSlider(wlist['x'] , wlist['y'], wlist['w'],wlist['start'] , wlist['stop'], wlist['initial'])
-		return sepbar
+		widget = SWIDGET.CSlider(eval(wlist['x']) , eval(wlist['y']), eval(wlist['w']), 
+		  eval(wlist['start']) , eval(wlist['stop']) , eval(wlist['initial']))
+		widget.setUpdateFunction(getattr(SEVENTS, wlist['update']))
+		if wlist.has_key('visible') and wlist.has_key('visible') == 0 : widget.visible= False
+		return widget
 	elif wlist['widget'] == "CButton" :
 		# if it is a button we create it and then we must put the callbacks in
-		button = SWIDGET.CButton(wlist['x'] , wlist['y'] , wlist['text'])
+		widget = SWIDGET.CButton(eval(wlist['x']) , eval(wlist['y']) , wlist['text'])
 		# for every callback we check the given function from the global list
-		checkCallbacks(button,wlist['callbacks'])
-		return button
+		checkCallbacks(widget,wlist['callbacks'])
+		if wlist.has_key('visible') and wlist.has_key('visible') == 0 : widget.visible= False
+		return widget
 	elif wlist['widget'] == "CScrollArea" :
 		image=SGFX.gui.image(wlist['image'])
-		sepbar = SWIDGET.CScrollArea(wlist['x'] , wlist['y'] , wlist['w'] , wlist['h'] , image)
-		sepbar.setUpdateFunction(getattr(SEVENTS, wlist['update']))
-		return sepbar
+		widget = SWIDGET.CScrollArea(eval(wlist['x']) , eval(wlist['y']) , eval(wlist['w']) , eval(wlist['h']) , image)
+		if wlist.has_key('visible') and wlist.has_key('visible') == 0 : widget.visible= False
+		return widget
 	elif wlist['widget'] == "CButtonDetails" :
-		buttondetail = SWINDOW.CButtonDetails(wlist['text'], wlist['key'], getattr(SEVENTS, wlist["callback"]))
-		return buttondetail
+		widget = SWINDOW.CButtonDetails(wlist['text'], wlist['key'], getattr(SEVENTS, wlist["callback"]))
+		if wlist.has_key('visible') and wlist.has_key('visible') == 0 : widget.visible= False
+		return widget
+	elif wlist['widget'] == "CImage" :
+		if wlist['alpha'] == 1:
+			widget = SWIDGET.buildImageAlpha(wlist['image'])
+		else:
+			widget = SWIDGET.buildImage(wlist['image'])
+		widget.rect.x = eval(wlist['x'])
+		widget.rect.y = eval(wlist['y'])
+		if wlist.has_key('callbacks'): checkCallbacks(widget,wlist['callbacks'])
+		if wlist.has_key('visible') and wlist.has_key('visible') == 0 : widget.visible= False
+		return widget
+	elif wlist['widget'] == "CBlankImage" :
+		widget = SWIDGET.CImage(eval(wlist['x']), eval(wlist['y']), eval(wlist['w']), eval(wlist['h']), None)
+		if wlist.has_key('callbacks') : checkCallbacks(widget,wlist['callbacks'])
+		if wlist.has_key('visible') and wlist.has_key('visible') == 0 : widget.visible= False
+		return widget
 
 def checkCallbacks(wid,clist):
 	""" Function that checks the callbacks and add it to the widget """
 	for c in range(len(clist)) :
 		if clist[c].keys()[0] == "lclk" and wid.callbacks.mouse_lclk == SPQR.mouse_lclk_std :
 			wid.callbacks.mouse_lclk = getattr(SEVENTS, clist[c]["lclk"])
-		elif clist[c].keys()[0] == "over" and wid.callbacks.mouse_lclk == SPQR.mouse_over_std :
+		elif clist[c].keys()[0] == "over" and wid.callbacks.mouse_over == SPQR.mouse_over_std :
 			wid.callbacks.mouse_over = getattr(SEVENTS, clist[c]["over"])
-		elif clist[c].keys()[0] == "rclk" and wid.callbacks.mouse_lclk == SPQR.mouse_rclk_std :
+		elif clist[c].keys()[0] == "rclk" and wid.callbacks.mouse_rclk == SPQR.mouse_rclk_std :
 			wid.callbacks.mouse_rclk = getattr(SEVENTS, clist[c]["rclk"])
-		elif clist[c].keys()[0] == "ldown" and wid.callbacks.mouse_lclk == SPQR.mouse_ldown_std :
+		elif clist[c].keys()[0] == "ldown" and wid.callbacks.mouse_ldown == SPQR.mouse_ldown_std :
 			wid.callbacks.mouse_ldown = getattr(SEVENTS, clist[c]["ldown"])
-		elif clist[c].keys()[0] == "rdown" and wid.callbacks.mouse_lclk == SPQR.mouse_rdown_std :
+		elif clist[c].keys()[0] == "rdown" and wid.callbacks.mouse_rdown == SPQR.mouse_rdown_std :
 			wid.callbacks.mouse_rdown = getattr(SEVENTS, clist[c]["rdown"])
-		elif clist[c].keys()[0] == "dclick" and wid.callbacks.mouse_lclk == SPQR.mouse_dclick_std :
+		elif clist[c].keys()[0] == "dclick" and wid.callbacks.mouse_dclick == SPQR.mouse_dclick_std :
 			wid.callbacks.mouse_dclick = getattr(SEVENTS, clist[c]["dclick"])
 	return wid
 

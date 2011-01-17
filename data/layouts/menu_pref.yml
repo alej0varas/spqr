@@ -1,0 +1,51 @@
+# main Window
+- title: SPQR Preferences
+  x: "-1"
+  y: "-1"
+  w: "288"
+  h: "152"
+  draw: 1
+  modal: 1
+  items:
+    - widget: CImage
+      x: "20"
+      y: "20"
+      image: "img_music"
+      alpha: 1
+
+    - widget: CLabel
+      text: "Music On:"
+      x: "88"
+      y: "28"
+
+    - widget: CLabel
+      text: "Volume:"
+      x: "88"
+      y: "60"
+
+    - widget: CCheckBox
+      initial: "SSFX.sound.music_playing"
+      x: "247"
+      y: "30"
+      after: musicCheckbox
+
+    - widget: CSlider
+      x: "160"
+      y: "62"
+      w: "100"
+      start: "0"
+      stop: "100"
+      initial: "SSFX.sound.getVolume()"
+      update: setVolume
+
+    - widget: CSeperator
+      x: "10"
+      y: "90"
+      w: "274 - SPQR.WINSZ_SIDE"
+
+    - widget: CButton
+      text: OK
+      x: "190"
+      y: "106"
+      callbacks:
+        - lclk: killModalWindow

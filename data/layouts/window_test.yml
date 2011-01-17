@@ -1,10 +1,11 @@
 # main Window
 - title: Window Test
-  x: -1
-  y: -1
-  w: 320
-  h: 200
+  x: "-1"
+  y: "-1"
+  w: "320"
+  h: "200"
   draw: 1
+  modal: 1
   items:
     - widget: CButtonDetails
       text: OK
