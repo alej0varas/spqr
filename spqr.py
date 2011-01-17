@@ -165,8 +165,8 @@ class CSPQR(object):
 		SGFX.gui.windows[index].addWidget(SMENU.CMenu(menu))
 	
 		# add a window with no frame that holds the widgets to overlay on the map
-		bwindow = SWINDOW.CWindow(0, SPQR.SCREEN_HEIGHT - SPQR.BBOX_HEIGHT, 
-								  SPQR.SCREEN_WIDTH, SPQR.BBOX_HEIGHT, "",
+		bwindow = SWINDOW.CWindow(0, SGFX.gui.iHeight("titlebar"), SPQR.SCREEN_WIDTH,
+								  SPQR.SCREEN_HEIGHT - SGFX.gui.iHeight("titlebar"), "",
 								  False, "map_widgets")
 		# and the mini-map on the rhs
 		w = SGFX.gui.iWidth("small_map")
@@ -196,7 +196,7 @@ class CSPQR(object):
 		w = SGFX.gui.iWidth("rome_button")
 		h = SGFX.gui.iHeight("rome_button")
 		x += SGFX.gui.iWidth("small_map") - w
-		y = SPQR.BBOX_HEIGHT - h
+		y = mini_map.rect.y + SGFX.gui.iHeight("small_map")
 		centre_button = SWIDGET.CImage(x, y, w, h, "rome_button")
 		centre_button.callbacks.mouse_lclk = SEVENT.centreMap
 		centre_button.active = True

@@ -27,8 +27,8 @@ AUTHOR				= "Chris Handy"
 EMAIL				= "maximinus@gmail.com"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
-LAST_UPDATE			= "15th Jan 2011"
-CODELINES			= "5757"
+LAST_UPDATE			= "17th Jan 2011"
+CODELINES			= "5774"
 FULLSCREEN			= False
 
 # before we go any further, this one is a must ;-)
@@ -128,9 +128,6 @@ WT_OPTMENU			= 10
 LEFT_JUSTIFY		= 0
 RIGHT_JUSTIFY		= 1
 CENTRE_HORIZ		= 2
-
-# height of bottom box from bottom of screen
-BBOX_HEIGHT			= 200
 
 # offsets for when we draw a pop-up menu to screen
 MENU_X_OFFSET		= 2

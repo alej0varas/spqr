@@ -130,8 +130,6 @@ class CGFXEngine(object):
 		# obviously 0/0 for top left corner - this just denotes bottom right corner
 		self.map_max_x = self.iWidth("map") - SPQR.SCREEN_WIDTH
 		self.map_max_y = self.iHeight("map") - self.map_rect.h
-		# damn silly variable for the mini map rect blit
-		self.y_offset_mini_map = SPQR.BBOX_HEIGHT + self.iHeight("win_tl")
 		# a temp image for some uses
 		self.temp_image = pygame.Surface((0, 0))
 		# variables so callbacks and external code can communicate
@@ -960,7 +958,7 @@ class CGFXEngine(object):
 		# start by putting the widgets in the right place
 		xpos = (len(units) * (SPQR.UNIT_WIDTH + SPQR.SPACER)) - SPQR.SPACER
 		xpos = int((SPQR.SCREEN_WIDTH - xpos) / 2)
-		ypos = SPQR.BBOX_HEIGHT - (SPQR.UNIT_HEIGHT + (SPQR.SPACER * 2))
+		ypos = self.map_rect.height - (SPQR.UNIT_HEIGHT + (SPQR.SPACER * 2))
 		for i in range(len(units)):
 			image = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT),
 								   pygame.SRCALPHA, 32).convert_alpha()
