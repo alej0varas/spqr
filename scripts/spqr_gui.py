@@ -659,7 +659,8 @@ class CGFXEngine(object):
 			unit = self.flash_highlight
 			# delete image from current map
 			old_region = SDATA.getUnitRegion(unit)
-			SDATA.moveUnit(unit, region)
+			# returns region the unit moved to after all the dust has settled
+			region = SDATA.moveUnit(unit, region)
 			cancelMoves()
 			self.unitFlashAndOff()
 			self.flushFlash()

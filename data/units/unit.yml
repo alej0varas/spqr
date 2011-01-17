@@ -52,3 +52,10 @@
   stats: [40, 70, 90]
   naval: yes
 
+# enemy units go here
+
+- name: "Celtic warriors"
+  location: "aemilia"
+  image: "warrior"
+  stats: [90, 40, 80]
+

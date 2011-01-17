@@ -16,6 +16,7 @@
 
 import pygame, sys, yaml
 import spqr_defines as SPQR
+import spqr_gui as SGFX
 import maps.spqr_map as SMAP
 import player.spqr_player as SPLAYER
 import units.spqr_unit as SUNITS
@@ -35,6 +36,18 @@ class CInfo(object):
 		self.players["romans"].colour = (184, 37, 37)
 		self.players["celts"] = SPLAYER.CPlayer("Celtic", "Celts")
 		self.players["celts"].colour = (55, 55, 230)
+
+	def doBattle(self, unit, region):
+		"""Do whatever you need to do when a battle happens
+		   Return False if the unit can't move"""
+		SGFX.gui.messagebox(SPQR.BUTTON_OK, "A battle (which is not yet coded) :-(", "Fight")
+		return False
+		
+	def changeRegionOwner(self, unit, region):
+		"""Do whatever you need to do when a battle happens
+		   Return False if the unit can't move"""
+		SGFX.gui.messagebox(SPQR.BUTTON_OK, "You have gained a new region (but not yet!)", "Conquered")
+		return False
 
 	def initNewTurn(self):
 		"""Call routine at end of turn. Resets all data
@@ -142,6 +155,8 @@ def addUnits():
 def moveUnit(unit, region):
 	"""Move the unit given to the new region
 	   Data is passed as strings"""
+	if checkBattle(unit, region) == False:
+		return False
 	# current location big enough?
 	if data.map.regions[region].units == SPQR.MAX_STACKING:
 		print "Error: Exceeded max stacking for", unit, "to", region
@@ -158,6 +173,20 @@ def moveUnit(unit, region):
 			return True
 	print "Error: Couldn't find unit", unit, "to move"
 	return False
+
+def checkBattle(unit, region):
+	"""See if there is a battle to be fought"""
+	# get the owner of the unit, and it's current region
+	ureg = getUnitRegion(unit)
+	if data.map.regions[ureg].owner != data.map.regions[region].owner:
+		# possible battle. Units placed in other region?
+		if data.map.regions[region].units != []:
+			# yes, do the battle
+			move = data.doBattle(unit, region)
+		else:
+			# set new owner this region
+			move = data.changeRegionOwner(ureg, region)
+		return move
 
 def getUnit(name):
 	for i in iterUnits():
