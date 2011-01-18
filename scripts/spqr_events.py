@@ -426,6 +426,67 @@ def displayPygameInfo(handle, xpos, ypos):
 	SGFX.gui.messagebox(SPQR.BUTTON_OK,
 		"For details on Pygame, vist:\n\nwww.pygame.org\n\nMany thanks to Pete Shinners", "PyGame")
 	return True
+	
+def windowTest(handle, xpos, ypos):
+	"""Routine to test whatever the latest version of the window
+	   code is. Does nothing clever really"""
+	# get the window from a yaml file and this returns a list of indexes
+	# incase we import more than 1 window we get their indexes
+	# here we have 1 window so we get the first index
+	index = SYAML.createWindow("../data/layouts/window_test.yml")[0]
+	# we have to add modal keypresses ourselves
+	SGFX.gui.keyboard.setModalKeys(1)
+	# turn off unit animations
+	SGFX.gui.unitFlashAndOff()
+	# add the window as a dirty image
+	win_img = SGFX.gui.windows[index].drawWindow()
+	SGFX.gui.addDirtyRect(win_img, SGFX.gui.windows[index].rect)
+	return True
+	
+def widgetTest(handle, xpos, ypos):
+	index = SYAML.createWindow("../data/layouts/widget_test.yml")[0]
+	SGFX.gui.keyboard.addKey(K_q, killModalWindow)
+	SGFX.gui.keyboard.addKey(K_RETURN, killModalWindow)
+	SGFX.gui.keyboard.setModalKeys(2)
+	# turn off unit animations for the moment and thats it
+	SGFX.gui.unitFlashAndOff()
+	# add the dirty rect details
+	SGFX.gui.addDirtyRect(SGFX.gui.windows[index].drawWindow(),
+		SGFX.gui.windows[index].rect)
+	return True
+
+def menuPreferences(handle, xpos, ypos):
+	"""Display the user preferences window. You can only really
+	   play with the music and volume settings for now"""
+	index = SYAML.createWindow("../data/layouts/menu_pref.yml")[0]
+	# add the new key event: o = ok
+	SGFX.gui.keyboard.addKey(K_o, killModalWindow)
+	SGFX.gui.keyboard.setModalKeys(1)
+	# turn off unit animations
+	SGFX.gui.unitFlashAndOff()
+	# setup dirty rect stuff
+	SGFX.gui.addDirtyRect(SGFX.gui.windows[index].drawWindow(),
+		SGFX.gui.windows[index].rect)
+	# and thats us done
+	return True
+
+def welcomeScreen(handle, xpos, ypos):
+	"""Routine displays opening screen, with load/save/new/about
+	   buttons. Always returns True after doing it's work"""
+	index = SYAML.createWindow("../data/layouts/welcome.yml")[0]
+	# add the modal key events: n=new, l=load, o=options, a=about, q=quit
+	SGFX.gui.keyboard.addKey(K_n, startGame)
+	SGFX.gui.keyboard.addKey(K_l, menuLoad)
+	SGFX.gui.keyboard.addKey(K_o, menuPreferences)
+	SGFX.gui.keyboard.addKey(K_a, menuHelpAbout)
+	SGFX.gui.keyboard.addKey(K_q, quitSpqr)
+	SGFX.gui.keyboard.setModalKeys(5)
+	# turn off unit animations
+	#SGFX.gui.unitFlashAndOff()
+	# add the window as a dirty image
+	SGFX.gui.addDirtyRect(SGFX.gui.windows[index].drawWindow(),
+		SGFX.gui.windows[index].rect)
+	return True
 
 # place all debugging events below this line
 # these are only activated if DEBUG_MODE is set to True
@@ -496,122 +557,6 @@ def displaySliderContents(handle, xpos, ypos):
 	# only if debugging is turned on, of course...
 	if SPQR.DEBUG_MODE == True:
 		print "Slider value:", handle.getSliderValue()
-	return True
-	
-def windowTest(handle, xpos, ypos):
-	"""Routine to test whatever the latest version of the window
-	   code is. Does nothing clever really"""
-	# get the window from a yaml file and this returns a list of indexes
-	# incase we import more than 1 window we get their indexes
-	# here we have 1 window so we get the first index
-	index = SYAML.createWindow("../data/layouts/window_test.yml")[0]
-	# we have to add modal keypresses ourselves
-	SGFX.gui.keyboard.setModalKeys(1)
-	# turn off unit animations
-	SGFX.gui.unitFlashAndOff()
-	# add the window as a dirty image
-	win_img = SGFX.gui.windows[index].drawWindow()
-	SGFX.gui.addDirtyRect(win_img, SGFX.gui.windows[index].rect)
-	return True
-	
-def widgetTest(handle, xpos, ypos):
-	index = SYAML.createWindow("../data/layouts/widget_test.yml")[0]
-	SGFX.gui.keyboard.addKey(K_q, killModalWindow)
-	SGFX.gui.keyboard.addKey(K_RETURN, killModalWindow)
-	SGFX.gui.keyboard.setModalKeys(2)
-	# turn off unit animations for the moment and thats it
-	SGFX.gui.unitFlashAndOff()
-	# add the dirty rect details
-	SGFX.gui.addDirtyRect(SGFX.gui.windows[index].drawWindow(),
-		SGFX.gui.windows[index].rect)
-	return True
-
-def menuPreferences(handle, xpos, ypos):
-	"""Display the user preferences window. You can only really
-	   play with the music and volume settings for now"""
-	index = SYAML.createWindow("../data/layouts/menu_pref.yml")[0]
-	# add the new key event: o = ok
-	SGFX.gui.keyboard.addKey(K_o, killModalWindow)
-	SGFX.gui.keyboard.setModalKeys(1)
-	# turn off unit animations
-	SGFX.gui.unitFlashAndOff()
-	# setup dirty rect stuff
-	SGFX.gui.addDirtyRect(SGFX.gui.windows[index].drawWindow(),
-		SGFX.gui.windows[index].rect)
-	# and thats us done
-	return True
-
-def welcomeScreen2(handle, xpos, ypos):
-	"""Routine displays opening screen, with load/save/new/about
-	   buttons. Always returns True after doing it's work"""
-	index = SYAML.createWindow("../data/layouts/welcome.yml")[0]
-	# add the modal key events: n=new, l=load, o=options, a=about, q=quit
-	SGFX.gui.keyboard.addKey(K_n, startGame)
-	SGFX.gui.keyboard.addKey(K_l, menuLoad)
-	SGFX.gui.keyboard.addKey(K_o, menuPreferences)
-	SGFX.gui.keyboard.addKey(K_a, menuHelpAbout)
-	SGFX.gui.keyboard.addKey(K_q, quitSpqr)
-	SGFX.gui.keyboard.setModalKeys(5)
-	# turn off unit animations
-	SGFX.gui.unitFlashAndOff()
-	# add the window as a dirty image
-	SGFX.gui.addDirtyRect(SGFX.gui.windows[index].drawWindow(),
-		SGFX.gui.windows[index].rect)
-	return True
-
-def welcomeScreen(handle, xpos, ypos):
-	"""Routine displays opening screen, with load/save/new/about
-	   buttons. Always returns True after doing it's work"""
-	# set the sizes
-	w = SGFX.gui.iWidth("startup")
-	h = SGFX.gui.iHeight("startup")
-	# build the window
-	welcome = SWINDOW.CWindow(-1, -1, w, h, "SPQR " + SPQR.VERSION, True)
-	# add the image that pretty much takes up the whole area:
-	main_img = SWIDGET.buildImage("startup")
-	welcome.addWidget(main_img)
-	# create the 4 main buttons
-	btn_new = SWIDGET.CButton(460, 12, "New")
-	btn_load = SWIDGET.CButton(460, 52, "Load")
-	btn_options = SWIDGET.CButton(460, 92, "Options")
-	btn_about = SWIDGET.CButton(460, 132, "About")
-	btn_quit = SWIDGET.CButton(460, 192, "Quit")
-	# make active
-	# add callbacks
-	btn_new.callbacks.mouse_lclk = startGame
-	btn_load.callbacks.mouse_lclk = menuLoad
-	btn_options.callbacks.mouse_lclk = menuPreferences
-	btn_about.callbacks.mouse_lclk = menuHelpAbout
-	btn_quit.callbacks.mouse_lclk = quitSpqr
-	
-	# include a link for information about pygame
-	# we'll do this by adding an active button that is not displayed
-	btn_pygame = SWIDGET.CButton(420, 332, "*BLANK*")
-	# resize it and don't display!
-	btn_pygame.rect.width = 127
-	btn_pygame.rect.height = 45
-	btn_pygame.visible = False
-	# add a simple callback
-	btn_pygame.callbacks.mouse_lclk = displayPygameInfo
-	
-	# add all that to the window
-	for i in [btn_new, 	btn_load, btn_options, btn_about, btn_quit, btn_pygame]:
-		i.active = True
-		welcome.addWidget(i)
-	# make modal
-	welcome.modal = True	
-	# add the modal key events: n=new, l=load, o=options, a=about, q=quit
-	SGFX.gui.keyboard.addKey(K_n, startGame)
-	SGFX.gui.keyboard.addKey(K_l, menuLoad)
-	SGFX.gui.keyboard.addKey(K_o, menuPreferences)
-	SGFX.gui.keyboard.addKey(K_a, menuHelpAbout)
-	SGFX.gui.keyboard.addKey(K_q, quitSpqr)
-	SGFX.gui.keyboard.setModalKeys(5)
-	# turn off unit animations
-	SGFX.gui.unitFlashAndOff()
-	# add the window as a dirty image
-	SGFX.gui.addDirtyRect(welcome.drawWindow(), welcome.rect)
-	SGFX.gui.addWindow(welcome)
 	return True
 	
 # functions for the setup.py

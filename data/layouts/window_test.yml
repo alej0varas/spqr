@@ -4,15 +4,20 @@
   y: "-1"
   w: "320"
   h: "200"
-  draw: 1
-  modal: 1
+  draw: Yes
+  modal: Yes
+  active: Yes
   items:
     - widget: CButtonDetails
       text: OK
       key: K_o
       callback: killModalWindow
+      active: Yes
+      visible: Yes
 
     - widget: CButtonDetails
       text: Exit
       key: K_e
       callback: killModalWindow
+      active: Yes
+      visible: Yes

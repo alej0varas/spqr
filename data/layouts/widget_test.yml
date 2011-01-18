@@ -4,18 +4,23 @@
   y: "-1"
   w: "260"
   h: "300"
-  draw: 1
-  modal: 1
+  draw: Yes
+  modal: Yes
+  active: Yes
   items:
     - widget: CLabel
       text: Label
       x: "10"
       y: "10"
+      active: Yes
+      visible: Yes
 
     - widget: CButton
       text: Quit
       x: "10"
       y: "30"
+      active: Yes
+      visible: Yes
       callbacks:
         - lclk: killModalWindow
 
@@ -23,6 +28,8 @@
       initial: "1"
       x: "10"
       y: "68"
+      active: Yes
+      visible: Yes
 
     - widget: CSlider
       x: "10"
@@ -32,11 +39,15 @@
       stop: "150"
       initial: "75"
       update: displaySliderContents
+      active: Yes
+      visible: Yes
 
     - widget: CLabel
       text: Double-Click Me!
       x: "20"
       y: "230"
+      active: Yes
+      visible: Yes
       callbacks:
         - dclick: dclickTest
 
@@ -45,6 +56,8 @@
       y: "30"
       options: ["Romans", "Iberians", "Greeks", "Selucids"]
       describe: options
+      active: Yes
+      visible: Yes
 
     - widget: CScrollArea
       x: "10"
@@ -52,3 +65,5 @@
       w: "SGFX.gui.iWidth('test_image')"
       h: "96"
       image: "test_image"
+      active: Yes
+      visible: Yes

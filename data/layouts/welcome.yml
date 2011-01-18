@@ -4,19 +4,24 @@
   y: "-1"
   w: "SGFX.gui.iWidth('startup')"
   h: "SGFX.gui.iHeight('startup')"
-  draw: 1
-  modal: 1
+  draw: Yes
+  modal: Yes
+  active: Yes
   items:
     - widget: CImage
       x: "0"
       y: "0"
       image: "startup"
       alpha: 0
+      active: No
+      visible: Yes
 
     - widget: CButton
       text: New
       x: "460"
       y: "12"
+      active: Yes
+      visible: Yes
       callbacks:
         - lclk: startGame
 
@@ -24,6 +29,8 @@
       text: Load
       x: "460"
       y: "52"
+      active: Yes
+      visible: Yes
       callbacks:
         - lclk: menuLoad
 
@@ -31,6 +38,8 @@
       text: Options
       x: "460"
       y: "92"
+      active: Yes
+      visible: Yes
       callbacks:
         - lclk: menuPreferences
 
@@ -38,6 +47,8 @@
       text: About
       x: "460"
       y: "132"
+      active: Yes
+      visible: Yes
       callbacks:
         - lclk: menuHelpAbout
 
@@ -45,14 +56,17 @@
       text: Quit
       x: "460"
       y: "192"
+      active: Yes
+      visible: Yes
       callbacks:
         - lclk: quitSpqr
 
-    - widget: CBlankImage
+    - widget: CBlankButton
       x: "420"
       y: "332"
       w: "127"
       h: "45"
-      visible: 0
+      active: Yes
+      visible: No
       callbacks:
         - lclk: displayPygameInfo

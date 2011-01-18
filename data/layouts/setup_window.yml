@@ -4,48 +4,75 @@
   y: "0"
   w: "640"
   h: "480"
-  draw: 0
-  modal: 0
+  draw: No
+  modal: No
+  active: Yes
   items:
     - widget: CLabel
       text: Resolution
       x: "29"
       y: "26"
+      active: Yes
+      visible: Yes
+
     - widget: CLabel
       text: Play Music
       x: "32"
       y: "64"
+      active: Yes
+      visible: Yes
+
     - widget: CLabel
       text: Show intro
       x: "30"
       y: "100"
+      active: Yes
+      visible: Yes
+
     - widget: CCheckBox
       initial: "1"
       x: "140"
       y: "100"
+      active: Yes
+      visible: Yes
+
     - widget: CCheckBox
       initial: "1"
       x: "140"
       y: "64"
+      active: Yes
+      visible: Yes
+
     - widget: COptionMenu
       x: "124"
       y: "20"
       options: ["800x600", "1024x768", "Fullscreen"]
       describe: opt-Resolution
+      active: Yes
+      visible: Yes
+
     - widget: CSeperator
       x: "6"
       y: "29+ 106"
       w: "631"
+      active: Yes
+      visible: Yes
+
     - widget: CButton
       x: "165"
       y: "148"
       text: OK
+      active: Yes
+      visible: Yes
       callbacks:
         - lclk: okClick
+
     - widget: CButton
       x: "50"
       y: "148"
       text: Cancel
+      active: Yes
+      visible: Yes
       callbacks:
         - lclk: cancelClick
 

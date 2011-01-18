@@ -20,6 +20,7 @@
 import sys, pygame
 from pygame.locals import *
 
+from scripts import spqr_data as SDATA
 from scripts import spqr_defines as SPQR
 from scripts import spqr_gui as SGFX
 from scripts import spqr_window as SWINDOW

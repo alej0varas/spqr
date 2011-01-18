@@ -4,30 +4,39 @@
   y: "-1"
   w: "288"
   h: "152"
-  draw: 1
-  modal: 1
+  draw: Yes
+  modal: Yes
+  active: Yes
   items:
     - widget: CImage
       x: "20"
       y: "20"
       image: "img_music"
       alpha: 1
+      active: Yes
+      visible: Yes
 
     - widget: CLabel
       text: "Music On:"
       x: "88"
       y: "28"
+      active: Yes
+      visible: Yes
 
     - widget: CLabel
       text: "Volume:"
       x: "88"
       y: "60"
+      active: Yes
+      visible: Yes
 
     - widget: CCheckBox
       initial: "SSFX.sound.music_playing"
       x: "247"
       y: "30"
       after: musicCheckbox
+      active: Yes
+      visible: Yes
 
     - widget: CSlider
       x: "160"
@@ -37,15 +46,21 @@
       stop: "100"
       initial: "SSFX.sound.getVolume()"
       update: setVolume
+      active: Yes
+      visible: Yes
 
     - widget: CSeperator
       x: "10"
       y: "90"
       w: "274 - SPQR.WINSZ_SIDE"
+      active: Yes
+      visible: Yes
 
     - widget: CButton
       text: OK
       x: "190"
       y: "106"
+      active: Yes
+      visible: Yes
       callbacks:
         - lclk: killModalWindow
