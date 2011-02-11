@@ -472,6 +472,10 @@ class CGFXEngine(object):
 			if event.type == MOUSEBUTTONDOWN and event.button == 3:
 				if SPQR.RMOUSE_END == True:
 					sys.exit(False)
+				else:
+					x, y = pygame.mouse.get_pos()
+					action = SPQR.MOUSE_RCLK
+					self.testMouse(x, y, action)
 			# was it left mouse button up?
 			elif event.type == MOUSEBUTTONUP and event.button == 1:
 				x, y = pygame.mouse.get_pos()
@@ -599,7 +603,7 @@ class CGFXEngine(object):
 								# widget asked for callback on mouse left down
 								bar.callbacks.mouse_ldown(bar, x_widget, y_widget)
 								return True
-							elif action == SPQR.MOUSE_RCLK and bar.callbacks.mouse_rclk != mouse_rclk_std:
+							elif action == SPQR.MOUSE_RCLK and bar.callbacks.mouse_rclk != SPQR.mouse_rclk_std:
 								bar.callbacks.mouse_rclk(bar, x_widget, y_widget)
 								return True
 							# and then exit

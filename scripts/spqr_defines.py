@@ -41,7 +41,7 @@ SCREEN_WIDTH 		= 800
 SCREEN_HEIGHT 		= 600
 
 # set this next one to true if you want a rh mouse click to exit
-RMOUSE_END			= True
+RMOUSE_END			= False
 
 # menu icons are always squares
 ICON_SIZE			= 24

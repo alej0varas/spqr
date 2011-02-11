@@ -24,6 +24,7 @@ import spqr_window as SWINDOW
 import spqr_widgets as SWIDGET
 import spqr_gui as SGFX
 import spqr_sound as SSFX
+import spqr_menu as SMENU
 import units.spqr_unit as SUNITS
 import spqr_ybuild as SYAML
 
@@ -558,6 +559,23 @@ def displaySliderContents(handle, xpos, ypos):
 	if SPQR.DEBUG_MODE == True:
 		print "Slider value:", handle.getSliderValue()
 	return True
+
+# right click menu functions
+
+def onMenu(handle, xpos, ypos):
+	""" test menu for right click """
+	# We initiate the menu
+	menu=SMENU.CMenuParent(handle.describe)
+	menu.addChild(SMENU.CMenuChild("New Game", "new", "Ctrl+N", menuNew))
+	#menu.addChild(SMENU.CMenuChild("sep", None, "", notYetCoded))
+	menu.addChild(SMENU.CMenuChild("Load Game", "open", "Ctrl+L", menuLoad))
+	menu.addChild(SMENU.CMenuChild("Save Game", "save", "Ctrl+S", menuSave))
+	menu.addChild(SMENU.CMenuChild("Exit SPQR", "exit", "Ctrl+Q", quitSpqr))
+	menu.offsets = []
+	menu.rect.x = handle.rect.x + handle.parent.rect.x + xpos
+	menu.rect.y = handle.rect.y + handle.parent.rect.y + ypos
+	SMENU.rclkMenu(menu)
+	return True
 	
 # functions for the setup.py
 
@@ -570,3 +588,4 @@ def okClick(handle, x, y):
 def cancelClick(handle, x, y):
 	"""quit utility and don't change anything"""
 	sys.exit(True)
+

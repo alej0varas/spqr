@@ -50,6 +50,7 @@
       visible: Yes
       callbacks:
         - dclick: dclickTest
+        - rclk: onMenu
 
     - widget: COptionMenu
       x: "120"

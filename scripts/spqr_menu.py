@@ -134,124 +134,13 @@ class CMenu(object):
 			# calculate offset for next menu entry
 			dest.x += itmp.get_width() + (SPQR.SPACER * 2)
 			# draw the actual menu here as well
-			self.drawMenu(foo)
+			drawMenu(foo)
 		# finish the defines
 		self.callbacks = SWIDGET.CCallbacks("CMenu_Callback")
 		# now set so that the menu traps all the clicks on it
 		self.callbacks.mouse_lclk = self.getMenuOption
 		self.parent = False
 		self.describe = "CMenu"
-		
-	def drawMenu(self,menu):
-		"""Given a menu, return an image of that menu. This is called only
-		   when the menu is changed in some way, not every time the menu
-		   is dropped down"""
-		# draw a menu, given the menu
-		pics = []
-		height = 0
-		i = 0
-		width = 0
-		sep_bar = False
-		# firstly draw all the parts we need to fully render the menu image
-		for foo in menu.children:
-			# loop through all children of this menu
-			text = foo.text
-			# is it a seperator?
-			if text == "sep":
-				# remember that fact
-				pics.append(pygame.Surface((1, 1)))
-				sep_bar = True
-				height += (2 * SPQR.MNU_HSPACE) + 1
-			else:
-				# create the text seperatly at first
-				text_image = SGFX.gui.fonts[SPQR.FONT_VERA].render(text, True, SPQR.MENU_TXT_COL)
-				# expand the image horizontally and vertically by making a new image
-				# and then blitting over the top of it...
-				final_text = pygame.Surface(
-					(text_image.get_width() + (SPQR.MNU_LSPACE * 2) + SPQR.ICON_SIZE + SPQR.SPACER,
-					text_image.get_height() + (SPQR.MNU_HSPACE * 2)), SRCALPHA)
-				final_text.fill(SPQR.MENU_COL)
-				# blit the icon
-				if foo.icon != None:
-					final_text.blit(SGFX.gui.image(foo.icon),
-						(SPQR.MNU_LSPACE, (SPQR.ICON_SIZE-final_text.get_height()) / 2))
-				final_text.blit(text_image, ((2 * SPQR.MNU_LSPACE) + SPQR.ICON_SIZE, SPQR.MNU_HSPACE))
-				pics.append(final_text)
-				height += final_text.get_height()
-			# longest section so far?
-			# get size of keytext to render
-			wk, hk = SGFX.gui.fonts[SPQR.FONT_VERA].size(foo.key_text)
-			# add minimum gap
-			wk += SPQR.MNU_KEY_GAP+final_text.get_width()
-			if wk > width:
-				width = wk
-			i += 1
-		# store text height for highlight use later
-		hgh_h = final_text.get_height()
-		# so then , do we need a sep bar? If so, draw it
-		if sep_bar == True:
-			bar = pygame.Surface((width, (SPQR.MNU_HSPACE * 2) + 1))
-			bar.fill((246, 246, 246))
-			pygame.draw.line(bar,(149, 149, 149), (2, SPQR.MNU_HSPACE),
-							(width - 2, SPQR.MNU_HSPACE), 1)
-		# now place all of those renders together
-		# allow for a 1 pixel border around the menu
-		width += SPQR.HALFSPCR
-		height += SPQR.HALFSPCR
-		menu.image = pygame.Surface((width, height))
-		# set background and draw border
-		menu.image.fill((246, 246, 246))
-		pygame.draw.line(menu.image, SPQR.MENU_BDR_COL, (0, 0), (0, 0), 1)
-		pygame.draw.line(menu.image, SPQR.MENU_BDR_COL, (width - 1, 0), (width - 1, 0), 1)
-		pygame.draw.line(menu.image, SPQR.MENU_BDR_COL, (0, height - 1), (0, height - 1), 1)
-		pygame.draw.line(menu.image, SPQR.MENU_BDR_COL, (width - 1, height - 1), (width - 1, height - 1), 1)
-		pygame.draw.line(menu.image, SPQR.MENU_CNR_COL, (1, 0), (width - 2, 0), 1)
-		pygame.draw.line(menu.image, SPQR.MENU_CNR_COL, (0, 1), (0, height - 2), 1)
-		pygame.draw.line(menu.image, SPQR.MENU_CNR_COL, (width - 1, 1), (width - 1, height), 1)
-		pygame.draw.line(menu.image, SPQR.MENU_CNR_COL, (1, height - 1), (width, height - 1), 1)
-		# now drop in the text
-		dest=pygame.Rect((1, 1, 0, 0))
-		# FINALLY we can draw what will be the highlight for this menu
-		# the 32 is to force a 32 bit surface for alpha blitting
-		menu.highlight = pygame.Surface((width - SPQR.QTRSPCR, hgh_h), 0, 32)
-		# then set the alpha value
-		menu.highlight.set_alpha(SPQR.MENU_ALPHA)
-		# lets try to draw on this surface
-		menu.highlight.fill(SPQR.MENU_HLCOL)
-		index = 0
-		# allow for small gap between menu and menubar
-		dest.x = 1
-		dest.y = 1 + SPQR.QTRSPCR
-		# now render the actual menu bar proper
-		index = 0
-		for text in pics:
-			dest.h = text.get_height()
-			if dest.h == 1:
-				# draw the sep bar
-				dest.h = bar.get_height()
-				menu.image.blit(bar, dest)
-				# store details for later
-				menu.children[index].rect = pygame.Rect((1, 1, 1, 1))
-				index += 1
-				dest.y += dest.h
-			else:
-				# create the key text
-				ktxt = SGFX.gui.fonts[SPQR.FONT_VERA].render(
-					menu.children[index].key_text, True, SPQR.MENU_TXT_COL)
-				# blit the text
-				dest.h = text.get_height()
-				menu.image.blit(text,dest)
-				# and then the key text
-				wr = pygame.Rect(width - (ktxt.get_width() + SPQR.HALFSPCR),
-								 ((dest.h-ktxt.get_height()) / 2) + dest.y,
-								 ktxt.get_width(), ktxt.get_height())
-				menu.image.blit(ktxt, wr)
-				# store the rect for mouse selection later
-				menu.children[index].rect = pygame.Rect((1, dest.y, width - SPQR.QTRSPCR, hgh_h))
-				index += 1
-				dest.y += dest.h
-		# and thats it
-		return True
 		
 	def addMenu(self, parent):
 		"""Add a menu to the HMenu. Returns index number of new menu"""
@@ -386,4 +275,215 @@ class CMenu(object):
 		if key_function == True:
 			bar(0, -1, -1)
 		return True
+
+def drawMenu(menu):
+	"""Given a menu, return an image of that menu. This is called only
+	   when the menu is changed in some way, not every time the menu
+	   is dropped down"""
+	# draw a menu, given the menu
+	pics = []
+	height = 0
+	i = 0
+	width = 0
+	sep_bar = False
+	# firstly draw all the parts we need to fully render the menu image
+	for foo in menu.children:
+		# loop through all children of this menu
+		text = foo.text
+		# is it a seperator?
+		if text == "sep":
+			# remember that fact
+			pics.append(pygame.Surface((1, 1)))
+			sep_bar = True
+			height += (2 * SPQR.MNU_HSPACE) + 1
+		else:
+			# create the text seperatly at first
+			text_image = SGFX.gui.fonts[SPQR.FONT_VERA].render(text, True, SPQR.MENU_TXT_COL)
+			# expand the image horizontally and vertically by making a new image
+			# and then blitting over the top of it...
+			final_text = pygame.Surface(
+				(text_image.get_width() + (SPQR.MNU_LSPACE * 2) + SPQR.ICON_SIZE + SPQR.SPACER,
+				text_image.get_height() + (SPQR.MNU_HSPACE * 2)), SRCALPHA)
+			final_text.fill(SPQR.MENU_COL)
+			# blit the icon
+			if foo.icon != None:
+				final_text.blit(SGFX.gui.image(foo.icon),
+					(SPQR.MNU_LSPACE, (SPQR.ICON_SIZE-final_text.get_height()) / 2))
+			final_text.blit(text_image, ((2 * SPQR.MNU_LSPACE) + SPQR.ICON_SIZE, SPQR.MNU_HSPACE))
+			pics.append(final_text)
+			height += final_text.get_height()
+		# longest section so far?
+		# get size of keytext to render
+		wk, hk = SGFX.gui.fonts[SPQR.FONT_VERA].size(foo.key_text)
+		# add minimum gap
+		wk += SPQR.MNU_KEY_GAP+final_text.get_width()
+		if wk > width:
+			width = wk
+		i += 1
+	# store text height for highlight use later
+	hgh_h = final_text.get_height()
+	# so then , do we need a sep bar? If so, draw it
+	if sep_bar == True:
+		bar = pygame.Surface((width, (SPQR.MNU_HSPACE * 2) + 1))
+		bar.fill((246, 246, 246))
+		pygame.draw.line(bar,(149, 149, 149), (2, SPQR.MNU_HSPACE),
+						(width - 2, SPQR.MNU_HSPACE), 1)
+	# now place all of those renders together
+	# allow for a 1 pixel border around the menu
+	width += SPQR.HALFSPCR
+	height += SPQR.HALFSPCR
+	menu.image = pygame.Surface((width, height))
+	# set background and draw border
+	menu.image.fill((246, 246, 246))
+	pygame.draw.line(menu.image, SPQR.MENU_BDR_COL, (0, 0), (0, 0), 1)
+	pygame.draw.line(menu.image, SPQR.MENU_BDR_COL, (width - 1, 0), (width - 1, 0), 1)
+	pygame.draw.line(menu.image, SPQR.MENU_BDR_COL, (0, height - 1), (0, height - 1), 1)
+	pygame.draw.line(menu.image, SPQR.MENU_BDR_COL, (width - 1, height - 1), (width - 1, height - 1), 1)
+	pygame.draw.line(menu.image, SPQR.MENU_CNR_COL, (1, 0), (width - 2, 0), 1)
+	pygame.draw.line(menu.image, SPQR.MENU_CNR_COL, (0, 1), (0, height - 2), 1)
+	pygame.draw.line(menu.image, SPQR.MENU_CNR_COL, (width - 1, 1), (width - 1, height), 1)
+	pygame.draw.line(menu.image, SPQR.MENU_CNR_COL, (1, height - 1), (width, height - 1), 1)
+	# now drop in the text
+	dest=pygame.Rect((1, 1, 0, 0))
+	# FINALLY we can draw what will be the highlight for this menu
+	# the 32 is to force a 32 bit surface for alpha blitting
+	menu.highlight = pygame.Surface((width - SPQR.QTRSPCR, hgh_h), 0, 32)
+	# then set the alpha value
+	menu.highlight.set_alpha(SPQR.MENU_ALPHA)
+	# lets try to draw on this surface
+	menu.highlight.fill(SPQR.MENU_HLCOL)
+	index = 0
+	# allow for small gap between menu and menubar
+	dest.x = 1
+	dest.y = 1 + SPQR.QTRSPCR
+	# now render the actual menu bar proper
+	index = 0
+	for text in pics:
+		dest.h = text.get_height()
+		if dest.h == 1:
+			# draw the sep bar
+			dest.h = bar.get_height()
+			menu.image.blit(bar, dest)
+			# store details for later
+			menu.children[index].rect = pygame.Rect((1, 1, 1, 1))
+			index += 1
+			dest.y += dest.h
+		else:
+			# create the key text
+			ktxt = SGFX.gui.fonts[SPQR.FONT_VERA].render(
+				menu.children[index].key_text, True, SPQR.MENU_TXT_COL)
+			# blit the text
+			dest.h = text.get_height()
+			menu.image.blit(text,dest)
+			# and then the key text
+			wr = pygame.Rect(width - (ktxt.get_width() + SPQR.HALFSPCR),
+							 ((dest.h-ktxt.get_height()) / 2) + dest.y,
+							 ktxt.get_width(), ktxt.get_height())
+			menu.image.blit(ktxt, wr)
+			# store the rect for mouse selection later
+			menu.children[index].rect = pygame.Rect((1, dest.y, width - SPQR.QTRSPCR, hgh_h))
+			index += 1
+			dest.y += dest.h
+	# and thats it
+	return True
+
+def rclkMenu(menu):
+	""" Function that creates and handles a right-click menu """
+	dest = pygame.Rect(0, 0, 0, 0)
+	dest.y = 4 + menu.rect.x
+	dest.x = SPQR.SPACER + menu.rect.y
+	for foo in menu.children:
+		text = foo.text
+		SGFX.gui.fonts[SPQR.FONT_VERA].set_bold(True)
+		itmp = SGFX.gui.fonts[SPQR.FONT_VERA].render(text,True,SPQR.COL_WHITE)
+		SGFX.gui.fonts[SPQR.FONT_VERA].set_bold(False)
+		menu.image.blit(itmp,dest)
+		# add rect area of this menu entry
+		menu.offsets.append(pygame.Rect((dest.x, dest.y, itmp.get_width() + 12 , 22)))
+		# calculate offset for next menu entry
+		dest.x += itmp.get_width() + (SPQR.SPACER * 2)
+	# draw the actual menu here as well
+	drawMenu(menu)
+	# now set so that the menu traps all the clicks on it
+	w = menu.image.get_width()
+	h = menu.image.get_height()
+	dest = pygame.Rect((menu.rect.x, menu.rect.y, w, h))
+	# make a copy of whats on the screen right here...
+	screen_copy = pygame.Surface((dest.w, dest.h))
+	screen_copy.blit(pygame.display.get_surface(), (0, 0), dest)
+	# copy the menu image across
+	SGFX.gui.screen.blit(menu.image, dest)
+	# and update the screen
+	pygame.display.update(dest)
+	# loop until we have user input and then execute the given code
+	code_called = False
+	exit_menu = False
+	highlight_on = False
+	last_highlight = pygame.Rect(1, 1, 1, 1)
+	key_function = False
+	while exit_menu == False:
+		event=pygame.event.poll()
+		# was it a keypress:	
+		if event.type == KEYDOWN:
+			# did it match?
+			print "key pressed"
+		elif event.type == MOUSEBUTTONUP:
+			x, y = pygame.mouse.get_pos()
+			# outside our menu?
+			if dest.collidepoint(x, y) == False:
+				# no more work to do
+				exit_menu = True
+			else:
+				# check to see if we clicked something...
+				if event.button != 1: continue
+				for foo in menu.children:
+					hrect = pygame.Rect(foo.rect.x, foo.rect.y, foo.rect.w, foo.rect.h)
+					# offset into menu
+					hrect.x += dest.x
+					hrect.y += dest.y
+					# are we in this one?
+					if hrect.collidepoint(x,y) == True:
+						# call the routine, clear up and then exit
+						# firstly erase the shown menu
+						SGFX.gui.screen.blit(screen_copy,dest)
+						pygame.display.update(dest)
+						# now do the call
+						foo.callbacks.mouse_lclk(foo, x, y)
+						code_called = True
+						exit_menu = True
+		elif event.type == MOUSEMOTION:
+			x, y = pygame.mouse.get_pos()
+			# is the mouse NOT in the last_highlight? Cos if so, we
+			# need to update that portion of that screen
+			if last_highlight.collidepoint(x, y) == False:
+				last_highlight.x -= dest.x
+				last_highlight.y -= dest.y
+				# copy portion on menu to screen
+				SGFX.gui.screen.blit(menu.image,dest)
+				# and update the screen
+				pygame.display.update(dest)
+				# test against all highlights
+			# inside the menu?
+			if dest.collidepoint(x, y) == True:
+				for foo in menu.children:
+					hrect = pygame.Rect(foo.rect.x, foo.rect.y, foo.rect.w, foo.rect.h)
+					# offset into menu
+					hrect.x += dest.x
+					hrect.y += dest.y
+					# already highlighted this?
+					if last_highlight != hrect and hrect.w != 1:
+						# are we in this one?
+						if hrect.collidepoint(x, y) == True:
+							# draw the highlight
+							SGFX.gui.screen.blit(menu.highlight,hrect)
+							pygame.display.update(dest)
+							highlight_on = True
+							last_highlight = hrect
+	# if no code called, tidy the screen back up again
+	if code_called == False:
+		# tidy the screen back up again
+		SGFX.gui.screen.blit(screen_copy, dest)
+		# update the screen
+		pygame.display.update(dest)
+	return True	
 
