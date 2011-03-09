@@ -179,3 +179,6 @@ def checkCallbacks(wid,clist):
 			wid.callbacks.mouse_dclick = getattr(SEVENTS, clist[c]["dclick"])
 	return wid
 
+def getDialog(filename):
+	""" returns a dialog from a file """
+	return yaml.load(open(filename))

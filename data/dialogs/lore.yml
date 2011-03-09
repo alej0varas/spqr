@@ -1,0 +1,15 @@
+# Lore speech
+- name: caesar
+  lines:
+    - Hello everyone this is Julious Ceasar and I welcome you to SPQR
+    - I hope that you enjoy the game. Have Fun !!!
+- name: soldier
+  lines:
+    - AVE CAESAR
+- name: narrator
+  lines:
+    - Roman empire
+    - One of the greatest empires of all time
+    - Siege control of great armys
+    - Conquer the world
+    - SPQR awaits your command

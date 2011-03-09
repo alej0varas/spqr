@@ -70,6 +70,7 @@ class CGFXEngine(object):
 		self.over_button = False
 		# interrupt for timers?
 		self.timer = True
+		self.tick = True
 		# item to check double-click against
 		self.dclick_handle = None
 		# store a simple console class
@@ -334,11 +335,11 @@ class CGFXEngine(object):
 		pygame.display.flip()
 		return True
 	
-	def updateOverlayWindow(self):
+	def updateOverlayWindow(self,index=-1):
 		"""Draw the window with the widget overlays only"""
 		# TODO: a better way of finding the window
-		offset = self.windows[-1].rect
-		for i in self.windows[-1].items:
+		offset = self.windows[index].rect
+		for i in self.windows[index].items:
 			if i.visible == True:
 				self.screen.blit(i.image, (i.rect.x+offset.x, i.rect.y+offset.y))
 
@@ -458,6 +459,11 @@ class CGFXEngine(object):
 			# kill timer and handle data
 			pygame.time.set_timer(SPQR.EVENT_DC_END, 0)
 			self.dclick_handle = None
+			return True
+		# Time event for keeping track of time
+		if event.type == SPQR.EVENT_TIME:
+			# return the miliseconds
+			self.tick=False
 			return True
 		# worst of all, could be an instant quit!
 		if event.type == pygame.QUIT:
@@ -1168,6 +1174,137 @@ class CGFXEngine(object):
 		   by setting the console flag to false"""
 		self.console = False
 		return True
+		
+	def story(self,image,caption,dialog,xpos,ypos,font=SPQR.FONT_VERA,txtcolor=SPQR.COL_BLACK):
+		"""Routine that displays dialogs on screen
+		Always returns True after doing it's work"""
+		# set the sizes
+		width = self.iWidth(image)
+		height = self.iHeight(image)
+		fontwidth,fontheight = self.fonts[font].size("X")
+		# Don't be bigger than 90% of main map
+		while width<(self.windows[1].rect.w*0.9) and height<(self.windows[1].rect.h*0.9):
+			width+= int(width*0.1)
+			height+= int(height*0.1)
+		# how many letters we can blit
+		letters=int(width//fontwidth)
+		# resize the pic
+		bckimg = pygame.transform.scale(self.image(image), (width, height))
+		# set sizes without borders
+		w = width - (2 * SPQR.WINSZ_SIDE)
+		h = height - SPQR.WINSZ_TOP - SPQR.WINSZ_BOT
+		# build the window
+		index = self.addWindow(SWINDOW.CWindow(xpos,ypos,w,h,caption,False))
+		# add the backround image
+		self.windows[index].image.blit(bckimg, (0,0))
+		# add 2 image widgets to use 1st will be a picture
+		imgx = width/2 - self.iWidth(dialog[0]["name"])/2
+		imgy = SPQR.SPACER
+		imgw = self.iWidth(dialog[0]["name"])
+		imgh = self.iHeight(dialog[0]["name"])
+		img = SWIDGET.CImage(imgx, imgy, imgw, imgh, None)
+		self.windows[index].addWidget(img)
+		# creating the background of the 1st widget
+		bckwga=bckimg.subsurface(img.rect)
+		# 2nd widget will be the text
+		lbly = img.rect.y+SPQR.SPACER+self.iHeight(dialog[0]["name"])
+		lbl = SWIDGET.CImage(width*0.1, lbly, width*0.8, height-lbly-2*SPQR.SPACER, None)
+		self.windows[index].addWidget(lbl)
+		# creating the background of the 1st widget
+		bckwgb=bckimg.subsurface(lbl.rect)
+		bckwgbw,bckwgbh = bckwgb.get_size()
+		# Make window modal
+		self.windows[index].modal=True
+		# set keyboard functions
+		self.keyboard.addKey(K_RETURN, msgboxOK)
+		self.keyboard.addKey(K_SPACE, msgboxOK)
+		self.keyboard.addKey(K_ESCAPE, msgboxQuit)
+		self.keyboard.setModalKeys(3)
+		# turn off unit animation during the messagebox
+		self.unitFlashAndOff()
+		# draw window
+		self.addDirtyRect(self.windows[index].drawWindow(),
+			self.windows[index].rect)
+		offset = self.windows[index].rect
+		# keep track of time
+		pygame.time.set_timer(SPQR.EVENT_TIME, SPQR.TEXT_DELAY)
+		# loop all the dialog npcs
+		for i in range(len(dialog)):
+			# getting the picture
+			self.windows[index].items[0].image.blit(bckwga, (0, 0))
+			self.windows[index].items[0].image.blit(self.image(dialog[i]["name"]), (0, 0))
+			txtheight=-3
+			for j in dialog[i]["lines"]:
+				# getting the dialoge text and blit for each line
+				txtheight+=fontheight+3
+				txt=0
+				while len(j)<letters:
+					# blit the text each letter at a time
+					tempsurface = self.fonts[font].render(j[0:txt], 1, txtcolor)
+					self.windows[index].items[1].image.blit(bckwgb.subsurface(0,txtheight,bckwgbw,bckwgbh-txtheight),(0,txtheight))
+					self.windows[index].items[1].image.blit(tempsurface,(0,txtheight))
+					self.updateOverlayWindow(index)
+					pygame.display.update(offset)
+					txt+=1
+					# check if we have end of line
+					if txt>len(j): break
+					# keep looping until we get a positive result
+					self.callback_temp = SPQR.BUTTON_FAIL
+					while self.callback_temp == SPQR.BUTTON_FAIL:
+						if self.tick==False:
+							self.tick=True
+							break
+						self.mainLoopSolo()
+					if self.callback_temp == SPQR.BUTTON_OK:
+						tempsurface = self.fonts[font].render(j, 1, txtcolor)
+						self.windows[index].items[1].image.blit(bckwgb.subsurface(0,txtheight,bckwgbw,bckwgbh-txtheight),(0,txtheight))
+						self.windows[index].items[1].image.blit(tempsurface,(0,txtheight))
+						self.updateOverlayWindow(index)
+						pygame.display.update(offset)
+						break
+					elif self.callback_temp == SPQR.BUTTON_QUIT:
+						pygame.time.set_timer(SPQR.EVENT_DC_END, 0)
+						# redraw the screen
+						self.deleteTopDirty()
+						# reset the keyboard
+						self.keyboard.removeModalKeys()
+						# remove the window
+						self.windows.pop()
+						# put the animation back if the top window is NOT modal
+						if self.windows[-1].modal == False:
+							self.unitFlashOn()
+						return True
+			# check for end of text
+			self.callback_temp = SPQR.BUTTON_FAIL
+			while self.callback_temp == SPQR.BUTTON_FAIL:
+				if self.tick==False:
+					pygame.time.wait(1000)
+					self.tick=True
+					break
+				self.mainLoopSolo()
+			if self.callback_temp == SPQR.BUTTON_QUIT:
+				pygame.time.set_timer(SPQR.EVENT_DC_END, 0)
+				# redraw the screen
+				self.deleteTopDirty()
+				# reset the keyboard
+				self.keyboard.removeModalKeys()
+				# remove the window
+				self.windows.pop()
+				# put the animation back if the top window is NOT modal
+				if self.windows[-1].modal == False:
+					self.unitFlashOn()
+				return True
+		# redraw the screen
+		self.deleteTopDirty()
+		# reset the keyboard
+		self.keyboard.removeModalKeys()
+		# remove the window
+		self.windows.pop()
+		# put the animation back if the top window is NOT modal
+		if self.windows[-1].modal == False:
+			self.unitFlashOn()
+		return True
+
 
 # callbacks for the messegebox routines (if needed)
 def msgboxOK(handle, xpos, ypos): 

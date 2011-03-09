@@ -187,6 +187,8 @@ def startGame(handle, xpos, ypos):
 	string = "To get help at any time, press F1. For a list of "
 	string += "keys and their actions, press k."
 	SGFX.gui.messagebox(SPQR.BUTTON_OK, string, "Game Start")
+	dialog = SYAML.getDialog("../data/dialogs/lore.yml")
+	SGFX.gui.story("papyrus","Test",dialog,-1,-1)
 	return True
 
 def menuNew(handle, xpos, ypos):
@@ -589,3 +591,12 @@ def cancelClick(handle, x, y):
 	"""quit utility and don't change anything"""
 	sys.exit(True)
 
+# functions for dialog use
+
+def lore(handle, x, y):
+	""" Function that loads dialogs and display them """
+	# open then file
+	dialog = SYAML.getDialog("../data/dialogs/lore.yml")
+	SGFX.gui.story("papyrus","Test",dialog,-1,-1)
+	return True
+	

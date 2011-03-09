@@ -82,7 +82,7 @@ WIN_MENU			= 1
 
 # the images to load
 # just list the folders inside gfx: the game will pull all of the png files
-GRAPHICS_F			= ["gui", "icons", "units", "cities" ,"map/regions", "units/overlays"]
+GRAPHICS_F			= ["gui", "icons", "units", "cities" ,"map/regions", "units/overlays", "npc"]
 
 # milliseconds between unit flash
 # (all animation times are in milliseconds)
@@ -91,6 +91,8 @@ ANIM_TIME			= 400
 MOVE_FRAME			= 24
 # number of milliseconds between clicks in a double-click (400 is the Gnome standard)
 DCLICK_SPEED		= 400
+# Number of milliseconds between time ticks for text blit
+TEXT_DELAY			= 60
 
 # mouse events as seen by the gui
 MOUSE_NONE			= 0
@@ -197,6 +199,8 @@ OPTM_BDARK			= (190, 190, 180)
 EVENT_SONGEND		= PYGAME.USEREVENT + 1
 # stop looking for a double-click when we get this event
 EVENT_DC_END		= PYGAME.USEREVENT + 2
+# time event
+EVENT_TIME			= PYGAME.USEREVENT + 3
 
 # some initial values for the sound system
 INIT_VOLUME			= 40
