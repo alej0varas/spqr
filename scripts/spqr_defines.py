@@ -82,7 +82,7 @@ WIN_MENU			= 1
 
 # the images to load
 # just list the folders inside gfx: the game will pull all of the png files
-GRAPHICS_F			= ["gui", "icons", "units", "cities" ,"map/regions", "units/overlays", "npc"]
+GRAPHICS_F			= ["gui", "icons", "units", "cities" ,"map/regions", "units/overlays","npc"]
 
 # milliseconds between unit flash
 # (all animation times are in milliseconds)
@@ -169,6 +169,7 @@ MENU_HLCOL			= (170, 83, 83)
 START_YEAR			= -201
 
 # define all the colours we use as well
+BGUI_TXT			= (246, 246, 246)
 BGUI_COL			= (238, 238, 230)
 BGUI_HIGH			= (227, 219, 213)
 MENU_COL			= (246, 246, 246)

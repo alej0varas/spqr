@@ -52,6 +52,16 @@
         - dclick: dclickTest
         - rclk: onMenu
 
+    - widget: CText
+      text: hello
+      x: "20"
+      y: "260"
+      w: "200"
+      h: "17"
+      active: Yes
+      visible: Yes
+      righttext: Yes
+
     - widget: COptionMenu
       x: "120"
       y: "30"

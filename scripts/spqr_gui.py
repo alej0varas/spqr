@@ -1226,18 +1226,19 @@ class CGFXEngine(object):
 		self.addDirtyRect(self.windows[index].drawWindow(),
 			self.windows[index].rect)
 		offset = self.windows[index].rect
-		# keep track of time
-		pygame.time.set_timer(SPQR.EVENT_TIME, SPQR.TEXT_DELAY)
 		# loop all the dialog npcs
 		for i in range(len(dialog)):
 			# getting the picture
 			self.windows[index].items[0].image.blit(bckwga, (0, 0))
 			self.windows[index].items[0].image.blit(self.image(dialog[i]["name"]), (0, 0))
 			txtheight=-3
+			pygame.event.clear()
 			for j in dialog[i]["lines"]:
 				# getting the dialoge text and blit for each line
 				txtheight+=fontheight+3
 				txt=0
+				# keep track of time
+				pygame.time.set_timer(SPQR.EVENT_TIME, SPQR.TEXT_DELAY)
 				while len(j)<letters:
 					# blit the text each letter at a time
 					tempsurface = self.fonts[font].render(j[0:txt], 1, txtcolor)
@@ -1274,6 +1275,7 @@ class CGFXEngine(object):
 						if self.windows[-1].modal == False:
 							self.unitFlashOn()
 						return True
+				pygame.time.set_timer(SPQR.EVENT_DC_END, 0)
 			# check for end of text
 			self.callback_temp = SPQR.BUTTON_FAIL
 			while self.callback_temp == SPQR.BUTTON_FAIL:
@@ -1283,7 +1285,6 @@ class CGFXEngine(object):
 					break
 				self.mainLoopSolo()
 			if self.callback_temp == SPQR.BUTTON_QUIT:
-				pygame.time.set_timer(SPQR.EVENT_DC_END, 0)
 				# redraw the screen
 				self.deleteTopDirty()
 				# reset the keyboard
@@ -1304,7 +1305,6 @@ class CGFXEngine(object):
 		if self.windows[-1].modal == False:
 			self.unitFlashOn()
 		return True
-
 
 # callbacks for the messegebox routines (if needed)
 def msgboxOK(handle, xpos, ypos): 

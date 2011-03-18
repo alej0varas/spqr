@@ -68,7 +68,19 @@ def createWidget(wlist):
 		passed list of properties """
 	# First we check the key that will always be in our widget's
 	# and defines the widget's purpose
-	if wlist['widget'] == "CLabel" :
+	if wlist['widget'] == "CText" :
+		if wlist['text']=="None": addtext=""
+		else: addtext=wlist['text']
+		# if this is a label make it with a text
+		widget = SWIDGET.CText(eval(wlist['x']),eval(wlist['y']),eval(wlist['w']),eval(wlist['h']),addtext,wlist['righttext'])
+		# Check if there is any widgets callback
+		if wlist.has_key('callbacks'): checkCallbacks(widget,wlist['callbacks'])
+		if wlist['active'] == True : widget.active = True
+		else : widget.active = False
+		if wlist['visible'] == True : widget.visible = True
+		else : widget.visible = False
+		return widget
+	elif wlist['widget'] == "CLabel" :
 		# if this is a label make it with a text
 		widget = SWIDGET.buildLabel(wlist['text'])
 		# and add the cords to the rect
@@ -182,3 +194,5 @@ def checkCallbacks(wid,clist):
 def getDialog(filename):
 	""" returns a dialog from a file """
 	return yaml.load(open(filename))
+	 
+

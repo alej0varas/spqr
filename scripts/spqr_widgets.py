@@ -14,7 +14,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import pygame
+import pygame, string
 from pygame.locals import *
 
 import spqr_defines as SPQR
@@ -1194,6 +1194,83 @@ class COptionMenu(CWidget):
 		# shouldn't ever get here, really
 		SGFX.gui.deleteTopDirty()
 		return False
+
+class CText(CWidget):
+	""" Text class stores details for a simple text widget and handles when
+		clicked the keyboard input. text variable we enter in init is added
+		right or left of the keyboard input according the righttext flag. """
+	def __init__(self, x, y, width, height, text, righttext=False, font = SPQR.FONT_VERA, bg_color = SPQR.BGUI_TXT):
+		CWidget.__init__(self, pygame.Rect(x,y,width,height), SPQR.WT_LABEL,
+						None, "CLabel") 
+		self.background_colour = bg_color
+		self.text_colour = SPQR.COL_BLACK
+		self.font = font
+		self.text = text
+		self.current_string = []
+		self.addright = righttext
+		self.image=pygame.Surface((self.rect. w,self.rect.h))
+		self.image.fill(self.background_colour)
+		# automatically add it's own click callback
+		self.callbacks.mouse_lclk = self.clicked
+		# sometimes you'll need to call another routine as well
+		# as updating the graphic. Let's set that here as blank
+		self.after_click = SPQR.null_routine
+		self.after_click_status = False
+	
+	def get_key(self):
+		""" Get the keyboard input """
+		while True:
+			event = pygame.event.wait()
+			if event.type == KEYDOWN:
+				return event.key
+			if event.type == pygame.QUIT:
+				SEVENT.quitSpqr(None, -1, -1)
+				return True
+			if event.type == MOUSEBUTTONUP:
+				x, y = pygame.mouse.get_pos()
+				x_off = x - self.parent.rect.x
+				y_off = y - self.parent.rect.y
+				if self.rect.collidepoint(x_off, y_off) == False: return K_RETURN
+	
+	def addAfterClick(self, routine):
+		""" Add routine to be called after left mouse clicked """
+		self.after_click_status = True
+		self.after_click = routine
+		return True
+	
+	def clicked(self, handle, x, y):
+		""" Called by the gui routine when clicked. Updates it's own gfx
+			in the parent window and handles the keyboard input. """
+		xpos = self.parent.rect.x
+		ypos = self.parent.rect.y
+		xpos += self.rect.x
+		ypos += self.rect.y
+		while True:
+			# make the string that we going to print
+			if self.addright == False:
+				txt = self.text + string.join(self.current_string,"")
+			else:
+				txt = string.join(self.current_string,"") + self.text
+			# now we just have to blit that text
+			printed = SGFX.gui.fonts[self.font].render(txt, 1, self.text_colour)
+			SGFX.gui.screen.blit(self.image, (xpos, ypos, 0, 0))
+			SGFX.gui.screen.blit(printed, (xpos, ypos, 0, 0))
+			pygame.display.update((xpos, ypos, self.rect.w, self.rect.h))
+			# get the keyboard input
+			inkey = self.get_key()
+			if inkey == K_BACKSPACE:
+				self.current_string = self.current_string[0:-1]
+			elif inkey == K_RETURN or inkey == 271 or inkey == K_ESCAPE:
+				# do we have an afterclick function?
+				if self.after_click_status == True:
+					self.after_click(handle, xpos, ypos)
+				return True
+			elif inkey == K_MINUS:
+				self.current_string.append("_")
+			elif inkey <= 127:
+				self.current_string.append(chr(inkey))
+		return True
+	
 
 # helper routines to build stuff follow
 def buildLabel(text, font = SPQR.FONT_VERA):
