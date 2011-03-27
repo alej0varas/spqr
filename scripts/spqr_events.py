@@ -494,62 +494,9 @@ def welcomeScreen(handle, xpos, ypos):
 # place all debugging events below this line
 # these are only activated if DEBUG_MODE is set to True
 
-# here are some console output routines called from an extra menu area
-def consoleUnitNames(handle, xpos, ypos):
-	"""Outputs to console the names of all the units in play"""
-	print "No units"
-	return True
-
-def consoleUnitNumbers(handle, xpos ,ypos):
-	"""Outputs to console the id numbers of all units"""
-	print "No units"
-	return True
-
-def consoleUnitOwners(handle, xpos, ypos):
-	"""Outputs to console owners of roman units"""
-	print "No owners"
-	return True
-
-def consoleCityNames(handle, xpos, ypos):
-	"""Outputs to console the names of all the cities in play"""
-	print "No cities"
-	return True
-
 def dclickTest(handle, xpos, ypos):
 	"""Test routine to check double-clicks"""
 	SGFX.gui.messagebox(SPQR.BUTTON_OK, "Double-clicked!", "Test")
-	return True
-
-def displayConsole(handle, xpos, ypos):
-	"""Opens console for display and editing
-	   This loop catches *all* input until you exit.
-	   Always returns True"""
-	# Bugs have been fixed but I need to spend some more
-	# time with this to make it actually fit for some purpose
-	console_surface = pygame.Surface((SPQR.CONSOLE_WIDTH, SPQR.CONSOLE_HEIGHT))
-	console = pyconsole.Console(
-		console_surface,
-		(0, 0, SPQR.CONSOLE_WIDTH, SPQR.CONSOLE_HEIGHT),
-		vars = {"gui":SGFX.gui},
-		functions = {"exit":SGFX.gui.exitConsole,
-					 "dunits":SGFX.gui.cfuncs.showUnits,
-					 "drunits":SGFX.gui.cfuncs.showRomanUnits,
-					 "dpeople":SGFX.gui.cfuncs.showPeople,
-					 "windows":SGFX.gui.cfuncs.showWindows})
-	# console needs to stay displayed
-	SGFX.gui.console = True
-	while(True):
-		console.process_input()
-		console.draw()
-		SGFX.gui.screen.blit(console_surface, (0, SPQR.WINSZ_TOP - 2))
-		pygame.display.flip()
-		# are we still drawing the console?
-		if SGFX.gui.console == False:
-			break
-		pygame.time.wait(10)
-	# clean up the screen
-	# since we only ever draw over the map, simply re-draw that
-	SGFX.gui.updateMap()
 	return True
 
 def displaySliderContents(handle, xpos, ypos):
@@ -563,11 +510,10 @@ def displaySliderContents(handle, xpos, ypos):
 	return True
 
 # right click menu functions
-
 def onMenu(handle, xpos, ypos):
 	""" test menu for right click """
 	# We initiate the menu
-	menu=SMENU.CMenuParent(handle.describe)
+	menu = SMENU.CMenuParent(handle.describe)
 	menu.addChild(SMENU.CMenuChild("New Game", "new", "Ctrl+N", menuNew))
 	#menu.addChild(SMENU.CMenuChild("sep", None, "", notYetCoded))
 	menu.addChild(SMENU.CMenuChild("Load Game", "open", "Ctrl+L", menuLoad))
@@ -580,7 +526,6 @@ def onMenu(handle, xpos, ypos):
 	return True
 	
 # functions for the setup.py
-
 def okClick(handle, x, y):
 	for i in SGFX.gui.windows[0].items:
 		if i.describe == "opt-Resolution":
@@ -592,11 +537,10 @@ def cancelClick(handle, x, y):
 	sys.exit(True)
 
 # functions for dialog use
-
 def lore(handle, x, y):
-	""" Function that loads dialogs and display them """
-	# open then file
+	"""Function that loads dialogs and display them """
+	# open the file
 	dialog = SYAML.getDialog("../data/dialogs/lore.yml")
-	SGFX.gui.story("papyrus","Test",dialog,-1,-1)
+	SGFX.gui.story("papyrus", "Test", dialog, -1, -1)
 	return True
-	
+

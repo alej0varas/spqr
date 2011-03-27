@@ -148,15 +148,11 @@ class CSPQR(object):
 	
 		# debug menu is always last - it's easy to remove then
 		if SPQR.DEBUG_MODE == True:
-			menu[3].addChild(SMENU.CMenuChild("Show unit names", "debug", "", SEVENT.consoleUnitNames))
-			menu[3].addChild(SMENU.CMenuChild("Show unit IDs", "debug", "", SEVENT.consoleUnitNumbers))
-			menu[3].addChild(SMENU.CMenuChild("Show unit owners", "debug", "", SEVENT.consoleUnitOwners))
 			menu[3].addChild(SMENU.CMenuChild("Show example city", "debug", "", SEVENT.showCity))
+			menu[3].addChild(SMENU.CMenuChild("Show example unit", "debug", "", SEVENT.notYetCoded))
 			menu[3].addChild(SMENU.CMenuChild("sep", "debug", "", SEVENT.notYetCoded))
 			menu[3].addChild(SMENU.CMenuChild("Window test", "debug", "", SEVENT.windowTest))
 			menu[3].addChild(SMENU.CMenuChild("Widget test", "debug", "", SEVENT.widgetTest))
-			menu[3].addChild(SMENU.CMenuChild("sep", "debug", "", SEVENT.notYetCoded))
-			menu[3].addChild(SMENU.CMenuChild("Open Console", "debug", "", SEVENT.displayConsole))
 	
 		# Add the menubar at the top. It has no drawn window
 		# THIS MUST BE THE FIRST WINDOW

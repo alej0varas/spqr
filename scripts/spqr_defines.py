@@ -32,8 +32,7 @@ CODELINES			= "5783"
 FULLSCREEN			= False
 
 # before we go any further, this one is a must ;-)
-# currently adds debug menu bar , along with access to
-# a python console
+# currently adds debug menu bar
 DEBUG_MODE		=	True
 
 # now place the equivalent of some(!) defines
@@ -45,9 +44,6 @@ RMOUSE_END			= False
 
 # menu icons are always squares
 ICON_SIZE			= 24
-# size of console screen
-CONSOLE_WIDTH		= SCREEN_WIDTH
-CONSOLE_HEIGHT		= (SCREEN_HEIGHT / 3) * 2
 # checkbox size goes here (always a square)
 CHKBOX_SIZE			= 13
 # size of unit gfx
