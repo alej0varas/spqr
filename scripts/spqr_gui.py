@@ -1164,30 +1164,30 @@ class CGFXEngine(object):
 		# return the value we got
 		return self.callback_temp
 
-	def story(self,image,caption,dialog,xpos,ypos,font=SPQR.FONT_VERA,txtcolor=SPQR.COL_BLACK):
+	def story(self, image, caption, dialog, xpos, ypos, font = SPQR.FONT_VERA, txtcolor = SPQR.COL_BLACK):
 		"""Routine that displays dialogs on screen
-		Always returns True after doing it's work"""
+		   Always returns True after doing it's work"""
 		# set the sizes
 		width = self.iWidth(image)
 		height = self.iHeight(image)
-		fontwidth,fontheight = self.fonts[font].size("X")
+		fontwidth, fontheight = self.fonts[font].size("X")
 		# Don't be bigger than 90% of main map
-		while width<(self.windows[1].rect.w*0.9) and height<(self.windows[1].rect.h*0.9):
-			width+= int(width*0.1)
-			height+= int(height*0.1)
+		while width < (self.windows[1].rect.w * 0.9) and height < (self.windows[1].rect.h * 0.9):
+			width += int(width * 0.1)
+			height += int(height * 0.1)
 		# how many letters we can blit
-		letters=int(width//fontwidth)
+		letters = int(width // fontwidth)
 		# resize the pic
 		bckimg = pygame.transform.scale(self.image(image), (width, height))
 		# set sizes without borders
 		w = width - (2 * SPQR.WINSZ_SIDE)
 		h = height - SPQR.WINSZ_TOP - SPQR.WINSZ_BOT
 		# build the window
-		index = self.addWindow(SWINDOW.CWindow(xpos,ypos,w,h,caption,False))
+		index = self.addWindow(SWINDOW.CWindow(xpos, ypos, w, h, caption, False))
 		# add the backround image
-		self.windows[index].image.blit(bckimg, (0,0))
+		self.windows[index].image.blit(bckimg, (0, 0))
 		# add 2 image widgets to use 1st will be a picture
-		imgx = width/2 - self.iWidth(dialog[0]["name"])/2
+		imgx = width / 2  - self.iWidth(dialog[0]["name"])/2
 		imgy = SPQR.SPACER
 		imgw = self.iWidth(dialog[0]["name"])
 		imgh = self.iHeight(dialog[0]["name"])
@@ -1196,12 +1196,12 @@ class CGFXEngine(object):
 		# creating the background of the 1st widget
 		bckwga=bckimg.subsurface(img.rect)
 		# 2nd widget will be the text
-		lbly = img.rect.y+SPQR.SPACER+self.iHeight(dialog[0]["name"])
-		lbl = SWIDGET.CImage(width*0.1, lbly, width*0.8, height-lbly-2*SPQR.SPACER, None)
+		lbly = img.rect.y + SPQR.SPACER + self.iHeight(dialog[0]["name"])
+		lbl = SWIDGET.CImage(width*0.1, lbly, width * 0.8, height - lbly - 2 * SPQR.SPACER, None)
 		self.windows[index].addWidget(lbl)
 		# creating the background of the 1st widget
-		bckwgb=bckimg.subsurface(lbl.rect)
-		bckwgbw,bckwgbh = bckwgb.get_size()
+		bckwgb = bckimg.subsurface(lbl.rect)
+		bckwgbw, bckwgbh = bckwgb.get_size()
 		# Make window modal
 		self.windows[index].modal=True
 		# set keyboard functions
@@ -1220,22 +1220,22 @@ class CGFXEngine(object):
 			# getting the picture
 			self.windows[index].items[0].image.blit(bckwga, (0, 0))
 			self.windows[index].items[0].image.blit(self.image(dialog[i]["name"]), (0, 0))
-			txtheight=-3
+			txtheight = -3
 			pygame.event.clear()
 			for j in dialog[i]["lines"]:
 				# getting the dialoge text and blit for each line
-				txtheight+=fontheight+3
-				txt=0
+				txtheight += fontheight + 3
+				txt = 0
 				# keep track of time
 				pygame.time.set_timer(SPQR.EVENT_TIME, SPQR.TEXT_DELAY)
 				while len(j)<letters:
 					# blit the text each letter at a time
 					tempsurface = self.fonts[font].render(j[0:txt], 1, txtcolor)
-					self.windows[index].items[1].image.blit(bckwgb.subsurface(0,txtheight,bckwgbw,bckwgbh-txtheight),(0,txtheight))
-					self.windows[index].items[1].image.blit(tempsurface,(0,txtheight))
+					self.windows[index].items[1].image.blit(bckwgb.subsurface(0, txtheight, bckwgbw, bckwgbh - txtheight),(0,txtheight))
+					self.windows[index].items[1].image.blit(tempsurface, (0, txtheight))
 					self.updateOverlayWindow(index)
 					pygame.display.update(offset)
-					txt+=1
+					txt += 1
 					# check if we have end of line
 					if txt>len(j): break
 					# keep looping until we get a positive result
