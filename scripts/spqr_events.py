@@ -28,9 +28,6 @@ import spqr_menu as SMENU
 import units.spqr_unit as SUNITS
 import spqr_ybuild as SYAML
 
-# thanks go to John Schanck for the following module
-import pyconsole
-
 # found here are all the functions triggered by the various mouse events
 # they must all have the structure
 # def function_name(handle,xpos,ypos)
@@ -187,7 +184,7 @@ def startGame(handle, xpos, ypos):
 	string = "To get help at any time, press F1. For a list of "
 	string += "keys and their actions, press k."
 	SGFX.gui.messagebox(SPQR.BUTTON_OK, string, "Game Start")
-	dialog = SYAML.getDialog("../data/dialogs/lore.yml")
+	dialog = SYAML.getDialog("./data/dialogs/lore.yml")
 	SGFX.gui.story("papyrus","Test",dialog,-1,-1)
 	return True
 
@@ -436,7 +433,7 @@ def windowTest(handle, xpos, ypos):
 	# get the window from a yaml file and this returns a list of indexes
 	# incase we import more than 1 window we get their indexes
 	# here we have 1 window so we get the first index
-	index = SYAML.createWindow("../data/layouts/window_test.yml")[0]
+	index = SYAML.createWindow("./data/layouts/window_test.yml")[0]
 	# we have to add modal keypresses ourselves
 	SGFX.gui.keyboard.setModalKeys(1)
 	# turn off unit animations
@@ -447,7 +444,7 @@ def windowTest(handle, xpos, ypos):
 	return True
 	
 def widgetTest(handle, xpos, ypos):
-	index = SYAML.createWindow("../data/layouts/widget_test.yml")[0]
+	index = SYAML.createWindow("./data/layouts/widget_test.yml")[0]
 	SGFX.gui.keyboard.addKey(K_q, killModalWindow)
 	SGFX.gui.keyboard.addKey(K_RETURN, killModalWindow)
 	SGFX.gui.keyboard.setModalKeys(2)
@@ -461,7 +458,7 @@ def widgetTest(handle, xpos, ypos):
 def menuPreferences(handle, xpos, ypos):
 	"""Display the user preferences window. You can only really
 	   play with the music and volume settings for now"""
-	index = SYAML.createWindow("../data/layouts/menu_pref.yml")[0]
+	index = SYAML.createWindow("./data/layouts/menu_pref.yml")[0]
 	# add the new key event: o = ok
 	SGFX.gui.keyboard.addKey(K_o, killModalWindow)
 	SGFX.gui.keyboard.setModalKeys(1)
@@ -476,7 +473,7 @@ def menuPreferences(handle, xpos, ypos):
 def welcomeScreen(handle, xpos, ypos):
 	"""Routine displays opening screen, with load/save/new/about
 	   buttons. Always returns True after doing it's work"""
-	index = SYAML.createWindow("../data/layouts/welcome.yml")[0]
+	index = SYAML.createWindow("./data/layouts/welcome.yml")[0]
 	# add the modal key events: n=new, l=load, o=options, a=about, q=quit
 	SGFX.gui.keyboard.addKey(K_n, startGame)
 	SGFX.gui.keyboard.addKey(K_l, menuLoad)
@@ -501,7 +498,7 @@ def dclickTest(handle, xpos, ypos):
 
 def displaySliderContents(handle, xpos, ypos):
 	"""As well as showing you how to read slider contents,
-	   this function outputs the slider value to a console.
+	   this function outputs the slider value to the terminal.
 	   Sometimes useful for checking/debugging. You can add
 	   it to any slider function callback"""
 	# only if debugging is turned on, of course...
@@ -540,7 +537,7 @@ def cancelClick(handle, x, y):
 def lore(handle, x, y):
 	"""Function that loads dialogs and display them """
 	# open the file
-	dialog = SYAML.getDialog("../data/dialogs/lore.yml")
+	dialog = SYAML.getDialog("./data/dialogs/lore.yml")
 	SGFX.gui.story("papyrus", "Test", dialog, -1, -1)
 	return True
 

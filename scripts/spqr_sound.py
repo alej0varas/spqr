@@ -41,7 +41,7 @@ class CSound(object):
 		pygame.mixer.music.set_endevent()
 		songtitle = self.music.pop()
 		self.music.insert(0, songtitle)
-		pygame.mixer.music.load("../music/" + songtitle)
+		pygame.mixer.music.load("./music/" + songtitle)
 		# when new music is loaded, the volume param is reset. Fix it
 		pygame.mixer.music.set_volume((float)((float)(self.volume) / 100.0))
 		pygame.mixer.music.play()

@@ -27,8 +27,8 @@ AUTHOR				= "Chris Handy"
 EMAIL				= "maximinus@gmail.com"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
-LAST_UPDATE			= "17th Jan 2011"
-CODELINES			= "5783"
+LAST_UPDATE			= "27th Mar 2011"
+CODELINES			= "5120"
 FULLSCREEN			= False
 
 # before we go any further, this one is a must ;-)

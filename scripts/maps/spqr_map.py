@@ -31,7 +31,7 @@ class CMap(object):
 		self.masks = {}
 		self.graph = nx.Graph()
 		# Load the map's regions from a file
-		var = yaml.load(open("../data/regions/map.yml"))
+		var = yaml.load(open("./data/regions/map.yml"))
 		# Make a temp list with the borders
 		wlist=[]
 		# for every region we will import the specific data

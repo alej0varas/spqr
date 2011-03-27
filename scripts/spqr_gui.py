@@ -22,7 +22,6 @@ import spqr_window as SWINDOW
 import spqr_widgets as SWIDGET
 import spqr_keys as SKEY
 import spqr_events as SEVENT
-import spqr_console as SCONSOLE
 import spqr_sound as SSFX
 import spqr_data as SDATA
 
@@ -54,7 +53,7 @@ class CGFXEngine(object):
 		if load_screen == True:
 			self.displayLoadingScreen(width, height)
 		# next up is to load in some images into the gfx array
-		self.images["map"] = pygame.image.load("../gfx/map/map.jpg").convert()
+		self.images["map"] = pygame.image.load("./gfx/map/map.jpg").convert()
 		# add a back buffer map render.. this will become the map that we render
 		foo = pygame.Surface((self.iWidth("map"), self.iHeight("map")))
 		self.images["buffer"] = foo
@@ -73,16 +72,12 @@ class CGFXEngine(object):
 		self.tick = True
 		# item to check double-click against
 		self.dclick_handle = None
-		# store a simple console class
-		self.cfuncs = SCONSOLE.CConsole()
-		# console currently being displayed?
-		self.console = False
 		pygame.display.set_caption("SPQR "+SPQR.VERSION)
 		
 		# get all filenames:
 		files = []
 		for i in SPQR.GRAPHICS_F:
-			files.extend(["../gfx/" + i +"/" + name for name in os.listdir("../gfx/" + i + "/")])
+			files.extend(["./gfx/" + i +"/" + name for name in os.listdir("./gfx/" + i + "/")])
 		# if it's a png, strip the name and insert it into a new hash
 		for i in files:
 			if i[-4:] == ".png":
@@ -91,9 +86,9 @@ class CGFXEngine(object):
 		# set up the fonts
 		pygame.font.init()
 		self.fonts = []
-		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf", SPQR.FONT_STD))
-		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf", SPQR.FONT_SMALL))
-		self.fonts.append(pygame.font.Font("../gfx/Vera.ttf", SPQR.FONT_LARGE))
+		self.fonts.append(pygame.font.Font("./gfx/Vera.ttf", SPQR.FONT_STD))
+		self.fonts.append(pygame.font.Font("./gfx/Vera.ttf", SPQR.FONT_SMALL))
+		self.fonts.append(pygame.font.Font("./gfx/Vera.ttf", SPQR.FONT_LARGE))
 
 		# update buffer images
 		self.updateMapData()
@@ -158,7 +153,7 @@ class CGFXEngine(object):
 
 	def displayLoadingScreen(self, width, height):
 		"""Displays the loading screen"""
-		load_screen = pygame.image.load("../gfx/load_screen.png").convert()
+		load_screen = pygame.image.load("./gfx/load_screen.png").convert()
 		self.screen.fill(SPQR.COL_BLACK)
 		xpos = (width - load_screen.get_width()) / 2
 		ypos = (height - load_screen.get_height()) / 2
@@ -1169,12 +1164,6 @@ class CGFXEngine(object):
 		# return the value we got
 		return self.callback_temp
 
-	def exitConsole(self):
-		"""Here's an easy one: kill the current console
-		   by setting the console flag to false"""
-		self.console = False
-		return True
-		
 	def story(self,image,caption,dialog,xpos,ypos,font=SPQR.FONT_VERA,txtcolor=SPQR.COL_BLACK):
 		"""Routine that displays dialogs on screen
 		Always returns True after doing it's work"""

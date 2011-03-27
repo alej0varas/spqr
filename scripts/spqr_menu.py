@@ -94,12 +94,12 @@ class CMenu(object):
 		# children is an array of arrays, with a one-on-one
 		self.menu = children
 		# load the base image we will use to generate the titlebar gfx
-		titlebar = pygame.image.load(os.path.normpath("../gfx/gui/titlebar.png")).convert()
+		titlebar = pygame.image.load(os.path.normpath("./gfx/gui/titlebar.png")).convert()
 		# store the rect for later
 		self.rect = pygame.Rect(0,0,SPQR.SCREEN_WIDTH,titlebar.get_height())
 		# draw the top bar starting here
 		# now work out what size the rhs pixmap text is
-		rhs_txt = "SPQR "+SPQR.VERSION
+		rhs_txt = "SPQR " + SPQR.VERSION
 		rhs_txt_width = SGFX.gui.fonts[SPQR.FONT_VERA].size(rhs_txt)[0] + SPQR.SPACER
 		# blit the lhs
 		x_blits = int((SPQR.SCREEN_WIDTH-rhs_txt_width - 51) / 8)
@@ -109,7 +109,7 @@ class CMenu(object):
 			self.image.blit(titlebar, dest)
 			dest.x += 8
 		# blit the rhs
-		titlebar = pygame.image.load(os.path.normpath("../gfx/gui/titlebar_fill.png")).convert()
+		titlebar = pygame.image.load(os.path.normpath("./gfx/gui/titlebar_fill.png")).convert()
 		dest.x = SPQR.SCREEN_WIDTH - (rhs_txt_width + 56)
 		while dest.x < SPQR.SCREEN_WIDTH:
 			self.image.blit(titlebar,dest)
