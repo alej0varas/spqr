@@ -71,8 +71,8 @@ def updateRegionMasks(masks):
 
 def iterRegions():
 	"""A custom iterator so we can change how regions are held"""
-	for key in data.map.regions.iterkeys():
-		yield data.map.regions[key]
+	for i in data.map.regions.itervalues():
+		yield i
 
 def iterUnits():
 	for region in data.map.regions.itervalues():

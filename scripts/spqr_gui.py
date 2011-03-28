@@ -246,8 +246,8 @@ class CGFXEngine(object):
 	def renderUnits(self):
 		"""Only render the first unit on the stack"""
 		# TODO: add extra gfx to show > 1 unit
-		for i in SDATA.iterUnits():
-			self.image("buffer").blit(self.image(i.image), SDATA.getUnitPosition(i.name))
+		for i in SDATA.iterRegions():
+			self.renderSingleUnit(i)
 	
 	def renderSingleUnit(self, region):
 		if len(region.units) > 0:
