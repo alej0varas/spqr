@@ -32,6 +32,10 @@ class CDirtyRect(object):
 	def __init__(self, pic, rec):
 		self.image = pic
 		self.rect = rec
+	
+	def update(self, image):
+		"""Update sent image"""
+		image.blit(self.image, self.rect)
 
 # now of course we need a class to hold all of the windows, i.e. the basic GUI class
 # this class also inits the gfx display
@@ -100,6 +104,7 @@ class CGFXEngine(object):
 		# index of troop we are flashing
 		self.flash_highlight = None
 		self.current_highlight = None
+		self.region_highlight = None
 		# modal windows use a dirty rect list to update, here it is
 		self.dirty = []
 		# enable keyboard reponses
@@ -239,8 +244,15 @@ class CGFXEngine(object):
 		self.fonts[SPQR.FONT_VERA].set_bold(False)
 
 	def renderUnits(self):
+		"""Only render the first unit on the stack"""
+		# TODO: add extra gfx to show > 1 unit
 		for i in SDATA.iterUnits():
 			self.image("buffer").blit(self.image(i.image), SDATA.getUnitPosition(i.name))
+	
+	def renderSingleUnit(self, region):
+		if len(region.units) > 0:
+			unit = region.units[0]
+			self.image("buffer").blit(self.image(unit.image), SDATA.getUnitPosition(unit.name))
 
 	# now a function to add a window
 	# it has it's own function because it has to return the index number
@@ -639,15 +651,41 @@ class CGFXEngine(object):
 		name = SDATA.regionClicked(x, y)
 		if name != False:
 			print "Region:", name, "owned by the", SDATA.regionOwnerPlural(name)
+			self.highlightRegion(name)
 			self.renderRegionInfoBox(name)
 			self.renderImageUnits(name)
 			self.updateGUI()
 		else:
-			# clear box if no info
+			# a click on a non-important map area
+			update = False
 			if self.info_widget.visible == True:
 				self.info_widget.visible = False
+				update = True
+			if self.region_highlight != None:
+				self.region_highlight.update(self.image("buffer"))
+				update = True
+			if update == True:
 				self.updateGUI()
 		return True
+
+	def highlightRegion(self, name):
+		"""Highlight the region in the owners colours"""
+		if self.region_highlight != None:
+			self.region_highlight.update(self.image("buffer"))
+		region = SDATA.getRegion(name)
+		highlight = pygame.Surface(self.image(region.image + "_mask").get_size(), 32)
+		# fill with colour of player
+		highlight.fill(region.colour)
+		mask = self.image(region.image + "_mask").copy()
+		mask.blit(highlight, (0, 0), None, pygame.BLEND_ADD)
+		# add a dirty rect of this
+		r_high = pygame.Surface(self.image(region.image + "_mask").get_size(), 32)
+		r_high.blit(self.image("buffer"), (0, 0), region.rect)
+		self.region_highlight = CDirtyRect(r_high, region.rect)
+		self.image("buffer").blit(mask, (region.rect.x, region.rect.y))
+		# blit the city and units, if they exist
+		self.renderSingleCity(region)
+		self.renderSingleUnit(region)
 
 	def moveUnit(self, region):
 		"""Move the unit (or not)"""
