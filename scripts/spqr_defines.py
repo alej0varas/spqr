@@ -72,6 +72,8 @@ FONT_VERA_LG		= 2
 FONT_SMALL			= 12
 FONT_STD			= 14
 FONT_LARGE			= 16
+# messagebox font
+FONT_MSG			= FONT_VERA
 
 # index numbers of windows that are always present
 WIN_MENU			= 1
@@ -121,6 +123,7 @@ WT_SLIDER			= 7
 WT_SCROLLAREA		= 8
 WT_ITEMLIST			= 9
 WT_OPTMENU			= 10
+WT_TEXT				= 11
 
 # text layout types
 LEFT_JUSTIFY		= 0

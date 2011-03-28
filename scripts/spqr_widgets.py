@@ -1196,19 +1196,18 @@ class COptionMenu(CWidget):
 		return False
 
 class CText(CWidget):
-	""" Text class stores details for a simple text widget and handles when
-		clicked the keyboard input. text variable we enter in init is added
-		right or left of the keyboard input according the righttext flag. """
-	def __init__(self, x, y, width, height, text, righttext=False, font = SPQR.FONT_VERA, bg_color = SPQR.BGUI_TXT):
-		CWidget.__init__(self, pygame.Rect(x,y,width,height), SPQR.WT_LABEL,
-						None, "CLabel") 
+	"""Text class stores details for a simple text widget and handles when
+	   clicked the keyboard input. text variable we enter in init is added
+	   right or left of the keyboard input according the righttext flag"""
+	def __init__(self, x, y, width, height, text, righttext = False, font = SPQR.FONT_VERA, bg_color = SPQR.BGUI_TXT):
+		CWidget.__init__(self, pygame.Rect(x,y,width,height), SPQR.WT_TEXT, None, "CText") 
 		self.background_colour = bg_color
 		self.text_colour = SPQR.COL_BLACK
 		self.font = font
 		self.text = text
 		self.current_string = []
 		self.addright = righttext
-		self.image=pygame.Surface((self.rect. w,self.rect.h))
+		self.image = pygame.Surface((self.rect. w,self.rect.h))
 		self.image.fill(self.background_colour)
 		# automatically add it's own click callback
 		self.callbacks.mouse_lclk = self.clicked
@@ -1217,8 +1216,8 @@ class CText(CWidget):
 		self.after_click = SPQR.null_routine
 		self.after_click_status = False
 	
-	def get_key(self):
-		""" Get the keyboard input """
+	def getKey(self):
+		"""Get the keyboard input """
 		while True:
 			event = pygame.event.wait()
 			if event.type == KEYDOWN:
@@ -1230,7 +1229,8 @@ class CText(CWidget):
 				x, y = pygame.mouse.get_pos()
 				x_off = x - self.parent.rect.x
 				y_off = y - self.parent.rect.y
-				if self.rect.collidepoint(x_off, y_off) == False: return K_RETURN
+				if self.rect.collidepoint(x_off, y_off) == False:
+					return K_RETURN
 	
 	def addAfterClick(self, routine):
 		""" Add routine to be called after left mouse clicked """
@@ -1248,16 +1248,16 @@ class CText(CWidget):
 		while True:
 			# make the string that we going to print
 			if self.addright == False:
-				txt = self.text + string.join(self.current_string,"")
+				txt = self.text + string.join(self.current_string, "")
 			else:
-				txt = string.join(self.current_string,"") + self.text
+				txt = string.join(self.current_string, "") + self.text
 			# now we just have to blit that text
 			printed = SGFX.gui.fonts[self.font].render(txt, 1, self.text_colour)
 			SGFX.gui.screen.blit(self.image, (xpos, ypos, 0, 0))
 			SGFX.gui.screen.blit(printed, (xpos, ypos, 0, 0))
 			pygame.display.update((xpos, ypos, self.rect.w, self.rect.h))
 			# get the keyboard input
-			inkey = self.get_key()
+			inkey = self.getKey()
 			if inkey == K_BACKSPACE:
 				self.current_string = self.current_string[0:-1]
 			elif inkey == K_RETURN or inkey == 271 or inkey == K_ESCAPE:
@@ -1271,7 +1271,6 @@ class CText(CWidget):
 				self.current_string.append(chr(inkey))
 		return True
 	
-
 # helper routines to build stuff follow
 def buildLabel(text, font = SPQR.FONT_VERA):
 	"""Helper function to build a label given just the text.

@@ -65,16 +65,12 @@ class CGFXEngine(object):
 		self.map_render = pygame.Surface((self.iWidth("map"),  self.iHeight("map")))
 
 		self.windows = []
-		# the font that the messagebox will use:
-		self.msg_font = SPQR.FONT_VERA
-		# highlight over button at the moment?
-		self.over_button = False
-		# interrupt for timers?
+		# interrupt for timers
 		self.timer = True
 		self.tick = True
 		# item to check double-click against
 		self.dclick_handle = None
-		pygame.display.set_caption("SPQR "+SPQR.VERSION)
+		pygame.display.set_caption("SPQR " + SPQR.VERSION)
 		
 		# get all filenames:
 		files = []
@@ -110,6 +106,7 @@ class CGFXEngine(object):
 		self.keyboard = SKEY.CKeyboard()
 		# start the first song here, as well
 		SSFX.sound.startNextSong()
+		
 		# some basic variables that SPQR uses regularly
 		# where to start the map blit from when blasting it to the screen
 		foo = (SPQR.SCREEN_HEIGHT - self.iHeight("win_tl")) + 1
@@ -998,7 +995,7 @@ class CGFXEngine(object):
 		self.info_widget.image = info
 		self.info_widget.visible = True
 
-# TODO: Below code should be moved into spqr_widgets.py, and messageboc made into a class
+# TODO: Below code should be moved into spqr_widgets.py, and messagebox made into a class
 
 	def fitText(self, text, x, y, fnt):
 		"""Call with the text, the x and y size of the area
@@ -1054,19 +1051,19 @@ class CGFXEngine(object):
 		txt_width = ((self.iWidth("button")+8)*3)+4
 		width = txt_width+(SPQR.SPACER*2)
 		# get average size of height..
-		height = (self.fonts[self.msg_font].size("X")[1])+1
+		height = (self.fonts[SPQR.FONT_MSG].size("X")[1])+1
 		# really short message? (as long as there are no cr's inside)
-		if self.fonts[self.msg_font].size(text)[0] < txt_width and re.search("\n", text) == False:
+		if self.fonts[SPQR.FONT_MSG].size(text)[0] < txt_width and re.search("\n", text) == False:
 			# then don't even bother with a 2nd line...easy
 			# render text to spare image
-			self.temp_image = self.fonts[self.msg_font].render(text, 1, (0, 0, 0))
+			self.temp_image = self.fonts[SPQR.FONT_MSG].render(text, 1, (0, 0, 0))
 		else:
 			# we KNOW we can't fit it into one line, try with 2,3,4 etc until it fits
 			done = False
 			ysize = height
 			while done == False:
 				ysize = ysize+height
-				done = self.fitText(text, txt_width, ysize, self.msg_font)
+				done = self.fitText(text, txt_width, ysize, SPQR.FONT_MSG)
 			height = ysize
 		# now we have the right size, lets render it!
 		# start with a window, but work out the height first...
