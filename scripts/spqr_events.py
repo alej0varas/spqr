@@ -40,9 +40,6 @@ import spqr_ybuild as SYAML
 # *DOESN'T* use the handle in a keyboard callback. You can always do code like
 # if xpos == -1: to check if it was a keyboard event
 
-# one more note: some of these functions are complex enough to be split up
-# so not *all* functions are this format, just the majority
-
 # we start with just the quit function (cos it's real easy!)
 def quitSpqr(handle, xpos, ypos):
 	"""Messagebox to confirm quit game.
@@ -184,8 +181,6 @@ def startGame(handle, xpos, ypos):
 	string = "To get help at any time, press F1. For a list of "
 	string += "keys and their actions, press k."
 	SGFX.gui.messagebox(SPQR.BUTTON_OK, string, "Game Start")
-	dialog = SYAML.getDialog("./data/dialogs/lore.yml")
-	SGFX.gui.story("papyrus","Test",dialog,-1,-1)
 	return True
 
 def menuNew(handle, xpos, ypos):
@@ -508,11 +503,10 @@ def displaySliderContents(handle, xpos, ypos):
 
 # right click menu functions
 def onMenu(handle, xpos, ypos):
-	""" test menu for right click """
+	"""Test menu for right click"""
 	# We initiate the menu
 	menu = SMENU.CMenuParent(handle.describe)
 	menu.addChild(SMENU.CMenuChild("New Game", "new", "Ctrl+N", menuNew))
-	#menu.addChild(SMENU.CMenuChild("sep", None, "", notYetCoded))
 	menu.addChild(SMENU.CMenuChild("Load Game", "open", "Ctrl+L", menuLoad))
 	menu.addChild(SMENU.CMenuChild("Save Game", "save", "Ctrl+S", menuSave))
 	menu.addChild(SMENU.CMenuChild("Exit SPQR", "exit", "Ctrl+Q", quitSpqr))

@@ -84,9 +84,7 @@ class CSPQR(object):
 		return False
 	
 	def sortOptions(self):
-		"""Routine reads command-line options, splits them up
-		   and makes sure they are executed. Returns False if there
-		   was some problem"""
+		"""Routine reads command-line options. Returns False if any problem"""
 		options = sys.argv
 		# any args at all?
 		if len(options) == 1:
@@ -114,15 +112,11 @@ class CSPQR(object):
 
 	# routine to init everything...
 	def setupStart(self):
-		"""This is a very important function call that sets up the spqr gui.
-		   It adds almost all of the useful and usual keychecks, windows
-		   menus and so on. SPQR will *NOT* work unless this gets called.
-		   And yes, it is very long but it's not at all complicated"""
-		# The interface. there are 3 parts to this: the menu bar at the top - 
+		"""Set up the spqr gui; keychecks, windows, and menus"""
+		# There are 3 parts to the interface: the menu bar at the top - 
 		# DO NOT add widgets here, only the menu and the version number info
 		# are held here; The main map and then the widgets on the main map.
 		# we make a seperate blank window to hold all of these widgets
-		# build up a menu
 		menu = []
 		menu.append(SMENU.CMenuParent("File"))
 		menu.append(SMENU.CMenuParent("Empire"))
@@ -153,6 +147,7 @@ class CSPQR(object):
 			menu[3].addChild(SMENU.CMenuChild("sep", "debug", "", SEVENT.notYetCoded))
 			menu[3].addChild(SMENU.CMenuChild("Window test", "debug", "", SEVENT.windowTest))
 			menu[3].addChild(SMENU.CMenuChild("Widget test", "debug", "", SEVENT.widgetTest))
+			menu[3].addChild(SMENU.CMenuChild("Dialog test", "debug", "", SEVENT.lore))
 	
 		# Add the menubar at the top. It has no drawn window
 		# THIS MUST BE THE FIRST WINDOW
