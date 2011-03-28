@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+# SPQR source code, Copyright 2005-2011 The SPQR Team
+
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
@@ -39,7 +41,7 @@ class CGFXEngine(object):
 		self.info_widget = None
 		self.map_widget = None
 
-	def mainInit(self, width, height, fullscreen, load_screen= True):
+	def mainInit(self, width, height, fullscreen, load_screen = True):
 		"""Long, boring routine that initiates the gui"""
 		pygame.init()
 		# ok, now init the basic screen

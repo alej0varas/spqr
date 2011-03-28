@@ -182,7 +182,7 @@ class CSPQR(object):
 		info = SWIDGET.buildUniqueImage(image)
 		info.rect.x = SPQR.SPACER
 		info.rect.y = y
-		info.describe = ("info-box")
+		info.describe = "info-box"
 		info.visible = False
 		bwindow.addWidget(info)
 		# we need to store it as well
@@ -233,7 +233,6 @@ class CSPQR(object):
 		pygame.time.set_timer(pygame.USEREVENT, SPQR.ANIM_TIME)
 		# display the welcome screen if needed
 		if self.intro == True:
-			# start with intro window displayed
 			SEVENT.welcomeScreen(0, 0, 0)
 
 	def addKeys(self):
