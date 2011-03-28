@@ -177,8 +177,7 @@ def moveUnit(unit, region):
 def checkBattle(unit, region):
 	"""See if there is a battle to be fought"""
 	# get the owner of the unit, and it's current region
-	ureg = getUnitRegion(unit)
-	if data.map.regions[ureg].owner != data.map.regions[region].owner:
+	if getUnitRegion(unit).owner != data.map.regions[region].owner:
 		# possible battle. Units placed in other region?
 		if data.map.regions[region].units != []:
 			# yes, do the battle
@@ -201,7 +200,7 @@ def getAllPlayerUnits(owner):
 	return units
 
 def getUnitPosition(name):
-	region = getUnitRegion(name)
+	region = getUnitRegionName(name)
 	position = data.map.regions[region].city_position
 	return position.x, position.y
 
@@ -209,11 +208,17 @@ def getUnitMoves(name):
 	unit = getUnit(name)
 	return unit.moves_left
 
-def getUnitRegion(name):
+def getUnitRegionName(name):
 	for i in iterRegions():
 		for unit in i.units:
 			if unit.name == name:
 				return unit.region
+
+def getUnitRegion(name):
+	for i in iterRegions():
+		for unit in i.units:
+			if unit.name == name:
+				return i
 
 def getRegionUnits(name):
 	return data.map.regions[name].units

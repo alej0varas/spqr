@@ -349,9 +349,6 @@ class CGFXEngine(object):
 			if i.visible == True:
 				self.screen.blit(i.image, (i.rect.x+offset.x, i.rect.y+offset.y))
 
-	def updateUnitWidget(self):
-		print "update me"
-
 	# this one merely updates the map, rather than blit all those
 	# gui things as well
 	def updateMap(self):
@@ -700,7 +697,7 @@ class CGFXEngine(object):
 			# get current unit
 			unit = self.flash_highlight
 			# delete image from current map
-			old_region = SDATA.getUnitRegion(unit)
+			old_region = SDATA.getUnitRegionName(unit)
 			# returns region the unit moved to after all the dust has settled
 			region = SDATA.moveUnit(unit, region)
 			cancelMoves()
@@ -726,7 +723,7 @@ class CGFXEngine(object):
 	def highlightMoves(self, unit):
 		"""Redraw buffer with highlighted areas and animate the given unit"""
 		# is it navy or army?
-		region = SDATA.getUnitRegion(unit)
+		region = SDATA.getUnitRegionName(unit)
 		if SDATA.unitNaval(unit):
 			moves = SDATA.getNavalMoves(region)
 		else:
@@ -887,6 +884,13 @@ class CGFXEngine(object):
 			self.flash_rect = pygame.Rect(x, y, SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT)
 			# use this to copy are from map_render:
 			self.flash_erase.blit(self.map_render, (0, 0), self.flash_rect)
+			
+			# TODO: code needs to do this
+			#        grab the whole region image
+			#        overlay the highlight
+			#        grab the background we need
+			print SDATA.getUnitRegion(self.current_highlight).colour
+			
 			# also make a copy of the area to blit back to the back map:
 			self.flash_old = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT))
 			self.flash_old.blit(self.image("buffer"), (0, 0), self.flash_rect)
