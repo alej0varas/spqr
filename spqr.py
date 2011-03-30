@@ -18,8 +18,6 @@
 
 import sys, pygame
 from pygame.locals import *
-
-# now include my own libs
 from scripts import spqr_defines as SPQR
 from scripts import spqr_data as SDATA
 from scripts import spqr_gui as SGFX

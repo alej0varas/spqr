@@ -788,7 +788,7 @@ class CGFXEngine(object):
 		"""CGFXEngine.panMap() - call with nothing
 			 Returns nothing, allows user to pan map with middle click"""
 		# before doing anything else, turn off unit flashing
-		self.unitFlashAndOff()
+		self.pauseFlashing()
 		xpos, ypos = pygame.mouse.get_rel()
 		while True:
 			event = pygame.event.poll()
@@ -964,6 +964,18 @@ class CGFXEngine(object):
 		# really simple code at the moment
 		self.image("buffer").blit(self.flash_old, self.flash_rect)
 		self.updateMap()
+
+	def pauseFlashing(self):
+		"""Call to pause current flashing. Preserves regioin highlighting"""
+		if self.timer == False:
+			return
+		if self.flash_on == False:
+			# update screen
+			self.image("buffer").blit(self.flash_draw, self.flash_rect)
+			self.updateMap()
+			self.flash_on = True
+		# turn timer off
+		self.timer = False
 
 	def unitFlashAndOff(self):
 		"""Call to turn off unit flashing. Also draws unit back to screen
