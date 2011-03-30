@@ -756,8 +756,11 @@ class CGFXEngine(object):
 		# we need to clean the map up
 		self.map_click_moves = []
 		self.renderPixelMap()
-		# highlight the region selected
-		self.highlightRegion(SDATA.getUnitRegionName(unit))
+		# highlight the region selected, and show the units
+		name = SDATA.getUnitRegionName(unit)
+		self.highlightRegion(name)
+		self.renderImageUnits(name)
+		self.renderRegionInfoBox(name)
 		if centre_map == True:
 			self.centreMap(x, y)
 		# only highlight if we have some moves
