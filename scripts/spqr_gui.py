@@ -882,14 +882,21 @@ class CGFXEngine(object):
 			x, y = SDATA.getUnitPosition(self.current_highlight)
 			# so we can calculate the blit rectangle
 			self.flash_rect = pygame.Rect(x, y, SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT)
-			# use this to copy are from map_render:
+			# use this to copy from map_render:
 			self.flash_erase.blit(self.map_render, (0, 0), self.flash_rect)
 			
-			# TODO: code needs to do this
-			#        grab the whole region image
-			#        overlay the highlight
-			#        grab the background we need
-			print SDATA.getUnitRegion(self.current_highlight).colour
+			# now we need to overlay the region highlight gfx
+			region = SDATA.getUnitRegion(self.current_highlight)
+			# get offsets into region overlay
+			offset = pygame.Rect(region.city_position.x - region.rect.x,
+								 region.city_position.y - region.rect.y,
+								 SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT)
+			highlight = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT), SRCALPHA)
+			highlight.fill(region.colour)
+			mask = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT), SRCALPHA)
+			mask.blit(self.image(region.image + "_mask"), (0, 0), offset)
+			mask.blit(highlight, (0, 0), None, pygame.BLEND_ADD)
+			self.flash_erase.blit(mask, (0, 0))
 			
 			# also make a copy of the area to blit back to the back map:
 			self.flash_old = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT))
