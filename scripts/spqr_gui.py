@@ -105,6 +105,7 @@ class CGFXEngine(object):
 		self.flash_highlight = None
 		self.current_highlight = None
 		self.region_highlight = None
+		self.current_highlight_region = None
 		# modal windows use a dirty rect list to update, here it is
 		self.dirty = []
 		# enable keyboard reponses
@@ -660,6 +661,8 @@ class CGFXEngine(object):
 				update = True
 			if self.region_highlight != None:
 				self.region_highlight.update(self.image("buffer"))
+				# must also blit the units of the highlighted region
+				self.renderSingleUnit(self.current_highlight_region)
 				update = True
 			if update == True:
 				self.updateGUI()
@@ -677,12 +680,13 @@ class CGFXEngine(object):
 		mask.blit(highlight, (0, 0), None, pygame.BLEND_ADD)
 		# add a dirty rect of this
 		r_high = pygame.Surface(self.image(region.image + "_mask").get_size(), 32)
-		r_high.blit(self.image("buffer"), (0, 0), region.rect)
+		r_high.blit(self.map_render, (0, 0), region.rect)
 		self.region_highlight = CDirtyRect(r_high, region.rect)
 		self.image("buffer").blit(mask, (region.rect.x, region.rect.y))
 		# blit the city and units, if they exist
 		self.renderSingleCity(region)
 		self.renderSingleUnit(region)
+		self.current_highlight_region = region
 
 	def moveUnit(self, region):
 		"""Move the unit (or not)"""
