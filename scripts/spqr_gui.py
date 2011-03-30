@@ -643,7 +643,13 @@ class CGFXEngine(object):
 		unit = SDATA.unitClicked(x, y)
 		if unit != False:
 			if unit.moves_left > 0:
+				name = SDATA.regionClicked(x, y)		
+				self.highlightRegion(name)
+				self.renderRegionInfoBox(name)
+				self.renderImageUnits(name)
 				self.highlightMoves(unit.name)
+				self.updateGUI()
+				return True
 		else:
 			self.unitFlashAndOff()
 		name = SDATA.regionClicked(x, y)
@@ -743,8 +749,9 @@ class CGFXEngine(object):
 			mask = self.image(name.image + "_mask").copy()
 			mask.blit(region, (0, 0), None, pygame.BLEND_ADD)
 			self.image("buffer").blit(mask, (name.rect.x, name.rect.y))
-			# blit the city, if it exists
+			# blit the city and unit, if they exist
 			self.renderSingleCity(name)
+			self.renderSingleUnit(name)
 		# animate the unit
 		self.flash_highlight = unit
 		self.unitFlashOn()
