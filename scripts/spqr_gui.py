@@ -748,13 +748,16 @@ class CGFXEngine(object):
 		self.updateMap()
 
 	def focusOnUnit(self, unit, centre_map = True):
-		"""Given a units name, centre the map on this unit and activate it"""
+		"""Given a units name, centre the map on this unit and activate it.
+		   Also highlights the region"""
 		x, y = SDATA.getUnitPosition(unit)
 		x += int(SPQR.UNIT_WIDTH / 2)
 		y += int(SPQR.UNIT_HEIGHT / 2)
 		# we need to clean the map up
 		self.map_click_moves = []
 		self.renderPixelMap()
+		# highlight the region selected
+		self.highlightRegion(SDATA.getUnitRegionName(unit))
 		if centre_map == True:
 			self.centreMap(x, y)
 		# only highlight if we have some moves
