@@ -900,13 +900,14 @@ class CGFXEngine(object):
 			
 			# also make a copy of the area to blit back to the back map:
 			self.flash_old = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT))
-			self.flash_old.blit(self.image("buffer"), (0, 0), self.flash_rect)
+			self.flash_old.blit(self.map_render, (0, 0), self.flash_rect)
 			# now we can construct the draw image. Get a copy of the last image
 			self.flash_draw = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT), SRCALPHA)
 			self.flash_draw.blit(self.flash_erase, (0, 0))
-			# then draw the unit over it
+			# then draw the unit over both images
 			index = SDATA.getUnitImage(self.current_highlight)
 			self.flash_draw.blit(self.image(index), (0, 0))
+			self.flash_old.blit(self.image(index), (0, 0))
 			# add to both images the moves left
 			moves = "moves" + str(SDATA.getUnitMoves(self.current_highlight))
 			self.flash_erase.blit(self.image(moves), (0, 0))
@@ -967,10 +968,9 @@ class CGFXEngine(object):
 		# is unit currently on screen?
 		if self.flash_on == False:
 			# no, so update it
-			self.image("buffer").blit(self.flash_draw, self.flash_rect)
+			self.image("buffer").blit(self.flash_old, self.flash_rect)
 			self.updateMap()
 			self.flash_on = True
-			self.flash_old = None
 		# turn flashing off
 		self.timer = False
 
