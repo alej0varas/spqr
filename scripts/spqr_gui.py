@@ -276,7 +276,7 @@ class CGFXEngine(object):
 		img.blit(pygame.display.get_surface(), (0, 0), rectangle)
 		# now blit the new image
 		self.screen.blit(new, (rectangle.x, rectangle.y))
-		pygame.display.update(rectangle)
+		pygame.display.update()
 		self.dirty.append(CDirtyRect(img, rectangle))
 		return True
 
@@ -1148,7 +1148,7 @@ class CGFXEngine(object):
 		# start with a window, but work out the height first...
 		wheight = height+SPQR.SPACER
 		# add height for sep bar (2) and buttons (2*button height)
-		wheight += (self.iHeight("button")*2)+2
+		wheight += (self.iHeight("button") * 2) + 2
 
 		# ok, the window gets rendered for us here
 		index = self.addWindow(SWINDOW.CWindow(-1, -1, width, wheight, win_title, True))
@@ -1157,10 +1157,10 @@ class CGFXEngine(object):
 		# now add the seperator bar
 		x = 6
 		y += height
-		self.windows[index].addWidget(SWIDGET.CSeperator(x, y, width-24))
-		y += 1+(self.iHeight("button")/2)
+		self.windows[index].addWidget(SWIDGET.CSeperator(x, y, width - 24))
+		y += 1 + (self.iHeight("button") / 2)
 		# move x to the right, buttons are blitted from right to left
-		x = width-16-(self.iWidth("button"))
+		x = width - 16 - (self.iWidth("button"))
 		# now we are ready to start printing buttons
 		total_buttons = 0
 		# logic is simple: found a button? yes, display it and 
@@ -1170,7 +1170,7 @@ class CGFXEngine(object):
 			# same for every instance of this little loop: add the callbacks
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxOK
 			self.windows[index].items[slot].active = True
-			x = x-(self.iWidth("button")+12)
+			x = x - (self.iWidth("button") + 12)
 			# add a key for this
 			self.keyboard.addKey(K_o, msgboxOK)
 			total_buttons += 1
@@ -1178,28 +1178,28 @@ class CGFXEngine(object):
 			slot = self.windows[index].addWidget(SWIDGET.CButton(x, y, "Cancel"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxCancel
 			self.windows[index].items[slot].active = True
-			x = x-(self.iWidth("button")+12)
+			x = x - (self.iWidth("button") + 12)
 			self.keyboard.addKey(K_c, msgboxCancel)
 			total_buttons += 1
 		if (flags & SPQR.BUTTON_YES) != 0:
 			slot = self.windows[index].addWidget(SWIDGET.CButton(x, y, "Yes"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxYes
 			self.windows[index].items[slot].active = True
-			x = x-(self.iWidth("button")+12)
+			x = x - (self.iWidth("button") + 12)
 			self.keyboard.addKey(K_y, msgboxYes)
 			total_buttons += 1
 		if (flags & SPQR.BUTTON_NO) != 0 and total_buttons < 3:
 			slot = self.windows[index].addWidget(SWIDGET.CButton(x, y, "No"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxNo
 			self.windows[index].items[slot].active = True
-			x = x-(self.iWidth("button") + 12)
+			x = x - (self.iWidth("button") + 12)
 			self.keyboard.addKey(K_n, msgboxNo)
 			total_buttons += 1
 		if (flags & SPQR.BUTTON_QUIT) != 0 and total_buttons < 3:
 			slot = self.windows[index].addWidget(SWIDGET.CButton(x, y, "Quit"))
 			self.windows[index].items[slot].callbacks.mouse_lclk = msgboxQuit
 			self.windows[index].items[slot].active = True
-			x = x-(self.iWidth("button") + 12)
+			x = x - (self.iWidth("button") + 12)
 			self.keyboard.addKey(K_q, msgboxQuit)
 			total_buttons += 1
 		if (flags & SPQR.BUTTON_IGNORE) != 0 and total_buttons < 3:
@@ -1220,7 +1220,7 @@ class CGFXEngine(object):
 		# set keyboard functions
 		self.keyboard.setModalKeys(total_buttons)
 		# turn off unit animation during the messagebox
-		self.unitFlashAndOff()
+		self.pauseFlashing()
 		# ok, lets get the image we need and the rectangle:
 		self.addDirtyRect(self.windows[index].drawWindow(),
 			self.windows[index].rect)
@@ -1231,11 +1231,12 @@ class CGFXEngine(object):
 		# so we caught the answer, now we just have to tidy up
 		# an active messagebox is ALWAYS top of the list, so just delete it
 		# and then redraw the screen
-		self.deleteTopDirty()
-		# reset the keyboard
-		self.keyboard.removeModalKeys()
 		# remove the window
 		self.windows.pop()
+		self.deleteTopDirty()
+		self.updateGUI()
+		# reset the keyboard
+		self.keyboard.removeModalKeys()
 		# put the animation back if the top window is NOT modal
 		if self.windows[-1].modal == False:
 			self.unitFlashOn()
@@ -1272,12 +1273,12 @@ class CGFXEngine(object):
 		img = SWIDGET.CImage(imgx, imgy, imgw, imgh, None)
 		self.windows[index].addWidget(img)
 		# creating the background of the 1st widget
-		bckwga=bckimg.subsurface(img.rect)
+		bckwga = bckimg.subsurface(img.rect)
 		# 2nd widget will be the text
 		lbly = img.rect.y + SPQR.SPACER + self.iHeight(dialog[0]["name"])
 		lbl = SWIDGET.CImage(width*0.1, lbly, width * 0.8, height - lbly - 2 * SPQR.SPACER, None)
 		self.windows[index].addWidget(lbl)
-		# creating the background of the 1st widget
+		# create the background of the 1st widget
 		bckwgb = bckimg.subsurface(lbl.rect)
 		bckwgbw, bckwgbh = bckwgb.get_size()
 		# Make window modal
@@ -1287,8 +1288,8 @@ class CGFXEngine(object):
 		self.keyboard.addKey(K_SPACE, msgboxOK)
 		self.keyboard.addKey(K_ESCAPE, msgboxQuit)
 		self.keyboard.setModalKeys(3)
-		# turn off unit animation during the messagebox
-		self.unitFlashAndOff()
+		# turn off unit animation during the dialog
+		self.pauseFlashing()
 		# draw window
 		self.addDirtyRect(self.windows[index].drawWindow(),
 			self.windows[index].rect)
