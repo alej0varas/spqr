@@ -89,7 +89,6 @@ def miniMapDrag(handle, xpos, ypos):
 	"""Called when left click dragging over mini-map.
 	   Catches all calls until the left mouse button
 	   is released again"""
-	# to make life a lot easier, we utilise miniMapClick()
 	miniMapClick(handle, xpos, ypos)
 	while(True):
 		event = pygame.event.poll()

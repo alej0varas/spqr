@@ -1232,14 +1232,17 @@ class CGFXEngine(object):
 		# an active messagebox is ALWAYS top of the list, so just delete it
 		# and then redraw the screen
 		# remove the window
-		self.windows.pop()
-		self.deleteTopDirty()
-		self.updateGUI()
+		
+		SEVENT.killModalWindow(None, None, None)
+		
+		#self.windows.pop()
+		#self.deleteTopDirty()
+		#self.updateGUI()
 		# reset the keyboard
-		self.keyboard.removeModalKeys()
+		#self.keyboard.removeModalKeys()
 		# put the animation back if the top window is NOT modal
-		if self.windows[-1].modal == False:
-			self.unitFlashOn()
+		#if self.windows[-1].modal == False:
+		#	self.unitFlashOn()
 		# return the value we got
 		return self.callback_temp
 
@@ -1352,17 +1355,6 @@ class CGFXEngine(object):
 					self.tick=True
 					break
 				self.mainLoopSolo()
-			if self.callback_temp == SPQR.BUTTON_QUIT:
-				# redraw the screen
-				self.deleteTopDirty()
-				# reset the keyboard
-				self.keyboard.removeModalKeys()
-				# remove the window
-				self.windows.pop()
-				# put the animation back if the top window is NOT modal
-				if self.windows[-1].modal == False:
-					self.unitFlashOn()
-				return True
 		# redraw the screen
 		self.deleteTopDirty()
 		# reset the keyboard
