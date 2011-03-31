@@ -166,7 +166,7 @@ def killModalWindow(handle, xpos, ypos):
 		SGFX.gui.unitFlashOn()
 	else:
 		# just to make sure...
-		SGFX.gui.unitFlashAndOff()
+		SGFX.gui.pauseFlashing()
 	return True
 
 def startGame(handle, xpos, ypos):
@@ -228,7 +228,7 @@ def showCity(handle, xpos, ypos):
 	window.addWidget(city_image)
 	window.addWidget(btn_ok)
 	SGFX.gui.addWindow(window)
-	SGFX.gui.unitFlashAndOff()
+	SGFX.gui.pauseFlashing()
 	# setup dirty rect stuff
 	SGFX.gui.addDirtyRect(window.drawWindow(), window.rect)
 	return True
@@ -293,7 +293,7 @@ def menuEmpireUnits(handle, xpos, ypos):
 	index = SGFX.gui.addWindow(uwin)
 
 	# turn off unit animations for the moment
-	SGFX.gui.unitFlashAndOff()
+	SGFX.gui.pauseFlashing()
 	# add the dirty rect details
 	SGFX.gui.addDirtyRect(SGFX.gui.windows[index].drawWindow(),
 		SGFX.gui.windows[index].rect)
@@ -430,7 +430,7 @@ def windowTest(handle, xpos, ypos):
 	# we have to add modal keypresses ourselves
 	SGFX.gui.keyboard.setModalKeys(1)
 	# turn off unit animations
-	SGFX.gui.unitFlashAndOff()
+	SGFX.gui.pauseFlashing()
 	# add the window as a dirty image
 	win_img = SGFX.gui.windows[index].drawWindow()
 	SGFX.gui.addDirtyRect(win_img, SGFX.gui.windows[index].rect)
@@ -442,7 +442,7 @@ def widgetTest(handle, xpos, ypos):
 	SGFX.gui.keyboard.addKey(K_RETURN, killModalWindow)
 	SGFX.gui.keyboard.setModalKeys(2)
 	# turn off unit animations for the moment and thats it
-	SGFX.gui.unitFlashAndOff()
+	SGFX.gui.pauseFlashing()
 	# add the dirty rect details
 	SGFX.gui.addDirtyRect(SGFX.gui.windows[index].drawWindow(),
 		SGFX.gui.windows[index].rect)
@@ -456,7 +456,7 @@ def menuPreferences(handle, xpos, ypos):
 	SGFX.gui.keyboard.addKey(K_o, killModalWindow)
 	SGFX.gui.keyboard.setModalKeys(1)
 	# turn off unit animations
-	SGFX.gui.unitFlashAndOff()
+	SGFX.gui.pauseFlashing()
 	# setup dirty rect stuff
 	SGFX.gui.addDirtyRect(SGFX.gui.windows[index].drawWindow(),
 		SGFX.gui.windows[index].rect)
@@ -475,7 +475,7 @@ def welcomeScreen(handle, xpos, ypos):
 	SGFX.gui.keyboard.addKey(K_q, quitSpqr)
 	SGFX.gui.keyboard.setModalKeys(5)
 	# turn off unit animations
-	#SGFX.gui.unitFlashAndOff()
+	#SGFX.gui.pauseFlashing()
 	# add the window as a dirty image
 	SGFX.gui.addDirtyRect(SGFX.gui.windows[index].drawWindow(),
 		SGFX.gui.windows[index].rect)

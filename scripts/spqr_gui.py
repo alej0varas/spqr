@@ -342,7 +342,7 @@ class CGFXEngine(object):
 		pygame.display.flip()
 		return True
 	
-	def updateOverlayWindow(self,index=-1):
+	def updateOverlayWindow(self, index = -1):
 		"""Draw the window with the widget overlays only"""
 		# TODO: a better way of finding the window
 		offset = self.windows[index].rect
@@ -352,14 +352,20 @@ class CGFXEngine(object):
 
 	# this one merely updates the map, rather than blit all those
 	# gui things as well
-	def updateMap(self):
+	def updateMap(self, flip = True):
 		"""Updates (i.e. redraws) map to main screen"""
 		self.screen.blit(self.image("buffer"), self.map_rect, self.map_screen)
 		self.updateOverlayWindow()
-		pygame.display.flip()
+		if flip == True:
+			pygame.display.flip()
 		# doing this *always* redraws the units as well, so make sure that
 		# the next flash unit action will be to erase the unit
 		self.unitFlashOn()
+		
+	def updateMapAndOverlay(self):
+		self.updateMap(False)
+		self.updateOverlayWindow()
+		pygame.display.flip()
 
 	# and this one merely blits the cursor in the mini map
 	def updateMiniMap(self):
@@ -977,13 +983,10 @@ class CGFXEngine(object):
 		self.updateMap()
 
 	def pauseFlashing(self):
-		"""Call to pause current flashing. Preserves regioin highlighting"""
+		"""Call to pause current flashing. Preserves region highlighting"""
 		if self.timer == False:
 			return
 		if self.flash_on == False:
-			# update screen
-			self.image("buffer").blit(self.flash_draw, self.flash_rect)
-			self.updateMap()
 			self.flash_on = True
 		# turn timer off
 		self.timer = False
