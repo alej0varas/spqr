@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>scripts.maps.spqr_map</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Package&nbsp;scripts ::
+        Package&nbsp;maps ::
+        Script&nbsp;spqr_map
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="scripts.maps.spqr_map-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="scripts.maps.spqr_map-module.html">Script scripts.maps.spqr_map</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/python</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment"># This program is free software; you can redistribute it and/or modify</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment"># it under the terms of the GNU General Public License as published by</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment"># the Free Software Foundation; either version 3 of the License, or</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-comment"># (at your option) any later version.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-comment"># This program is distributed in the hope that it will be useful,</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-comment"># but WITHOUT ANY WARRANTY; without even the implied warranty of</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-comment"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-comment"># GNU General Public License for more details.</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-comment"># You should have received a copy of the GNU General Public License</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-comment"># along with this program; if not, write to the Free Software</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-comment"># Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">__future__</tt> <tt class="py-keyword">import</tt> <tt class="py-name">absolute_import</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-op">.</tt><tt class="py-op">.</tt> <tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Script scripts.spqr_defines=scripts.spqr_defines-module.html"><a title="scripts.spqr_defines" class="py-name" href="#" onclick="return doclink('link-0', 'spqr_defines', 'link-0');">spqr_defines</a></tt> <tt class="py-keyword">as</tt> <tt class="py-name">SPQR</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">pygame</tt><tt class="py-op">,</tt> <tt class="py-name">yaml</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">networkx</tt> <tt class="py-keyword">as</tt> <tt class="py-name">nx</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-op">.</tt> <tt class="py-keyword">import</tt> <tt id="link-1" class="py-name" targets="Script scripts.maps.spqr_city=scripts.maps.spqr_city-module.html"><a title="scripts.maps.spqr_city" class="py-name" href="#" onclick="return doclink('link-1', 'spqr_city', 'link-1');">spqr_city</a></tt> <tt class="py-keyword">as</tt> <tt class="py-name">SCITY</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"> </tt>
+<a name="Position"></a><div id="Position-def"><a name="L23"></a><tt class="py-lineno">23</tt> <a class="py-toggle" href="#" id="Position-toggle" onclick="return toggle('Position');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="scripts.maps.spqr_map.Position-class.html">Position</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Position-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="Position-expanded"><a name="Position.__init__"></a><div id="Position.__init__-def"><a name="L24"></a><tt class="py-lineno">24</tt> <a class="py-toggle" href="#" id="Position.__init__-toggle" onclick="return toggle('Position.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="scripts.maps.spqr_map.Position-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">position</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Position.__init__-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="Position.__init__-expanded"><a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">x</tt> <tt class="py-op">=</tt> <tt class="py-name">position</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">y</tt> <tt class="py-op">=</tt> <tt class="py-name">position</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> </tt>
+</div></div><a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"> </tt>
+<a name="CMap"></a><div id="CMap-def"><a name="L28"></a><tt class="py-lineno">28</tt> <a class="py-toggle" href="#" id="CMap-toggle" onclick="return toggle('CMap');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="scripts.maps.spqr_map.CMap-class.html">CMap</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CMap-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="CMap-expanded"><a name="CMap.__init__"></a><div id="CMap.__init__-def"><a name="L29"></a><tt class="py-lineno">29</tt> <a class="py-toggle" href="#" id="CMap.__init__-toggle" onclick="return toggle('CMap.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="scripts.maps.spqr_map.CMap-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">players</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CMap.__init__-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="CMap.__init__-expanded"><a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">regions</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">masks</tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">graph</tt> <tt class="py-op">=</tt> <tt class="py-name">nx</tt><tt class="py-op">.</tt><tt class="py-name">Graph</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">                <tt class="py-comment"># Load the map's regions from a file</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">                <tt class="py-name">var</tt> <tt class="py-op">=</tt> <tt class="py-name">yaml</tt><tt class="py-op">.</tt><tt class="py-name">load</tt><tt class="py-op">(</tt><tt class="py-name">open</tt><tt class="py-op">(</tt><tt class="py-string">"./data/regions/map.yml"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">                <tt class="py-comment"># Make a temp list with the borders</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">                <tt class="py-name">wlist</tt><tt class="py-op">=</tt><tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">                <tt class="py-comment"># for every region we will import the specific data</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">i</tt> <tt class="py-keyword">in</tt> <tt class="py-name">var</tt><tt class="py-op">:</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">                        <tt class="py-comment"># we will add now a list with the connecting regions</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">                        <tt class="py-keyword">for</tt> <tt class="py-name">region</tt> <tt class="py-keyword">in</tt> <tt class="py-name">i</tt><tt class="py-op">[</tt><tt class="py-string">"borders"</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">                                <tt class="py-name">wlist</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-name">i</tt><tt class="py-op">[</tt><tt class="py-string">"name"</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">region</tt><tt class="py-op">[</tt><tt class="py-string">"name"</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">                        <tt class="py-comment"># make the player know it's the owner</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">                        <tt class="py-name">players</tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">[</tt><tt class="py-string">"owner"</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">owned_regions</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">i</tt><tt class="py-op">[</tt><tt class="py-string">"name"</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">                        <tt class="py-comment"># Append the temp list to our data</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">                        <tt class="py-name">colour</tt> <tt class="py-op">=</tt> <tt class="py-name">players</tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">[</tt><tt class="py-string">"owner"</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">colour</tt> </tt>
+<a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">regions</tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">[</tt><tt class="py-string">"name"</tt><tt class="py-op">]</tt><tt class="py-op">]</tt> <tt class="py-op">=</tt> <tt id="link-2" class="py-name" targets="Class scripts.maps.spqr_map.CRegion=scripts.maps.spqr_map.CRegion-class.html"><a title="scripts.maps.spqr_map.CRegion" class="py-name" href="#" onclick="return doclink('link-2', 'CRegion', 'link-2');">CRegion</a></tt><tt class="py-op">(</tt><tt class="py-name">i</tt><tt class="py-op">[</tt><tt class="py-string">"name"</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">i</tt><tt class="py-op">[</tt><tt class="py-string">"xpos"</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">i</tt><tt class="py-op">[</tt><tt class="py-string">"ypos"</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">i</tt><tt class="py-op">[</tt><tt class="py-string">"owner"</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">                                                                                          <tt class="py-name">colour</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">i</tt><tt class="py-op">[</tt><tt class="py-string">"unit_x"</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">i</tt><tt class="py-op">[</tt><tt class="py-string">"unit_y"</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">i</tt><tt class="py-op">[</tt><tt class="py-string">"city"</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">graph</tt><tt class="py-op">.</tt><tt class="py-name">add_node</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">regions</tt><tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">[</tt><tt class="py-string">"name"</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">                <tt class="py-comment"># repeat again for graph connections</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">node</tt> <tt class="py-keyword">in</tt> <tt class="py-name">wlist</tt><tt class="py-op">:</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">graph</tt><tt class="py-op">.</tt><tt class="py-name">add_edge</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">regions</tt><tt class="py-op">[</tt><tt class="py-name">node</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">regions</tt><tt class="py-op">[</tt><tt class="py-name">node</tt><tt class="py-op">[</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">                <tt class="py-comment"># sort the naval connections</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-3" class="py-name" targets="Method scripts.maps.spqr_map.CMap.computeNavalAreas()=scripts.maps.spqr_map.CMap-class.html#computeNavalAreas"><a title="scripts.maps.spqr_map.CMap.computeNavalAreas" class="py-name" href="#" onclick="return doclink('link-3', 'computeNavalAreas', 'link-3');">computeNavalAreas</a></tt><tt class="py-op">(</tt><tt class="py-name">var</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">                 </tt>
+<a name="CMap.computeNavalAreas"></a><div id="CMap.computeNavalAreas-def"><a name="L55"></a><tt class="py-lineno">55</tt> <a class="py-toggle" href="#" id="CMap.computeNavalAreas-toggle" onclick="return toggle('CMap.computeNavalAreas');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="scripts.maps.spqr_map.CMap-class.html#computeNavalAreas">computeNavalAreas</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">data</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CMap.computeNavalAreas-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="CMap.computeNavalAreas-expanded"><a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line">                <tt class="py-docstring">"""A port has access to ports in the same area. Here we store all</tt> </tt>
+<a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line"><tt class="py-docstring">                   the naval regions in a hash list"""</tt> </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line">                <tt class="py-keyword">for</tt> <tt class="py-name">region</tt> <tt class="py-keyword">in</tt> <tt id="link-4" class="py-name" targets="Variable scripts.spqr_data.data=scripts.spqr_data-module.html#data"><a title="scripts.spqr_data.data" class="py-name" href="#" onclick="return doclink('link-4', 'data', 'link-4');">data</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line">                        <tt class="py-keyword">if</tt> <tt class="py-name">region</tt><tt class="py-op">.</tt><tt class="py-name">has_key</tt><tt class="py-op">(</tt><tt class="py-string">"naval"</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line">                                <tt class="py-keyword">for</tt> <tt class="py-name">nregion</tt> <tt class="py-keyword">in</tt> <tt class="py-name">region</tt><tt class="py-op">[</tt><tt class="py-string">"naval"</tt><tt class="py-op">]</tt><tt class="py-op">:</tt> </tt>
+<a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line">                                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">regions</tt><tt class="py-op">[</tt><tt class="py-name">region</tt><tt class="py-op">[</tt><tt class="py-string">"name"</tt><tt class="py-op">]</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">naval_regions</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">nregion</tt><tt class="py-op">[</tt><tt class="py-string">"name"</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line">         </tt>
+<a name="CMap.getNeighbors"></a><div id="CMap.getNeighbors-def"><a name="L63"></a><tt class="py-lineno">63</tt> <a class="py-toggle" href="#" id="CMap.getNeighbors-toggle" onclick="return toggle('CMap.getNeighbors');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="scripts.maps.spqr_map.CMap-class.html#getNeighbors">getNeighbors</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">region</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CMap.getNeighbors-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="CMap.getNeighbors-expanded"><a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-op">[</tt><tt class="py-name">i</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name" targets="Method scripts.spqr_gui.CGFXEngine.image()=scripts.spqr_gui.CGFXEngine-class.html#image"><a title="scripts.spqr_gui.CGFXEngine.image" class="py-name" href="#" onclick="return doclink('link-5', 'image', 'link-5');">image</a></tt> <tt class="py-keyword">for</tt> <tt class="py-name">i</tt> <tt class="py-keyword">in</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">graph</tt><tt class="py-op">.</tt><tt class="py-name">neighbors</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">regions</tt><tt class="py-op">[</tt><tt class="py-name">region</tt><tt class="py-op">]</tt><tt class="py-op">)</tt><tt class="py-op">]</tt> </tt>
+</div><a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line">                 </tt>
+<a name="CMap.addUnit"></a><div id="CMap.addUnit-def"><a name="L66"></a><tt class="py-lineno">66</tt> <a class="py-toggle" href="#" id="CMap.addUnit-toggle" onclick="return toggle('CMap.addUnit');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="scripts.maps.spqr_map.CMap-class.html#addUnit">addUnit</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">region</tt><tt class="py-op">,</tt> <tt class="py-param">unit</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CMap.addUnit-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="CMap.addUnit-expanded"><a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">len</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">regions</tt><tt class="py-op">[</tt><tt class="py-name">region</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">units</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-name">SPQR</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Variable scripts.spqr_defines.MAX_STACKING=scripts.spqr_defines-module.html#MAX_STACKING"><a title="scripts.spqr_defines.MAX_STACKING" class="py-name" href="#" onclick="return doclink('link-6', 'MAX_STACKING', 'link-6');">MAX_STACKING</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line">                        <tt class="py-keyword">return</tt> <tt class="py-name">False</tt> </tt>
+<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line">                <tt class="py-name">unit</tt><tt class="py-op">.</tt><tt class="py-name">region</tt> <tt class="py-op">=</tt> <tt class="py-name">region</tt> </tt>
+<a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">regions</tt><tt class="py-op">[</tt><tt class="py-name">region</tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt class="py-name">units</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">unit</tt><tt class="py-op">)</tt> </tt>
+<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">True</tt> </tt>
+</div></div><a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line"> </tt>
+<a name="CRegion"></a><div id="CRegion-def"><a name="L73"></a><tt class="py-lineno">73</tt> <a class="py-toggle" href="#" id="CRegion-toggle" onclick="return toggle('CRegion');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="scripts.maps.spqr_map.CRegion-class.html">CRegion</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CRegion-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="CRegion-expanded"><a name="CRegion.__init__"></a><div id="CRegion.__init__-def"><a name="L74"></a><tt class="py-lineno">74</tt> <a class="py-toggle" href="#" id="CRegion.__init__-toggle" onclick="return toggle('CRegion.__init__');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="scripts.maps.spqr_map.CRegion-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">image</tt><tt class="py-op">,</tt> <tt class="py-param">x</tt><tt class="py-op">,</tt> <tt class="py-param">y</tt><tt class="py-op">,</tt> <tt class="py-param">owner</tt><tt class="py-op">,</tt> <tt class="py-param">colour</tt><tt class="py-op">,</tt> <tt class="py-param">city_pos</tt><tt class="py-op">,</tt> <tt class="py-param">city_name</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="CRegion.__init__-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="CRegion.__init__-expanded"><a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name"><a title="scripts.spqr_gui.CGFXEngine.image" class="py-name" href="#" onclick="return doclink('link-7', 'image', 'link-5');">image</a></tt> <tt class="py-op">=</tt> <tt id="link-8" class="py-name"><a title="scripts.spqr_gui.CGFXEngine.image" class="py-name" href="#" onclick="return doclink('link-8', 'image', 'link-5');">image</a></tt> </tt>
+<a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">naval_regions</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">rect</tt> <tt class="py-op">=</tt> <tt class="py-name">pygame</tt><tt class="py-op">.</tt><tt class="py-name">Rect</tt><tt class="py-op">(</tt><tt class="py-name">x</tt><tt class="py-op">,</tt> <tt class="py-name">y</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt> </tt>
+<a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">owner</tt> <tt class="py-op">=</tt> <tt class="py-name">owner</tt> </tt>
+<a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">colour</tt> <tt class="py-op">=</tt> <tt class="py-name">colour</tt> </tt>
+<a name="L80"></a><tt class="py-lineno">80</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">city_position</tt> <tt class="py-op">=</tt> <tt id="link-9" class="py-name" targets="Class scripts.maps.spqr_map.Position=scripts.maps.spqr_map.Position-class.html"><a title="scripts.maps.spqr_map.Position" class="py-name" href="#" onclick="return doclink('link-9', 'Position', 'link-9');">Position</a></tt><tt class="py-op">(</tt><tt class="py-name">city_pos</tt><tt class="py-op">)</tt> </tt>
+<a name="L81"></a><tt class="py-lineno">81</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">city</tt> <tt class="py-op">=</tt> <tt class="py-name">SCITY</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name" targets="Class scripts.maps.spqr_city.CCity=scripts.maps.spqr_city.CCity-class.html"><a title="scripts.maps.spqr_city.CCity" class="py-name" href="#" onclick="return doclink('link-10', 'CCity', 'link-10');">CCity</a></tt><tt class="py-op">(</tt><tt class="py-name">city_name</tt><tt class="py-op">,</tt> <tt class="py-string">"roman_medium"</tt><tt class="py-op">)</tt> </tt>
+<a name="L82"></a><tt class="py-lineno">82</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">units</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L83"></a><tt class="py-lineno">83</tt>  <tt class="py-line">                <tt class="py-comment"># sometimes the area that the city text appears in is outside the area of the region</tt> </tt>
+<a name="L84"></a><tt class="py-lineno">84</tt>  <tt class="py-line">                <tt class="py-comment"># we need to save this area to make re-drawing the region not need a whole map redraw</tt> </tt>
+<a name="L85"></a><tt class="py-lineno">85</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">text_rect</tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+</div></div><a name="L86"></a><tt class="py-lineno">86</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Fri Apr  1 13:21:46 2011
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

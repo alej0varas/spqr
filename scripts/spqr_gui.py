@@ -1144,7 +1144,7 @@ class CGFXEngine(object):
 	def messagebox(self, flags, text, win_title):
 		"""Call the messagebox with flags (essentially the buttons
 		   you want displayed), the text itself, and the message at
-		   the top of the window. Handles \n in strings fine
+		   the top of the window. Handles c/r in strings fine
 		   I apologise for the length of this function"""
 		# just quickly, did we have any buttons?
 		if flags == 0:
