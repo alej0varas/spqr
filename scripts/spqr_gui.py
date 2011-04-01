@@ -647,11 +647,10 @@ class CGFXEngine(object):
 		unit = SDATA.unitClicked(x, y)
 		if unit != False:
 			if unit.moves_left > 0:
-				name = SDATA.regionClicked(x, y)		
-				self.highlightRegion(name)
-				self.renderRegionInfoBox(name)
-				self.renderImageUnits(name)
-				self.highlightMoves(unit.name)
+				self.highlightRegion(unit.region)
+				self.renderRegionInfoBox(unit.region)
+				self.renderImageUnits(unit.region)
+				self.highlightMoves(unit)
 				self.updateGUI()
 				return True
 		else:
@@ -683,6 +682,7 @@ class CGFXEngine(object):
 		if self.region_highlight != None:
 			self.region_highlight.update(self.image("buffer"))
 			self.renderSingleUnit(self.current_highlight_region)
+			self.flushFlash()
 		region = SDATA.getRegion(name)
 		highlight = pygame.Surface(self.image(region.image + "_mask").get_size(), 32)
 		# fill with colour of player
@@ -713,7 +713,7 @@ class CGFXEngine(object):
 			# get current unit
 			unit = self.flash_highlight
 			# delete image from current map
-			old_region = SDATA.getUnitRegionName(unit)
+			old_region = unit.region
 			# returns region the unit moved to after all the dust has settled
 			region = SDATA.moveUnit(unit, region)
 			cancelMoves()
@@ -741,13 +741,15 @@ class CGFXEngine(object):
 
 	def highlightMoves(self, unit):
 		"""Redraw buffer with highlighted areas and animate the given unit"""
+		
+		print unit
+		
 		# is it navy or army?
-		region = SDATA.getUnitRegionName(unit)
-		if SDATA.unitNaval(unit):
-			moves = SDATA.getNavalMoves(region)
+		if unit.naval == True:
+			moves = SDATA.getNavalMoves(unit.region)
 		else:
 			# get possible 1 move locations
-			moves = SDATA.getNeighbors(region)
+			moves = SDATA.getNeighbors(unit.region)
 		# remove all regions which already have a maximum unit stack
 		moves = [x for x in moves if len(SDATA.getRegionUnits(x)) < (SPQR.MAX_STACKING - 1)]
 		# now highlight all of those regions
@@ -777,10 +779,9 @@ class CGFXEngine(object):
 		self.map_click_moves = []
 		self.renderPixelMap()
 		# highlight the region selected, and show the units
-		name = SDATA.getUnitRegionName(unit)
-		self.highlightRegion(name)
-		self.renderImageUnits(name)
-		self.renderRegionInfoBox(name)
+		self.highlightRegion(unit.name)
+		self.renderImageUnits(unit.name)
+		self.renderRegionInfoBox(unit.name)
 		if centre_map == True:
 			self.centreMap(x, y)
 		# only highlight if we have some moves
@@ -908,14 +909,14 @@ class CGFXEngine(object):
 			self.flash_erase = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT), SRCALPHA)
 			# ok, we can blit the rendered map over
 			# get the x,y co-ords we need
-			x, y = SDATA.getUnitPosition(self.current_highlight)
+			x, y = SDATA.getUnitPosition(self.current_highlight.name)
 			# so we can calculate the blit rectangle
 			self.flash_rect = pygame.Rect(x, y, SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT)
 			# use this to copy from map_render:
 			self.flash_erase.blit(self.map_render, (0, 0), self.flash_rect)
 			
 			# now we need to overlay the region highlight gfx
-			region = SDATA.getUnitRegion(self.current_highlight)
+			region = SDATA.getRegion(self.current_highlight.region)
 			# get offsets into region overlay
 			offset = pygame.Rect(region.city_position.x - region.rect.x,
 								 region.city_position.y - region.rect.y,
@@ -934,11 +935,10 @@ class CGFXEngine(object):
 			self.flash_draw = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT), SRCALPHA)
 			self.flash_draw.blit(self.flash_erase, (0, 0))
 			# then draw the unit over both images
-			index = SDATA.getUnitImage(self.current_highlight)
-			self.flash_draw.blit(self.image(index), (0, 0))
-			self.flash_old.blit(self.image(index), (0, 0))
+			self.flash_draw.blit(self.image(self.current_highlight.image), (0, 0))
+			self.flash_old.blit(self.image(self.current_highlight.image), (0, 0))
 			# add to both images the moves left
-			moves = "moves" + str(SDATA.getUnitMoves(self.current_highlight))
+			moves = "moves" + str(self.current_highlight.moves)
 			self.flash_erase.blit(self.image(moves), (0, 0))
 			self.flash_draw.blit(self.image(moves), (0, 0))
 			
