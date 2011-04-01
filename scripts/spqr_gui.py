@@ -115,12 +115,12 @@ class CGFXEngine(object):
 		
 		# some basic variables that SPQR uses regularly
 		# where to start the map blit from when blasting it to the screen
-		foo = (SPQR.SCREEN_HEIGHT - self.iHeight("win_tl")) + 1
+		menu_y_max = (SPQR.SCREEN_HEIGHT - self.iHeight("win_tl")) + 1
 		# define the 'from' rectangle
-		self.map_screen = pygame.Rect((0, 0, SPQR.SCREEN_WIDTH, foo))
+		self.map_screen = pygame.Rect((0, 0, SPQR.SCREEN_WIDTH, menu_y_max))
 		# and the target rectangle for the blit:
 		self.map_rect = pygame.Rect((0, (self.iHeight("win_tl"))-1,
-			SPQR.SCREEN_WIDTH, foo))
+			SPQR.SCREEN_WIDTH, menu_y_max))
 		# area that the map covers on the screen:
 		self.map_area = pygame.Rect((0, self.iHeight("win_tl"),
 			SPQR.SCREEN_WIDTH, (SPQR.SCREEN_HEIGHT-self.iHeight("win_tl"))))
@@ -322,22 +322,22 @@ class CGFXEngine(object):
 		index = 0
 		# we have to do the window testing in reverse to the way we blit, as the first
 		# object blitted is on the 'bottom' of the screen, and we have to test from the top
-		for foo in self.windows:
-			if foo.display == True:
-				self.screen.blit(foo.image, (foo.rect.x, foo.rect.y))
-			for bar in foo.items:
-				if bar.visible == True:
+		for window in self.windows:
+			if window.display == True:
+				self.screen.blit(window.image, (window.rect.x, window.rect.y))
+			for item in window.items:
+				if item.visible == True:
 					# is this the mini-map?
-					if bar.describe  ==  "mini-map":
+					if item.describe  ==  "mini-map":
 						# just update it
 						self.updateMiniMap()
-						x1 = foo.rect.x+bar.rect.x
-						y1 = foo.rect.y+bar.rect.y
-						self.screen.blit(bar.image, (x1, y1))
+						x1 = window.rect.x + item.rect.x
+						y1 = window.rect.y + item.rect.y
+						self.screen.blit(item.image, (x1, y1))
 					else:
-						x1 = foo.rect.x+bar.rect.x
-						y1 = foo.rect.y+bar.rect.y
-						self.screen.blit(bar.image, (x1, y1))
+						x1 = window.rect.x + item.rect.x
+						y1 = window.rect.y + item.rect.y
+						self.screen.blit(item.image, (x1, y1))
 			index += 1
 		pygame.display.flip()
 		return True
@@ -446,7 +446,7 @@ class CGFXEngine(object):
 	# happened, the later function checks if we got a GUI event)
 	def checkInputs(self):
 		"""checkInputs() is called on a loop whilst the game is waiting
-		   for user input (i.e. most of the time). It doens't actually do
+		   for user input (i.e. most of the time). It doesn't actually do
 		   anything with the input except pass the event along to somewhere
 		   else, so think of it more like a sorting office"""
 		event = pygame.event.wait()
@@ -966,6 +966,8 @@ class CGFXEngine(object):
 			else:
 				self.screen.blit(self.flash_draw, dest, area)
 				self.flash_on = True
+			# final check: do we need to redraw the overlay graphics?
+			self.updateOverlayAfterFlash(dest)
 			# update the screen and we're done
 			pygame.display.update(dest)
 			return True
@@ -975,6 +977,11 @@ class CGFXEngine(object):
 		else:
 			self.flash_on = True
 		return False
+
+	def updateOverlayAfterFlash(self, dest):
+		"""If the flashed unit clips any of the overlays, update a partial overlay"""
+		print dest
+		
 
 	def clearFlash(self):
 		"""Routine clears any gfx stuff on the map due to flashing"""

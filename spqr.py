@@ -62,7 +62,7 @@ class CSPQR(object):
 		elif flag == 'v':
 			# show version details and exit
 			print "SPQR " + SPQR.VERSION + ", written and designed by Chris Smith"
-			print "  Copr. 2005-2010, released under the GNU Public License v2"
+			print "  Copr. 2005-2011, released under the GNU Public License v2"
 			print "  Last code update: " + SPQR.LAST_UPDATE
 			sys.exit(True)
 		elif flag == 'g':
