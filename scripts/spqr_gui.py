@@ -645,7 +645,7 @@ class CGFXEngine(object):
 			return True
 		# first we check units, then cities, then regions
 		unit = SDATA.unitClicked(x, y)
-		if unit != False:
+		if unit:
 			if unit.moves_left > 0:
 				self.highlightRegion(unit.region)
 				self.renderRegionInfoBox(unit.region)
@@ -710,14 +710,13 @@ class CGFXEngine(object):
 		# played clicked region on list: move unit
 		if region in self.map_click_moves:
 			# get current unit
-			unit = self.flash_highlight
+			unit = self.current_highlight
 			# delete image from current map
 			old_region = unit.region
 			# returns region the unit moved to after all the dust has settled
 			region = SDATA.moveUnit(unit.name, region)
 			cancelMoves()
 			self.unitFlashAndOff()
-			self.flushFlash()
 			self.renderSingleRegion(old_region)
 			# finally, we should click the map on the new region city
 			# now highlight the new unit if it has moves left, or focus on the city
@@ -897,7 +896,7 @@ class CGFXEngine(object):
 		# the unit gfx and, the second has just the area
 		# We just blit between the 2. Firstly we need
 		# to see if the unit highlight has changed at all
-		if self.flash_highlight != self.current_highlight:
+		if self.flash_highlight != self.current_highlight or self.current_highlight == None:
 			self.current_highlight = self.flash_highlight
 			# we now have an new flashing unit. Firstly, remove the old blit area
 			if self.flash_old != None:
@@ -935,7 +934,7 @@ class CGFXEngine(object):
 			self.flash_draw.blit(self.image(self.current_highlight.image), (0, 0))
 			self.flash_old.blit(self.image(self.current_highlight.image), (0, 0))
 			# add to both images the moves left
-			moves = "moves" + str(self.current_highlight.moves)
+			moves = "moves" + str(self.current_highlight.moves_left)
 			self.flash_erase.blit(self.image(moves), (0, 0))
 			self.flash_draw.blit(self.image(moves), (0, 0))
 			
