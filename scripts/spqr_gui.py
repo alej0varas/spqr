@@ -808,7 +808,7 @@ class CGFXEngine(object):
 		xpos, ypos = pygame.mouse.get_rel()
 		while True:
 			event = pygame.event.poll()
-			# the mouse
+			# check the middle button is still pressed
 			a, b, c = pygame.mouse.get_pressed()
 			if b != 1:
 				# mouse has been de-pressed
