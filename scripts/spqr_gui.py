@@ -802,21 +802,20 @@ class CGFXEngine(object):
 	# this is the function that allows you to pan the the map with the 
 	# middle mouse button
 	def panMap(self):
-		"""CGFXEngine.panMap() - call with nothing
-			 Returns nothing, allows user to pan map with middle click"""
+		"""Allows user to pan map with middle click"""
 		# before doing anything else, turn off unit flashing
 		self.pauseFlashing()
 		xpos, ypos = pygame.mouse.get_rel()
 		while True:
 			event = pygame.event.poll()
+			# the mouse
+			a, b, c = pygame.mouse.get_pressed()
+			if b != 1:
+				# mouse has been de-pressed
+				# turn unit animation back on
+				self.unitFlashOn()
+				return			
 			if event.type == MOUSEMOTION:
-				# cancel current action if we got mouse button up
-				a, b, c = pygame.mouse.get_pressed()
-				if b != 1:
-					# mouse has been de-pressed
-					# turn unit animation back on
-					self.unitFlashOn()
-					return
 				# grab relative grabs
 				xpos, ypos = pygame.mouse.get_rel()
 				# update the map thus
