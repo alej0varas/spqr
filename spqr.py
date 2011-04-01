@@ -155,6 +155,7 @@ class CSPQR(object):
 		SGFX.gui.windows[index].addWidget(SMENU.CMenu(menu))
 	
 		# add a window with no frame that holds the widgets to overlay on the map
+		# THIS IS ALWAYS THE SECOND WINDOW!
 		bwindow = SWINDOW.CWindow(0, SGFX.gui.iHeight("titlebar"), SPQR.SCREEN_WIDTH,
 								  SPQR.SCREEN_HEIGHT - SGFX.gui.iHeight("titlebar"), "",
 								  False, "map_widgets")

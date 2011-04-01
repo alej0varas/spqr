@@ -980,8 +980,17 @@ class CGFXEngine(object):
 
 	def updateOverlayAfterFlash(self, dest):
 		"""If the flashed unit clips any of the overlays, update a partial overlay"""
-		print dest
-		
+		for widget in self.windows[1].items:
+			# visible and matching?
+			if widget.visible and widget.rect.colliderect(dest):
+				# get the overlap
+				overlap = widget.rect.clip(dest)
+				source = pygame.Rect(overlap.x - widget.rect.x, overlap.y - widget.rect.y,
+									 overlap.width, overlap.height)
+				# offset menu height
+				overlap.y += self.iHeight("win_tl") - 1	
+				# blit the image to the screen
+				self.screen.blit(widget.image, overlap, source)
 
 	def clearFlash(self):
 		"""Routine clears any gfx stuff on the map due to flashing"""
