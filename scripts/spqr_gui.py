@@ -682,6 +682,7 @@ class CGFXEngine(object):
 		"""Highlight the region in the owners colours"""
 		if self.region_highlight != None:
 			self.region_highlight.update(self.image("buffer"))
+			self.renderSingleUnit(self.current_highlight_region)
 		region = SDATA.getRegion(name)
 		highlight = pygame.Surface(self.image(region.image + "_mask").get_size(), 32)
 		# fill with colour of player
