@@ -358,7 +358,7 @@ class CGFXEngine(object):
 			pygame.display.flip()
 		# doing this *always* redraws the units as well, so make sure that
 		# the next flash unit action will be to erase the unit
-		self.unitFlashOn()
+		self.flash_on = False
 		
 	def updateMapAndOverlay(self):
 		self.updateMap(False)
@@ -682,7 +682,7 @@ class CGFXEngine(object):
 		"""Highlight the region in the owners colours"""
 		if self.region_highlight != None:
 			self.region_highlight.update(self.image("buffer"))
-			self.renderSingleUnit(self.current_highlight_region)	
+			self.renderSingleUnit(self.current_highlight_region)
 		region = SDATA.getRegion(name)
 		highlight = pygame.Surface(self.image(region.image + "_mask").get_size(), 32)
 		# fill with colour of player
@@ -807,7 +807,10 @@ class CGFXEngine(object):
 	def panMap(self):
 		"""Allows user to pan map with middle click"""
 		# before doing anything else, turn off unit flashing
-		self.pauseFlashing()
+		animate_after_pan = False
+		if self.timer == True:
+			self.pauseFlashing()
+			animate_after_pan = True
 		xpos, ypos = pygame.mouse.get_rel()
 		while True:
 			event = pygame.event.poll()
@@ -815,8 +818,9 @@ class CGFXEngine(object):
 			a, b, c = pygame.mouse.get_pressed()
 			if b != 1:
 				# mouse has been de-pressed
-				# turn unit animation back on
-				self.unitFlashOn()
+				# turn unit animation back on - if needed
+				if animate_after_pan == True:
+					self.unitFlashOn()
 				return			
 			if event.type == MOUSEMOTION:
 				# grab relative grabs
