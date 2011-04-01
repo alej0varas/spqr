@@ -251,7 +251,7 @@ class CGFXEngine(object):
 	def renderSingleUnit(self, region):
 		if len(region.units) > 0:
 			unit = region.units[0]
-			self.image("buffer").blit(self.image(unit.image), SDATA.getUnitPosition(unit.name))
+			self.image("buffer").blit(self.image(unit.image), SDATA.getUnitPosition(unit))
 
 	# now a function to add a window
 	# it has it's own function because it has to return the index number
@@ -657,7 +657,6 @@ class CGFXEngine(object):
 			self.unitFlashAndOff()
 		name = SDATA.regionClicked(x, y)
 		if name != False:
-			print "Region:", name, "owned by the", SDATA.regionOwnerPlural(name)
 			self.highlightRegion(name)
 			self.renderRegionInfoBox(name)
 			self.renderImageUnits(name)
@@ -715,20 +714,21 @@ class CGFXEngine(object):
 			# delete image from current map
 			old_region = unit.region
 			# returns region the unit moved to after all the dust has settled
-			region = SDATA.moveUnit(unit, region)
+			region = SDATA.moveUnit(unit.name, region)
 			cancelMoves()
 			self.unitFlashAndOff()
 			self.flushFlash()
 			self.renderSingleRegion(old_region)
 			# finally, we should click the map on the new region city
 			# now highlight the new unit if it has moves left, or focus on the city
-			if SDATA.getUnitMoves(unit) != 0:
+			if unit.moves_left != 0:
 				self.focusOnUnit(unit)
 			else:
 				cx, cy = SDATA.getCityPosition(SDATA.getRegion(region))
+				# make sure we offset into the correct place
 				cx += 5
 				cy += 5
-				self.mapClick(cx, cy)
+				self.mapClick(None, cx, cy)
 				self.updateGUI()
 			return True
 		# cancel everything
@@ -741,9 +741,6 @@ class CGFXEngine(object):
 
 	def highlightMoves(self, unit):
 		"""Redraw buffer with highlighted areas and animate the given unit"""
-		
-		print unit
-		
 		# is it navy or army?
 		if unit.naval == True:
 			moves = SDATA.getNavalMoves(unit.region)
@@ -779,13 +776,13 @@ class CGFXEngine(object):
 		self.map_click_moves = []
 		self.renderPixelMap()
 		# highlight the region selected, and show the units
-		self.highlightRegion(unit.name)
-		self.renderImageUnits(unit.name)
-		self.renderRegionInfoBox(unit.name)
+		self.highlightRegion(unit.region)
+		self.renderImageUnits(unit.region)
+		self.renderRegionInfoBox(unit.region)
 		if centre_map == True:
 			self.centreMap(x, y)
 		# only highlight if we have some moves
-		if SDATA.getUnitMoves(unit) > 0:
+		if unit.moves_left > 0:
 			self.flash_old = None
 			self.highlightMoves(unit)
 
@@ -909,7 +906,7 @@ class CGFXEngine(object):
 			self.flash_erase = pygame.Surface((SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT), SRCALPHA)
 			# ok, we can blit the rendered map over
 			# get the x,y co-ords we need
-			x, y = SDATA.getUnitPosition(self.current_highlight.name)
+			x, y = SDATA.getUnitPosition(self.current_highlight)
 			# so we can calculate the blit rectangle
 			self.flash_rect = pygame.Rect(x, y, SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT)
 			# use this to copy from map_render:
@@ -1066,7 +1063,7 @@ class CGFXEngine(object):
 			self.unit_widgets[i].visible = True
 			self.unit_widgets[i].active = True
 			self.unit_widgets[i].rect.x = xpos
-			self.unit_widgets[i].data = units[i].name
+			self.unit_widgets[i].data = units[i]
 			xpos += SPQR.UNIT_WIDTH + SPQR.SPACER
 			self.unit_widgets[i].rect.y = ypos
 		return True

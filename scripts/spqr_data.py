@@ -170,7 +170,8 @@ def moveUnit(unit, region):
 			data.map.regions[i.region].units.remove(i)
 			i.region = region
 			i.moves_left -= 1
-			return True
+			# return the region we go to
+			return region
 	print "Error: Couldn't find unit", unit, "to move"
 	return False
 
@@ -199,9 +200,8 @@ def getAllPlayerUnits(owner):
 			units.extend(region.units)
 	return units
 
-def getUnitPosition(name):
-	region = getUnitRegionName(name)
-	position = data.map.regions[region].city_position
+def getUnitPosition(unit):
+	position = data.map.regions[unit.region].city_position
 	return position.x, position.y
 
 def getUnitMoves(name):
