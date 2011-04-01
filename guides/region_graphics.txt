@@ -15,5 +15,6 @@ The icon file is png format file of which the longest side must be 95 pixels. Th
 and it's border, and is used to display region details, and when we need a small picture of the
 region.
 
-The mask file is a block black image that must be 40% transparant black.
+The mask file is a block black image that must be 40% transparant black, and must be shrunk 3 pixels
+from the edge (but the image must be the same size as the base png file.
 
