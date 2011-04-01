@@ -131,8 +131,6 @@ class CGFXEngine(object):
 		# obviously 0/0 for top left corner - this just denotes bottom right corner
 		self.map_max_x = self.iWidth("map") - SPQR.SCREEN_WIDTH
 		self.map_max_y = self.iHeight("map") - self.map_rect.h
-		# a temp image for some uses
-		self.temp_image = pygame.Surface((0, 0))
 		# variables so callbacks and external code can communicate
 		self.callback_temp = SPQR.BUTTON_FAIL
 		# a flag to see if a menu is waiting for input
@@ -706,8 +704,9 @@ class CGFXEngine(object):
 			self.map_click_moves = []
 			self.renderPixelMap()
 			self.updateMap()
-		# there are 2 choices: player clicked no region,
+		# there are 3 choices: player clicked no region,
 		# or region not on list: reset map and move on
+		# player clicked unit region: no action
 		# played clicked region on list: move unit
 		if region in self.map_click_moves:
 			# get current unit
@@ -732,6 +731,9 @@ class CGFXEngine(object):
 				self.updateGUI()
 			return True
 		# cancel everything
+		# player clicked on the unit region?
+		if region == SDATA.getUnitRegionName(self.flash_highlight):
+			return False
 		cancelMoves()
 		self.unitFlashAndOff()
 		return False
