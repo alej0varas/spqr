@@ -1147,22 +1147,16 @@ class CGFXEngine(object):
 		width = txt_width+(SPQR.SPACER*2)
 		# get average size of height..
 		height = (self.fonts[SPQR.FONT_MSG].size("X")[1])+1
-		# really short message? (as long as there are no cr's inside)
-		if self.fonts[SPQR.FONT_MSG].size(text)[0] < txt_width and re.search("\n", text) == False:
-			# then don't even bother with a 2nd line...easy
-			# render text to spare image
-			self.temp_image = self.fonts[SPQR.FONT_MSG].render(text, 1, (0, 0, 0))
-		else:
-			# we KNOW we can't fit it into one line, try with 2,3,4 etc until it fits
-			done = False
-			ysize = height
-			while done == False:
-				ysize = ysize+height
-				done = self.fitText(text, txt_width, ysize, SPQR.FONT_MSG)
-			height = ysize
+		# get text area size
+		done = False
+		ysize = height
+		while done == False:
+			ysize = ysize+height
+			done = self.fitText(text, txt_width, ysize, SPQR.FONT_MSG)
+		height = ysize
 		# now we have the right size, lets render it!
 		# start with a window, but work out the height first...
-		wheight = height+SPQR.SPACER
+		wheight = height + SPQR.SPACER
 		# add height for sep bar (2) and buttons (2*button height)
 		wheight += (self.iHeight("button") * 2) + 2
 
