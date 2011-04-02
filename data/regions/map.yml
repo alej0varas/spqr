@@ -1,5 +1,7 @@
 # YAML data for all regions
 
+# Italian regions
+
 - name: "lucania_et_bruttiun"
   xpos: 1339
   ypos: 1147
@@ -101,4 +103,67 @@
     - name: "transpadana"
     - name: "etruria"
     - name: "aemilia"
+
+# Spanish regions
+
+- name: "baetica"
+  xpos: 100
+  ypos: 100
+  owner: "romans"
+  unit_x: 150
+  unit_y: 150
+  city: "None1"
+  borders:
+    - name: "carthaginiensis_I"
+
+- name: "carthaginiensis_I"
+  xpos: 450
+  ypos: 100
+  owner: "romans"
+  unit_x: 550
+  unit_y: 150
+  city: "None2"
+  borders:
+    - name: "baetica"
+    - name: "carthaginiensis_II"
+ 
+- name: "carthaginiensis_II"
+  xpos: 800
+  ypos: 100
+  owner: "romans"
+  unit_x: 950
+  unit_y: 150
+  city: "None3"
+  borders:
+    - name: "carthaginiensis_I"
+
+- name: "tarraconensis"
+  xpos: 100
+  ypos: 450
+  owner: "romans"
+  unit_x: 150
+  unit_y: 350
+  city: "None3"
+  borders:
+    - name: "carthaginiensis_I"
+
+- name: "galicia"
+  xpos: 450
+  ypos: 450
+  owner: "romans"
+  unit_x: 550
+  unit_y: 550
+  city: "None4"
+  borders:
+    - name: "carthaginiensis_I"
+
+- name: "lusitania"
+  xpos: 900
+  ypos: 450
+  owner: "romans"
+  unit_x: 950
+  unit_y: 550
+  city: "None5"
+  borders:
+    - name: "carthaginiensis_I"
 
