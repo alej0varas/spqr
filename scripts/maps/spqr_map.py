@@ -28,8 +28,19 @@ class Position(object):
 class CMap(object):
 	def __init__(self, players):
 		self.regions = {}
+		self.cities = {}
 		self.masks = {}
 		self.graph = nx.Graph()
+		# sort the naval connections
+		self.loadRegions(players)
+		self.loadCities()
+
+	def loadCities(self):
+		cities = yaml.load(open("./data/regions/cities.yml"))
+		for city in cities:
+			print city
+
+	def loadRegions(self, players):
 		# Load the map's regions from a file
 		var = yaml.load(open("./data/regions/map.yml"))
 		# Make a temp list with the borders
@@ -49,7 +60,6 @@ class CMap(object):
 		# repeat again for graph connections
 		for node in wlist:
 			self.graph.add_edge(self.regions[node[0]], self.regions[node[1]])
-		# sort the naval connections
 		self.computeNavalAreas(var)
 		
 	def computeNavalAreas(self, data):
