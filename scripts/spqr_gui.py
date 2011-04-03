@@ -223,7 +223,7 @@ class CGFXEngine(object):
 
 	def renderSingleCity(self, region):
 		# no population, don't draw it!
-		if region.city.population < 1:
+		if region.city.population == 0:
 			return
 		self.fonts[SPQR.FONT_VERA].set_bold(True)
 		name = region.city.name

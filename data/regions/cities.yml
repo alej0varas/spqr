@@ -78,7 +78,7 @@
   consumption: 1
  
 - city: "toledo"
-  population: 40000
+  population: 0
   direct_tax: 1
   indirect_tax: 3
   production: 1
@@ -92,14 +92,14 @@
   consumption: 1
 
 - city: "astorga"
-  population: 40000
+  population: 0
   direct_tax: 1
   indirect_tax: 3
   production: 1
   consumption: 1
 
 - city: "evora"
-  population: 40000
+  population: 0
   direct_tax: 1
   indirect_tax: 3
   production: 1

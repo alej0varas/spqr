@@ -124,6 +124,8 @@
   unit_x: 618
   unit_y: 1416
   city: "cartagena"
+  naval:
+    - name: "sicily"
   borders:
     - name: "baetica"
     - name: "north_carthaginiensis"

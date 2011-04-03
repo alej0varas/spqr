@@ -51,6 +51,11 @@
   image: "rome_legion"
   stats: [65, 80, 76]
 
+- name: "Legio_spain"
+  location: "baetica"
+  image: "rome_legion"
+  stats: [50, 50, 60]
+
 - name: "Sicilian_Fleet"
   location: "sicily"
   image: "boat"
