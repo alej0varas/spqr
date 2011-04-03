@@ -173,7 +173,7 @@
   owner: "romans"
   unit_x: 950
   unit_y: 550
-  city: "None5"
+  city 54
   borders:
     - name: "north_carthaginiensis"
     - name: "south_carthaginiensis"

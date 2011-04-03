@@ -1,0 +1,76 @@
+# YAML data for all regions
+
+# Italian cities
+
+- city: "Brundisium"
+  population = 40000
+  direct_tax = 1
+  indirect_tax = 3
+
+- city: "Sybaris"
+  population = 40000
+  direct_tax = 1
+  indirect_tax = 3
+
+- city: "Roma"
+  population = 40000
+  direct_tax = 1
+  indirect_tax = 3
+
+- city: "Arretium"
+  population = 40000
+  direct_tax = 1
+  indirect_tax = 3
+
+- city: "Ariminum"
+  population = 40000
+  direct_tax = 1
+  indirect_tax = 3
+
+- city: "Syracuse"
+  population = 40000
+  direct_tax = 1
+  indirect_tax = 3
+
+- city: "Nicaea"
+  population = 40000
+  direct_tax = 1
+  indirect_tax = 3
+
+- city: "Aquileia"
+  population = 40000
+  direct_tax = 1
+  indirect_tax = 3
+
+# Spanish cities
+
+- city: "None1"
+  population = 40000
+  direct_tax = 1
+  indirect_tax = 3
+
+- city: "None2"
+  population = 40000
+  direct_tax = 1
+  indirect_tax = 3
+ 
+- city: "None3"
+  population = 40000
+  direct_tax = 1
+  indirect_tax = 3
+
+- city: "None3"
+  population = 40000
+  direct_tax = 1
+  indirect_tax = 3
+
+- city: "None4"
+  population = 40000
+  direct_tax = 1
+  indirect_tax = 3
+
+- city: "None5"
+  population = 40000
+  direct_tax = 1
+  indirect_tax = 3
+
