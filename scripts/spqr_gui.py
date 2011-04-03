@@ -222,6 +222,9 @@ class CGFXEngine(object):
 				self.renderSingleCity(i)
 
 	def renderSingleCity(self, region):
+		# no population, don't draw it!
+		if region.city.population < 1:
+			return
 		self.fonts[SPQR.FONT_VERA].set_bold(True)
 		name = region.city.name
 		x, y = SDATA.getCityPosition(region)

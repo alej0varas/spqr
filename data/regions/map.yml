@@ -8,7 +8,7 @@
   owner: "romans"
   unit_x: 1380
   unit_y: 1184
-  city: "Brundisium"
+  city: "brundisium"
   naval:
     - name: "latium_et_campania"
     - name: "sicily"
@@ -22,7 +22,7 @@
   owner: "romans"
   unit_x: 1429
   unit_y: 1120
-  city: "Sybaris"
+  city: "sybaris"
   borders:
     - name: "latium_et_campania"
     - name: "lucania_et_bruttiun"
@@ -33,7 +33,7 @@
   owner: "romans"
   unit_x: 1233
   unit_y: 1103
-  city: "Roma"
+  city: "roma"
   naval:
     - name: "sicily"
     - name: "lucania_et_bruttiun"
@@ -49,7 +49,7 @@
   owner: "celts"
   unit_x: 1225
   unit_y: 979
-  city: "Arretium"
+  city: "arretium"
   borders:
     - name: "latium_et_campania"
     - name: "etruria"
@@ -61,7 +61,7 @@
   owner: "romans"
   unit_x: 1147
   unit_y: 1007
-  city: "Ariminum"
+  city: "ariminum"
   borders:
     - name: "latium_et_campania"
     - name: "aemilia"
@@ -74,7 +74,7 @@
   owner: "romans"
   unit_x: 1340
   unit_y: 1326
-  city: "Syracuse"
+  city: "syracuse"
   naval:
     - name: "lucania_et_bruttiun"
     - name: "latium_et_campania"
@@ -87,7 +87,7 @@
   owner: "romans"
   unit_x: 978
   unit_y: 970
-  city: "Nicaea"
+  city: "nicaea"
   borders:
     - name: "etruria"
     - name: "venetia_et_histria"
@@ -98,7 +98,7 @@
   owner: "romans"
   unit_x: 1186
   unit_y: 831
-  city: "Aquileia"
+  city: "aquileia"
   borders:
     - name: "transpadana"
     - name: "etruria"
@@ -112,7 +112,7 @@
   owner: "romans"
   unit_x: 150
   unit_y: 150
-  city: "None1"
+  city: "none1"
   borders:
     - name: "south_carthaginiensis"
     - name: "lusitania"
@@ -123,7 +123,7 @@
   owner: "romans"
   unit_x: 550
   unit_y: 150
-  city: "None2"
+  city: "none2"
   borders:
     - name: "baetica"
     - name: "north_carthaginiensis"
@@ -136,7 +136,7 @@
   owner: "romans"
   unit_x: 950
   unit_y: 150
-  city: "None3"
+  city: "none3"
   borders:
     - name: "south_carthaginiensis"
     - name: "lusitania"
@@ -149,19 +149,19 @@
   owner: "romans"
   unit_x: 150
   unit_y: 350
-  city: "None3"
+  city: "none3"
   borders:
     - name: "north_carthaginiensis"
     - name: "south_carthaginiensis"
     - name: "galicia"
 
 - name: "galicia"
-t  xpos: 226
+  xpos: 226
   ypos: 1118
   owner: "romans"
   unit_x: 550
   unit_y: 550
-  city: "None4"
+  city: "none4"
   borders:
     - name: "north_carthaginiensis"
     - name: "tarraconensis"
@@ -173,7 +173,7 @@ t  xpos: 226
   owner: "romans"
   unit_x: 950
   unit_y: 550
-  city 54
+  city: "none5"
   borders:
     - name: "north_carthaginiensis"
     - name: "south_carthaginiensis"

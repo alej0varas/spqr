@@ -16,12 +16,16 @@
 
 class CCity(object):
 	"""Defines a city in SPQR"""
-	def __init__(self, name, image):
+	def __init__(self, name, population):
 		self.name = name
-		self.image = image
-		self.population = 40000
-		self.happiness = 5
-		self.food_consumption = 2000
+		self.image = "roman_medium"
+		self.population = population
 		self.direct_tax = 1
-		self.indirect_tax = 3
+		self.indirect_tax = 1
+		self.production = 1
+		self.consumption = 1
+	
+	def calculateImage(self, owner):
+		"""Generates the right image to draw"""
+		pass
 

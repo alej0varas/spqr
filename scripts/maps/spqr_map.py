@@ -28,19 +28,20 @@ class Position(object):
 class CMap(object):
 	def __init__(self, players):
 		self.regions = {}
-		self.cities = {}
 		self.masks = {}
 		self.graph = nx.Graph()
 		# sort the naval connections
 		self.loadRegions(players)
-		self.loadCities()
 
 	def loadCities(self):
 		cities = yaml.load(open("./data/regions/cities.yml"))
-		for city in cities:
-			print city
+		city_hash = {}
+		for i in cities:
+			city_hash[i["city"]] = SCITY.CCity(i["city"], i["population"])
+		return city_hash
 
 	def loadRegions(self, players):
+		cities = self.loadCities()
 		# Load the map's regions from a file
 		var = yaml.load(open("./data/regions/map.yml"))
 		# Make a temp list with the borders
@@ -55,7 +56,7 @@ class CMap(object):
 			# Append the temp list to our data
 			colour = players[i["owner"]].colour
 			self.regions[i["name"]] = CRegion(i["name"], i["xpos"], i["ypos"], i["owner"],
-											  colour, (i["unit_x"], i["unit_y"]), i["city"])
+											  colour, (i["unit_x"], i["unit_y"]), cities[i["city"]])
 			self.graph.add_node(self.regions[i["name"]])
 		# repeat again for graph connections
 		for node in wlist:
@@ -81,14 +82,14 @@ class CMap(object):
 		return True
 
 class CRegion(object):
-	def __init__(self, image, x, y, owner, colour, city_pos, city_name):
+	def __init__(self, image, x, y, owner, colour, city_pos, city):
 		self.image = image
 		self.naval_regions = []
 		self.rect = pygame.Rect(x, y, 0, 0)
 		self.owner = owner
 		self.colour = colour
 		self.city_position = Position(city_pos)
-		self.city = SCITY.CCity(city_name, "roman_medium")
+		self.city = city
 		self.units = []
 		# sometimes the area that the city text appears in is outside the area of the region
 		# we need to save this area to make re-drawing the region not need a whole map redraw

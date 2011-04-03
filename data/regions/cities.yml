@@ -2,75 +2,103 @@
 
 # Italian cities
 
-- city: "Brundisium"
-  population: = 40000
-  direct_tax: = 1
-  indirect_tax: = 3
+- city: "brundisium"
+  population: 40000
+  direct_tax: 1
+  indirect_tax: 3
+  production: 1
+  consumption: 1
 
-- city: "Sybaris"
-  population: = 40000
-  direct_tax: = 1
-  indirect_tax: = 3
+- city: "sybaris"
+  population: 40000
+  direct_tax: 1
+  indirect_tax: 3
+  production: 1
+  consumption: 1
 
-- city: "Roma"
-  population: = 40000
-  direct_tax: = 1
-  indirect_tax: = 3
+- city: "roma"
+  population: 40000
+  direct_tax: 1
+  indirect_tax: 3
+  production: 1
+  consumption: 1
 
-- city: "Arretium"
-  population: = 40000
-  direct_tax: = 1
-  indirect_tax: = 3
+- city: "arretium"
+  population: 40000
+  direct_tax: 1
+  indirect_tax: 3
+  production: 1
+  consumption: 1
 
-- city: "Ariminum"
-  population: = 40000
-  direct_tax: = 1
-  indirect_tax: = 3
+- city: "ariminum"
+  population: 40000
+  direct_tax: 1
+  indirect_tax: 3
+  production: 1
+  consumption: 1
 
-- city: "Syracuse"
-  population: = 40000
-  direct_tax: = 1
-  indirect_tax: = 3
+- city: "syracuse"
+  population: 40000
+  direct_tax: 1
+  indirect_tax: 3
+  production: 1
+  consumption: 1
 
-- city: "Nicaea"
-  population: = 40000
-  direct_tax: = 1
-  indirect_tax: = 3
+- city: "nicaea"
+  population: 40000
+  direct_tax: 1
+  indirect_tax: 3
+  production: 1
+  consumption: 1
 
-- city: "Aquileia"
-  population: = 40000
-  direct_tax: = 1
-  indirect_tax: = 3
+- city: "aquileia"
+  population: 40000
+  direct_tax: 1
+  indirect_tax: 3
+  production: 1
+  consumption: 1
 
 # Spanish cities
 
-- city: "None1"
-  population: = 40000
-  direct_tax: = 1
-  indirect_tax: = 3
+- city: "none1"
+  population: 40000
+  direct_tax: 1
+  indirect_tax: 3
+  production: 1
+  consumption: 1
 
-- city: "None2"
-  population: = 40000
-  direct_tax: = 1
-  indirect_tax: = 3
+- city: "none2"
+  population: 40000
+  direct_tax: 1
+  indirect_tax: 3
+  production: 1
+  consumption: 1
  
-- city: "None3"
-  population: = 40000
-  direct_tax: = 1
-  indirect_tax: = 3
+- city: "none3"
+  population: 40000
+  direct_tax: 1
+  indirect_tax: 3
+  production: 1
+  consumption: 1
 
-- city: "None3"
-  population: = 40000
-  direct_tax: = 1
-  indirect_tax: = 3
+- city: "none3"
+  population: 40000
+  direct_tax: 1
+  indirect_tax: 3
+  production: 1
+  consumption: 1
 
-- city: "None4"
-  population: = 40000
-  direct_tax: = 1
-  indirect_tax: = 3
+- city: "none4"
+  population: 40000
+  direct_tax: 1
+  indirect_tax: 3
+  production: 1
+  consumption: 1
 
-- city: "None5"
-  population: = 40000
-  direct_tax: = 1
-  indirect_tax: = 3
+- city: "none5"
+  population: 40000
+  direct_tax: 1
+  indirect_tax: 3
+  production: 1
+  consumption: 1
 
