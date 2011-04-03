@@ -110,9 +110,9 @@
   xpos: 336
   ypos: 1359
   owner: "romans"
-  unit_x: 150
-  unit_y: 150
-  city: "none1"
+  unit_x: 416
+  unit_y: 1439
+  city: "cordova"
   borders:
     - name: "south_carthaginiensis"
     - name: "lusitania"
@@ -121,9 +121,9 @@
   xpos: 457
   ypos: 1259
   owner: "romans"
-  unit_x: 550
-  unit_y: 150
-  city: "none2"
+  unit_x: 618
+  unit_y: 1416
+  city: "cartagena"
   borders:
     - name: "baetica"
     - name: "north_carthaginiensis"
@@ -134,9 +134,9 @@
   xpos: 403
   ypos: 1162
   owner: "romans"
-  unit_x: 950
-  unit_y: 150
-  city: "none3"
+  unit_x: 467
+  unit_y: 1290
+  city: "toledo"
   borders:
     - name: "south_carthaginiensis"
     - name: "lusitania"
@@ -147,9 +147,9 @@
   xpos: 394
   ypos: 1109
   owner: "romans"
-  unit_x: 150
-  unit_y: 350
-  city: "none3"
+  unit_x: 687
+  unit_y: 1198
+  city: "tarragona"
   borders:
     - name: "north_carthaginiensis"
     - name: "south_carthaginiensis"
@@ -159,9 +159,9 @@
   xpos: 226
   ypos: 1118
   owner: "romans"
-  unit_x: 550
-  unit_y: 550
-  city: "none4"
+  unit_x: 356
+  unit_y: 1152
+  city: "astorga"
   borders:
     - name: "north_carthaginiensis"
     - name: "tarraconensis"
@@ -171,9 +171,9 @@
   xpos: 253
   ypos: 1205
   owner: "romans"
-  unit_x: 950
-  unit_y: 550
-  city: "none5"
+  unit_x: 291
+  unit_y: 1371
+  city: "evora"
   borders:
     - name: "north_carthaginiensis"
     - name: "south_carthaginiensis"

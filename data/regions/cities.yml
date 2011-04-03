@@ -1,5 +1,8 @@
 # YAML data for all regions
 
+# Note to designers:
+# SPQR expects to find all of the cities mentioned in the map.yml file defined here.
+
 # Italian cities
 
 - city: "brundisium"
@@ -60,42 +63,42 @@
 
 # Spanish cities
 
-- city: "none1"
+- city: "tarragona"
   population: 40000
   direct_tax: 1
   indirect_tax: 3
   production: 1
   consumption: 1
 
-- city: "none2"
+- city: "cartagena"
   population: 40000
   direct_tax: 1
   indirect_tax: 3
   production: 1
   consumption: 1
  
-- city: "none3"
+- city: "toledo"
   population: 40000
   direct_tax: 1
   indirect_tax: 3
   production: 1
   consumption: 1
 
-- city: "none3"
+- city: "cordova"
   population: 40000
   direct_tax: 1
   indirect_tax: 3
   production: 1
   consumption: 1
 
-- city: "none4"
+- city: "astorga"
   population: 40000
   direct_tax: 1
   indirect_tax: 3
   production: 1
   consumption: 1
 
-- city: "none5"
+- city: "evora"
   population: 40000
   direct_tax: 1
   indirect_tax: 3
