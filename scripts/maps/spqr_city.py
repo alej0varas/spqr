@@ -17,13 +17,16 @@
 class CCity(object):
 	"""Defines a city in SPQR"""
 	def __init__(self, name, population):
-		self.name = name
+		self.name = self.calculateName(name)
 		self.image = "roman_medium"
 		self.population = population
 		self.direct_tax = 1
 		self.indirect_tax = 1
 		self.production = 1
 		self.consumption = 1
+	
+	def calculateName(self, text):
+		return text.replace("_", " ").title()
 	
 	def calculateImage(self, owner):
 		"""Generates the right image to draw"""
