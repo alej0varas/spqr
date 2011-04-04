@@ -34,9 +34,6 @@ def showBattleScreen(attacker, region):
 	# get the defending units (only the first for now)
 	# must be some units, we checked earlier
 	defender = region.units[0]
-	# get the random elements
-	attack_events = getAttackEvents()
-	defend_events = getDefendEvents()
 	# now we have all we need to build the base window
 	window = SWINDOW.CWindow(-1, -1, 300, 200, "Battle Screen", True)
 	window.modal = True
@@ -60,6 +57,23 @@ def showBattleScreen(attacker, region):
 	for widget in [attack_unit_label, defend_unit_label, attack_image,
 					defend_image, btn_attack]:
 		window.addWidget(widget)
+	# get the random elements and add them
+	xpos = 20
+	ypos = 90
+	for event in getAttackEvents():
+		label = SWIDGET.buildLabel(event)
+		label.rect.x = xpos
+		label.rect.y = ypos
+		window.addWidget(label)
+		ypos += 20
+	xpos = 150
+	ypos = 90
+	for event in getDefendEvents():
+		label = SWIDGET.buildLabel(event)
+		label.rect.x = xpos
+		label.rect.y = ypos
+		window.addWidget(label)
+		ypos += 20
 	SGFX.gui.addWindow(window)
 	SGFX.gui.pauseFlashing()
 	# setup dirty rect stuff
