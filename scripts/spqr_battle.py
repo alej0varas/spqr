@@ -30,12 +30,15 @@ attack_bad	=	["Fighting uphill", "Against the wind", "Troops tired"]
 defend_good	=	["Good auspices", "Hard to retreat", "Troops rested"]
 defend_bad	=	["Defense stretched", "Troops tired", "Low morale"]
 
+attack_options	=	["Brutal", "Aggressive", "Neutral", "Cautious"]
+retreat_options =	["Never", "30% loss", "20% loss", "10% loss", "Under attack"]
+
 def showBattleScreen(attacker, region):
 	# get the defending units (only the first for now)
 	# must be some units, we checked earlier
 	defender = region.units[0]
 	# now we have all we need to build the base window
-	window = SWINDOW.CWindow(-1, -1, 300, 200, "Battle Screen", True)
+	window = SWINDOW.CWindow(-1, -1, 400, 300, "Battle Screen", True)
 	window.modal = True
 	# we need widgets for the unit names
 	attack_unit_label = SWIDGET.buildLabel(attacker.name)
@@ -51,7 +54,7 @@ def showBattleScreen(attacker, region):
 	defend_image = SWIDGET.buildImageAlpha(defender.image)
 	defend_image.rect.x = 120
 	defend_image.rect.y = 20
-	btn_attack = SWIDGET.CButton(50, 150, "OK")
+	btn_attack = SWIDGET.CButton(100, 250, "OK")
 	btn_attack.callbacks.mouse_lclk = SEVENTS.killModalWindow
 	btn_attack.active = True
 	for widget in [attack_unit_label, defend_unit_label, attack_image,
@@ -59,21 +62,31 @@ def showBattleScreen(attacker, region):
 		window.addWidget(widget)
 	# get the random elements and add them
 	xpos = 20
-	ypos = 90
+	ypos1 = 120
 	for event in getAttackEvents():
 		label = SWIDGET.buildLabel(event)
 		label.rect.x = xpos
-		label.rect.y = ypos
+		label.rect.y = ypos1
 		window.addWidget(label)
-		ypos += 20
+		ypos1 += 20
 	xpos = 150
-	ypos = 90
+	ypos2 = 120
 	for event in getDefendEvents():
 		label = SWIDGET.buildLabel(event)
 		label.rect.x = xpos
-		label.rect.y = ypos
+		label.rect.y = ypos2
 		window.addWidget(label)
-		ypos += 20
+		ypos2 += 20
+	# how far?
+	if ypos2 > ypos1:
+		ypos1 = ypos2
+	# build in the options
+	opt1 = SWIDGET.COptionMenu(20, ypos1, attack_options)
+	opt2 = SWIDGET.COptionMenu(200, ypos1, retreat_options)
+	opt1.active = True
+	opt2.active = True
+	window.addWidget(opt1)
+	window.addWidget(opt2)
 	SGFX.gui.addWindow(window)
 	SGFX.gui.pauseFlashing()
 	# setup dirty rect stuff

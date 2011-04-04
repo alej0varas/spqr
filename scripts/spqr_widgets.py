@@ -985,7 +985,7 @@ class COptionMenu(CWidget):
 	   list of the options, in text format"""
 	   # TODO: If you move the optmenu, you must manually set the
 	   # drop_rect co-ords as well
-	def __init__(self,x,y,options):
+	def __init__(self, x, y, options):
 		CWidget.__init__(self, None, SPQR.WT_OPTMENU, None, "COptionMenu")
 		# just a simple check - there has to be at least 1 option!
 		if len(options) < 1:
