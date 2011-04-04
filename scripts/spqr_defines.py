@@ -36,8 +36,8 @@ FULLSCREEN			= False
 DEBUG_MODE		=	True
 
 # now place the equivalent of some(!) defines
-SCREEN_WIDTH 		= 800
-SCREEN_HEIGHT 		= 600
+SCREEN_WIDTH 		= 900
+SCREEN_HEIGHT 		= 700
 
 # set this next one to true if you want a rh mouse click to exit
 RMOUSE_END			= False

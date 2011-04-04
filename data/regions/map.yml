@@ -78,6 +78,7 @@
   naval:
     - name: "lucania_et_bruttiun"
     - name: "latium_et_campania"
+    - name: "south_carthaginiensis"
   borders:
     - name: "lucania_et_bruttiun"
 
