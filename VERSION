@@ -101,6 +101,7 @@ Version History.
 0.3.615 Movement graphic effect seems to work fine, this means movement is 80% complete.
 0.3.7	Movement of units and naval units is complete.
 0.3.71	Tidying up all the movement and selection code
+0.3.72	Selection and highlighting finished: Added battle screen
 
 Notable milestones:
 
