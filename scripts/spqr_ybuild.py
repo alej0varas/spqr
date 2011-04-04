@@ -19,6 +19,7 @@ import spqr_gui as SGFX
 import spqr_window as SWINDOW
 import spqr_widgets as SWIDGET
 import spqr_events as SEVENTS
+import spqr_battle as SBATTLE
 import spqr_defines as SPQR
 import spqr_sound as SSFX
 
@@ -227,22 +228,29 @@ def createWidget(wlist):
 			widget.visible = False
 		return widget
 
-def checkCallbacks(wid,clist):
+def checkCallbacks(wid, clist):
 	""" Function that checks the callbacks and add it to the widget """
 	for c in range(len(clist)) :
 		if clist[c].keys()[0] == "lclk" and wid.callbacks.mouse_lclk == SPQR.mouse_lclk_std :
-			wid.callbacks.mouse_lclk = getattr(SEVENTS, clist[c]["lclk"])
+			wid.callbacks.mouse_lclk = getCallback(clist[c]["lclk"])
 		elif clist[c].keys()[0] == "over" and wid.callbacks.mouse_over == SPQR.mouse_over_std :
-			wid.callbacks.mouse_over = getattr(SEVENTS, clist[c]["over"])
+			wid.callbacks.mouse_over = getCallback(clist[c]["over"])
 		elif clist[c].keys()[0] == "rclk" and wid.callbacks.mouse_rclk == SPQR.mouse_rclk_std :
-			wid.callbacks.mouse_rclk = getattr(SEVENTS, clist[c]["rclk"])
+			wid.callbacks.mouse_rclk = getCallback(clist[c]["rclk"])
 		elif clist[c].keys()[0] == "ldown" and wid.callbacks.mouse_ldown == SPQR.mouse_ldown_std :
-			wid.callbacks.mouse_ldown = getattr(SEVENTS, clist[c]["ldown"])
+			wid.callbacks.mouse_ldown = getCallback(clist[c]["ldown"])
 		elif clist[c].keys()[0] == "rdown" and wid.callbacks.mouse_rdown == SPQR.mouse_rdown_std :
-			wid.callbacks.mouse_rdown = getattr(SEVENTS, clist[c]["rdown"])
+			wid.callbacks.mouse_rdown = getCallback(clist[c]["rdown"])
 		elif clist[c].keys()[0] == "dclick" and wid.callbacks.mouse_dclick == SPQR.mouse_dclick_std :
-			wid.callbacks.mouse_dclick = getattr(SEVENTS, clist[c]["dclick"])
+			wid.callbacks.mouse_dclick = getCallback(clist[c]["dclick"])
 	return wid
+
+def getCallback(function_name):
+	for module in [SEVENTS, SBATTLE]:
+		if hasattr(module, function_name):
+			return getattr(module, function_name)
+	# some error, so pass a standard error function
+	return getattr(SEVENTS, invalidFunction)
 
 def getDialog(filename):
 	""" returns a dialog from a file """

@@ -480,6 +480,11 @@ def welcomeScreen(handle, xpos, ypos):
 		SGFX.gui.windows[index].rect)
 	return True
 
+def invalidFunction(handle, xpos, ypos):
+	"""Called if the defined function in a yaml file is not valid"""
+	SGFX.gui.messagebox(SPQR.BUTTON_OK,	"Invalid function in yaml file", "Invalid")
+	return True
+
 # place all debugging events below this line
 # these are only activated if DEBUG_MODE is set to True
 
