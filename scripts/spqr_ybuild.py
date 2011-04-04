@@ -57,7 +57,8 @@ def createWindow(filename):
 		# finally I add the window to the gui
 		index.append(SGFX.gui.addWindow(jlist[j]))
 		# and check if it is modal
-		if var[j].has_key('modal') : SGFX.gui.windows[index[j]].modal = var[j]['modal']
+		if var[j].has_key('modal'):
+			SGFX.gui.windows[index[j]].modal = var[j]['modal']
 		# build the button area if exist
 		if buttondetails != [] :
 			SGFX.gui.windows[index[j]].buildButtonArea(buttondetails, False)
@@ -68,87 +69,130 @@ def createWidget(wlist):
 		passed list of properties """
 	# First we check the key that will always be in our widget's
 	# and defines the widget's purpose
-	if wlist['widget'] == "CText" :
-		if wlist['text']=="None": addtext=""
-		else: addtext=wlist['text']
+	if wlist['widget'] == "CText":
+		if wlist['text'] == "None":
+			addtext = ""
+		else:
+			addtext = wlist['text']
 		# if this is a label make it with a text
-		widget = SWIDGET.CText(eval(wlist['x']),eval(wlist['y']),eval(wlist['w']),eval(wlist['h']),addtext,wlist['righttext'])
-		# Check if there is any widgets callback
-		if wlist.has_key('callbacks'): checkCallbacks(widget,wlist['callbacks'])
-		if wlist['active'] == True : widget.active = True
-		else : widget.active = False
-		if wlist['visible'] == True : widget.visible = True
-		else : widget.visible = False
+		widget = SWIDGET.CText(eval(wlist['x']), eval(wlist['y']), eval(wlist['w']),
+							   eval(wlist['h']), addtext, wlist['righttext'])
+		# check if there are any widgets callback
+		if wlist.has_key('callbacks'):
+			checkCallbacks(widget, wlist['callbacks'])
+		if wlist['active'] == True:
+			widget.active = True
+		else: 
+			widget.active = False
+		if wlist['visible'] == True:
+			widget.visible = True
+		else:
+			widget.visible = False
 		return widget
-	elif wlist['widget'] == "CLabel" :
+	elif wlist['widget'] == "CLabel":
 		# if this is a label make it with a text
 		widget = SWIDGET.buildLabel(wlist['text'])
 		# and add the cords to the rect
 		widget.rect.x = eval(wlist['x'])
 		widget.rect.y = eval(wlist['y'])
 		# Check if there is any widgets callback
-		if wlist.has_key('callbacks'): checkCallbacks(widget,wlist['callbacks'])
-		if wlist['active'] == True : widget.active = True
-		else : widget.active = False
-		if wlist['visible'] == True : widget.visible = True
-		else : widget.visible = False
+		if wlist.has_key('callbacks'):
+			checkCallbacks(widget,wlist['callbacks'])
+		if wlist['active'] == True:
+			widget.active = True
+		else:
+			widget.active = False
+		if wlist['visible'] == True:
+			widget.visible = True
+		else:
+			widget.visible = False
 		return widget
-	elif wlist['widget'] == "CCheckBox" :
+	elif wlist['widget'] == "CCheckBox":
 		widget = SWIDGET.CCheckBox(eval(wlist['x']) , eval(wlist['y']) , eval(wlist['initial']))
-		if wlist.has_key('after') : widget.addAfterClick(getattr(SEVENTS, wlist['after']))
-		if wlist['active'] == True : widget.active = True
-		else : widget.active = False
-		if wlist['visible'] == True : widget.visible = True
-		else : widget.visible = False
+		if wlist.has_key('after'):
+			widget.addAfterClick(getattr(SEVENTS, wlist['after']))
+		if wlist['active'] == True:
+			widget.active = True
+		else:
+			widget.active = False
+		if wlist['visible'] == True:
+			widget.visible = True
+		else:
+			widget.visible = False
 		return widget
-	elif wlist['widget'] == "COptionMenu" :
+	elif wlist['widget'] == "COptionMenu":
 		widget = SWIDGET.COptionMenu(eval(wlist['x']), eval(wlist['y']) , wlist['options'])
 		widget.describe = wlist['describe']
-		if wlist['active'] == True : widget.active = True
-		else : widget.active = False
-		if wlist['visible'] == True : widget.visible = True
-		else : widget.visible = False
+		if wlist['active'] == True:
+			widget.active = True
+		else:
+			widget.active = False
+		if wlist['visible'] == True:
+			widget.visible = True
+		else:
+			widget.visible = False
 		return widget
 	elif wlist['widget'] == "CSeperator" :
 		widget = SWIDGET.CSeperator(eval(wlist['x']) , eval(wlist['y']) , eval(wlist['w']))
-		if wlist['active'] == True : widget.active = True
-		else : widget.active = False
-		if wlist['visible'] == True : widget.visible = True
-		else : widget.visible = False
+		if wlist['active'] == True:
+			widget.active = True
+		else:
+			widget.active = False
+		if wlist['visible'] == True:
+			widget.visible = True
+		else:
+			widget.visible = False
 		return widget
 	elif wlist['widget'] == "CSlider" :
-		widget = SWIDGET.CSlider(eval(wlist['x']) , eval(wlist['y']), eval(wlist['w']), 
-		  eval(wlist['start']) , eval(wlist['stop']) , eval(wlist['initial']))
+		widget = SWIDGET.CSlider(eval(wlist['x']), eval(wlist['y']), eval(wlist['w']), 
+		  						 eval(wlist['start']), eval(wlist['stop']), eval(wlist['initial']))
 		widget.setUpdateFunction(getattr(SEVENTS, wlist['update']))
-		if wlist['active'] == True : widget.active = True
-		else : widget.active = False
-		if wlist['visible'] == True : widget.visible = True
-		else : widget.visible = False
+		if wlist['active'] == True:
+			widget.active = True
+		else:
+			widget.active = False
+		if wlist['visible'] == True:
+			widget.visible = True
+		else:
+			widget.visible = False
 		return widget
-	elif wlist['widget'] == "CButton" :
+	elif wlist['widget'] == "CButton":
 		# if it is a button we create it and then we must put the callbacks in
-		widget = SWIDGET.CButton(eval(wlist['x']) , eval(wlist['y']) , wlist['text'])
+		widget = SWIDGET.CButton(eval(wlist['x']), eval(wlist['y']), wlist['text'])
 		# for every callback we check the given function from the global list
 		checkCallbacks(widget,wlist['callbacks'])
-		if wlist['active'] == True : widget.active = True
-		else : widget.active = False
-		if wlist['visible'] == True : widget.visible = True
-		else : widget.visible = False
+		if wlist['active'] == True:
+			widget.active = True
+		else:
+			widget.active = False
+		if wlist['visible'] == True:
+			widget.visible = True
+		else:
+			widget.visible = False
 		return widget
-	elif wlist['widget'] == "CScrollArea" :
-		image=SGFX.gui.image(wlist['image'])
-		widget = SWIDGET.CScrollArea(eval(wlist['x']) , eval(wlist['y']) , eval(wlist['w']) , eval(wlist['h']) , image)
-		if wlist['active'] == True : widget.active = True
-		else : widget.active = False
-		if wlist['visible'] == True : widget.visible = True
-		else : widget.visible = False
+	elif wlist['widget'] == "CScrollArea":
+		image = SGFX.gui.image(wlist['image'])
+		widget = SWIDGET.CScrollArea(eval(wlist['x']), eval(wlist['y']), eval(wlist['w']),
+									 eval(wlist['h']) , image)
+		if wlist['active'] == True:
+			widget.active = True
+		else:
+			widget.active = False
+		if wlist['visible'] == True:
+			widget.visible = True
+		else:
+			widget.visible = False
 		return widget
 	elif wlist['widget'] == "CButtonDetails" :
 		widget = SWINDOW.CButtonDetails(wlist['text'], wlist['key'], getattr(SEVENTS, wlist["callback"]))
-		if wlist['active'] == True : widget.active = True
-		else : widget.active = False
-		if wlist['visible'] == True : widget.visible = True
-		else : widget.visible = False
+		if wlist['active'] == True:
+			widget.active = True
+		else:
+			widget.active = False
+		if wlist['visible'] == True:
+			widget.visible = True
+		else:
+			widget.visible = False
 		return widget
 	elif wlist['widget'] == "CImage" :
 		if wlist['alpha'] == 1:
@@ -157,21 +201,30 @@ def createWidget(wlist):
 			widget = SWIDGET.buildImage(wlist['image'])
 		widget.rect.x = eval(wlist['x'])
 		widget.rect.y = eval(wlist['y'])
-		if wlist.has_key('callbacks'): checkCallbacks(widget,wlist['callbacks'])
-		if wlist['active'] == True : widget.active = True
-		else : widget.active = False
-		if wlist['visible'] == True : widget.visible = True
-		else : widget.visible = False
+		if wlist.has_key('callbacks'):
+			checkCallbacks(widget,wlist['callbacks'])
+		if wlist['active'] == True:
+			widget.active = True
+		else:
+			widget.active = False
+		if wlist['visible'] == True:
+			widget.visible = True
+		else:
+			widget.visible = False
 		return widget
 	elif wlist['widget'] == "CBlankButton" :
 		widget = SWIDGET.CButton(eval(wlist['x']), eval(wlist['y']), "*BLANK*")
 		widget.rect.width = eval(wlist['w'])
 		widget.rect.height = eval(wlist['h'])
-		checkCallbacks(widget,wlist['callbacks'])
-		if wlist['active'] == True : widget.active = True
-		else : widget.active = False
-		if wlist['visible'] == True : widget.visible = True
-		else : widget.visible = False
+		checkCallbacks(widget, wlist['callbacks'])
+		if wlist['active'] == True:
+			widget.active = True
+		else:
+			widget.active = False
+		if wlist['visible'] == True:
+			widget.visible = True
+		else:
+			widget.visible = False
 		return widget
 
 def checkCallbacks(wid,clist):
@@ -194,5 +247,4 @@ def checkCallbacks(wid,clist):
 def getDialog(filename):
 	""" returns a dialog from a file """
 	return yaml.load(open(filename))
-	 
 

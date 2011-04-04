@@ -17,6 +17,7 @@
 import pygame, sys, yaml
 import spqr_defines as SPQR
 import spqr_gui as SGFX
+import spqr_battle as SBATTLE
 import maps.spqr_map as SMAP
 import player.spqr_player as SPLAYER
 import units.spqr_unit as SUNITS
@@ -40,12 +41,11 @@ class CInfo(object):
 	def doBattle(self, unit, region):
 		"""Do whatever you need to do when a battle happens
 		   Return False if the unit can't move"""
-		SGFX.gui.messagebox(SPQR.BUTTON_OK, "A battle (which is not yet coded) :-(", "Fight")
+		SBATTLE.showBattleScreen(unit, region)
 		return False
 		
 	def changeRegionOwner(self, unit, region):
-		"""Do whatever you need to do when a battle happens
-		   Return False if the unit can't move"""
+		"""Used when a unit captures a region. Returns False if it didn't happen"""
 		SGFX.gui.messagebox(SPQR.BUTTON_OK, "You have gained a new region (but not yet!)", "Conquered")
 		return False
 

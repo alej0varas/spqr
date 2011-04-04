@@ -1,0 +1,44 @@
+# Welcome screen Window
+- title: "Battle"
+  x: "-1"
+  y: "-1"
+  w: "300"
+  h: "200"
+  draw: Yes
+  modal: Yes
+  active: Yes
+  items:
+    - widget: CImage
+      x: "20"
+      y: "20"
+      image: "elephant"
+      alpha: 0
+      active: No
+      visible: Yes
+
+    - widget: CImage
+      x: "120"
+      y: "20"
+      image: "elephant"
+      alpha: 0
+      active: No
+      visible: Yes
+
+    - widget: CButton
+      text: Attack
+      x: "120"
+      y: "150"
+      active: Yes
+      visible: Yes
+      callbacks:
+        - lclk: doBattle
+
+    - widget: CButton
+      text: Retreat
+      x: "20"
+      y: "150"
+      active: Yes
+      visible: Yes
+      callbacks:
+        - lclk: retreatBattle
+

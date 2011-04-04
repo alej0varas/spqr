@@ -137,7 +137,6 @@ def setVolume(handle, xpos, ypos):
 	volume = handle.getSliderValue()
 	# set new volume
 	SSFX.sound.setVolume(volume)
-	# so simple!
 	return True
 
 # define the callbacks
