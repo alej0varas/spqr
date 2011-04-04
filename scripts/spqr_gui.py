@@ -198,22 +198,23 @@ class CGFXEngine(object):
 
 	def renderSingleRegion(self, region):
 		"""Update the regions cities and unit gfx to the back buffer"""
-		# first we erase the old unit + city gfx
-		i = SDATA.getRegion(region)
-		pos = SDATA.getCityPosition(i)
-		self.image("buffer").blit(self.image("map"), pos,
-								  pygame.Rect(pos[0], pos[1], SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT))
-		self.image("buffer").blit(self.image("map"), i.text_rect, i.text_rect)
+		# first we erase the old unit + city gfx, if there was one
+		region = SDATA.getRegion(region)
+		if region.text_rect != None:
+			pos = SDATA.getCityPosition(region)
+			self.image("buffer").blit(self.image("map"), pos,
+									  pygame.Rect(pos[0], pos[1], SPQR.UNIT_WIDTH, SPQR.UNIT_HEIGHT))
+			self.image("buffer").blit(self.image("map"), region.text_rect, region.text_rect)
 		# then we repair the border
-		area = pygame.Surface(self.image(i.image).get_size()).convert()
-		area.fill(i.colour)
-		mask = self.image(i.image).copy()
+		area = pygame.Surface(self.image(region.image).get_size()).convert()
+		area.fill(region.colour)
+		mask = self.image(region.image).copy()
 		mask.blit(area, (0, 0), None, pygame.BLEND_ADD)
-		self.image("buffer").blit(mask, (i.rect.x, i.rect.y))
+		self.image("buffer").blit(mask, (region.rect.x, region.rect.y))
 		# either a city is there or not: if it is, then the text has already
 		# been blitted and we just need to blit the city, otherwise do nothing
-		if i.city != None:
-			self.renderSingleCity(i)
+		if region.city != None:
+			self.renderSingleCity(region)
 
 	def renderCities(self):
 		"""Draw all cities, and their names, on the board"""
