@@ -459,7 +459,6 @@ def menuPreferences(handle, xpos, ypos):
 	# setup dirty rect stuff
 	SGFX.gui.addDirtyRect(SGFX.gui.windows[index].drawWindow(),
 		SGFX.gui.windows[index].rect)
-	# and thats us done
 	return True
 
 def welcomeScreen(handle, xpos, ypos):

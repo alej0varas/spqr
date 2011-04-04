@@ -719,6 +719,9 @@ class CGFXEngine(object):
 			old_region = unit.region
 			# returns region the unit moved to after all the dust has settled
 			region = SDATA.moveUnit(unit.name, region)
+			# if a proble, or no unit move, don't do anything
+			if region == False:
+				return False
 			cancelMoves()
 			self.unitFlashAndOff()
 			self.renderSingleRegion(old_region)

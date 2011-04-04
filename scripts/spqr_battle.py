@@ -15,6 +15,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 import spqr_defines as SPQR
+import spqr_gui as SGFX
 import spqr_events as SEVENTS
 import spqr_ybuild as SYAML
 
@@ -22,6 +23,12 @@ import spqr_ybuild as SYAML
 
 def showBattleScreen(attacker, region):
 	index = SYAML.createWindow("./data/layouts/battle.yml")[0]
+	# turn off unit animations
+	SGFX.gui.pauseFlashing()
+	# setup dirty rect stuff
+	SGFX.gui.addDirtyRect(SGFX.gui.windows[index].drawWindow(),
+		SGFX.gui.windows[index].rect)
+	return True
 
 def doBattle(handle, xpos, ypos):
 	print "Do the battle!"
