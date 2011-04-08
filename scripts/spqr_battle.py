@@ -80,9 +80,19 @@ def showBattleScreen(attacker, region):
 	# how far?
 	if ypos2 > ypos1:
 		ypos1 = ypos2
+	ypos1 += 5
 	# build in the options
+	attack_text = SWIDGET.buildLabel("Attack style:")
+	attack_text.rect.x = 20
+	attack_text.rect.y = ypos1
+	defend_text = SWIDGET.buildLabel("Retreat:")
+	defend_text.rect.x = 220
+	defend_text.rect.y = ypos1
+	window.addWidget(attack_text)
+	window.addWidget(defend_text)
+	ypos1 += 20
 	opt1 = SWIDGET.COptionMenu(20, ypos1, attack_options)
-	opt2 = SWIDGET.COptionMenu(200, ypos1, retreat_options)
+	opt2 = SWIDGET.COptionMenu(220, ypos1, retreat_options)
 	opt1.active = True
 	opt2.active = True
 	window.addWidget(opt1)
