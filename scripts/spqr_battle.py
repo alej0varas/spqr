@@ -41,10 +41,10 @@ def showBattleScreen(attacker, region):
 	window = SWINDOW.CWindow(-1, -1, 390, 300, "Battle Screen", True)
 	window.modal = True
 	# we need widgets for the unit names
-	attack_unit_label = SWIDGET.buildLabel(attacker.name)
+	attack_unit_label = SWIDGET.buildLabel(attacker.name, SPQR.FONT_VERA_BOLD)
 	attack_unit_label.rect.x = int((180 - attack_unit_label.rect.width) / 2) + 10
 	attack_unit_label.rect.y = 65
-	defend_unit_label = SWIDGET.buildLabel(defender.name)
+	defend_unit_label = SWIDGET.buildLabel(defender.name, SPQR.FONT_VERA_BOLD)
 	defend_unit_label.rect.x = int((180 - defend_unit_label.rect.width) / 2) + 200
 	defend_unit_label.rect.y = 65
 	# pictures of the units

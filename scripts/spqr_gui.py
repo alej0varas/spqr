@@ -91,7 +91,7 @@ class CGFXEngine(object):
 		self.fonts.append(pygame.font.Font("./gfx/Vera.ttf", SPQR.FONT_STD))
 		self.fonts.append(pygame.font.Font("./gfx/Vera.ttf", SPQR.FONT_SMALL))
 		self.fonts.append(pygame.font.Font("./gfx/Vera.ttf", SPQR.FONT_LARGE))
-		self.fonts.append(pygame.font.Font("./gfx/Vera-Bold.ttf", SPQR.FONT_STD)
+		self.fonts.append(pygame.font.Font("./gfx/Vera-Bold.ttf", SPQR.FONT_STD))
 
 		# update buffer images
 		self.updateMapData()
