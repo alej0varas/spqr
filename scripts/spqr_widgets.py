@@ -69,13 +69,13 @@ class CLabel(CWidget):
 		self.justification = SPQR.LEFT_JUSTIFY
 		self.text = text	
 		# render the image text
-		if self.buildLabel() == False:
+		if self.buildLabel(bold) == False:
 			# well, something went wrong, lets create an empty gfx
 			image=pygame.Surface((self.rect. w,self.rect.h))
 			image.fill(self.background_colour)
 	
 	# code for the following routine taken from the Pygame code repository.
-	# written by David Clark, amended by Chris Handy
+	# originally written by David Clark, amended by Chris Handy
 	def buildLabel(self):
 		"""Called to redraw the text on the label
 		   Returns false (and displays message on console) if
@@ -1280,7 +1280,7 @@ def buildLabel(text, font = SPQR.FONT_VERA):
 	# TODO: annoyingly enough, despite asking what size the font is, if
 	# I render to an image of that size, it doesn't work. So we have to add 1
 	# any answers to this one, or have I missed something?
-	return(CLabel(0, 0, w, h+1, text, font))
+	return(CLabel(0, 0, w, h+1, text, font, bold))
 
 def buildImage(image):
 	"""Helper function to build a image given just the image

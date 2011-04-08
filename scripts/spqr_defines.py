@@ -68,6 +68,7 @@ GRADBAR_WIDTH		= 128
 FONT_VERA			= 0
 FONT_VERA_SM		= 1
 FONT_VERA_LG		= 2
+FONT_VERA_BOLD		= 3
 # and their sizes
 FONT_SMALL			= 12
 FONT_STD			= 14

@@ -38,21 +38,21 @@ def showBattleScreen(attacker, region):
 	# must be some units, we checked earlier
 	defender = region.units[0]
 	# now we have all we need to build the base window
-	window = SWINDOW.CWindow(-1, -1, 400, 300, "Battle Screen", True)
+	window = SWINDOW.CWindow(-1, -1, 390, 300, "Battle Screen", True)
 	window.modal = True
 	# we need widgets for the unit names
 	attack_unit_label = SWIDGET.buildLabel(attacker.name)
-	attack_unit_label.rect.x = 20
+	attack_unit_label.rect.x = int((180 - attack_unit_label.rect.width) / 2) + 10
 	attack_unit_label.rect.y = 65
 	defend_unit_label = SWIDGET.buildLabel(defender.name)
-	defend_unit_label.rect.x = 120
+	defend_unit_label.rect.x = int((180 - defend_unit_label.rect.width) / 2) + 200
 	defend_unit_label.rect.y = 65
 	# pictures of the units
 	attack_image = SWIDGET.buildImageAlpha(attacker.image)
-	attack_image.rect.x = 20
+	attack_image.rect.x = int((180 - SPQR.UNIT_WIDTH) / 2) + 10
 	attack_image.rect.y = 20
 	defend_image = SWIDGET.buildImageAlpha(defender.image)
-	defend_image.rect.x = 120
+	defend_image.rect.x = int((180 - SPQR.UNIT_WIDTH) / 2) + 200
 	defend_image.rect.y = 20
 	btn_attack = SWIDGET.CButton(100, 250, "OK")
 	btn_attack.callbacks.mouse_lclk = SEVENTS.killModalWindow
@@ -62,15 +62,15 @@ def showBattleScreen(attacker, region):
 		window.addWidget(widget)
 	# get the random elements and add them
 	xpos = 20
-	ypos1 = 120
+	ypos1 = 90
 	for event in getAttackEvents():
 		label = SWIDGET.buildLabel(event)
 		label.rect.x = xpos
 		label.rect.y = ypos1
 		window.addWidget(label)
 		ypos1 += 20
-	xpos = 150
-	ypos2 = 120
+	xpos = 220
+	ypos2 = 90
 	for event in getDefendEvents():
 		label = SWIDGET.buildLabel(event)
 		label.rect.x = xpos
