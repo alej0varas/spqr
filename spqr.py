@@ -36,7 +36,7 @@ class CSPQR(object):
 		self.sortOptions()
 		SGFX.gui.mainInit(SPQR.SCREEN_WIDTH, SPQR.SCREEN_HEIGHT, self.fullscreen)
 		# actually go any furthur?
-		if self.init_only == True:
+		if self.init_only:
 			# no, so exit here
 			print "SPQR: init() worked fine."
 			sys.exit(True)
@@ -119,7 +119,7 @@ class CSPQR(object):
 		menu.append(SMENU.CMenuParent("File"))
 		menu.append(SMENU.CMenuParent("Empire"))
 		menu.append(SMENU.CMenuParent("Help"))
-		if(SPQR.DEBUG_MODE == True):
+		if SPQR.DEBUG_MODE:
 			menu.append(SMENU.CMenuParent("Debug"))
 		# then add the sub menus below these
 		menu[0].addChild(SMENU.CMenuChild("New Game", "new", "Ctrl+N", SEVENT.menuNew))
@@ -139,7 +139,7 @@ class CSPQR(object):
 		menu[2].addChild(SMENU.CMenuChild("Help", "help", "F1", SEVENT.menuHelpHelp))
 	
 		# debug menu is always last - it's easy to remove then
-		if SPQR.DEBUG_MODE == True:
+		if SPQR.DEBUG_MODE:
 			menu[3].addChild(SMENU.CMenuChild("Show example city", "debug", "", SEVENT.showCity))
 			menu[3].addChild(SMENU.CMenuChild("Show example unit", "debug", "", SEVENT.notYetCoded))
 			menu[3].addChild(SMENU.CMenuChild("sep", "debug", "", SEVENT.notYetCoded))
@@ -226,7 +226,7 @@ class CSPQR(object):
 		# finally, the last thing we do is start the animation timer
 		pygame.time.set_timer(pygame.USEREVENT, SPQR.ANIM_TIME)
 		# display the welcome screen if needed
-		if self.intro == True:
+		if self.intro:
 			SEVENT.welcomeScreen(0, 0, 0)
 
 	def addKeys(self):
@@ -240,7 +240,7 @@ class CSPQR(object):
 		SGFX.gui.keyboard.addKey(K_e, SEVENT.keyMenuEmpire, KMOD_LALT)
 		SGFX.gui.keyboard.addKey(K_h, SEVENT.keyMenuHelp, KMOD_LALT)
 		# debug menu added?
-		if SPQR.DEBUG_MODE == True:
+		if SPQR.DEBUG_MODE:
 			SGFX.gui.keyboard.addKey(K_d, SEVENT.keyMenuDebug, KMOD_LALT)
 		SGFX.gui.keyboard.addKey(K_ESCAPE, SEVENT.keyMenuEscape)
 		# allow map scrolling with curser keys
