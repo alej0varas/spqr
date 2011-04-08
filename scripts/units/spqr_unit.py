@@ -33,11 +33,9 @@ class CUnit(object):
 		self.turn_done = False
 		self.naval = naval
 		
-#	def __str__(self):
-#		"""Return a string of the unit details"""
-#		text = "  Name: " + self.name
-#		text += "\nRegion: " + self.region + "\n"
-#		return text
+	def __str__(self):
+		"""Return a string of the unit details"""
+		return self.name.replace("_", " ")
 
 # sort routines
 def sortImage(a, b):
