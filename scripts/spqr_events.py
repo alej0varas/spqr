@@ -123,7 +123,7 @@ def notYetCoded(handle, xpos, ypos):
 # now follow the events for the preferences screen
 def musicCheckbox(handle, xpos, ypos):
 	"""Starts / stops music"""
-	if handle.status == True:
+	if handle.status:
 		# start music
 		SSFX.sound.startMusic()
 	else:
@@ -498,7 +498,7 @@ def displaySliderContents(handle, xpos, ypos):
 	   Sometimes useful for checking/debugging. You can add
 	   it to any slider function callback"""
 	# only if debugging is turned on, of course...
-	if SPQR.DEBUG_MODE == True:
+	if SPQR.DEBUG_MODE:
 		print "Slider value:", handle.getSliderValue()
 	return True
 

@@ -27,8 +27,8 @@ AUTHOR				= "Chris Handy"
 EMAIL				= "maximinus@gmail.com"
 WEBSITE				= "http://sourceforge.net/projects/spqr/"
 STARTED				= "1st Jan 2005"
-LAST_UPDATE			= "4th Apr 2011"
-CODELINES			= "5622"
+LAST_UPDATE			= "8th Apr 2011"
+CODELINES			= "5687"
 FULLSCREEN			= False
 
 # before we go any further, this one is a must ;-)
@@ -69,6 +69,7 @@ FONT_VERA			= 0
 FONT_VERA_SM		= 1
 FONT_VERA_LG		= 2
 FONT_VERA_BOLD		= 3
+FONT_VERA_ITALIC	= 4
 # and their sizes
 FONT_SMALL			= 12
 FONT_STD			= 14

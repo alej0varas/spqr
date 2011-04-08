@@ -50,13 +50,13 @@ class CGFXEngine(object):
 		pygame.init()
 		# ok, now init the basic screen
 		# done now so image.convert works when we load the images
-		if fullscreen == True:
+		if fullscreen:
 			self.screen = pygame.display.set_mode((width, height),
 				HWSURFACE|FULLSCREEN|DOUBLEBUF)
 		else:
 			self.screen = pygame.display.set_mode((width, height), HWSURFACE|DOUBLEBUF)
 		self.images = {}
-		if load_screen == True:
+		if load_screen:
 			self.displayLoadingScreen(width, height)
 		# next up is to load in some images into the gfx array
 		self.images["map"] = pygame.image.load("./gfx/map/map.jpg").convert()
@@ -92,6 +92,7 @@ class CGFXEngine(object):
 		self.fonts.append(pygame.font.Font("./gfx/Vera.ttf", SPQR.FONT_SMALL))
 		self.fonts.append(pygame.font.Font("./gfx/Vera.ttf", SPQR.FONT_LARGE))
 		self.fonts.append(pygame.font.Font("./gfx/Vera-Bold.ttf", SPQR.FONT_STD))
+		self.fonts.append(pygame.font.Font("./gfx/Vera-Italic.ttf", SPQR.FONT_STD))
 
 		# update buffer images
 		self.updateMapData()
@@ -326,10 +327,10 @@ class CGFXEngine(object):
 		# we have to do the window testing in reverse to the way we blit, as the first
 		# object blitted is on the 'bottom' of the screen, and we have to test from the top
 		for window in self.windows:
-			if window.display == True:
+			if window.display:
 				self.screen.blit(window.image, (window.rect.x, window.rect.y))
 			for item in window.items:
-				if item.visible == True:
+				if item.visible:
 					# is this the mini-map?
 					if item.describe  ==  "mini-map":
 						# just update it
@@ -350,7 +351,7 @@ class CGFXEngine(object):
 		# TODO: a better way of finding the window
 		offset = self.windows[index].rect
 		for i in self.windows[index].items:
-			if i.visible == True:
+			if i.visible:
 				self.screen.blit(i.image, (i.rect.x+offset.x, i.rect.y+offset.y))
 
 	# this one merely updates the map, rather than blit all those
@@ -359,7 +360,7 @@ class CGFXEngine(object):
 		"""Updates (i.e. redraws) map to main screen"""
 		self.screen.blit(self.image("buffer"), self.map_rect, self.map_screen)
 		self.updateOverlayWindow()
-		if flip == True:
+		if flip:
 			pygame.display.flip()
 		# doing this *always* redraws the units as well, so make sure that
 		# the next flash unit action will be to erase the unit
@@ -431,7 +432,7 @@ class CGFXEngine(object):
 		"""Handle a keypress"""
 		# does it match anything?
 		foo, bar, handle = self.keyboard.getKeyFunction(event.key, event.mod)
-		if foo == True:
+		if foo:
 			# set win_index to TOP of current window list -2 to enable
 			# killing of current window from keyboard function
 			self.win_index = len(self.windows)-2
@@ -457,7 +458,7 @@ class CGFXEngine(object):
 		if event.type == KEYDOWN:
 			return self.handleKeypress(event)
 		# now handle animation requests from the timer
-		if event.type == pygame.USEREVENT and self.timer == True:
+		if event.type == pygame.USEREVENT and self.timer:
 			self.flashUnit()
 			return False
 		action = SPQR.MOUSE_NONE
@@ -483,13 +484,13 @@ class CGFXEngine(object):
 			SEVENT.quitSpqr(None, -1, -1)
 			return True
 		# cancel current menu if we got mouse button down
-		if event.type == MOUSEBUTTONDOWN and self.menu_active == True:
+		if event.type == MOUSEBUTTONDOWN and self.menu_active:
 			self.menu_active = False
 			return False
 		if event.type != NOEVENT:
 			# if it's a rmb down, then possibly exit
 			if event.type == MOUSEBUTTONDOWN and event.button == 3:
-				if SPQR.RMOUSE_END == True:
+				if SPQR.RMOUSE_END:
 					sys.exit(False)
 				else:
 					x, y = pygame.mouse.get_pos()
@@ -511,7 +512,7 @@ class CGFXEngine(object):
 				if self.windows[len(self.windows) - 1].modal == False:
 					# must be over main map for panning to work
 					x, y = pygame.mouse.get_pos()
-					if self.map_area.collidepoint(x, y) == True:
+					if self.map_area.collidepoint(x, y):
 						self.panMap()
 			else:
 				# have we moved?
@@ -530,15 +531,15 @@ class CGFXEngine(object):
 		   if any need to be highlighted. Returns True if anything
 		   on the screen needed to be updated"""
 		for bar in self.windows[-1].items:
-			if bar.active == True and bar.wtype == SPQR.WT_BUTTON:
+			if bar.active and bar.wtype == SPQR.WT_BUTTON:
 				xoff = x-self.windows[-1].rect.x
 				yoff = y-self.windows[-1].rect.y
-				if bar.rect.collidepoint(xoff, yoff) == True:
+				if bar.rect.collidepoint(xoff, yoff):
 					# don't forget to test here if it's actually visible or not... ;-)
 					if bar.visible == False:
 						return False
 					# already highlighted?
-					if bar.highlight == True:
+					if bar.highlight:
 						return False
 					else:
 						# update a dirty rect
@@ -548,7 +549,7 @@ class CGFXEngine(object):
 						self.screen.blit(bar.pressed, dest)
 						pygame.display.update(dest)
 						return True
-				if bar.highlight == True and bar.wtype == SPQR.WT_BUTTON:
+				if bar.highlight and bar.wtype == SPQR.WT_BUTTON:
 					# an old highlight needs rubbing out
 					bar.highlight = False
 					dest = pygame.Rect(bar.rect.x+self.windows[-1].rect.x,
@@ -571,18 +572,18 @@ class CGFXEngine(object):
 			# define a new variable that we can use later to kill the current window off
 			foo = self.windows[self.win_index]			
 			self.win_index = self.win_index-1
-			if quit == True:
+			if quit:
 				return False
 			# if this is a modal window, then stop after processing:
 			quit = foo.modal
 			# is the mouse pointer inside the window, or is there any window at all?
-			if foo.rect.collidepoint(x, y) == True or foo.display == False:
+			if foo.rect.collidepoint(x, y) or foo.display == False:
 				# check all of the points inside the window
 				for bar in foo.items:
-					if bar.active == True:
+					if bar.active:
 						x_off = x - foo.rect.x
 						y_off = y - foo.rect.y
-						if bar.rect.collidepoint(x_off, y_off) == True:
+						if bar.rect.collidepoint(x_off, y_off):
 							# get offset into widget
 							x_widget = x_off-bar.rect.x
 							y_widget = y_off-bar.rect.y
@@ -669,7 +670,7 @@ class CGFXEngine(object):
 		else:
 			# a click on a non-important map area
 			update = False
-			if self.info_widget.visible == True:
+			if self.info_widget.visible:
 				self.info_widget.visible = False
 				update = True
 			if self.region_highlight != None:
@@ -677,7 +678,7 @@ class CGFXEngine(object):
 				# must also blit the units of the highlighted region
 				self.renderSingleUnit(self.current_highlight_region)
 				update = True
-			if update == True:
+			if update:
 				self.updateGUI()
 		return True
 
@@ -749,7 +750,7 @@ class CGFXEngine(object):
 	def highlightMoves(self, unit):
 		"""Redraw buffer with highlighted areas and animate the given unit"""
 		# is it navy or army?
-		if unit.naval == True:
+		if unit.naval:
 			moves = SDATA.getNavalMoves(unit.region)
 		else:
 			# get possible 1 move locations
@@ -786,7 +787,7 @@ class CGFXEngine(object):
 		self.highlightRegion(unit.region)
 		self.renderImageUnits(unit.region)
 		self.renderRegionInfoBox(unit.region)
-		if centre_map == True:
+		if centre_map:
 			self.centreMap(x, y)
 		# only highlight if we have some moves
 		if unit.moves_left > 0:
@@ -813,7 +814,7 @@ class CGFXEngine(object):
 		"""Allows user to pan map with middle click"""
 		# before doing anything else, turn off unit flashing
 		animate_after_pan = False
-		if self.timer == True:
+		if self.timer:
 			self.pauseFlashing()
 			animate_after_pan = True
 		xpos, ypos = pygame.mouse.get_rel()
@@ -824,7 +825,7 @@ class CGFXEngine(object):
 			if b != 1:
 				# mouse has been de-pressed
 				# turn unit animation back on - if needed
-				if animate_after_pan == True:
+				if animate_after_pan:
 					self.unitFlashOn()
 				return			
 			if event.type == MOUSEMOTION:
@@ -969,7 +970,7 @@ class CGFXEngine(object):
 			if dest.y == SPQR.WINSZ_TOP - 1:
 				area.y = SPQR.UNIT_HEIGHT - dest.h
 			# now blit the right rectangle:
-			if self.flash_on == True:
+			if self.flash_on:
 				self.screen.blit(self.flash_erase, dest, area)
 				# be prepared for next time...
 				self.flash_on = False
@@ -982,7 +983,7 @@ class CGFXEngine(object):
 			pygame.display.update(dest)
 			return True
 		# the rectangles didn't overlap, but get ready for next round:
-		if self.flash_on == True:
+		if self.flash_on:
 			self.flash_on = False
 		else:
 			self.flash_on = True
@@ -1040,7 +1041,7 @@ class CGFXEngine(object):
 		"""Call to turn unit flashing back on. Returns False if this
 		   didn't happen for some reason"""
 		# already on?
-		if self.timer == True:
+		if self.timer:
 			return True
 		# make sure first call is show the erase frame
 		self.flash_on = True
