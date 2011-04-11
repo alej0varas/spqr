@@ -1095,8 +1095,7 @@ class CGFXEngine(object):
 			ypos = 4
 		info.blit(self.image(icon_name), (xpos, ypos))
 		# render the region name, as well
-		region = region.replace("_", " ").title()
-		text = self.fonts[SPQR.FONT_VERA_SM].render(region, True, SPQR.COL_BLACK)
+		text = self.fonts[SPQR.FONT_VERA_SM].render(str(region), True, SPQR.COL_BLACK)
 		info.blit(text, (int((info.get_width() - text.get_width()) / 2),
 						(info.get_height() - (text.get_height() + 2))))
 		self.info_widget.image = info

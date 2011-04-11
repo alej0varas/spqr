@@ -44,9 +44,10 @@ class CInfo(object):
 		SBATTLE.showBattleScreen(getUnit(unit), getRegion(region))
 		return False
 		
-	def changeRegionOwner(self, unit, region):
+	def changeRegionOwner(self, region, new_owner):
 		"""Used when a unit captures a region. Returns False if it didn't happen"""
-		SGFX.gui.messagebox(SPQR.BUTTON_OK, "You have gained a new region (but not yet!)", "Conquered")
+		region = data.map.regions[region]
+		SGFX.gui.messagebox(SPQR.BUTTON_OK, "You have conquered " + str(region), "Conquered")
 		return False
 
 	def initNewTurn(self):
@@ -186,7 +187,7 @@ def checkBattle(unit, region):
 			move = data.doBattle(unit, region)
 		else:
 			# set new owner this region
-			move = data.changeRegionOwner(unit, region)
+			move = data.changeRegionOwner(region, getUnitRegion(unit).owner)
 		return move
 
 def getUnit(name):

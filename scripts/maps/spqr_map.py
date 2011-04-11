@@ -83,6 +83,7 @@ class CMap(object):
 
 class CRegion(object):
 	def __init__(self, image, x, y, owner, colour, city_pos, city):
+		# image is a str
 		self.image = image
 		self.naval_regions = []
 		self.rect = pygame.Rect(x, y, 0, 0)
@@ -94,4 +95,7 @@ class CRegion(object):
 		# sometimes the area that the city text appears in is outside the area of the region
 		# we need to save this area to make re-drawing the region not need a whole map redraw
 		self.text_rect = None
+
+	def __str__(self):
+		return self.image.replace("_", " ").title()
 
