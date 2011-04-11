@@ -186,7 +186,7 @@ def checkBattle(unit, region):
 			move = data.doBattle(unit, region)
 		else:
 			# set new owner this region
-			move = data.changeRegionOwner(ureg, region)
+			move = data.changeRegionOwner(unit, region)
 		return move
 
 def getUnit(name):
