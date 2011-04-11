@@ -685,7 +685,7 @@ class CGFXEngine(object):
 	def highlightRegion(self, name):
 		"""Highlight the region in the owners colours"""
 		if self.region_highlight != None:
-			self.region_highlight.update(self.image("buffer"))
+			#self.region_highlight.update(self.image("buffer"))
 			self.renderSingleUnit(self.current_highlight_region)
 			self.flushFlash()
 		region = SDATA.getRegion(name)
@@ -704,10 +704,6 @@ class CGFXEngine(object):
 		self.renderSingleUnit(region)
 		self.current_highlight_region = region
 
-	def updateNewRegionOwner(self, region):
-		"""Update region gfx to indicate new owner"""
-		pass
-
 	def moveUnit(self, region):
 		"""Move the unit (or not)"""
 		def cancelMoves(): 
@@ -725,7 +721,7 @@ class CGFXEngine(object):
 			old_region = unit.region
 			# returns region the unit moved to after all the dust has settled
 			region = SDATA.moveUnit(unit.name, region)
-			# if a proble, or no unit move, don't do anything
+			# if a problem, or no unit move, don't do anything
 			if region == False:
 				return False
 			cancelMoves()
@@ -786,7 +782,7 @@ class CGFXEngine(object):
 		y += int(SPQR.UNIT_HEIGHT / 2)
 		# we need to clean the map up
 		self.map_click_moves = []
-		self.renderPixelMap()
+		#self.renderPixelMap()
 		# highlight the region selected, and show the units
 		self.highlightRegion(unit.region)
 		self.renderImageUnits(unit.region)

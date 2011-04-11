@@ -50,7 +50,6 @@ class CInfo(object):
 		# we need to update ownership
 		# destroy all units found in the region (there SHOULD be zero), and change owners
 		region.changeOwner(new_owner, self.players[new_owner].colour)
-		SGFX.gui.updateNewRegionOwner(region)
 		SGFX.gui.messagebox(SPQR.BUTTON_OK, "You have conquered " + str(region), "Conquered")
 		return True
 
