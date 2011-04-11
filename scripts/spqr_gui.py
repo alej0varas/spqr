@@ -685,7 +685,8 @@ class CGFXEngine(object):
 	def highlightRegion(self, name):
 		"""Highlight the region in the owners colours"""
 		if self.region_highlight != None:
-			#self.region_highlight.update(self.image("buffer"))
+			self.region_highlight.update(self.image("buffer"))
+			# if we capture a new unit, then this does not work
 			self.renderSingleUnit(self.current_highlight_region)
 			self.flushFlash()
 		region = SDATA.getRegion(name)
@@ -703,6 +704,7 @@ class CGFXEngine(object):
 		self.renderSingleCity(region)
 		self.renderSingleUnit(region)
 		self.current_highlight_region = region
+		self.updateGUI()
 
 	def moveUnit(self, region):
 		"""Move the unit (or not)"""
@@ -782,7 +784,7 @@ class CGFXEngine(object):
 		y += int(SPQR.UNIT_HEIGHT / 2)
 		# we need to clean the map up
 		self.map_click_moves = []
-		#self.renderPixelMap()
+		self.renderPixelMap()
 		# highlight the region selected, and show the units
 		self.highlightRegion(unit.region)
 		self.renderImageUnits(unit.region)

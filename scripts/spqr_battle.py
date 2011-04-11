@@ -99,10 +99,10 @@ def showBattleScreen(attacker, region):
 	ypos1 += 15
 	# add withdraw and attack buttons
 	btn_attack = SWIDGET.CButton(297, ypos1, "Attack")
-	btn_attack.callbacks.mouse_lclk = SEVENTS.killModalWindow
+	btn_attack.callbacks.mouse_lclk = doBattle
 	btn_attack.active = True
 	btn_withdraw = SWIDGET.CButton(200, ypos1, "Withdraw")
-	btn_withdraw.callbacks.mouse_lclk = SEVENTS.killModalWindow
+	btn_withdraw.callbacks.mouse_lclk = retreatBattle
 	btn_withdraw.active = True
 	window.addWidget(btn_attack)
 	window.addWidget(btn_withdraw)
@@ -112,6 +112,13 @@ def showBattleScreen(attacker, region):
 	SGFX.gui.pauseFlashing()
 	# setup dirty rect stuff
 	SGFX.gui.addDirtyRect(window.drawWindow(), window.rect)
+	return loopAndWait()
+
+def loopAndWait():
+	SGFX.gui.callback_temp = None
+	while SGFX.gui.callback_temp == None:
+		SGFX.gui.mainLoopSolo()
+	return SGFX.gui.callback_temp
 
 def getAttackEvents():
 	return getEvents(attack_good, attack_bad)
@@ -140,10 +147,12 @@ def ymlShowBattleScreen(attacker, region):
 	return True
 
 def doBattle(handle, xpos, ypos):
-	print "Do the battle!"
+	"""Do the battle"""
+	SGFX.gui.callback_temp = True
 	SEVENTS.killModalWindow(handle, xpos, ypos)
 
 def retreatBattle(handle, xpos, ypos):
-	print "Oh noes! Retreat!"
+	"""Don't do the battle"""
+	SGFX.gui.callback_temp = False
 	SEVENTS.killModalWindow(handle, xpos, ypos)
 

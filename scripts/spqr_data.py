@@ -41,17 +41,15 @@ class CInfo(object):
 	def doBattle(self, unit, region):
 		"""Do whatever you need to do when a battle happens
 		   Return False if the unit can't move"""
-		SBATTLE.showBattleScreen(getUnit(unit), getRegion(region))
-		return False
+		return SBATTLE.showBattleScreen(getUnit(unit), getRegion(region))
 		
 	def changeRegionOwner(self, region, new_owner):
-		"""Used when a unit captures a region. Returns False if it didn't happen"""
+		"""Used when a unit captures a region"""
 		region = data.map.regions[region]
 		# we need to update ownership
 		# destroy all units found in the region (there SHOULD be zero), and change owners
 		region.changeOwner(new_owner, self.players[new_owner].colour)
 		SGFX.gui.messagebox(SPQR.BUTTON_OK, "You have conquered " + str(region), "Conquered")
-		return True
 
 	def initNewTurn(self):
 		"""Call routine at end of turn. Resets all data
@@ -188,10 +186,16 @@ def checkBattle(unit, region):
 		if data.map.regions[region].units != []:
 			# yes, do the battle
 			move = data.doBattle(unit, region)
+			# maybe need to set new owner
+			if move == True:
+				data.changeRegionOwner(region, getUnitRegion(unit).owner)
 		else:
 			# set new owner this region
-			move = data.changeRegionOwner(region, getUnitRegion(unit).owner)
+			data.changeRegionOwner(region, getUnitRegion(unit).owner)
+			return True
 		return move
+	# couldn't find unit?
+	return False
 
 def getUnit(name):
 	for i in iterUnits():
