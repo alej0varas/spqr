@@ -38,6 +38,12 @@ class CUnit(object):
 
 	def getMilitaryStrength(self):
 		return self.stats.power()
+	
+	def setLoss(self, loss):
+		"""Called when a unit loses troops"""
+		self.stats.strength -= loss
+		if self.stats.strength < 0:
+			self.stats.strength
 
 	def __str__(self):
 		"""Return a string of the unit details"""

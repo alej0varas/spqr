@@ -73,7 +73,15 @@ class CMap(object):
 	
 	def getNeighbors(self, region):
 		return [i.image for i in self.graph.neighbors(self.regions[region])]
-		
+
+	def getRetreatNeighbors(self, region):
+		"""Return a list of all regions the unit can retreat to"""
+		possibles = []
+		for r in self.getNeighbors(region):
+			if r.owner == region.owner and len(r.units) != SPQR.MAX_STACKING:
+				possibles.append(region)
+		return possibles
+
 	def addUnit(self, region, unit):
 		if len(self.regions[region].units) == SPQR.MAX_STACKING:
 			return False
