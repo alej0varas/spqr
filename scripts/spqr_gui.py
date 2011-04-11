@@ -686,6 +686,7 @@ class CGFXEngine(object):
 		"""Highlight the region in the owners colours"""
 		if self.region_highlight != None:
 			self.region_highlight.update(self.image("buffer"))
+			self.renderPixelMap()
 			# if we capture a new unit, then this does not work
 			self.renderSingleUnit(self.current_highlight_region)
 			self.flushFlash()
