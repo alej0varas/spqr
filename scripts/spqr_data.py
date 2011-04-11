@@ -93,23 +93,24 @@ def nextUnitToMove(unit = None):
 	units = []
 	for region in data.map.regions.itervalues():
 		for i in region.units:
-			units.append(i.name)
+			if i.moves_left > 0:
+				units.append(i.name)
 	# no units?
 	if len(units) == 0:
 		return None
 	# sort the units
 	units.sort()
-	if unit in units:
+	if unit != None and unit.name in units:
 		# find the location
-		index = units.index(unit)
+		index = units.index(unit.name)
 		if index == len(units) - 1:
 			# last one, use the first
-			return units[0]
+			return getUnit(units[0])
 		else:
-			return units[index + 1]
+			return getUnit(units[index + 1])
 	else:
 		# no match, just return the first one then
-		return units[0]
+		return getUnit(units[0])
 
 def regionOwnerPlural(region):
 	return data.players[getRegion(region).owner].name_plural
