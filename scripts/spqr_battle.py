@@ -160,7 +160,25 @@ class BattleScreen(object):
 
 def computeBattle(attackers, defenders):
 	"""Run a battle, set the results, show the player and finish"""
-	print attackers
-	print defenders
+	attack_strength = 0
+	for i in attackers:
+		attack_strength += i.getMilitaryStrength()
+	defend_strength = 0
+	for i in defenders:
+		defend_strength += i.getMilitaryStrength()
+	# from the ratio, we can get the chance of success for the attacker
+	if random.randrange(attack_strength + defend_strength) <= attack_strength:
+		# do fancy maths later
+		print "Win!"
+		attack_loss = defend_strength * (random.randrange(60, 80))
+		defend_loss = attack_strength * (random.randrange(130, 180))
+		print attack_loss
+		print defend_loss
+	else:
+		print "Lose :-("
+		attack_loss = defend_strength * (random.randrange(130, 180))
+		defend_loss = attack_strength * (random.randrange(60, 80))
+		print attack_loss
+		print defend_loss
 	return False
 

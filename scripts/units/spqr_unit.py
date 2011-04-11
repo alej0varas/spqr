@@ -19,6 +19,9 @@ class UnitStats(object):
 		self.strength = strength
 		self.quality = quality
 		self.morale = morale
+	
+	def power(self):
+		return int((self.strength * self.quality * (self.morale / 3.0)) / 10000.0)
 
 class CUnit(object):
 	"""Normally the calling functions read q and m from a file,
@@ -32,7 +35,10 @@ class CUnit(object):
 		self.region = None
 		self.turn_done = False
 		self.naval = naval
-		
+
+	def getMilitaryStrength(self):
+		return self.stats.power()
+
 	def __str__(self):
 		"""Return a string of the unit details"""
 		return self.name.replace("_", " ")
