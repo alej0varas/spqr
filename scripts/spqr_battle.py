@@ -169,16 +169,22 @@ def computeBattle(attackers, defenders):
 	# from the ratio, we can get the chance of success for the attacker
 	if random.randrange(attack_strength + defend_strength) <= attack_strength:
 		# do fancy maths later
-		print "Win!"
-		attack_loss = defend_strength * (random.randrange(60, 80))
-		defend_loss = attack_strength * (random.randrange(130, 180))
-		print attack_loss
-		print defend_loss
+		return attackWin(attack_strength, defend_strength)
 	else:
-		print "Lose :-("
-		attack_loss = defend_strength * (random.randrange(130, 180))
-		defend_loss = attack_strength * (random.randrange(60, 80))
-		print attack_loss
-		print defend_loss
+		return attackLose(attack_strength, defend_strength)
+	return False
+
+def attackWin(defend, attack):
+	attack_loss = defend * (random.randrange(60, 80))
+	defend_loss = attack * (random.randrange(130, 180))
+	message = "You won, at a loss of " + str(attack_loss) + " soldiers."
+	SGFX.gui.messagebox(SPQR.BUTTON_OK, message, "Results")
+	return False
+
+def attackLose(defend, attack):
+	attack_loss = defend * (random.randrange(130, 180))
+	defend_loss = attack * (random.randrange(60, 80))
+	message = "You lost, and it cost you " + str(attack_loss) + " soldiers."
+	SGFX.gui.messagebox(SPQR.BUTTON_OK, message, "Results")
 	return False
 
