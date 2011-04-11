@@ -41,7 +41,8 @@ class CInfo(object):
 	def doBattle(self, unit, region):
 		"""Do whatever you need to do when a battle happens
 		   Return False if the unit can't move"""
-		return SBATTLE.showBattleScreen(getUnit(unit), getRegion(region))
+		battle = SBATTLE.BattleScreen(getUnit(unit), getRegion(region))
+		return battle.run()
 		
 	def changeRegionOwner(self, region, new_owner):
 		"""Used when a unit captures a region"""
