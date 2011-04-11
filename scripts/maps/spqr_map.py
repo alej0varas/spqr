@@ -96,6 +96,11 @@ class CRegion(object):
 		# we need to save this area to make re-drawing the region not need a whole map redraw
 		self.text_rect = None
 
+	def changeOwner(self, new_owner, colour):
+		self.units = []
+		self.owner = new_owner
+		self.colour = colour
+
 	def __str__(self):
 		return self.image.replace("_", " ").title()
 

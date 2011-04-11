@@ -47,8 +47,12 @@ class CInfo(object):
 	def changeRegionOwner(self, region, new_owner):
 		"""Used when a unit captures a region. Returns False if it didn't happen"""
 		region = data.map.regions[region]
+		# we need to update ownership
+		# destroy all units found in the region (there SHOULD be zero), and change owners
+		region.changeOwner(new_owner, self.players[new_owner].colour)
+		SGFX.gui.updateNewRegionOwner(region)
 		SGFX.gui.messagebox(SPQR.BUTTON_OK, "You have conquered " + str(region), "Conquered")
-		return False
+		return True
 
 	def initNewTurn(self):
 		"""Call routine at end of turn. Resets all data

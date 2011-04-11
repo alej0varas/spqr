@@ -704,6 +704,10 @@ class CGFXEngine(object):
 		self.renderSingleUnit(region)
 		self.current_highlight_region = region
 
+	def updateNewRegionOwner(self, region):
+		"""Update region gfx to indicate new owner"""
+		pass
+
 	def moveUnit(self, region):
 		"""Move the unit (or not)"""
 		def cancelMoves(): 
