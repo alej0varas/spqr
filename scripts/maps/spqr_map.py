@@ -71,13 +71,16 @@ class CMap(object):
 				for nregion in region["naval"]:
 					self.regions[region["name"]].naval_regions.append(nregion["name"])
 	
-	def getNeighbors(self, region):
-		return [i.image for i in self.graph.neighbors(self.regions[region])]
+	def getNeighbors(self, region, as_region = False):
+		if as_region:
+			return [i for i in self.graph.neighbors(self.regions[region])]
+		else:
+			return [i.image for i in self.graph.neighbors(self.regions[region])]
 
 	def getRetreatNeighbors(self, region):
 		"""Return a list of all regions the unit can retreat to"""
 		possibles = []
-		for r in self.getNeighbors(region):
+		for r in self.getNeighbors(region.image, True):
 			if r.owner == region.owner and len(r.units) != SPQR.MAX_STACKING:
 				possibles.append(region)
 		return possibles

@@ -19,30 +19,6 @@
   stats: [45, 80, 75]
   owner: "romans"
   
-- name: "Legio_IV"
-  location: "venetia_et_histria"
-  image: "rome_legion"
-  stats: [80, 80, 65]
-  owner: "romans"
-  
-- name: "Legio_V"
-  location: "venetia_et_histria"
-  image: "rome_legion"
-  stats: [71, 80, 82]
-  owner: "romans"
-
-- name: "Legio_VI"
-  location: "venetia_et_histria"
-  image: "rome_legion"
-  stats: [55, 80, 80]
-  owner: "romans"
-
-- name: "Legio_VII"
-  location: "venetia_et_histria"
-  image: "rome_legion"
-  stats: [73, 76, 80]
-  owner: "romans"
-
 - name: "Legio_IX"
   location: "latium_et_campania"
   image: "rome_legion"

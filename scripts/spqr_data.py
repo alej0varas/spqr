@@ -14,7 +14,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import pygame, sys, yaml
+import pygame, sys, yaml, random
 import spqr_defines as SPQR
 import spqr_gui as SGFX
 import spqr_battle as SBATTLE
@@ -41,14 +41,34 @@ class CInfo(object):
 	def doBattle(self, unit, region):
 		"""Do whatever you need to do when a battle happens
 		   Return False if the unit can't move"""
-		battle = SBATTLE.BattleScreen(getUnit(unit), getRegion(region))
+		region = getRegion(region)
+		battle = SBATTLE.BattleScreen(getUnit(unit), region)
 		result = battle.run()
 		if not result:
 			# they ran away
 			return False
 		# do the battle, and compute the results etc
-		return SBATTLE.computeBattle([getUnit(unit)], getRegion(region).units)
-		
+		result = SBATTLE.computeBattle([getUnit(unit)], region.units)
+		if result:
+			# retreat the units
+			while len(region.units) > 0:
+				regions = self.map.getRetreatNeighbors(region)
+				
+				print "BBB:", region.units[0]
+				
+				if regions != [] and getUnit(region.units[0]).stats.strength != 0:
+					move_to = random.choice(regions)
+					move_to.units.append(region.units[0])
+					
+					print "Moving", str(region.units[0]), "to", str(move_to)
+					
+					# remove old unit from location
+					region.units = region.units[1:]
+				else:
+					# destroy the unit
+					region.units.remove(unit)
+		return result
+
 	def changeRegionOwner(self, region, new_owner):
 		"""Used when a unit captures a region"""
 		region = data.map.regions[region]
