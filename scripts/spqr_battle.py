@@ -158,3 +158,9 @@ class BattleScreen(object):
 		self.result = False
 		SEVENTS.killModalWindow(handle, xpos, ypos)
 
+def computeBattle(attackers, defenders):
+	"""Run a battle, set the results, show the player and finish"""
+	print attackers
+	print defenders
+	return False
+

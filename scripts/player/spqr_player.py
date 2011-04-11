@@ -20,4 +20,10 @@ class CPlayer(object):
 		self.name_plural = name_plural
 		self.colour = None
 		self.owned_regions = []
+	
+	def addNewRegion(self, region):
+		pass
+	
+	def removeRegion(self, region):
+		pass
 
