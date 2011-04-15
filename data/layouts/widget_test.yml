@@ -53,14 +53,13 @@
         - rclk: onMenu
 
     - widget: CText
-      text: hello
       x: "20"
       y: "260"
-      w: "200"
-      h: "17"
+      font: "SPQR.FONT_VERA"
+      chars: "20"
+      lines: "1"
       active: Yes
       visible: Yes
-      righttext: Yes
 
     - widget: COptionMenu
       x: "120"

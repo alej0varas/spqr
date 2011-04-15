@@ -1199,16 +1199,28 @@ class CText(CWidget):
 	"""Text class stores details for a simple text widget and handles when
 	   clicked the keyboard input. text variable we enter in init is added
 	   right or left of the keyboard input according the righttext flag"""
-	def __init__(self, x, y, width, height, text, righttext = False, font = SPQR.FONT_VERA, bg_color = SPQR.BGUI_TXT):
+	def __init__(self, x, y, width, height, maxlines, font = SPQR.FONT_VERA, bgcolor = SPQR.BGUI_TXT,
+				fgcolor=SPQR.COL_BLACK, curscolor=SPQR.COLG_RED, hlcolor=SPQR.BGUI_HIGH):
 		CWidget.__init__(self, pygame.Rect(x,y,width,height), SPQR.WT_TEXT, None, "CText") 
-		self.background_colour = bg_color
-		self.text_colour = SPQR.COL_BLACK
-		self.font = font
-		self.text = text
-		self.current_string = []
-		self.addright = righttext
+		self.bgcolor = bgcolor
+		self.fgcolor = fgcolor
+		self.curscolor = curscolor
+		self.hlcolor = hlcolor
+		self.maxlines = maxlines
+		self.font = SGFX.gui.fonts[font]
+		self.cursor = False
+		self.tab = 4
+		self.output = ""
+		self.cursorindex = 0
+		self.selectstart = 0
+		# set 3 parameters for letter bliting
+		self._x = x
+		self._y = y
+		self._rect = self.rect.copy()
+		# set the default image of the widget
+		# this is used only in the initiation of the window
 		self.image = pygame.Surface((self.rect. w,self.rect.h))
-		self.image.fill(self.background_colour)
+		self.image.fill(self.bgcolor)
 		# automatically add it's own click callback
 		self.callbacks.mouse_lclk = self.clicked
 		# sometimes you'll need to call another routine as well
@@ -1216,21 +1228,138 @@ class CText(CWidget):
 		self.after_click = SPQR.null_routine
 		self.after_click_status = False
 	
-	def getKey(self):
-		"""Get the keyboard input """
-		while True:
-			event = pygame.event.wait()
-			if event.type == KEYDOWN:
-				return event.key
-			if event.type == pygame.QUIT:
-				SEVENT.quitSpqr(None, -1, -1)
-				return True
-			if event.type == MOUSEBUTTONUP:
-				x, y = pygame.mouse.get_pos()
-				x_off = x - self.parent.rect.x
-				y_off = y - self.parent.rect.y
-				if self.rect.collidepoint(x_off, y_off) == False:
-					return K_RETURN
+	def clear_selection(self):
+		if self.selectstart != self.cursorindex:
+			select1,select2 = sorted((self.selectstart,self.cursorindex))
+			self.output = self.output[:select1]+self.output[select2:]
+			self.cursorindex = select1
+			return True
+		return False
+        
+	def show(self):
+		h = self.rect.h
+		x, y = self._x, self._y
+		r = pygame.Rect(x,y,0,h)
+		for e,i in enumerate(self.output+'\n'):
+			if e == self.cursorindex+1: break
+			if i not in '\n\t':
+				r = pygame.Rect(x,y,*self.font.size(i))
+				x = r.right
+			elif i == '\n':
+				r = pygame.Rect(x,y,1,h)
+				x = self._x
+				y = r.bottom
+			else:
+				t = self.font.size(self.tab*' ')[0]
+				t = ((((x-self._x) / t) + 1) * t ) - (x-self._x)
+				r = pygame.Rect(x,y,t,h)
+				x = r.right
+        
+		rclamp = r.clamp(self._rect)
+		self._x += rclamp.x - r.x
+		self._y += rclamp.y - r.y
+        
+		clip = SGFX.gui.screen.get_clip()
+		SGFX.gui.screen.set_clip(self._rect.clip(clip))
+		try: SGFX.gui.screen.fill(self.bgcolor,self._rect)
+		except: SGFX.gui.screen.blit(self.bgcolor,self._rect)
+		x = self._x
+		y = self._y
+		select1,select2 = sorted((self.selectstart,self.cursorindex))
+		self.C = []
+		for e,i in enumerate(self.output):
+			if i not in '\n\t':
+				self.C.append(pygame.Rect(x,y,*self.font.size(i)))
+				if select1 <= e < select2:
+					SGFX.gui.screen.blit(self.font.render(i,1,self.hlcolor),(x,y))
+				else:
+					SGFX.gui.screen.blit(self.font.render(i,1,self.fgcolor),(x,y))
+				x = self.C[-1].right
+			elif i == '\n':
+				self.C.append(pygame.Rect(x,y,0,h))
+				x=self._x
+				y = self.C[-1].bottom
+			else:
+				t = self.font.size(self.tab*' ')[0]
+				t = ((((x-self._x) / t) + 1) * t ) - (x-self._x)
+				self.C.append(pygame.Rect(x,y,t,h))
+				x = self.C[-1].right
+		self.C.append(pygame.Rect(x,y,0,h))
+		if self.cursor:
+			p = self.C[self.cursorindex]
+			pygame.draw.line(SGFX.gui.screen,self.curscolor,p.topleft,(p.left,p.bottom),1)
+		pygame.display.update(self._rect)
+		SGFX.gui.screen.set_clip(clip)
+            
+	def place_cursor(self,pos):
+		c = pygame.Rect(pos,(0,0)).collidelist(self.C)
+		if c > -1: self.cursorindex = c if pos[0] <= self.C[c].centerx else c + 1
+		else:
+			l = (pos[1] - self._y) / self.font.get_height()
+			self.cursorindex = sum([len(i) for i in self.output.split('\n')][:l+1])+l
+			if self.cursorindex > len(self.output): self.cursorindex = len(self.output)
+			elif self.cursorindex < 0: self.cursorindex = 0
+                
+	def wakeup(self,ev):
+		if ev.type == pygame.KEYDOWN:
+            
+			if ev.key == pygame.K_RIGHT:
+				if self.selectstart != self.cursorindex: self.cursorindex = max((self.selectstart,self.cursorindex))
+				elif self.cursorindex < len(self.output): self.cursorindex += 1
+                
+			elif ev.key == pygame.K_LEFT:
+				if self.selectstart != self.cursorindex: self.cursorindex = min((self.selectstart,self.cursorindex))
+				elif self.cursorindex > 0: self.cursorindex -= 1
+                
+			elif ev.key == pygame.K_DELETE:
+				if not self.clear_selection():
+					self.output = self.output[:self.cursorindex]+self.output[self.cursorindex+1:]
+            
+			elif ev.key == pygame.K_END:
+				try:
+					self.cursorindex = self.output[self.cursorindex:].index('\n') + self.cursorindex
+				except:
+					self.cursorindex = len(self.output)
+            
+			elif ev.key == pygame.K_HOME:
+				try:
+					self.cursorindex = self.output[:self.cursorindex].rindex('\n') + 1
+				except:
+					self.cursorindex = 0
+            
+			elif ev.key == pygame.K_RETURN or ev.key == pygame.K_KP_ENTER:
+				self.clear_selection()
+				if not self.maxlines or self.output.count('\n') < self.maxlines - 1:
+					self.output = self.output[:self.cursorindex]+'\n'+self.output[self.cursorindex:]
+					self.cursorindex += 1
+            
+			elif ev.key == pygame.K_BACKSPACE:
+				if not self.clear_selection():
+					if self.cursorindex > 0:
+						self.cursorindex -= 1 
+						self.output = self.output[:self.cursorindex]+self.output[self.cursorindex+1:]
+            
+			elif ev.key == pygame.K_UP:
+				c = self.C[self.cursorindex]
+				self.place_cursor((c.left,c.top-self.font.get_height()))
+
+			elif ev.key == pygame.K_DOWN:
+				c = self.C[self.cursorindex]
+				self.place_cursor((c.left,c.top+self.font.get_height()))
+                
+			elif ev.unicode:
+				self.clear_selection()
+				self.output = self.output[:self.cursorindex]+ev.unicode+self.output[self.cursorindex:]
+				self.cursorindex += 1
+			if ev.key not in (K_NUMLOCK,K_CAPSLOCK,K_SCROLLOCK,K_RSHIFT,K_LSHIFT,K_RCTRL,K_LCTRL,K_RALT,K_LALT,K_RMETA,K_LMETA,K_LSUPER,K_RSUPER,K_MODE,K_HELP,K_PRINT,K_SYSREQ,K_BREAK,K_MENU,K_POWER):
+				self.selectstart = self.cursorindex
+			self.show()
+        
+		elif (ev.type == pygame.MOUSEBUTTONDOWN and ev.button == 1) or (ev.type == pygame.MOUSEMOTION and ev.buttons[0]):
+			self.place_cursor(ev.pos)
+			if ev.type == pygame.MOUSEBUTTONDOWN:
+				self.selectstart = self.cursorindex
+			self.show()
 	
 	def addAfterClick(self, routine):
 		""" Add routine to be called after left mouse clicked """
@@ -1241,34 +1370,26 @@ class CText(CWidget):
 	def clicked(self, handle, x, y):
 		""" Called by the gui routine when clicked. Updates it's own gfx
 			in the parent window and handles the keyboard input. """
-		xpos = self.parent.rect.x
-		ypos = self.parent.rect.y
-		xpos += self.rect.x
-		ypos += self.rect.y
+		self.cursor = True
+		self.show()
 		while True:
-			# make the string that we going to print
-			if self.addright == False:
-				txt = self.text + string.join(self.current_string, "")
+			ev = pygame.event.wait()
+			if ev.type == KEYDOWN and ev.key == K_ESCAPE:
+				self.cursor = False
+				self.fgcolor = 50,50,50
+				self.show()
+				break
+			elif ev.type == MOUSEBUTTONUP and ev.button == 1:
+				if not self._rect.collidepoint(ev.pos):
+					self.cursor = False
+					self.fgcolor = 50,50,50
+					self.show()
+					break
+				self.cursor = True
+				self.fgcolor = 0,0,0
+				self.wakeup(ev)
 			else:
-				txt = string.join(self.current_string, "") + self.text
-			# now we just have to blit that text
-			printed = SGFX.gui.fonts[self.font].render(txt, 1, self.text_colour)
-			SGFX.gui.screen.blit(self.image, (xpos, ypos, 0, 0))
-			SGFX.gui.screen.blit(printed, (xpos, ypos, 0, 0))
-			pygame.display.update((xpos, ypos, self.rect.w, self.rect.h))
-			# get the keyboard input
-			inkey = self.getKey()
-			if inkey == K_BACKSPACE:
-				self.current_string = self.current_string[0:-1]
-			elif inkey == K_RETURN or inkey == 271 or inkey == K_ESCAPE:
-				# do we have an afterclick function?
-				if self.after_click_status == True:
-					self.after_click(handle, xpos, ypos)
-				return True
-			elif inkey == K_MINUS:
-				self.current_string.append("_")
-			elif inkey <= 127:
-				self.current_string.append(chr(inkey))
+				self.wakeup(ev)
 		return True
 	
 # helper routines to build stuff follow

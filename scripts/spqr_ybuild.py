@@ -52,6 +52,16 @@ def createWindow(filename):
 			# Skip button detail widget's
 			if wid.describe == "CButtonDetails":
 				buttondetails.append(wid)
+			elif wid.describe == "CText":
+				# correct the position for bliting
+				wid._x += jlist[j].rect.x
+				wid._y += jlist[j].rect.y
+				# add the window border offset to the equation
+				if jlist[j].border_offset == True :
+					wid._rect.x += jlist[j].rect.x + SGFX.gui.iWidth("win_bl")
+					wid._rect.y += jlist[j].rect.y + SGFX.gui.iHeight("win_tl")
+				# add widget to the window
+				jlist[j].addWidget(wid)
 			else:
 				# add widget to the window
 				jlist[j].addWidget(wid)
@@ -71,13 +81,9 @@ def createWidget(wlist):
 	# First we check the key that will always be in our widget's
 	# and defines the widget's purpose
 	if wlist['widget'] == "CText":
-		if wlist['text'] == "None":
-			addtext = ""
-		else:
-			addtext = wlist['text']
-		# if this is a label make it with a text
-		widget = SWIDGET.CText(eval(wlist['x']), eval(wlist['y']), eval(wlist['w']),
-							   eval(wlist['h']), addtext, wlist['righttext'])
+		height = SGFX.gui.fonts[eval(wlist['font'])].get_height() * eval(wlist['lines'])
+		width = SGFX.gui.fonts[eval(wlist['font'])].size('X')[0] * eval(wlist['chars'])
+		widget = SWIDGET.CText(eval(wlist['x']), eval(wlist['y']), width, height, eval(wlist['lines']), eval(wlist['font']))
 		# check if there are any widgets callback
 		if wlist.has_key('callbacks'):
 			checkCallbacks(widget, wlist['callbacks'])

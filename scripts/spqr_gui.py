@@ -48,6 +48,7 @@ class CGFXEngine(object):
 	def mainInit(self, width, height, fullscreen, load_screen = True):
 		"""Long, boring routine that initiates the gui"""
 		pygame.init()
+		pygame.key.set_repeat(100,40)
 		# ok, now init the basic screen
 		# done now so image.convert works when we load the images
 		if fullscreen:
