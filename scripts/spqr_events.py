@@ -41,15 +41,29 @@ import spqr_ybuild as SYAML
 # if xpos == -1: to check if it was a keyboard event
 
 # we start with just the quit function (cos it's real easy!)
+
+#def quitSpqr(handle, xpos, ypos):
+#	"""Messagebox to confirm quit game.
+#		 Returns True or doesn't return at all!"""
+#	result = SGFX.gui.messagebox((SPQR.BUTTON_OK|SPQR.BUTTON_CANCEL),
+#		"Really quit SPQR?", "Quit Message")
+#	if result == SPQR.BUTTON_OK:
+#		# exit the game
+#		sys.exit(True)
+#	return True
+	
 def quitSpqr(handle, xpos, ypos):
 	"""Messagebox to confirm quit game.
 		 Returns True or doesn't return at all!"""
-	result = SGFX.gui.messagebox((SPQR.BUTTON_OK|SPQR.BUTTON_CANCEL),
-		"Really quit SPQR?", "Quit Message")
-	if result == SPQR.BUTTON_OK:
-		# exit the game
-		sys.exit(True)
+	SGFX.gui.addWindow(SWINDOW.CMsgbox((SPQR.BUTTON_OK|SPQR.BUTTON_CANCEL),
+		[quitSpqr_ok, msgbox_nop],"Really quit Heroes of Wing Commander?", "Quit Message"))
 	return True
+	
+def quitSpqr_ok(handle, xpos, ypos):
+	sys.exit(True)
+	
+def msgbox_nop(handle, xpos, ypos):
+	killModalWindow(None, None, None)
 		
 def centreMap(handle, xpos, ypos):
 	"""Routine centres the map on the city of Rome"""

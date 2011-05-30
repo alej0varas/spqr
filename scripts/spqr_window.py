@@ -283,3 +283,107 @@ class CWindow(object):
 		# deal with making the window modal, etc...
 		return(bindex)
 
+# Here we have the game windows subclassing CWindow
+
+class CMsgbox(CWindow):
+	""" Basic Class of messagebox with flags (essentially the buttons
+	   you want displayed), a list with the buttons routines the text
+	   itself, and the message at the top of the window. Handles c/r 
+	   in strings fine """
+	def __init__(self, flags, routines, text, win_title):
+		if flags == 0:
+			print "[HOWC]: Error: error no buttons defined"
+			sys.exit(False)
+		self.Wbtn = SGFX.gui.iWidth("button")
+		self.Hbtn = SGFX.gui.iHeight("button")
+		# start by calculating the MINIMUM size for this messagebox and txt label
+		txt_width = ((self.Wbtn+8)*3)+4
+		width = txt_width+(SPQR.SPACER*2)
+		# get average size of height..
+		height = (SGFX.gui.fonts[SPQR.FONT_MSG].size("X")[1])+1
+		# get text area size
+		done = None
+		ysize = height
+		while done == None:
+			ysize = ysize+height
+			done = SWIDGET.fitText(text, txt_width, ysize, SPQR.FONT_MSG)
+		height = ysize
+		# now we have the right size, lets render it!
+		# start with a window, but work out the height first...
+		wheight = height + SPQR.SPACER
+		# add height for sep bar (2) and buttons (2*button height)
+		wheight += (self.Hbtn * 2) + 2
+		# ok, the window gets rendered for us here
+		CWindow.__init__(self,-1, -1, width, wheight, win_title, True)
+		
+		y = SPQR.SPACER
+		self.addWidget(SWIDGET.CLabel(6, y, txt_width, height, text))
+		# now add the seperator bar
+		x = 6
+		y += height
+		self.addWidget(SWIDGET.CSeperator(x, y, width - 24))
+		y += 1 + (self.Hbtn / 2)
+		# move x to the right, buttons are blitted from right to left
+		x = width - 16 - self.Wbtn
+		# now we are ready to start printing buttons
+		total_buttons = 0
+		# logic is simple: found a button? yes, display it and 
+		# modify next print pos. quit if 4th button found
+		if (flags & SPQR.BUTTON_OK) != 0:
+			slot = self.addWidget(SWIDGET.CButton(x, y, "OK"))
+			# same for every instance of this little loop: add the callbacks
+			self.items[slot].callbacks.mouse_lclk = routines[total_buttons]
+			self.items[slot].active = True
+			x -= (12 + self.Wbtn)
+			# add a key for this
+			SGFX.gui.keyboard.addKey(K_o, routines[total_buttons])
+			total_buttons += 1
+		if (flags & SPQR.BUTTON_CANCEL) != 0:
+			slot = self.addWidget(SWIDGET.CButton(x, y, "Cancel"))
+			self.items[slot].callbacks.mouse_lclk = routines[total_buttons]
+			self.items[slot].active = True
+			x -= (12 + self.Wbtn)
+			SGFX.gui.keyboard.addKey(K_c, routines[total_buttons])
+			total_buttons += 1
+		if (flags & SPQR.BUTTON_YES) != 0:
+			slot = self.addWidget(SWIDGET.CButton(x, y, "Yes"))
+			self.items[slot].callbacks.mouse_lclk = routines[total_buttons]
+			self.items[slot].active = True
+			x -= (12 + self.Wbtn)
+			SGFX.gui.keyboard.addKey(K_y, routines[total_buttons])
+			total_buttons += 1
+		if (flags & SPQR.BUTTON_NO) != 0 and total_buttons < 3:
+			slot = self.addWidget(SWIDGET.CButton(x, y, "No"))
+			self.items[slot].callbacks.mouse_lclk = routines[total_buttons]
+			self.items[slot].active = True
+			x -= (12 + self.Wbtn)
+			SGFX.gui.keyboard.addKey(K_n, routines[total_buttons])
+			total_buttons += 1
+		if (flags & SPQR.BUTTON_QUIT) != 0 and total_buttons < 3:
+			slot = self.addWidget(SWIDGET.CButton(x, y, "Quit"))
+			self.items[slot].callbacks.mouse_lclk = routines[total_buttons]
+			self.items[slot].active = True
+			x -= (12 + self.Wbtn)
+			SGFX.gui.keyboard.addKey(K_q, routines[total_buttons])
+			total_buttons += 1
+		if (flags & SPQR.BUTTON_IGNORE) != 0 and total_buttons < 3:
+			slot = self.addWidget(SWIDGET.CButton(x, y, "Ignore"))
+			self.items[slot].callbacks.mouse_lclk = routines[total_buttons]
+			self.items[slot].active = True
+			SGFX.gui.keyboard.addKey(K_i, routines[total_buttons])
+			total_buttons += 1
+		# thats the graphics dealt with, make sure the whole window is modal
+		self.modal = True
+		# if there was only one button, then make the enter key also activate it
+		if total_buttons == 1:
+			# get the routine to call
+			rout = SGFX.gui.keyboard.active_keys[-1].function
+			SGFX.gui.keyboard.addKey(K_RETURN, rout)
+			# allow for extra key on key stack
+			total_buttons += 1
+		# set keyboard functions
+		SGFX.gui.keyboard.setModalKeys(total_buttons)
+		# ok, lets get the image we need and the rectangle:
+		SGFX.gui.addDirtyRect(self.drawWindow(),
+			self.rect)
+

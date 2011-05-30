@@ -1391,7 +1391,98 @@ class CText(CWidget):
 			else:
 				self.wakeup(ev)
 		return True
-	
+
+# Helper routines for text widgets
+def renderText(rect, text, font, text_colour, bgcolor = None,
+				justification = SPQR.LEFT_JUSTIFY, iscircle = False, w=0, h=0):
+	""" justify the text, creates the text surface and returns it.
+		Returns an empty surface(and displays message on console) if
+		the new text will not fit the image. (possible on low res)"""
+	if w==0 and h==0 :
+		w = rect.w
+		h = rect.h
+	# check if the text fits inside the given rect
+	final_lines = fitText(text, rect.w, rect.h, font)
+	# if the text doesn't fit return an empty surface and exit
+	if final_lines == None:
+		print "Error: Text string too tall in label"
+		return pygame.Surface((w,h))
+	# Let's try to write the text out on the surface.	
+	image = pygame.Surface((w,h), pygame.SRCALPHA, 32)
+	# if we have a background color fill the surface
+	if bgcolor != None:
+		image.fill(bgcolor)
+	# if the given rect is a circle move the rect starting  
+	# possition x,y inside the circle from the given rect
+	if iscircle == True:
+		w_offset = rect.x
+		h_offset = rect.y
+	else:
+		w_offset = 0
+		h_offset = 0
+	# lets justify every line and return the image
+	accumulated_height = 0
+	for line in final_lines:
+		if line != "":
+			tempsurface = SGFX.gui.fonts[font].render(line, 1, text_colour)
+			if justification == SPQR.LEFT_JUSTIFY:
+				image.blit(tempsurface, (0, accumulated_height))
+			elif justification == SPQR.CENTER_HORIZ:
+				image.blit(tempsurface, ((rect.w-tempsurface.get_width())/2, accumulated_height))
+			elif justification == SPQR.RIGHT_JUSTIFY:
+				image.blit(tempsurface, (rect.w - tempsurface.get_width(), accumulated_height))
+			elif justification == SPQR.EVEN:
+				y_offset = (rect.w - (len(final_lines)*SGFX.gui.fonts[font].size(final_lines[0])[1]))/2
+				image.blit(tempsurface,(w_offset + ((rect.w-tempsurface.get_width())/2),
+											accumulated_height + h_offset + y_offset))
+			else:
+				print "Error: Invalid justification value in label"
+				return pygame.Surface((w,h))
+		accumulated_height += SGFX.gui.fonts[font].size(line)[1]
+	# for debuging rect
+	#pygame.draw.rect(image, SPQR.COL_WHITE, rect,1)
+	return image
+
+def fitText(text, w, h, fnt):
+	"""Call with the text, the x and y size of the area
+	to test against, and the font. Returns false if
+	it couldn't be done, otherwise returns true """
+	final_lines = []
+	requested_lines = text.splitlines()
+	# Create a series of lines that will fit on the provided rectangle
+	for requested_line in requested_lines:
+		if SGFX.gui.fonts[fnt].size(requested_line)[0] > w:
+			words = requested_line.split(' ')
+			# if any of our words are too long to fit, return.
+			for word in words:
+				if SGFX.gui.fonts[fnt].size(word)[0] >= w:
+					# TODO: should actually handle long words, since a web address
+					# has been found to be too long for this code!
+					# Possible answer: don't use long web addresses, or break them
+					# up first.
+					print "Error: Word was too long in label"
+					return None
+			# Start a new line
+			accumulated_line = ""
+			for word in words:
+				test_line = accumulated_line+word+" "
+				# Build the line while the words fit.
+				if SGFX.gui.fonts[fnt].size(test_line)[0] < w:
+					accumulated_line = test_line
+				else:
+					final_lines.append(accumulated_line)
+					accumulated_line = word+" "
+			final_lines.append(accumulated_line)
+		else:
+			final_lines.append(requested_line)
+	# everything seemed to work ok.. so far!
+	accumulated_height = 0
+	for line in final_lines:
+		if accumulated_height + SGFX.gui.fonts[fnt].size(line)[1] >= h:
+			return None
+		accumulated_height += SGFX.gui.fonts[fnt].size(line)[1]
+	return final_lines
+		
 # helper routines to build stuff follow
 def buildLabel(text, font = SPQR.FONT_VERA):
 	"""Helper function to build a label given just the text.
