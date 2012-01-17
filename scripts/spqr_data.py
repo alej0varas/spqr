@@ -205,7 +205,7 @@ def moveUnit(unit, region):
 			i.moves_left -= 1
 			# return the region we go to
 			return region
-	print 'Error: Couldn't find unit', unit, 'to move'
+	print "Error: Couldn't find unit", unit, 'to move'
 	return False
 
 def checkBattle(unit, region):
