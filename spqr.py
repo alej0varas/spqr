@@ -38,7 +38,7 @@ class CSPQR(object):
 		# actually go any furthur?
 		if self.init_only:
 			# no, so exit here
-			print "SPQR: init() worked fine."
+			print 'SPQR: init() worked fine.'
 			sys.exit(True)
 
 	# TODO: use optparse, don't re-invent the wheel
@@ -61,24 +61,24 @@ class CSPQR(object):
 			return True
 		elif flag == 'v':
 			# show version details and exit
-			print "SPQR " + SPQR.VERSION + ", written and designed by Chris Smith"
-			print "  Copr. 2005-2011, released under the GNU Public License v2"
-			print "  Last code update: " + SPQR.LAST_UPDATE
+			print 'SPQR ' + SPQR.VERSION + ', written and designed by Chris Handy'
+			print '  Copr. 2005-2012, released under the GNU Public License v3'
+			print '  Last code update: ' + SPQR.LAST_UPDATE
 			sys.exit(True)
 		elif flag == 'g':
-			print "[SPQR]: In memory of Jerry Garcia"
+			print '[SPQR]: In memory of Jerry Garcia'
 			return True
-		elif flag == "?":
-			print "SPQR Command line options:"
-			print "  -f : Fullscreen"
-			print "  -n : Skip intro"
-			print "  -t : Test init only"
-			print "  -v : Show version details"
-			print "  -? : Show this display"
+		elif flag == '?':
+			print 'SPQR Command line options:'
+			print '  -f : Fullscreen'
+			print '  -n : Skip intro'
+			print '  -t : Test init only'
+			print '  -v : Show version details'
+			print '  -? : Show this display'
 			# all done, a valid exit point
 			sys.exit(True)
 		# no match, but not a terrible error
-		print "[SPQR] Error: No option for flag " + flag
+		print '[SPQR] Error: No option for flag ' + flag
 		return False
 	
 	def sortOptions(self):
@@ -116,67 +116,67 @@ class CSPQR(object):
 		# are held here; The main map and then the widgets on the main map.
 		# we make a seperate blank window to hold all of these widgets
 		menu = []
-		menu.append(SMENU.CMenuParent("File"))
-		menu.append(SMENU.CMenuParent("Empire"))
-		menu.append(SMENU.CMenuParent("Help"))
+		menu.append(SMENU.CMenuParent('File'))
+		menu.append(SMENU.CMenuParent('Empire'))
+		menu.append(SMENU.CMenuParent('Help'))
 		if SPQR.DEBUG_MODE:
-			menu.append(SMENU.CMenuParent("Debug"))
+			menu.append(SMENU.CMenuParent('Debug'))
 		# then add the sub menus below these
-		menu[0].addChild(SMENU.CMenuChild("New Game", "new", "Ctrl+N", SEVENT.menuNew))
-		menu[0].addChild(SMENU.CMenuChild("sep", None, "", SEVENT.notYetCoded))
-		menu[0].addChild(SMENU.CMenuChild("Load Game", "open", "Ctrl+L", SEVENT.menuLoad))
-		menu[0].addChild(SMENU.CMenuChild("Save Game", "save", "Ctrl+S", SEVENT.menuSave))
+		menu[0].addChild(SMENU.CMenuChild('New Game", "new", "Ctrl+N", SEVENT.menuNew))
+		menu[0].addChild(SMENU.CMenuChild('sep", None, "", SEVENT.notYetCoded))
+		menu[0].addChild(SMENU.CMenuChild('Load Game", "open", "Ctrl+L", SEVENT.menuLoad))
+		menu[0].addChild(SMENU.CMenuChild('Save Game", "save", "Ctrl+S", SEVENT.menuSave))
 		# this is a seperate, drawn bar to split the text
-		menu[0].addChild(SMENU.CMenuChild("sep", None, "", SEVENT.notYetCoded))
-		menu[0].addChild(SMENU.CMenuChild("Preferences", "preferences", "Ctrl+P", SEVENT.menuPreferences))
-		menu[0].addChild(SMENU.CMenuChild("sep", None, "", SEVENT.notYetCoded))
-		menu[0].addChild(SMENU.CMenuChild("Exit SPQR", "exit", "Ctrl+Q", SEVENT.quitSpqr))
-		menu[1].addChild(SMENU.CMenuChild("Visit Senate", "senate", "F2", SEVENT.menuEmpireSenate))
-		menu[1].addChild(SMENU.CMenuChild("Show Units", "military", "Ctrl+U", SEVENT.menuEmpireUnits))
-		menu[1].addChild(SMENU.CMenuChild("Statistics", "statistics", "", SEVENT.menuEmpireStatistics))
-		menu[2].addChild(SMENU.CMenuChild("About", "about", "Ctrl+A", SEVENT.menuHelpAbout))
-		menu[2].addChild(SMENU.CMenuChild("sep", None, "", SEVENT.notYetCoded))
-		menu[2].addChild(SMENU.CMenuChild("Help", "help", "F1", SEVENT.menuHelpHelp))
+		menu[0].addChild(SMENU.CMenuChild('sep', None, '', SEVENT.notYetCoded))
+		menu[0].addChild(SMENU.CMenuChild('Preferences', 'preferences', 'Ctrl+P', SEVENT.menuPreferences))
+		menu[0].addChild(SMENU.CMenuChild('sep', None, '', SEVENT.notYetCoded))
+		menu[0].addChild(SMENU.CMenuChild('Exit SPQR', 'exit', 'Ctrl+Q', SEVENT.quitSpqr))
+		menu[1].addChild(SMENU.CMenuChild('Visit Senate', 'senate', 'F2', SEVENT.menuEmpireSenate))
+		menu[1].addChild(SMENU.CMenuChild('Show Units', 'military', 'Ctrl+U', SEVENT.menuEmpireUnits))
+		menu[1].addChild(SMENU.CMenuChild('Statistics', 'statistics', '', SEVENT.menuEmpireStatistics))
+		menu[2].addChild(SMENU.CMenuChild('About', "about", 'Ctrl+A', SEVENT.menuHelpAbout))
+		menu[2].addChild(SMENU.CMenuChild('sep', None, '', SEVENT.notYetCoded))
+		menu[2].addChild(SMENU.CMenuChild('Help', 'help', 'F1', SEVENT.menuHelpHelp))
 	
 		# debug menu is always last - it's easy to remove then
 		if SPQR.DEBUG_MODE:
-			menu[3].addChild(SMENU.CMenuChild("Show example city", "debug", "", SEVENT.showCity))
-			menu[3].addChild(SMENU.CMenuChild("Show example unit", "debug", "", SEVENT.notYetCoded))
-			menu[3].addChild(SMENU.CMenuChild("sep", "debug", "", SEVENT.notYetCoded))
-			menu[3].addChild(SMENU.CMenuChild("Window test", "debug", "", SEVENT.windowTest))
-			menu[3].addChild(SMENU.CMenuChild("Widget test", "debug", "", SEVENT.widgetTest))
-			menu[3].addChild(SMENU.CMenuChild("Dialog test", "debug", "", SEVENT.lore))
+			menu[3].addChild(SMENU.CMenuChild('Show example city', 'debug', '', SEVENT.showCity))
+			menu[3].addChild(SMENU.CMenuChild('Show example unit', 'debug', '', SEVENT.notYetCoded))
+			menu[3].addChild(SMENU.CMenuChild('sep", "debug', '', SEVENT.notYetCoded))
+			menu[3].addChild(SMENU.CMenuChild('Window test', 'debug', '', SEVENT.windowTest))
+			menu[3].addChild(SMENU.CMenuChild('Widget test', 'debug', '', SEVENT.widgetTest))
+			menu[3].addChild(SMENU.CMenuChild('Dialog test', 'debug', '', SEVENT.lore))
 	
 		# Add the menubar at the top. It has no drawn window
 		# THIS MUST BE THE FIRST WINDOW
-		index = SGFX.gui.addWindow(SWINDOW.CWindow(0, 0, 0, 0, "", False, describe="Menus"))
+		index = SGFX.gui.addWindow(SWINDOW.CWindow(0, 0, 0, 0, '', False, describe='Menus'))
 		SGFX.gui.windows[index].border_offset = False
 		# add the prepared menu onto this
 		SGFX.gui.windows[index].addWidget(SMENU.CMenu(menu))
 	
 		# add a window with no frame that holds the widgets to overlay on the map
 		# THIS IS ALWAYS THE SECOND WINDOW!
-		bwindow = SWINDOW.CWindow(0, SGFX.gui.iHeight("titlebar"), SPQR.SCREEN_WIDTH,
-								  SPQR.SCREEN_HEIGHT - SGFX.gui.iHeight("titlebar"), "",
-								  False, "map_widgets")
+		bwindow = SWINDOW.CWindow(0, SGFX.gui.iHeight('titlebar'), SPQR.SCREEN_WIDTH,
+								  SPQR.SCREEN_HEIGHT - SGFX.gui.iHeight('titlebar'), '',
+								  False, 'map_widgets')
 		# and the mini-map on the rhs
-		w = SGFX.gui.iWidth("small_map")
-		h = SGFX.gui.iHeight("small_map")
-		x = SPQR.SCREEN_WIDTH - (SGFX.gui.iWidth("small_map") + SPQR.SPACER + bwindow.rect.x)
-		y = SPQR.SCREEN_HEIGHT - (SGFX.gui.iHeight("small_map") + (2*SPQR.SPACER) + 1 + bwindow.rect.y)
-		mini_map = SWIDGET.CImage(x, y, w, h, "small_map")
+		w = SGFX.gui.iWidth('small_map')
+		h = SGFX.gui.iHeight('small_map')
+		x = SPQR.SCREEN_WIDTH - (SGFX.gui.iWidth('small_map') + SPQR.SPACER + bwindow.rect.x)
+		y = SPQR.SCREEN_HEIGHT - (SGFX.gui.iHeight('small_map') + (2 * SPQR.SPACER) + 1 + bwindow.rect.y)
+		mini_map = SWIDGET.CImage(x, y, w, h, 'small_map')
 		# allow left mouse button dragging as well (also simulates a mini-map click)
 		mini_map.callbacks.mouse_ldown = SEVENT.miniMapDrag
 		mini_map.active = True
-		mini_map.describe = "mini-map"
+		mini_map.describe = 'mini-map'
 		bwindow.addWidget(mini_map)
 
-		image = pygame.Surface(SGFX.gui.image("small_map").get_size()).convert_alpha()
+		image = pygame.Surface(SGFX.gui.image('small_map').get_size()).convert_alpha()
 		image.fill(SPQR.BGUI_COL)
 		info = SWIDGET.buildUniqueImage(image)
 		info.rect.x = SPQR.SPACER
 		info.rect.y = y
-		info.describe = "info-box"
+		info.describe = 'info-box'
 		info.visible = False
 		bwindow.addWidget(info)
 		# we need to store it as well
@@ -184,22 +184,22 @@ class CSPQR(object):
 		SGFX.gui.map_widget = mini_map
 
 		# complete with centre on rome button
-		w = SGFX.gui.iWidth("rome_button")
-		h = SGFX.gui.iHeight("rome_button")
-		x += SGFX.gui.iWidth("small_map") - w
-		y = mini_map.rect.y + SGFX.gui.iHeight("small_map")
-		centre_button = SWIDGET.CImage(x, y, w, h, "rome_button")
+		w = SGFX.gui.iWidth('rome_button')
+		h = SGFX.gui.iHeight('rome_button')
+		x += SGFX.gui.iWidth('small_map') - w
+		y = mini_map.rect.y + SGFX.gui.iHeight('small_map')
+		centre_button = SWIDGET.CImage(x, y, w, h, 'rome_button')
 		centre_button.callbacks.mouse_lclk = SEVENT.centreMap
 		centre_button.active = True
-		centre_button.describe = "centre button"
+		centre_button.describe = 'centre button'
 		bwindow.addWidget(centre_button)
 		
 		# areas for MAX_STACKING units to be displayed
 		units = []
 		for i in range(SPQR.MAX_STACKING):
-			w = SWIDGET.buildImage("rome_legion")
+			w = SWIDGET.buildImage('rome_legion')
 			# set params
-			w.describe = "mapunit+" + str(i + 1)
+			w.describe = 'mapunit+' + str(i + 1)
 			w.rect.x = 10 + (i * 55)
 			w.rect.y = 10
 			w.visible = False
@@ -209,7 +209,7 @@ class CSPQR(object):
 			bwindow.addWidget(w)
 	
 		# add a blank simple widget that catches all the calls for the map
-		map_widget = SWIDGET.CWidget(bwindow.rect, SPQR.WT_MAP, None, "map_widget", 
+		map_widget = SWIDGET.CWidget(bwindow.rect, SPQR.WT_MAP, None, 'map_widget', 
 									 active = True, visible = False)
 		map_widget.callbacks.mouse_lclk = SGFX.gui.mapClick
 		bwindow.addWidget(map_widget)
@@ -270,4 +270,3 @@ def main():
 
 if __name__ == '__main__':
 	main()
-
