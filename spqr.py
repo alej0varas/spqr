@@ -122,10 +122,10 @@ class CSPQR(object):
 		if SPQR.DEBUG_MODE:
 			menu.append(SMENU.CMenuParent('Debug'))
 		# then add the sub menus below these
-		menu[0].addChild(SMENU.CMenuChild('New Game", "new", "Ctrl+N", SEVENT.menuNew))
-		menu[0].addChild(SMENU.CMenuChild('sep", None, "", SEVENT.notYetCoded))
-		menu[0].addChild(SMENU.CMenuChild('Load Game", "open", "Ctrl+L", SEVENT.menuLoad))
-		menu[0].addChild(SMENU.CMenuChild('Save Game", "save", "Ctrl+S", SEVENT.menuSave))
+		menu[0].addChild(SMENU.CMenuChild('New Game', "new", "Ctrl+N", SEVENT.menuNew))
+		menu[0].addChild(SMENU.CMenuChild('sep', None, "", SEVENT.notYetCoded))
+		menu[0].addChild(SMENU.CMenuChild('Load Game', "open", "Ctrl+L", SEVENT.menuLoad))
+		menu[0].addChild(SMENU.CMenuChild('Save Game', "save", "Ctrl+S", SEVENT.menuSave))
 		# this is a seperate, drawn bar to split the text
 		menu[0].addChild(SMENU.CMenuChild('sep', None, '', SEVENT.notYetCoded))
 		menu[0].addChild(SMENU.CMenuChild('Preferences', 'preferences', 'Ctrl+P', SEVENT.menuPreferences))
@@ -142,7 +142,7 @@ class CSPQR(object):
 		if SPQR.DEBUG_MODE:
 			menu[3].addChild(SMENU.CMenuChild('Show example city', 'debug', '', SEVENT.showCity))
 			menu[3].addChild(SMENU.CMenuChild('Show example unit', 'debug', '', SEVENT.notYetCoded))
-			menu[3].addChild(SMENU.CMenuChild('sep", "debug', '', SEVENT.notYetCoded))
+			menu[3].addChild(SMENU.CMenuChild('sep', 'debug', '', SEVENT.notYetCoded))
 			menu[3].addChild(SMENU.CMenuChild('Window test', 'debug', '', SEVENT.windowTest))
 			menu[3].addChild(SMENU.CMenuChild('Widget test', 'debug', '', SEVENT.widgetTest))
 			menu[3].addChild(SMENU.CMenuChild('Dialog test', 'debug', '', SEVENT.lore))

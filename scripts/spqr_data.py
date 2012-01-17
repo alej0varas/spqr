@@ -26,6 +26,7 @@ import units.spqr_unit as SUNITS
 # held as a singleton in a python module
 
 class CInfo(object):
+	"""This is the class that stores all the data needed for the game."""
 	def __init__(self):
 		self.year = SPQR.START_YEAR
 		self.players = {}
@@ -33,10 +34,11 @@ class CInfo(object):
 		self.map = SMAP.CMap(self.players)
 
 	def addPlayers(self):
-		self.players["romans"] = SPLAYER.CPlayer("Roman", "Romans")
-		self.players["romans"].colour = (184, 37, 37)
-		self.players["celts"] = SPLAYER.CPlayer("Celtic", "Celts")
-		self.players["celts"].colour = (55, 55, 230)
+		# TODO: This should be from the data file.
+		self.players['romans'] = SPLAYER.CPlayer('Roman', 'Romans')
+		self.players['romans'].colour = (184, 37, 37)
+		self.players['celts'] = SPLAYER.CPlayer('Celtic', 'Celts')
+		self.players['celts'].colour = (55, 55, 230)
 
 	def doBattle(self, unit, region):
 		"""Do whatever you need to do when a battle happens
@@ -56,6 +58,8 @@ class CInfo(object):
 				
 				print "BBB:", region.units[0]
 				
+				print 'DDD:', getUnit(region.units[0])
+				
 				if regions != [] and getUnit(region.units[0]).stats.strength != 0:
 					move_to = random.choice(regions)
 					move_to.units.append(region.units[0])
@@ -73,7 +77,7 @@ class CInfo(object):
 		"""Used when a unit captures a region"""
 		region = data.map.regions[region]
 		# we need to update ownership
-		# destroy all units found in the region (there SHOULD be zero), and change owners
+		# destroy all units found in the region (thegetre SHOULD be zero), and change owners
 		region.changeOwner(new_owner, self.players[new_owner].colour)
 		SGFX.gui.messagebox(SPQR.BUTTON_OK, "You have conquered " + str(region), "Conquered")
 
@@ -224,7 +228,9 @@ def checkBattle(unit, region):
 	return False
 
 def getUnit(name):
+	"""Return the unit of the given name, or None."""
 	for i in iterUnits():
+		print 'CCC:', i.name
 		if name == i.name:
 			return i
 

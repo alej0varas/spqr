@@ -166,6 +166,10 @@ def computeBattle(attackers, defenders):
 	defend_strength = 0
 	for i in defenders:
 		defend_strength += i.getMilitaryStrength()
+		
+	print 'A:', attack_strength
+	print 'D:', defend_strength
+		
 	# from the ratio, we can get the chance of success for the attacker
 	if random.randrange(attack_strength + defend_strength) <= attack_strength:
 		# do fancy maths later
