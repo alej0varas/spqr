@@ -169,12 +169,12 @@ def unitClicked(x, y):
 
 def addUnits():
 	"""Used at start of game to add all units"""
-	units=[]
+	unit s =[]
 	# Load the map's units from a file
-	var = yaml.load(open("./data/units/unit.yml"))
+	var = yaml.load(open('./data/units/unit.yml'))
 	# For every unit we load their data and add the unit
 	for i in var:
-		st = SUNITS.UnitStats(i["stats"][0], i["stats"][1], i["stats"][2])
+		st = SUNITS.UnitStats(i['stats'][0], i["stats"][1], i["stats"][2])
 		if i.has_key('naval'):
 			result = data.map.addUnit(i['location'], 
 									  SUNITS.CUnit(i['name'], i['image'], 
@@ -182,7 +182,7 @@ def addUnits():
 		else:
 			result = data.map.addUnit(i['location'], SUNITS.CUnit(i['name'], i['image'], stats = st))
 		if result == False:
-			print "Error: Too many units in ", var[j]['location']
+			print 'Error: Too many units in ', var[j]['location']
 			sys.exit(False)
 
 def moveUnit(unit, region):
@@ -192,7 +192,7 @@ def moveUnit(unit, region):
 		return False
 	# current location big enough?
 	if data.map.regions[region].units == SPQR.MAX_STACKING:
-		print "Error: Exceeded max stacking for", unit, "to", region
+		print 'Error: Exceeded max stacking for', unit, 'to', region
 		return False
 	# check that the unit exists somewhere
 	for i in iterUnits():
@@ -205,7 +205,7 @@ def moveUnit(unit, region):
 			i.moves_left -= 1
 			# return the region we go to
 			return region
-	print "Error: Couldn't find unit", unit, "to move"
+	print 'Error: Couldn't find unit', unit, 'to move'
 	return False
 
 def checkBattle(unit, region):
