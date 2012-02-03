@@ -169,7 +169,7 @@ def unitClicked(x, y):
 
 def addUnits():
 	"""Used at start of game to add all units"""
-	unit s =[]
+	units =[]
 	# Load the map's units from a file
 	var = yaml.load(open('./data/units/unit.yml'))
 	# For every unit we load their data and add the unit
