@@ -16,8 +16,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import sys, pygame
+from optparse import OptionParser
+import sys
+
+import pygame
 from pygame.locals import *
+
 from scripts import spqr_defines as SPQR
 from scripts import spqr_data as SDATA
 from scripts import spqr_gui as SGFX
@@ -26,6 +30,7 @@ from scripts import spqr_widgets as SWIDGET
 from scripts import spqr_menu as SMENU
 from scripts import spqr_events as SEVENT
 
+
 class CSPQR(object):
 	def __init__(self):
 		self.fullscreen = SPQR.FULLSCREEN
@@ -33,7 +38,9 @@ class CSPQR(object):
 		self.init_only = False
 		# init the data
 		SDATA.addUnits()
-		self.sortOptions()
+                # parse comman line options
+                self.parseOpts()
+
 		SGFX.gui.mainInit(SPQR.SCREEN_WIDTH, SPQR.SCREEN_HEIGHT, self.fullscreen)
 		# actually go any furthur?
 		if self.init_only:
@@ -41,72 +48,33 @@ class CSPQR(object):
 			print 'SPQR: init() worked fine.'
 			sys.exit(True)
 
-	# TODO: use optparse, don't re-invent the wheel
-	def executeFlag(self, flag):
-		"""Call with flag, which should be a single letter.
-		   Routine does whatever has to be done. Returns
-		   True if something happened, false otherwise"""
-		# big simple if statement:
-		if flag == 'f':
-			# set to fullscreen
-			self.fullscreen = True
-			return True
-		elif flag == 'n':
-			# don't show intro, just jump into a game
-			self.intro = False
-			return True
-		elif flag == 't':
-			# exit after initing data
-			self.init_only = True
-			return True
-		elif flag == 'v':
-			# show version details and exit
+	def parseOpts(self):
+		parser = OptionParser()
+		parser.add_option("-f", "--fullscreen", action="store_true", dest="fullscreen",
+				  help="Fullscreen")
+		parser.add_option("-n", "--no-intro", action="store_false", dest="intro",
+				  help="Skip intro")
+		parser.add_option("-t", "--test-init", action="store_true", dest="init_only",
+				  help="Test init only")
+		parser.add_option("-v", "--version", action="store_true", dest="version",
+				  help="Show version and exit")
+		parser.add_option("-g", action="store_true", dest="g",
+				  help="")
+
+		(options, args) = parser.parse_args()
+
+		# optparse
+		if options.g:
+			print '[SPQR]: In memory of Jerry Garcia'
+		elif options.version:
 			print 'SPQR ' + SPQR.VERSION + ', written and designed by Chris Handy'
 			print '  Copr. 2005-2012, released under the GNU Public License v3'
 			print '  Last code update: ' + SPQR.LAST_UPDATE
 			sys.exit(True)
-		elif flag == 'g':
-			print '[SPQR]: In memory of Jerry Garcia'
-			return True
-		elif flag == '?':
-			print 'SPQR Command line options:'
-			print '  -f : Fullscreen'
-			print '  -n : Skip intro'
-			print '  -t : Test init only'
-			print '  -v : Show version details'
-			print '  -? : Show this display'
-			# all done, a valid exit point
-			sys.exit(True)
-		# no match, but not a terrible error
-		print '[SPQR] Error: No option for flag ' + flag
-		return False
-	
-	def sortOptions(self):
-		"""Routine reads command-line options. Returns False if any problem"""
-		options = sys.argv
-		# any args at all?
-		if len(options) == 1:
-			return True
-		# remove the first one
-		options.pop(0)
-		for i in options:
-			# split into characters:
-			chars = list(i)
-			# first character must be a '-'
-			if chars[0] != '-':
-				print "[SPQR]: Error: Flag sequence does not start with '-'"
-				sys.exit(False)
-			# remove it
-			chars.pop(0)
-			# anything left?
-			if len(chars) == 0:
-				print "[SPQR]: Error: No flags following '-' char"
-				return False
-			# do each flag
-			for flag in chars:		
-				self.executeFlag(flag)
-		# everything must have worked
-		return True
+
+		self.fullscreen = options.fullscreen
+		self.intro = options.intro
+		self.init_only = options.init_only
 
 	# routine to init everything...
 	def setupStart(self):
