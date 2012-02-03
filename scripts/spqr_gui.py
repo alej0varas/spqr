@@ -950,7 +950,12 @@ class CGFXEngine(object):
 			moves = "moves" + str(self.current_highlight.moves_left)
 			self.flash_erase.blit(self.image(moves), (0, 0))
 			self.flash_draw.blit(self.image(moves), (0, 0))
-			
+			# add to both images the numbre of units
+                        units = SDATA.getRegionUnits(self.current_highlight.region)
+                        moves = "moves" + str(len(units))
+			self.flash_erase.blit(self.image(moves), (SPQR.UNIT_WIDTH / 2, 0))
+			self.flash_draw.blit(self.image(moves), (SPQR.UNIT_WIDTH / 2, 0))
+
 			# make sure that we draw the erase part of the image first
 			self.flash_on = True
 			# screen map probably needs updating, do it here
