@@ -14,6 +14,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+import sys
+
 # we need some pygame variables:
 import pygame.locals as PYGAME
 
@@ -34,7 +36,7 @@ FULLSCREEN			= False
 # before we go any further, this one is a must ;-)
 # currently adds debug menu bar
 DEBUG_MODE		=	True
-
+LOG_FILENAME = '/tmp/spqr.log'
 # now place the equivalent of some(!) defines
 SCREEN_WIDTH 		= 900
 SCREEN_HEIGHT 		= 700
@@ -214,30 +216,30 @@ SFX_ON				= True
 # they are here to prevent an exception should an unregistered
 # event ever be called
 def mouse_over_std(handle, x, y):
-	print "SPQR Error: mouse_over_std called"
+	sys.stdout.write("SPQR Error: mouse_over_std called")
 	return False
 
 def mouse_ldown_std(handle, x, y):
-	print "SPQR Error: mouse_ldown_std called"
+	sys.stdout.write("SPQR Error: mouse_ldown_std called")
 	return False
 
 def mouse_rdown_std(handle,x,y):
-	print "SPQR Error: mouse_rdown_std called"
+	sys.stdout.write("SPQR Error: mouse_rdown_std called")
 	return False
 
 def mouse_dclick_std(handle, x, y):
-	print "SPQR Error: mouse_dclick_std called"
+	sys.stdout.write("SPQR Error: mouse_dclick_std called")
 	return False
 
 def mouse_lclk_std(handle, x, y):
-	print "SPQR Error: mouse_lclk_std called"
+	sys.stdout.write("SPQR Error: mouse_lclk_std called")
 	return False
 
 def mouse_rclk_std(handle, x, y):
-	print "SPQR Error: mouse_rclk_std called"
+	sys.stdout.write("SPQR Error: mouse_rclk_std called")
 	return False
 	
 def null_routine(handle, x, y):
-	print "SPQR Error: Null routine called"
+	sys.stdout.write("SPQR Error: Null routine called")
 	return False
 

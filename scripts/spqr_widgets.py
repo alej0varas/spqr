@@ -14,6 +14,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+import logging
+
 import pygame, string
 from pygame.locals import *
 
@@ -21,6 +23,9 @@ import spqr_defines as SPQR
 import spqr_events as SEVENT
 import spqr_keys as SKEY
 import spqr_gui as SGFX
+
+# Setup logging
+logger = logging.getLogger('spqr.widgets')
 
 # what follows is the base class used for the callback functions of the widgets. Every
 # widget has one, and you can modify the widgets be pointing mouse_* to different functions
@@ -89,8 +94,8 @@ class CLabel(CWidget):
 				# if any of our words are too long to fit, return.
 				for word in words:
 					if SGFX.gui.fonts[self.font].size(word)[0] >= self.rect.w:
-						print "Error: Word (", word, ") was too long in label"
-						print "       Width was more than ", self.rect.w
+						logger.error("Word (" + word + ") was too long in label")
+						logger.error("       Width was more than %d" % self.rect.w)
 						return(False)
 				# Start a new line
 				accumulated_line = ""
@@ -111,8 +116,8 @@ class CLabel(CWidget):
 		accumulated_height = 0
 		for line in final_lines:
 			if accumulated_height + SGFX.gui.fonts[self.font].size(line)[1] >= self.rect.h:
-				print "Error: Text string too tall in label"
-				print "       ah=", accumulated_height, " h=", self.rect.h
+				logger.error("Text string too tall in label")
+				logger.error("       ah=%d h=%d " % (accumulated_height, self.rect.h))
 				return False
 			if line != "":
 				tempsurface = SGFX.gui.fonts[self.font].render(line, 1, self.text_colour)
@@ -123,7 +128,7 @@ class CLabel(CWidget):
 				elif self.justification == SPQR.RIGHT_JUSTIFY:
 					self.image.blit(tempsurface, (self.rect.w - tempsurface.get_width(), accumulated_height))
 				else:
-					print "Error: Invalid justification value in label"
+					logger.error("Invalid justification value in label")
 					return False
 			accumulated_height += SGFX.gui.fonts[self.font].size(line)[1]
 		return True
@@ -882,7 +887,7 @@ class CItemList(CWidget):
 		sc_h = total_height - hheight
 		# was there an error there?
 		if sc_h < SPQR.SCAREA_MINH:
-			print "Error: Size for ItemList too small"
+			logger.error("Size for ItemList too small")
 			# do it, but nasty things may happen
 			# probably the widget display will look nasty
 			sc_h = sc_image.get_height()/2
@@ -990,7 +995,7 @@ class COptionMenu(CWidget):
 		# just a simple check - there has to be at least 1 option!
 		if len(options) < 1:
 			if SPQR.DEBUG_MODE == True:
-				print "Error: Asked for OptionMenu with no options"
+				logger.error("Asked for OptionMenu with no options")
 				# enter the error options
 				options = ["Error", "No","Options", "Given"]
 
@@ -1405,7 +1410,7 @@ def renderText(rect, text, font, text_colour, bgcolor = None,
 	final_lines = fitText(text, rect.w, rect.h, font)
 	# if the text doesn't fit return an empty surface and exit
 	if final_lines == None:
-		print "Error: Text string too tall in label"
+		logger.error("Text string too tall in label")
 		return pygame.Surface((w,h))
 	# Let's try to write the text out on the surface.	
 	image = pygame.Surface((w,h), pygame.SRCALPHA, 32)
@@ -1436,7 +1441,7 @@ def renderText(rect, text, font, text_colour, bgcolor = None,
 				image.blit(tempsurface,(w_offset + ((rect.w-tempsurface.get_width())/2),
 											accumulated_height + h_offset + y_offset))
 			else:
-				print "Error: Invalid justification value in label"
+				logger.error("Invalid justification value in label")
 				return pygame.Surface((w,h))
 		accumulated_height += SGFX.gui.fonts[font].size(line)[1]
 	# for debuging rect
@@ -1460,7 +1465,7 @@ def fitText(text, w, h, fnt):
 					# has been found to be too long for this code!
 					# Possible answer: don't use long web addresses, or break them
 					# up first.
-					print "Error: Word was too long in label"
+					logger.error("Word was too long in label")
 					return None
 			# Start a new line
 			accumulated_line = ""

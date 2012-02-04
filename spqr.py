@@ -16,6 +16,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+import logging
+
 from optparse import OptionParser
 import sys
 
@@ -30,23 +32,32 @@ from scripts import spqr_widgets as SWIDGET
 from scripts import spqr_menu as SMENU
 from scripts import spqr_events as SEVENT
 
+# Setup logging
+logging.basicConfig(filename=SPQR.LOG_FILENAME, level=logging.NOTSET)
+logger = logging.getLogger('spqr')
+
 
 class CSPQR(object):
 	def __init__(self):
+		logger.info("\t **** S.P.Q.R. starting ****")
 		self.fullscreen = SPQR.FULLSCREEN
 		self.intro = True
 		self.init_only = False
 		# init the data
 		SDATA.addUnits()
-                # parse comman line options
-                self.parseOpts()
+		# parse comman line options
+		self.parseOpts()
 
 		SGFX.gui.mainInit(SPQR.SCREEN_WIDTH, SPQR.SCREEN_HEIGHT, self.fullscreen)
 		# actually go any furthur?
 		if self.init_only:
 			# no, so exit here
-			print 'SPQR: init() worked fine.'
-			sys.exit(True)
+			logger.debug('SPQR: init() worked fine')
+			self.exit(0)
+
+	def exit(self, status=0):
+		logger.info('\t **** S.P.Q.R. exiting with status %d ****' % status)
+		sys.exit(status)
 
 	def parseOpts(self):
 		parser = OptionParser()
@@ -65,12 +76,12 @@ class CSPQR(object):
 
 		# optparse
 		if options.g:
-			print '[SPQR]: In memory of Jerry Garcia'
+			sys.stdout.write('[SPQR]: In memory of Jerry Garcia\n')
 		elif options.version:
-			print 'SPQR ' + SPQR.VERSION + ', written and designed by Chris Handy'
-			print '  Copr. 2005-2012, released under the GNU Public License v3'
-			print '  Last code update: ' + SPQR.LAST_UPDATE
-			sys.exit(True)
+			sys.stdout.write('SPQR ' + SPQR.VERSION + ', written and designed by Chris Handy\n')
+			sys.stdout.write('  Copr. 2005-2012, released under the GNU Public License v3\n')
+			sys.stdout.write('  Last code update: ' + SPQR.LAST_UPDATE + '\n')
+			self.exit(0)
 
 		self.fullscreen = options.fullscreen
 		self.intro = options.intro

@@ -16,6 +16,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+import logging
+
 import sys, pygame, re, os
 from pygame.locals import *
 
@@ -26,6 +28,9 @@ import spqr_keys as SKEY
 import spqr_events as SEVENT
 import spqr_sound as SSFX
 import spqr_data as SDATA
+
+# Setup logging
+logger = logging.getLogger('spqr.gui')
 
 # class that holds the dirty rectangle updates
 class CDirtyRect(object):
@@ -1130,7 +1135,7 @@ class CGFXEngine(object):
 						# has been found to be too long for this code!
 						# Possible answer: don't use long web addresses, or break them
 						# up first.
-						print "Error: Word was too long in label"
+						logger.debug("Word was too long in label")
 						return False
 				# Start a new line
 				accumulated_line = ""

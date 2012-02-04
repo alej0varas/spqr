@@ -15,6 +15,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 # get modules
+import logging
 import sys,pygame
 from pygame.locals import *
 
@@ -27,6 +28,9 @@ import spqr_sound as SSFX
 import spqr_menu as SMENU
 import units.spqr_unit as SUNITS
 import spqr_ybuild as SYAML
+
+# Setup logging
+logger = logging.getLogger('spqr.events')
 
 # found here are all the functions triggered by the various mouse events
 # they must all have the structure
@@ -513,7 +517,7 @@ def displaySliderContents(handle, xpos, ypos):
 	   it to any slider function callback"""
 	# only if debugging is turned on, of course...
 	if SPQR.DEBUG_MODE:
-		print "Slider value:", handle.getSliderValue()
+		logger.debug("Slider value: " + handle.getSliderValue())
 	return True
 
 # right click menu functions
@@ -535,7 +539,7 @@ def onMenu(handle, xpos, ypos):
 def okClick(handle, x, y):
 	for i in SGFX.gui.windows[0].items:
 		if i.describe == "opt-Resolution":
-			print "You selected a resolution of", i.option
+			logger.debug("You selected a resolution of " + i.option)
 			sys.exit(True)
 
 def cancelClick(handle, x, y):

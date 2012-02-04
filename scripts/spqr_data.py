@@ -14,7 +14,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+import logging
+
 import pygame, sys, yaml, random
+
 import spqr_defines as SPQR
 import spqr_gui as SGFX
 import spqr_battle as SBATTLE
@@ -22,9 +25,12 @@ import maps.spqr_map as SMAP
 import player.spqr_player as SPLAYER
 import units.spqr_unit as SUNITS
 
+# Setup logging
+logger = logging.getLogger("spqr.data")
+
+
 # definitions for the map, players and units
 # held as a singleton in a python module
-
 class CInfo(object):
 	"""This is the class that stores all the data needed for the game."""
 	def __init__(self):
@@ -56,15 +62,15 @@ class CInfo(object):
 			while len(region.units) > 0:
 				regions = self.map.getRetreatNeighbors(region)
 				
-				print "BBB:", region.units[0]
+				logger.debug("BBB: %s" % region.units[0])
 				
-				print 'DDD:', getUnit(region.units[0])
+				logger.debug("DDD: %s" % getUnit(region.units[0]))
 				
 				if regions != [] and getUnit(region.units[0]).stats.strength != 0:
 					move_to = random.choice(regions)
 					move_to.units.append(region.units[0])
 					
-					print "Moving", str(region.units[0]), "to", str(move_to)
+					logger.debug("Moving %d to %d" % (region.units[0], move_to))
 					
 					# remove old unit from location
 					region.units = region.units[1:]
@@ -182,7 +188,7 @@ def addUnits():
 		else:
 			result = data.map.addUnit(i['location'], SUNITS.CUnit(i['name'], i['image'], stats = st))
 		if result == False:
-			print 'Error: Too many units in ', var[j]['location']
+			logger.debug("Too many units in %s" % var[j]['location'])
 			sys.exit(False)
 
 def moveUnit(unit, region):
@@ -192,7 +198,7 @@ def moveUnit(unit, region):
 		return False
 	# current location big enough?
 	if data.map.regions[region].units == SPQR.MAX_STACKING:
-		print 'Error: Exceeded max stacking for', unit, 'to', region
+		logger.debug("Exceeded max stacking for %s to %s" % (unit, region))
 		return False
 	# check that the unit exists somewhere
 	for i in iterUnits():
@@ -205,7 +211,7 @@ def moveUnit(unit, region):
 			i.moves_left -= 1
 			# return the region we go to
 			return region
-	print "Error: Couldn't find unit", unit, 'to move'
+	logger.debug("Couldn't find unit %s to move" % unit)
 	return False
 
 def checkBattle(unit, region):
@@ -230,7 +236,7 @@ def checkBattle(unit, region):
 def getUnit(name):
 	"""Return the unit of the given name, or None."""
 	for i in iterUnits():
-		print 'CCC:', i.name
+		logger.debug("CCC: %s" % i.name)
 		if name == i.name:
 			return i
 

@@ -14,12 +14,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+import logging
 import sys, pygame, os.path
 from pygame.locals import *
 
 import spqr_defines as SPQR
 import spqr_widgets as SWIDGET
 import spqr_gui as SGFX
+
+# Setup logging
+logger = logging.getLogger('spqr.menu')
 
 # this is the definition of an item in a menu drop-down
 class CMenuChild(object):
@@ -426,7 +430,7 @@ def rclkMenu(menu):
 		# was it a keypress:	
 		if event.type == KEYDOWN:
 			# did it match?
-			print "key pressed"
+			logger.debug("key pressed")
 		elif event.type == MOUSEBUTTONUP:
 			x, y = pygame.mouse.get_pos()
 			# outside our menu?

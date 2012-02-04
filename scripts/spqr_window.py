@@ -15,12 +15,16 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 # get modules
+import logging
 import sys, pygame
 from pygame.locals import *
 
 import spqr_defines as SPQR
 import spqr_widgets as SWIDGET
 import spqr_gui as SGFX
+
+# Setup logging
+logger = logging.getLogger('spqr.window')
 
 # at the moment, you have to allow for the borders when you create a new window
 # sorry about, it's definitly on the TODO list
@@ -209,7 +213,7 @@ class CWindow(object):
 		if width < (SPQR.SPACER * 4) + bwidth:
 			# cant do it, so return false
 			if SPQR.DEBUG_MODE == True:
-				print "Error: Couldn't add buttons (window too small)"
+				logger.error("Couldn't add buttons (window too small)")
 			return False
 		# how many buttons can we add then?
 		padding = SPQR.SPACER * 2
@@ -274,7 +278,7 @@ class CWindow(object):
 		else:
 			# 2 lines of buttons not implemented
 			if SPQR.DEBUG_MODE == True:
-				print "Error: >1 line of buttons not implemented in buildButtonArea()"
+				logger.error(">1 line of buttons not implemented in buildButtonArea()")
 			return False
 		# one last thing. Recentre the window?
 		if self.centre == True:
@@ -292,7 +296,7 @@ class CMsgbox(CWindow):
 	   in strings fine """
 	def __init__(self, flags, routines, text, win_title):
 		if flags == 0:
-			print "[HOWC]: Error: error no buttons defined"
+			logger.error("[HOWC]: error no buttons defined")
 			sys.exit(False)
 		self.Wbtn = SGFX.gui.iWidth("button")
 		self.Hbtn = SGFX.gui.iHeight("button")

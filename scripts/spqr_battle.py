@@ -14,7 +14,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+import logging
 import random
+
 import spqr_defines as SPQR
 import spqr_gui as SGFX
 import spqr_events as SEVENTS
@@ -22,6 +24,9 @@ import spqr_widgets as SWIDGET
 import spqr_window as SWINDOW
 import spqr_ybuild as SYAML
 import spqr_data as SDATA
+
+# Setup logging
+logger = logging.getLogger('spqr.battle')
 
 # module to handle all of the battle display window code
 
@@ -167,8 +172,8 @@ def computeBattle(attackers, defenders):
 	for i in defenders:
 		defend_strength += i.getMilitaryStrength()
 		
-	print 'A:', attack_strength
-	print 'D:', defend_strength
+	logger.debug("A: %d" % attack_strength)
+	logger.debug("D: %d" % defend_strength)
 		
 	# from the ratio, we can get the chance of success for the attacker
 	if random.randrange(attack_strength + defend_strength) <= attack_strength:
