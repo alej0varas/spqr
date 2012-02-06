@@ -59,24 +59,15 @@ class CInfo(object):
 		result = SBATTLE.computeBattle([getUnit(unit)], region.units)
 		if result:
 			# retreat the units
-			while len(region.units) > 0:
-				regions = self.map.getRetreatNeighbors(region)
-				
-				logger.debug("BBB: %s" % region.units[0])
-				
-				logger.debug("DDD: %s" % getUnit(region.units[0]))
-				
-				if regions != [] and getUnit(region.units[0]).stats.strength != 0:
-					move_to = random.choice(regions)
-					move_to.units.append(region.units[0])
-					
-					logger.debug("Moving %d to %d" % (region.units[0], move_to))
-					
-					# remove old unit from location
-					region.units = region.units[1:]
-				else:
-					# destroy the unit
-					region.units.remove(unit)
+                        for looser_unit in region.units:
+				retreat_regions = self.map.getRetreatNeighbors(region)
+				logger.debug("Attaked Region: %s" % region)
+				logger.debug("Looser: %s" % region.units[0])
+				if retreat_regions and looser_unit.stats.strength > 0:
+					move_to = random.choice(retreat_regions)
+					move_to.units.append(looser_unit)
+					logger.debug("Moving %s to %s" % (looser_unit, move_to))
+                                region.units.remove(looser_unit)
 		return result
 
 	def changeRegionOwner(self, region, new_owner):
@@ -236,7 +227,6 @@ def checkBattle(unit, region):
 def getUnit(name):
 	"""Return the unit of the given name, or None."""
 	for i in iterUnits():
-		logger.debug("CCC: %s" % i.name)
 		if name == i.name:
 			return i
 
